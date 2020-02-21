@@ -1,0 +1,100 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    defaultConfig {
+        applicationId "com.example.bo.dengyun"
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        versionCode rootProject.ext.android.versionCode
+        versionName rootProject.ext.android.versionName
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexKeepProguard file('multidex.pro')
+        multiDexEnabled true
+        manifestPlaceholders = [
+                GETUI_APP_ID    : "hiTFn7zSlO7wz9LDRklFy4",
+                GETUI_APP_KEY   : "TO4lMW1FGT6b25knkS5vj6",
+                GETUI_APP_SECRET: "uyrjpF2LmT7R8pBg9UK7w9",
+                PACKAGE_NAME    : applicationId
+        ]
+        ndk {
+            // 设置支持的SO库架构
+            abiFilters "armeabi", "armeabi-v7a","x86"
+        }
+        javaCompileOptions {
+            // 显式声明支持注解
+            annotationProcessorOptions {
+                includeCompileClasspath true
+                //arouter配置
+                arguments = [AROUTER_MODULE_NAME: project.getName()]
+            }
+        }
+        javaCompileOptions { annotationProcessorOptions { includeCompileClasspath = true } }
+    }
+    signingConfigs {
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file('local.properties').newDataInputStream())
+        def keystoreFilepath = properties.getProperty("keystore.path")
+        def keystorePSW = properties.getProperty("keystore.password")
+        def keystoreAlias = properties.getProperty("keystore.alias")
+        def keystoreAliasPSW = properties.getProperty("keystore.alias_password")
+        def keyfile = file(keystoreFilepath)
+        release {
+            storeFile keyfile
+            storePassword keystorePSW
+            keyAlias keystoreAlias
+            keyPassword keystoreAliasPSW
+            v2SigningEnabled true
+        }
+        debug {
+            storeFile keyfile
+            storePassword keystorePSW
+            keyAlias keystoreAlias
+            keyPassword keystoreAliasPSW
+            v2SigningEnabled true
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            consumerProguardFiles 'proguard-rules.pro'
+
+        }
+        debug {
+            minifyEnabled true
+            shrinkResources true
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            consumerProguardFiles 'proguard-rules.pro'
+        }
+    }
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(':baselibrary')
+
+}

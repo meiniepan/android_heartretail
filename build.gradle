@@ -1,0 +1,45 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    apply from: 'config.gradle'
+    repositories {
+        google()
+        jcenter()
+        
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:${versions.gradle}"
+        classpath 'com.sensorsdata.analytics.android:android-gradle-plugin2:3.0.3'
+        
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        mavenLocal()
+        google()
+        mavenCentral()
+        jcenter()
+        maven { url "https://jitpack.io" }
+        maven { url 'https://dl.bintray.com/umsdk/release' }
+        maven { url "https://raw.githubusercontent.com/idengyun/androidlib/master" } //登云
+        maven { url "http://mvn.gt.igexin.com/nexus/content/repositories/releases/" }   //个推
+        maven { url 'https://dl.bintray.com/zouyuhan/maven' }   //神策
+        maven { url 'http://developer.huawei.com/repo/' }
+        maven { url "https://raw.githubusercontent.com/idengyun/neg/master" }
+        maven { url "https://raw.githubusercontent.com/idengyun/CosBeauty/master" }
+        maven { url "https://raw.githubusercontent.com/idengyun/JinMu/master" }
+        maven { url "https://raw.githubusercontent.com/idengyun/AlivcLivePusher/master" }
+        maven() { url 'https://maven.aliyun.com/repository/releases' }
+        maven {url  "https://dl.bintray.com/rongcloud/maven"}//融云
+
+        flatDir { dirs 'libs' }
+        
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

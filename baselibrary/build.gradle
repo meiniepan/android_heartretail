@@ -1,0 +1,76 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    defaultConfig {
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        versionCode rootProject.ext.android.versionCode
+        versionName rootProject.ext.android.versionName
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        debug {
+            minifyEnabled false
+            consumerProguardFiles 'proguard-rules.pro'
+        }
+        release {
+            minifyEnabled false
+            consumerProguardFiles 'proguard-rules.pro'
+        }
+    }
+
+    /*解决PictureSelector和rxjava的冲突*/
+    packagingOptions {
+        exclude 'META-INF/rxjava.properties'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    api fileTree(dir: 'libs', include: ['*.jar'])
+
+    testImplementation rootProject.ext.dependencies.junit
+    androidTestImplementation(rootProject.ext.dependencies.runner) {
+        exclude group: 'com.android.support'
+    }
+    androidTestImplementation(rootProject.ext.dependencies.espresso) {
+        exclude group: 'com.android.support'
+    }
+
+    api rootProject.ext.dependencies.appcompat
+    api rootProject.ext.dependencies.design
+    api rootProject.ext.dependencies.multidex
+    api rootProject.ext.dependencies.constraint
+    api rootProject.ext.dependencies.okgo
+    api rootProject.ext.dependencies.gson
+    api rootProject.ext.dependencies.eventbus
+    api rootProject.ext.dependencies.SmartRefreshLayout
+    api rootProject.ext.dependencies.okrx2
+//    api rootProject.ext.dependencies.okserver
+    api rootProject.ext.dependencies.BaseRecyclerViewAdapterHelper
+    api rootProject.ext.dependencies.umeng_common
+    api rootProject.ext.dependencies.umeng_analytics
+    api rootProject.ext.dependencies.SensorsAnalyticsSDK
+    api(rootProject.ext.dependencies.glide) { exclude group: 'com.android.support' }
+    api(rootProject.ext.dependencies.butterknife) { exclude group: 'com.android.support' }
+    api(rootProject.ext.dependencies.logger) { exclude group: 'com.android.support' }
+    api(rootProject.ext.dependencies.arouter_api) { exclude group: 'com.android.support' }
+    api(rootProject.ext.dependencies.PictureSelector) {
+        exclude group: 'com.android.support'
+        exclude group: 'com.github.bumptech.glide'
+    }
+    api(rootProject.ext.dependencies.permission) {
+        exclude group: 'com.android.support', module: 'appcompat-v7'
+        exclude group: 'com.android.support', module: 'support-fragment'
+    }
+    api rootProject.ext.dependencies.bannerlib
+    api rootProject.ext.dependencies.statusrecyclerview
+    //    api rootProject.ext.dependencies["FlycoTabLayout_Lib"]
+
+    api rootProject.ext.dependencies.litepal
+}

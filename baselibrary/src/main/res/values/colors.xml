@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="baselib_white">#ffffff</color>
+    <color name="baselib_black">#000000</color>
+    <color name="basetoobar_bgcolor">#ff4c82</color>
+    <color name="basetoobar_textcolor">#ffffff</color>
+    <color name="basetoobar_right_textcolor">#ffffff</color>
+    <color name="base_gray">#949494</color>
+    <color name="base_dialog_ios_blue">#037BFF</color>
+    <color name="base_dialog_ios_gray">#8F8F8F</color>
+    <color name="base_stateview_text">#a9b7b7</color>
+    <color name="base_guide_shadow">#80000000</color>
+    <color name="base_gray999">#999999</color>
+    <color name="base_red08d">#ef508d</color>
+    <color name="gray3">#999999</color>
+    <color name="nocolor">#00000000</color>
+    <color name="colorWhite">#fff</color>
+
+</resources>
