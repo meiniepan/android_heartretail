@@ -96,5 +96,9 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':baselibrary')
+    implementation project(':usermodule')
+    implementation project(':commonmodule')
+    implementation project(':splashmodule')
+    implementation project(':routermodule')
 
 }

@@ -1,1 +1,1 @@
-include ':app', ':baselibrary'
+include ':app', ':baselibrary', ':splashmodule', ':routermodule', ':commonmodule', ':usermodule'
