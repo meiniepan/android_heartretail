@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion rootProject.ext.android.compileSdkVersion
     defaultConfig {
-        applicationId "com.example.bo.dengyun"
+        applicationId "com.idengyun.heartretail"
         minSdkVersion rootProject.ext.android.minSdkVersion
         targetSdkVersion rootProject.ext.android.targetSdkVersion
         versionCode rootProject.ext.android.versionCode
@@ -19,7 +19,7 @@ android {
         ]
         ndk {
             // 设置支持的SO库架构
-            abiFilters "armeabi", "armeabi-v7a","x86"
+            abiFilters "armeabi", "armeabi-v7a", "x86"
         }
         javaCompileOptions {
             // 显式声明支持注解
@@ -101,4 +101,5 @@ dependencies {
     implementation project(':splashmodule')
     implementation project(':routermodule')
 
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
 }
