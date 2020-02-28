@@ -6,6 +6,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.NestedScrollView;
 import android.view.View;
 import android.widget.OverScroller;
+import android.widget.ProgressBar;
+import android.widget.RatingBar;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 
@@ -21,62 +23,76 @@ public final class GoodsDetailsFragment extends BaseFragment {
     private int middleHeight;
     private int endHeight;
 
+    /**
+     * 周一 心项目-商品详情页 商品规格页 用户评价页 1.UI编写 2.api调试
+     * 周二 心项目-确认订单页 1.UI编写 2.api调试
+     * 周三 心项目-门店列表页 门店详情页 1.UI编写 2.api调试
+     * 周四 心项目-登录页 注册页 找回密码页 个人资料页 1.UI编写 2.api调试
+     * 周五 心项目-各种协议页 1.UI编写 2.api调试
+     */
     @Override
     public int getLayoutId() {
-        return R.layout.fragment_details;
+        return R.layout.fragment_details_;
     }
 
     @Override
     public void initViews(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        NestedScrollView nested_scroll_view = view.findViewById(R.id.nested_scroll_view);
-        View layout_home = view.findViewById(R.id.layout_home);
-        View layout_middle = view.findViewById(R.id.layout_middle);
-        View layout_end = view.findViewById(R.id.layout_end);
-        View btn_shortcut_home = view.findViewById(R.id.btn_shortcut_home);
-        View btn_shortcut_end = view.findViewById(R.id.btn_shortcut_end);
-        View btn_shortcut_m = view.findViewById(R.id.btn_shortcut_m);
-
-        nested_scroll_view.setSmoothScrollingEnabled(true);
-        try {
-            Field mScroller = nested_scroll_view.getClass().getDeclaredField("mScroller");
-            mScroller.setAccessible(true);
-            OverScroller scroller = new OverScroller(nested_scroll_view.getContext()) {
-                @Override
-                public void startScroll(int startX, int startY, int dx, int dy, int duration) {
-                    super.startScroll(startX, startY, dx, dy, 1000);
-                }
-            };
-            mScroller.set(nested_scroll_view, scroller);
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-
-
-        View.OnLayoutChangeListener onLayoutChangeListener = new View.OnLayoutChangeListener() {
-            @Override
-            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                if (v == layout_home) homeHeight = bottom - top;
-                if (v == layout_middle) middleHeight = bottom - top;
-                if (v == layout_end) endHeight = bottom - top;
-            }
-        };
-        layout_home.addOnLayoutChangeListener(onLayoutChangeListener);
-        layout_middle.addOnLayoutChangeListener(onLayoutChangeListener);
-        layout_end.addOnLayoutChangeListener(onLayoutChangeListener);
-
-        View.OnClickListener onClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (v == btn_shortcut_home) nested_scroll_view.smoothScrollTo(0, 0);
-                if (v == btn_shortcut_m) nested_scroll_view.smoothScrollTo(0, homeHeight);
-                if (v == btn_shortcut_end)
-                    nested_scroll_view.smoothScrollTo(0, homeHeight + middleHeight);
-            }
-        };
-        btn_shortcut_home.setOnClickListener(onClickListener);
-        btn_shortcut_end.setOnClickListener(onClickListener);
-        btn_shortcut_m.setOnClickListener(onClickListener);
+//        NestedScrollView nested_scroll_view = view.findViewById(R.id.nested_scroll_view);
+//        View layout_home = view.findViewById(R.id.layout_home);
+//        View layout_middle = view.findViewById(R.id.layout_middle);
+//        View layout_end = view.findViewById(R.id.layout_end);
+//        View btn_shortcut_home = view.findViewById(R.id.btn_shortcut_home);
+//        View btn_shortcut_end = view.findViewById(R.id.btn_shortcut_end);
+//        View btn_shortcut_m = view.findViewById(R.id.btn_shortcut_m);
+//
+//        nested_scroll_view.setSmoothScrollingEnabled(true);
+//        try {
+//            Field mScroller = nested_scroll_view.getClass().getDeclaredField("mScroller");
+//            mScroller.setAccessible(true);
+//            OverScroller scroller = new OverScroller(nested_scroll_view.getContext()) {
+//                @Override
+//                public void startScroll(int startX, int startY, int dx, int dy, int duration) {
+//                    super.startScroll(startX, startY, dx, dy, 1000);
+//                }
+//            };
+//            mScroller.set(nested_scroll_view, scroller);
+//        } catch (Throwable e) {
+//            e.printStackTrace();
+//        }
+//
+//
+//        View.OnLayoutChangeListener onLayoutChangeListener = new View.OnLayoutChangeListener() {
+//            @Override
+//            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+//                if (v == layout_home) homeHeight = bottom - top;
+//                if (v == layout_middle) middleHeight = bottom - top;
+//                if (v == layout_end) endHeight = bottom - top;
+//            }
+//        };
+//        layout_home.addOnLayoutChangeListener(onLayoutChangeListener);
+//        layout_middle.addOnLayoutChangeListener(onLayoutChangeListener);
+//        layout_end.addOnLayoutChangeListener(onLayoutChangeListener);
+//
+//        View.OnClickListener onClickListener = new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (v == btn_shortcut_home) nested_scroll_view.smoothScrollTo(0, 0);
+//                if (v == btn_shortcut_m) nested_scroll_view.smoothScrollTo(0, homeHeight);
+//                if (v == btn_shortcut_end)
+//                    nested_scroll_view.smoothScrollTo(0, homeHeight + middleHeight);
+//            }
+//        };
+//        btn_shortcut_home.setOnClickListener(onClickListener);
+//        btn_shortcut_end.setOnClickListener(onClickListener);
+//        btn_shortcut_m.setOnClickListener(onClickListener);
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+//        RatingBar r;
+//        ProgressBar progressBar = new ProgressBar(getContext());
+//        System.out.println(progressBar.getMax() + "=max    min=" + progressBar.getMin());
+    }
 }
 
