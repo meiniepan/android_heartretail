@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:background="#F8F8F8">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="116dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp">
+
+            <ImageView
+                android:id="@+id/iv_user_avatar"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:background="#3f00" />
+
+            <TextView
+                android:id="@+id/tv_user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="9dp"
+                android:textColor="#ff333333"
+                android:textSize="16sp"
+                app:layout_constraintLeft_toRightOf="@+id/iv_user_avatar"
+                app:layout_constraintTop_toTopOf="@+id/iv_user_avatar"
+                tools:text="施永哲" />
+
+            <TextView
+                android:id="@+id/tv_user_level"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:background="@drawable/shape_user_level_bg"
+                android:paddingStart="5dp"
+                android:paddingEnd="4dp"
+                android:textColor="#ffffffff"
+                android:textSize="11sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/tv_user_name"
+                app:layout_constraintLeft_toRightOf="@+id/tv_user_name"
+                tools:text="LV5" />
+
+            <RatingBar
+                android:id="@+id/rb_user_rating"
+                style="?attr/ratingBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:isIndicator="true"
+                android:numStars="5"
+                android:rating="3.5"
+                android:stepSize="0.5"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_user_avatar"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/iv_user_avatar" />
+
+            <TextView
+                android:id="@+id/tv_user_evaluation_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:textColor="#ff666666"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_user_avatar"
+                app:layout_constraintLeft_toRightOf="@+id/iv_user_avatar"
+                tools:text="2020-01-01" />
+
+            <TextView
+                android:id="@+id/tv_user_likes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#ff666666"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_user_avatar"
+                app:layout_constraintRight_toRightOf="parent"
+                tools:text="1234" />
+
+            <TextView
+                android:id="@+id/tv_user_evaluation_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:textColor="#ff666666"
+                android:textSize="14sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iv_user_avatar"
+                tools:text="这里是一段描述性文字，一般会有多行。如有评价，文字全部展示。" />
+        </android.support.constraint.ConstraintLayout>
+
+        <View
+            android:id="@+id/tv_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_gravity="bottom"
+            android:background="#DDDDDD"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tv_no_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        android:text="~ 没有更多啦 ~"
+        android:textColor="#ff999999"
+        android:textSize="14sp"
+        android:visibility="visible" />
+</LinearLayout>
+
+

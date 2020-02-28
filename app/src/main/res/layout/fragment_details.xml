@@ -13,51 +13,68 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="#3f00"
             android:orientation="vertical">
 
-            <FrameLayout
+            <LinearLayout
                 android:id="@+id/layout_home"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="599dp"
+                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/tv_1"
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="500dp"
-                    android:layout_gravity="center"
-                    android:background="#f00"
-                    android:text="商品"
-                    android:textSize="38sp" />
-            </FrameLayout>
+                    android:layout_height="375dp" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="12dp" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="12dp" />
+            </LinearLayout>
 
             <FrameLayout
                 android:id="@+id/layout_middle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="173dp"
+                android:background="#30f0">
 
-                <TextView
-                    android:id="@+id/tv_2"
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    android:layout_gravity="center"
-                    android:background="#0f0"
-                    android:text="评价"
-                    android:textSize="38sp" />
+                    android:layout_height="45dp" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="116dp" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="12dp" />
             </FrameLayout>
 
             <FrameLayout
                 android:id="@+id/layout_end"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:background="#300f">
 
-                <TextView
-                    android:id="@+id/tv_3"
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="600dp"
-                    android:layout_gravity="center"
-                    android:background="#00f"
-                    android:text="详情"
-                    android:textSize="38sp" />
+                    android:layout_height="45dp" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="281dp" />
             </FrameLayout>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
@@ -65,6 +82,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:alpha="0.0"
         android:orientation="vertical">
 
         <Button

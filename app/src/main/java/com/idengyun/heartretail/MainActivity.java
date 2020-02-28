@@ -10,6 +10,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SystemUIHelper.applySystemUI(this);
         //setContentView(R.layout.activity_main);
         getSupportFragmentManager()
                 .beginTransaction()
