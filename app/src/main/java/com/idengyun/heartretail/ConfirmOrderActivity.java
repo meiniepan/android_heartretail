@@ -12,7 +12,7 @@ import com.dengyun.baselibrary.base.activity.BaseActivity;
 public class ConfirmOrderActivity extends BaseActivity {
     @Override
     protected int getLayoutId() {
-        return 0;
+        return R.layout.activity_confirm_order;
     }
 
     @Override
