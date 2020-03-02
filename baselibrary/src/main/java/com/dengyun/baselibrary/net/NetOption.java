@@ -148,7 +148,7 @@ public class NetOption {
         private Type type;
         private Class clazz;
         private boolean isInterceptErrorCode = true;//是否拦截错误code (继续拦截全局的错误code，例如token过期，只是设置是否不拦截其他非全局的错误code)
-        private @ProjectType int projectType = ProjectType.IDENGYUN_FZX;//项目类型（由于不同的项目的网络参数配置可能不一致)，默认每天美耶
+        private @ProjectType int projectType = ProjectType.IDENGYUN_HR;//项目类型（由于不同的项目的网络参数配置可能不一致)，默认每天美耶
 
         private Builder(String url) {
             this.url = url;

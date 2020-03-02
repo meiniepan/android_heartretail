@@ -12,6 +12,8 @@ import com.dengyun.baselibrary.utils.phoneapp.AppUtils;
 import com.sensorsdata.analytics.android.sdk.SensorsDataAPI;
 import com.sensorsdata.analytics.android.sdk.util.SensorsDataUtils;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -57,8 +59,10 @@ public class DealParamsUtil {
             //  这里替换掉netOption中的params参数，替换成一个key，value为加密之后的参数json
             String imDealParams = getDealIMParams(netOption.getParams(), netOption.isEncrypt());
             netOption.getParams().clear();
-            netOption.getParams().put("paramString",imDealParams);
+            netOption.getParams().put("paramString", imDealParams);
             return imDealParams;
+        } else if (netOption.getProjectType() == ProjectType.IDENGYUN_HR) {
+            return getDealHRParams(netOption.getParams(), netOption.isEncrypt());
         } else {
             return GsonConvertUtil.toJson(netOption.getParams());
         }
@@ -77,7 +81,7 @@ public class DealParamsUtil {
         setFZXPublicParam(paramsMap);//添加公共参数
         if (isEncrypt) {
             String secret = SharedPreferencesUtil.getData(Utils.getApp(), "main", "secret", "");
-            return getFZXEncryptJson(paramsMap,secret);//妃子校参数加密
+            return getFZXEncryptJson(paramsMap, secret);//妃子校参数加密
         } else {
             return GsonConvertUtil.toJson(paramsMap);
         }
@@ -88,7 +92,7 @@ public class DealParamsUtil {
         setFZXPublicParam(paramsMap);//添加公共参数
         if (isEncrypt) {
             String cs_secret = SharedPreferencesUtil.getData(Utils.getApp(), "main", "cs_secret", "");
-            return getFZXEncryptJson(paramsMap,cs_secret);//妃子校参数加密
+            return getFZXEncryptJson(paramsMap, cs_secret);//妃子校参数加密
         } else {
             return GsonConvertUtil.toJson(paramsMap);
         }
@@ -98,7 +102,7 @@ public class DealParamsUtil {
         setFZXPublicParam(paramsMap);//添加公共参数
         if (isEncrypt) {
             String ms_secret = SharedPreferencesUtil.getData(Utils.getApp(), "main", "ms_secret", "");
-            return getFZXEncryptJson(paramsMap,ms_secret);//妃子校参数加密
+            return getFZXEncryptJson(paramsMap, ms_secret);//妃子校参数加密
         } else {
             return GsonConvertUtil.toJson(paramsMap);
         }
@@ -108,7 +112,7 @@ public class DealParamsUtil {
         setFZXPublicParam(paramsMap);//添加公共参数
         if (isEncrypt) {
             String secret_dt = SharedPreferencesUtil.getData(Utils.getApp(), "main", "marketService", "");
-            return getFZXEncryptJson(paramsMap,secret_dt);//妃子校参数加密
+            return getFZXEncryptJson(paramsMap, secret_dt);//妃子校参数加密
         } else {
             return GsonConvertUtil.toJson(paramsMap);
         }
@@ -132,6 +136,15 @@ public class DealParamsUtil {
         }
     }
 
+    public static String getDealHRParams(Map paramsMap, boolean isEncrypt) {
+        setHRPublicParam(paramsMap);//添加公共参数
+        if (isEncrypt) {
+            return getHREncryptJson(paramsMap);//妃子校参数加密
+        } else {
+            return GsonConvertUtil.toJson(paramsMap);
+        }
+    }
+
 
     /**
      * 每天美耶参数加密
@@ -144,7 +157,7 @@ public class DealParamsUtil {
         String secret = SharedPreferencesUtil.getData(Utils.getApp(), "mainconfig", "secret", "");
         //加密字段拼接在请求json前后，得md5值
         String signMd5 = EncryptUtils.stringToMD5(secret + paramJson0 + secret);
-        Map<String,Object> paramMap = new HashMap<>();
+        Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("jsonStr", "mtmy" + paramJson0);
         paramMap.put("sign", signMd5);
         return GsonConvertUtil.toJson(paramMap);
@@ -156,10 +169,10 @@ public class DealParamsUtil {
      * @param map 加密之前的map
      * @return 加密之后的参数Json
      */
-    private static String getFZXEncryptJson(Map map,String secret) {
+    private static String getFZXEncryptJson(Map map, String secret) {
         String paramJson0 = GsonConvertUtil.toJson(map);
         String signMd5 = EncryptUtils.stringToMD5(secret + paramJson0 + secret);
-        Map<String,Object> paramMap = new HashMap<>();
+        Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("jsonStr", secret + paramJson0);
         paramMap.put("sign", signMd5);
         return GsonConvertUtil.toJson(paramMap);
@@ -176,7 +189,7 @@ public class DealParamsUtil {
         String secret = SharedPreferencesUtil.getData(Utils.getApp(), "mainconfig", "secret", "");
         //加密字段拼接在请求json前后，得md5值
         String signMd5 = EncryptUtils.stringToMD5(secret + paramJson0 + secret);
-        Map<String,Object> paramMap = new HashMap<>();
+        Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("jsonStr", secret + paramJson0);
         paramMap.put("sign", signMd5);
         return GsonConvertUtil.toJson(paramMap);
@@ -190,24 +203,39 @@ public class DealParamsUtil {
      */
     private static String getIMEncryptJson(Map map) {
         //map中的key添加进ArrayList并排序
-        Collection<String> paramsKeySet= map.keySet(); //ASCII排序
+        Collection<String> paramsKeySet = map.keySet(); //ASCII排序
         Iterator paramIterator = paramsKeySet.iterator();
         List<String> list = new ArrayList(paramsKeySet.size());
-        while(paramIterator.hasNext()){
-            list.add((String)paramIterator.next());
+        while (paramIterator.hasNext()) {
+            list.add((String) paramIterator.next());
         }
         Collections.sort(list);//按字典升序排序
 
         //字符串拼接,md5获得加密签名
         StringBuffer sbu = new StringBuffer();
         sbu.append("appKey=im");//字符串签名拼接
-        for (String key : list){
-            sbu.append("&"+key+"&");
+        for (String key : list) {
+            sbu.append("&" + key + "&");
         }
         sbu.append("&appId=im");//字符串后面拼接
         String signMd5 = EncryptUtils.stringToMD5(sbu.toString());
         map.put("sign", signMd5);
         return GsonConvertUtil.toJson(map);
+    }
+
+    /**
+     * 心零售请求加密
+     *
+     * @param map
+     * @return
+     */
+    private static String getHREncryptJson(Map map) {
+        String paramJson0 = GsonConvertUtil.toJson(map);
+        String signMd5 = EncryptUtils.stringToMD5(paramJson0 + "secret");
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("jsonStr", paramJson0);
+        paramMap.put("sign", signMd5);
+        return GsonConvertUtil.toJson(paramMap);
     }
 
     /**
@@ -227,7 +255,8 @@ public class DealParamsUtil {
         if (!map.containsKey("city_name"))
             map.put("city_name", GlobalProperty.getInstance().getCity());
         if (SensorsDataAPI.sharedInstance(Utils.getApp()).getAnonymousId() != null) {
-            if (!map.containsKey("distinct_id")) map.put("distinct_id", SensorsDataAPI.sharedInstance(Utils.getApp()).getAnonymousId());
+            if (!map.containsKey("distinct_id"))
+                map.put("distinct_id", SensorsDataAPI.sharedInstance(Utils.getApp()).getAnonymousId());
         }
         if (!map.containsKey("sa_province"))
             map.put("sa_province", GlobalProperty.getInstance().getSaProvince() == null ? "" : GlobalProperty.getInstance().getSaProvince());
@@ -249,7 +278,7 @@ public class DealParamsUtil {
      *
      * @param map 之前的参数map
      */
-    public static void setFZXPublicParam(Map map){
+    public static void setFZXPublicParam(Map map) {
         String token = SpUserConstants.getUserToken();
         String user_id = SpUserConstants.getUserId();
 
@@ -257,9 +286,11 @@ public class DealParamsUtil {
         if (!map.containsKey("client")) map.put("client", "android");
         if (!map.containsKey("user_token")) map.put("user_token", token);
         if (!map.containsKey("ver_num")) map.put("ver_num", AppUtils.getAppVersionName());
-        if (!map.containsKey("company_id")) map.put("company_id", GlobalProperty.getInstance().getCompany_id());
+        if (!map.containsKey("company_id"))
+            map.put("company_id", GlobalProperty.getInstance().getCompany_id());
         if (SensorsDataAPI.sharedInstance(Utils.getApp()).getAnonymousId() != null) {
-            if (!map.containsKey("distinct_id")) map.put("distinct_id", SensorsDataAPI.sharedInstance(Utils.getApp()).getAnonymousId());
+            if (!map.containsKey("distinct_id"))
+                map.put("distinct_id", SensorsDataAPI.sharedInstance(Utils.getApp()).getAnonymousId());
         }
         if (!map.containsKey("sa_province"))
             map.put("sa_province", GlobalProperty.getInstance().getSaProvince() == null ? "" : GlobalProperty.getInstance().getSaProvince());
@@ -282,7 +313,7 @@ public class DealParamsUtil {
      *
      * @param map 之前的参数map
      */
-    public static void setIMPublicParam(Map map){
+    public static void setIMPublicParam(Map map) {
         if (!map.containsKey("client")) map.put("client", "android");
         if (!map.containsKey("version")) map.put("version", AppUtils.getAppVersionName());
     }
@@ -292,7 +323,17 @@ public class DealParamsUtil {
      *
      * @param map 之前的参数map
      */
-    public static void setSobotPublicParam(Map map){
+    public static void setSobotPublicParam(Map map) {
+        if (!map.containsKey("client")) map.put("client", "android");
+        if (!map.containsKey("version")) map.put("version", AppUtils.getAppVersionName());
+    }
+
+    /**
+     * 心零售参数添加公共参数
+     *
+     * @param map 之前的参数map
+     */
+    public static void setHRPublicParam(Map map) {
         if (!map.containsKey("client")) map.put("client", "android");
         if (!map.containsKey("version")) map.put("version", AppUtils.getAppVersionName());
     }

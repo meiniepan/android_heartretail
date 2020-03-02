@@ -23,5 +23,9 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    compileOnly rootProject.ext.dependencies.appcompat
+    compileOnly rootProject.ext.dependencies.sadatalib
     implementation project(':baselibrary')
+    implementation project(':routermodule')
+    api rootProject.ext.dependencies.updatelib
 }
