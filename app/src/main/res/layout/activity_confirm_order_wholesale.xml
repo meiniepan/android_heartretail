@@ -89,10 +89,14 @@
                     android:visibility="gone"
                     >
 
-                    <ImageView
-                        android:layout_width="@dimen/dp_14"
-                        android:layout_height="@dimen/dp_16"
-                        android:src="@drawable/ic_check_off" />
+                    <CheckBox
+                        android:id="@+id/cb_protocol"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:button="@null"
+                        android:drawableStart="@drawable/selector_read_protocol"
+                        />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -238,12 +242,16 @@
                     android:layout_height="wrap_content"
                     tools:hint="红包余额支付" />
 
-                <ImageView
-                    android:id="@+id/iv_red_packet_switch"
-                    android:layout_width="36dp"
-                    android:layout_height="24dp"
-                    android:layout_marginStart="8dp"
-                    android:background="@drawable/ic_switch_off" />
+                <CheckBox
+                    android:id="@+id/cb_red_packet_switch"
+                    android:layout_marginStart="2dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:button="@null"
+                    android:checked="true"
+                    android:drawableStart="@drawable/selector_switch"
+                    />
             </LinearLayout>
 
             <Space
@@ -285,7 +293,7 @@
             <ImageView
                 android:layout_width="14dp"
                 android:layout_height="14dp"
-                android:background="@drawable/ic_check_off" />
+                android:background="@drawable/ic_read_protocol_off" />
 
             <TextView
                 android:layout_width="wrap_content"
