@@ -16,6 +16,11 @@ import java.util.HashMap;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/**
+ * @Title 店铺列表页面
+ * @Author: zhoubo
+ * @CreateDate: 2020-02-28 16:10
+ */
 public class ShopListActivity extends BaseActivity {
 
     private String tempImgUrl = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1582971338042&di=a2a7879ee98d6f9c50d5f1ccdeeccd73&imgtype=0&src=http%3A%2F%2Fdik.img.kttpdq.com%2Fpic%2F142%2F99386%2F5bdc6bc2302e4423_1440x900.jpg";
