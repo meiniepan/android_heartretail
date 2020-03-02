@@ -17,8 +17,7 @@ import com.idengyun.heartretail.utils.DecimalFormatUtil;
 import java.util.List;
 
 /**
- * @Title 标题
- * @Desc: 描述
+ * @Title 店铺列表适配器
  * @Author: zhoubo
  * @CreateDate: 2020-02-28 16:10
  */

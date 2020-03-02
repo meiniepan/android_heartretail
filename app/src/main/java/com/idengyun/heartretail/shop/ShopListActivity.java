@@ -50,8 +50,8 @@ public class ShopListActivity extends BaseActivity {
         shopListBean1.setShopName("可诺丹婷大族广场店2");
         shopListBean1.setDistance(700);
         shopListBean1.setShopAddress("北京市大兴区荣京东街12号");
-        shopListBean.setIsUsed(0);
-        shopListBean.setIsNear(1);
+        shopListBean1.setIsUsed(0);
+        shopListBean1.setIsNear(1);
         shopListBean1.setShopId(2);
         shopListBean1.setShopPhoto(tempImgUrl);
         shopListBeans.add(shopListBean1);
@@ -61,8 +61,8 @@ public class ShopListActivity extends BaseActivity {
             shopListBean2.setShopName("可诺丹婷大族广场店"+(i+3));
             shopListBean2.setDistance(700);
             shopListBean2.setShopAddress("北京市大兴区荣京东街12号");
-            shopListBean.setIsUsed(0);
-            shopListBean.setIsNear(0);
+            shopListBean2.setIsUsed(0);
+            shopListBean2.setIsNear(0);
             shopListBean2.setShopId(i+3);
             shopListBean2.setShopPhoto(tempImgUrl);
             shopListBeans.add(shopListBean2);
