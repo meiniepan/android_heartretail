@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".shop.ShopDetailActivity">
+    <com.dengyun.baselibrary.widgets.toolbar.BaseToolBar
+        android:id="@+id/toolbar_shop_detail"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/basetool_height"/>
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="230dp"
+        android:columnCount="3"
+        android:rowCount="2"
+        android:useDefaultMargins="false"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginBottom="24dp"
+        android:orientation="horizontal">
+        <com.dengyun.baselibrary.widgets.imageview.RoundImageView
+            android:id="@+id/riv_photo1"
+            android:layout_margin="4.5dp"
+            android:gravity="center"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:src="@mipmap/ic_launcher"
+            app:radius="8dp"
+            android:scaleType="centerCrop" />
+        <com.dengyun.baselibrary.widgets.imageview.RoundImageView
+            android:id="@+id/riv_photo2"
+            android:layout_margin="4.5dp"
+            android:gravity="center"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:src="@mipmap/ic_launcher"
+            app:radius="8dp"
+            android:scaleType="centerCrop" />
+        <com.dengyun.baselibrary.widgets.imageview.RoundImageView
+            android:id="@+id/riv_photo3"
+            android:layout_margin="4.5dp"
+            android:gravity="center"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:src="@mipmap/ic_launcher"
+            app:radius="8dp"
+            android:scaleType="centerCrop" />
+        <com.dengyun.baselibrary.widgets.imageview.RoundImageView
+            android:id="@+id/riv_photo4"
+            android:layout_margin="4.5dp"
+            android:gravity="center"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:src="@mipmap/ic_launcher"
+            app:radius="8dp"
+            android:scaleType="centerCrop" />
+        <com.dengyun.baselibrary.widgets.imageview.RoundImageView
+            android:id="@+id/riv_photo5"
+            android:layout_margin="4.5dp"
+            android:gravity="center"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:src="@mipmap/ic_launcher"
+            app:radius="8dp"
+            android:scaleType="centerCrop" />
+        <com.dengyun.baselibrary.widgets.imageview.RoundImageView
+            android:id="@+id/riv_photo6"
+            android:layout_margin="4.5dp"
+            android:gravity="center"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:src="@mipmap/ic_launcher"
+            app:radius="8dp"
+            android:scaleType="centerCrop" />
+    </GridLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@color/lineColor"/>
+    <TextView
+        android:id="@+id/tv_shop_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="24dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:text="可诺丹婷大族广场店" />
+    <TextView
+        android:id="@+id/tv_shop_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="16dp"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:drawablePadding="8dp"
+        android:gravity="center_vertical"
+        android:drawableStart="@drawable/ic_shop_time"
+        android:text="10:00 - 22:00" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="16dp">
+        <ImageView
+            android:id="@+id/iv_shop_navigation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/ic_shop_navigation"
+            android:paddingEnd="22dp"
+            android:layout_centerVertical="true"/>
+        <TextView
+            android:id="@+id/tv_shop_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:layout_toStartOf="@+id/iv_shop_navigation"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:maxLines="2"
+            android:layout_marginEnd="10dp"
+            android:drawablePadding="8dp"
+            android:drawableStart="@drawable/ic_shop_address"
+            android:text="北京市大兴区荣华南路大族广场T5座" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_shop_tele"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="16dp"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:drawablePadding="8dp"
+        android:gravity="center_vertical"
+        android:drawableStart="@drawable/ic_shop_tele"
+        android:text="010 - 12345678"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="24dp"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:text="门店简介"/>
+    <TextView
+        android:id="@+id/tv_shop_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="12dp"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:text="这里时一段对该店铺的文字介绍信息，文字全"/>
+
+</LinearLayout>
