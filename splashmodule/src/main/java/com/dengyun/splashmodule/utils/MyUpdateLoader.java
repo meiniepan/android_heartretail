@@ -27,8 +27,13 @@ public class MyUpdateLoader implements UpdateDataLoader {
                                   String requestUrl,
                                   boolean isShowDialog,
                                   final UpdateDataLoaderCallback callback) {
-        //requestUrl = "http://10.10.8.22:9151/app-store/interface/iversion/queryAppVersion.do";//测试地址
-        Type type = new TypeToken<ApiBean<UpdateBean>>() {}.getType();
+        // TODO: 2020-03-02 临时方案先不请求更新接口
+        UpdateBean updateBean = new UpdateBean();
+        updateBean.setIsUpdate(0);
+        updateBean.setIsForce(0);
+        callback.onSuccess(updateBean);
+
+        /*Type type = new TypeToken<ApiBean<UpdateBean>>() {}.getType();
         NetOption netOption = NetOption.newBuilder(requestUrl)
                 .isShowDialog(isShowDialog)
                 .projectType(ProjectType.NONE)
@@ -51,7 +56,7 @@ public class MyUpdateLoader implements UpdateDataLoader {
             public void handleError(Response<ApiBean<UpdateBean>> response) {
                 //处理请求错误，这里去掉默认处理，重写此方法空实现
             }
-        });
+        });*/
     }
 
     @Override

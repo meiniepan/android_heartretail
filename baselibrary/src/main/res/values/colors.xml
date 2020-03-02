@@ -2,9 +2,9 @@
 <resources>
     <color name="baselib_white">#ffffff</color>
     <color name="baselib_black">#000000</color>
-    <color name="basetoobar_bgcolor">#ff4c82</color>
-    <color name="basetoobar_textcolor">#ffffff</color>
-    <color name="basetoobar_right_textcolor">#ffffff</color>
+    <color name="basetoobar_bgcolor">#ffffff</color>
+    <color name="basetoobar_textcolor">#333333</color>
+    <color name="basetoobar_right_textcolor">#333333</color>
     <color name="base_gray">#949494</color>
     <color name="base_dialog_ios_blue">#037BFF</color>
     <color name="base_dialog_ios_gray">#8F8F8F</color>
