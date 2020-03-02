@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/baselib_white"
+        android:orientation="vertical">
+        <com.dengyun.baselibrary.widgets.imageview.RatioImageView
+            android:id="@+id/imageview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
+
+<!--        <RelativeLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent">-->
+<!--            <ImageView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_centerInParent="true"-->
+<!--                android:src="@drawable/splash_bg_bottom"/>-->
+<!--        </RelativeLayout>-->
+    </LinearLayout>
+
+    <com.dengyun.splashmodule.widgets.CountDownView
+        android:id="@+id/cdv_ad"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="40dp"
+        android:layout_marginRight="20dp"
+        app:count_background_color="@color/base_gray999"
+        app:count_bordercolor="@color/base_red08d"
+        app:count_borderwidth="3dp"
+        app:count_textsize="15dp"
+        app:count_text="跳过" />
+</RelativeLayout>

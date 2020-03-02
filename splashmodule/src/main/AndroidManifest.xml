@@ -1,2 +1,40 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.idengyun.splashmodule" />
+    package="com.dengyun.splashmodule">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+
+    <application android:allowBackup="true">
+
+        <activity
+            android:name=".activitys.SplashActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeSplash">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <!-- 神策妃子校测试版scheme： sa76893f95 -->
+            <!-- 神策妃子校正式版scheme： sa541e0919 -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="heatmap"
+                    android:scheme="sa541e0919" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>
