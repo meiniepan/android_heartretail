@@ -1,4 +1,4 @@
-package com.idengyun.heartretail;
+package com.idengyun.heartretail.goods;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,6 +12,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
+import com.idengyun.heartretail.R;
 
 /**
  * 用户评价

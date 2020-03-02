@@ -1,4 +1,4 @@
-package com.idengyun.heartretail;
+package com.idengyun.heartretail.main;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

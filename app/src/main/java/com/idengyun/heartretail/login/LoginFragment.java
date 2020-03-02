@@ -1,4 +1,4 @@
-package com.idengyun.heartretail;
+package com.idengyun.heartretail.login;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -9,6 +9,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
+import com.idengyun.heartretail.R;
 
 /**
  * 登录页面

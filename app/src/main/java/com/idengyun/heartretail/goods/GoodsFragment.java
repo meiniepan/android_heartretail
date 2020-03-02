@@ -1,4 +1,4 @@
-package com.idengyun.heartretail;
+package com.idengyun.heartretail.goods;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
+import com.idengyun.heartretail.R;
 import com.zhoubo07.bannerlib.ConvenientBanner;
 import com.zhoubo07.bannerlib.banner.SimpleImageBannerBean;
 import com.zhoubo07.bannerlib.banner.SimpleImageHolder;

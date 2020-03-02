@@ -4,6 +4,7 @@ package com.idengyun.heartretail;
 import android.os.Bundle;
 
 import com.dengyun.baselibrary.base.activity.BaseActivity;
+import com.idengyun.heartretail.main.MainFragment;
 
 public class MainActivity extends BaseActivity {
 

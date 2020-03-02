@@ -1,4 +1,4 @@
-package com.idengyun.heartretail;
+package com.idengyun.heartretail.main;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -7,6 +7,7 @@ import android.support.design.widget.TabLayout;
 import android.view.View;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
+import com.idengyun.heartretail.R;
 
 /**
  * 红包页面
