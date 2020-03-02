@@ -26,7 +26,9 @@ import java.util.Iterator;
 public class SplashActivity extends BaseSplashActivity {
     @Override
     public void loadMainAndAdUrls(final OnLoadMainUrlsListener onLoadMainUrlsListener) {
-        Type type = new TypeToken<MainConfig>() {}.getType();
+        // TODO: 2020-03-02 先注掉主配置请求
+
+        /*Type type = new TypeToken<MainConfig>() {}.getType();
         NetOption netOption = NetOption.newBuilder(MainUrlConstants.MAINHTTP)
                 .activity(this)
                 .type(type)
@@ -55,7 +57,7 @@ public class SplashActivity extends BaseSplashActivity {
                         super.onNoNet(e);
                         //没联网的操作
                     }
-                });
+                });*/
     }
 
     private void saveLocalMainconfig( final MainConfig mainConfig){
