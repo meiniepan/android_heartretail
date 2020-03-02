@@ -150,17 +150,33 @@
                         android:textColor="#ff999999"
                         android:textSize="14sp" />
 
-                    <EditText
-                        android:id="@+id/et_pwd"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="#3f00"
-                        android:hint="请输入登录密码"
-                        android:paddingTop="23dp"
-                        android:paddingBottom="17dp"
-                        android:textColor="#ff666666"
-                        android:textColorHint="#ff666666"
-                        android:textSize="14sp" />
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/et_pwd"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="#3f00"
+                            android:hint="请输入登录密码"
+                            android:paddingTop="23dp"
+                            android:paddingBottom="17dp"
+                            android:textColor="#ff666666"
+                            android:textColorHint="#ff666666"
+                            android:textSize="14sp" />
+
+                        <CheckBox
+                            android:id="@+id/cb_eye"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:button="@null"
+                            android:drawableStart="@drawable/selector_login_eye" />
+                    </LinearLayout>
 
                     <TextView
                         android:layout_width="wrap_content"
