@@ -81,10 +81,11 @@ public class LeadFragment1 extends BaseFragment {
         String url = SpMainConfigConstants.index();
         if(TextUtils.isEmpty(url)){
             Type type = new TypeToken<ApiBean<MainConfig>>() {}.getType();
+            // TODO: 2020-03-02 项目类型妃子校 需修改
             NetOption netOption = NetOption.newBuilder(MainUrlConstants.MAINHTTP)
                     .fragment(this)
                     .type(type)
-                    .projectType(ProjectType.IDENGYUN_HR)
+                    .projectType(ProjectType.IDENGYUN_FZX)
                     .isEncrypt(false)
                     .isShowDialog(true)
                     .build();
