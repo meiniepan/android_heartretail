@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="ThemeSplash" parent="Theme.AppCompat.Light.NoActionBar">
+        <!--设置闪屏页的背景图，设置.9图时后面的广告页黑屏，原因暂时未找到，使用正常图片-->
+        <!--<item name="android:windowBackground">@color/base_red08d</item>-->
+        <item name="android:windowBackground">@drawable/layler_splash_bg</item>
+        <item name="android:windowNoTitle">true</item>
+        <!--<item name="android:windowFullscreen">true</item>-->
+        <item name="windowActionBar">false</item>
+        <!--一定要，否则有状态栏显示，不能全屏-->
+        <item name="windowNoTitle">true</item>
+
+        <!--不让windowBackground延申到navigation bar区域-->
+        <item name="android:windowDrawsSystemBarBackgrounds">false</item>
+    </style>
+</resources>

@@ -3,4 +3,11 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="orange">#FF6633</color>
+    <color name="black">#333333</color>
+    <color name="textGray">#666666</color>
+    <color name="yellow">#FFBB22</color>
+    <color name="lineColor">#DDDDDD</color>
+    <color name="heart_orange">#FF6633</color>
+    <color name="tint">#fff8f8f8</color>
 </resources>
