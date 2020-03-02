@@ -1,25 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray3"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
+    android:background="@color/tint"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:scrollbars="none">
 
-    <!--    <com.dengyun.baselibrary.widgets.toolbar.BaseToolBar-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="44dp"-->
-    <!--        app:left_icon="@drawable/picture_back"-->
-    <!--        app:toolbar_title="确认订单"-->
-    <!--        app:titleTextColor="@color/bar_grey_90"-->
-    <!--        />-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@color/white"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_goods_detail_back_arrow" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/back"
+            android:text="返回"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="确认订单"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingStart="15dp"
+        android:background="@color/white"
         android:paddingTop="24dp"
         android:paddingEnd="15dp"
         android:paddingBottom="24dp">
@@ -93,7 +121,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="4dp"
-        android:background="" />
+        android:background="@drawable/bac_decore_split" />
 
 
     <com.idengyun.statusrecyclerviewlib.StatusRecyclerView
@@ -190,10 +218,11 @@
                 tools:hint="红包余额支付" />
 
             <ImageView
+                android:id="@+id/iv_red_packet_switch"
                 android:layout_width="36dp"
                 android:layout_height="24dp"
                 android:layout_marginStart="8dp"
-                android:background="" />
+                android:background="@drawable/ic_switch_off" />
         </LinearLayout>
         <Space
             android:layout_width="match_parent"
@@ -231,7 +260,7 @@
     <ImageView
         android:layout_width="14dp"
         android:layout_height="14dp"
-        android:background=""/>
+        android:background="@drawable/ic_check_off" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -275,3 +304,4 @@
     </LinearLayout>
 
 </LinearLayout>
+</android.support.v4.widget.NestedScrollView>
