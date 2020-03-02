@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
+import com.dengyun.baselibrary.net.constants.ProjectType;
 import com.dengyun.baselibrary.net.rx.RxObserver;
 import com.dengyun.baselibrary.net.rx.RxSchedulers;
 import com.dengyun.baselibrary.spconstants.SpUserConstants;
@@ -30,6 +31,7 @@ public class SplashActivity extends BaseSplashActivity {
                 .activity(this)
                 .type(type)
                 .isEncrypt(false)
+                .projectType(ProjectType.IDENGYUN_FZX)
                 .params("nowu_id", SpUserConstants.getUserId())
                 .params("user_token",SpUserConstants.getUserToken())
                 .params("company_id",SpUserConstants.getComPanyId())
