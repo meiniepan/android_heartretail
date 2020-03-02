@@ -56,6 +56,8 @@
                 tools:text="LV5" />
 
             <RatingBar
+                android:minHeight="13dp"
+                android:maxHeight="13dp"
                 android:id="@+id/rb_user_rating"
                 style="?attr/ratingBarStyleSmall"
                 android:layout_width="wrap_content"
@@ -84,6 +86,9 @@
                 android:id="@+id/tv_user_likes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_goods_detail_likes"
+                android:drawablePadding="4dp"
+                android:gravity="center_vertical"
                 android:textColor="#ff666666"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_user_avatar"
