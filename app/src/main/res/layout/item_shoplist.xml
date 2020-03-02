@@ -55,25 +55,25 @@
             android:textSize="12sp"
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
+            android:layout_marginEnd="12dp"
             tool:text="最近使用"
             android:text="最近使用" />
         <TextView
             android:id="@+id/tv_shop_near"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
             android:background="@drawable/shape_yellow_shop_near"
             android:textColor="@color/white"
             android:textSize="12sp"
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
+            android:layout_marginEnd="12dp"
             tool:text="据您最近"
             android:text="据您最近" />
         <TextView
             android:id="@+id/tv_shop_distance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
             android:textSize="14sp"
             android:textColor="@color/textGray"
             tool:text="距离700m"
@@ -89,5 +89,10 @@
         android:textColor="@color/textGray"
         tool:text="北京市大兴区荣京东街12号"
         android:text="北京市大兴区荣京东街12号"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/lineColor"/>
 
 </RelativeLayout>

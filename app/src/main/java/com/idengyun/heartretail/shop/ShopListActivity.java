@@ -3,6 +3,7 @@ package com.idengyun.heartretail.shop;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 
 import com.dengyun.baselibrary.base.activity.BaseActivity;
 import com.idengyun.heartretail.R;
@@ -61,7 +62,7 @@ public class ShopListActivity extends BaseActivity {
         shopListBean1.setShopPhoto(tempImgUrl);
         shopListBeans.add(shopListBean1);
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             ShopListBean shopListBean2 = new ShopListBean();
             shopListBean2.setShopName("可诺丹婷大族广场店"+(i+3));
             shopListBean2.setDistance(700);
@@ -73,6 +74,7 @@ public class ShopListActivity extends BaseActivity {
             shopListBeans.add(shopListBean2);
         }
         ShopListAdapter shopListAdapter = new ShopListAdapter(R.layout.item_shoplist,shopListBeans);
+        rrvShoplist.setLayoutManager(new LinearLayoutManager(this));
         rrvShoplist.setAdapter(shopListAdapter);
     }
 
