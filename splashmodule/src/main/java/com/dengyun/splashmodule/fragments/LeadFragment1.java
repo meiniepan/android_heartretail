@@ -15,6 +15,7 @@ import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.config.RouterPathConfig;
 import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
+import com.dengyun.baselibrary.net.constants.ProjectType;
 import com.dengyun.baselibrary.net.rx.RxObserver;
 import com.dengyun.baselibrary.net.rx.RxSchedulers;
 import com.dengyun.baselibrary.spconstants.SpUserConstants;
@@ -83,6 +84,7 @@ public class LeadFragment1 extends BaseFragment {
             NetOption netOption = NetOption.newBuilder(MainUrlConstants.MAINHTTP)
                     .fragment(this)
                     .type(type)
+                    .projectType(ProjectType.IDENGYUN_HR)
                     .isEncrypt(false)
                     .isShowDialog(true)
                     .build();
