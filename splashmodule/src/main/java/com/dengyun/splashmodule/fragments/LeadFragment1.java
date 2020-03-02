@@ -15,6 +15,7 @@ import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.config.RouterPathConfig;
 import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
+import com.dengyun.baselibrary.net.constants.ProjectType;
 import com.dengyun.baselibrary.net.rx.RxObserver;
 import com.dengyun.baselibrary.net.rx.RxSchedulers;
 import com.dengyun.baselibrary.spconstants.SpUserConstants;
@@ -80,9 +81,11 @@ public class LeadFragment1 extends BaseFragment {
         String url = SpMainConfigConstants.index();
         if(TextUtils.isEmpty(url)){
             Type type = new TypeToken<ApiBean<MainConfig>>() {}.getType();
+            // TODO: 2020-03-02 项目类型妃子校 需修改
             NetOption netOption = NetOption.newBuilder(MainUrlConstants.MAINHTTP)
                     .fragment(this)
                     .type(type)
+                    .projectType(ProjectType.IDENGYUN_FZX)
                     .isEncrypt(false)
                     .isShowDialog(true)
                     .build();
