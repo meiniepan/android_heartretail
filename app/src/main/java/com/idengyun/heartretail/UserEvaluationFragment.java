@@ -20,6 +20,36 @@ import com.dengyun.baselibrary.base.fragment.BaseFragment;
  */
 public final class UserEvaluationFragment extends BaseFragment {
 
+
+    class LoadMore {
+        int totalSize;
+        int totalPage;
+        int pageSize;
+        int page;
+
+        public LoadMore() {
+
+
+            totalPage = (int) Math.ceil(1D * totalSize / pageSize);
+
+            if (page > totalPage) {
+                // 已经是最后一页了
+                return;
+            }
+
+            if ((page + 1) > totalPage) {
+                // 已经是最后一页了
+
+            } else {
+                int newPage = page + 1;
+
+            }
+
+            // clalback success page+=1 fail=page;
+        }
+    }
+
+
     @Override
     public int getLayoutId() {
         return R.layout.fragment_user_evaluation;
@@ -43,20 +73,21 @@ public final class UserEvaluationFragment extends BaseFragment {
 
         @NonNull
         @Override
-        public EvaluationHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        public EvaluationHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int position) {
             if (inflater == null) inflater = LayoutInflater.from(viewGroup.getContext());
             View itemView = inflater.inflate(R.layout.fragment_user_evaluation_item, viewGroup, false);
             return new EvaluationHolder(itemView);
         }
 
         @Override
-        public void onBindViewHolder(@NonNull EvaluationHolder evaluationHolder, int i) {
-
+        public void onBindViewHolder(@NonNull EvaluationHolder holder, int position) {
+            if (position == getItemCount() - 1) holder.tv_no_more.setVisibility(View.VISIBLE);
+            else holder.tv_no_more.setVisibility(View.GONE);
         }
 
         @Override
         public int getItemCount() {
-            return 0;
+            return 6;
         }
 
         class EvaluationHolder extends RecyclerView.ViewHolder {
@@ -72,6 +103,10 @@ public final class UserEvaluationFragment extends BaseFragment {
 
             EvaluationHolder(@NonNull View itemView) {
                 super(itemView);
+                findViewById(itemView);
+            }
+
+            private void findViewById(@NonNull View itemView) {
                 iv_user_avatar = itemView.findViewById(R.id.iv_user_avatar);
                 tv_user_name = itemView.findViewById(R.id.tv_user_name);
                 tv_user_level = itemView.findViewById(R.id.tv_user_level);
@@ -81,6 +116,14 @@ public final class UserEvaluationFragment extends BaseFragment {
                 tv_user_evaluation_content = itemView.findViewById(R.id.tv_user_evaluation_content);
                 tv_divider = itemView.findViewById(R.id.tv_divider);
                 tv_no_more = itemView.findViewById(R.id.tv_no_more);
+
+                //rb_user_rating.setMax();
+//                rb_user_rating.setProgressDrawable(getResources().getDrawable(R.drawable.layer_list_ratingbar));
+//                Drawable drawable = getResources().getDrawable(R.drawable.ic_start_16dp_bg);
+//                Drawable drawable1 = getResources().getDrawable(R.drawable.ic_star_16dp);
+//                Drawable pd = new LayerDrawable(new Drawable[]{drawable, new GradientDrawable(), drawable1});
+//                rb_user_rating.setProgressDrawable(pd);
+//                new BitmapDrawable().setTileModeXY();
             }
         }
     }

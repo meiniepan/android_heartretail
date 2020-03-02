@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingStart="0dp"
+    android:paddingTop="0dp"
+    android:paddingEnd="12dp"
+    android:paddingBottom="12dp"
+    android:textColor="#ff333333"
+    android:textSize="14sp"
+    tools:text="20ml装">
+
+    <CheckBox
+        android:id="@+id/tv_goods_spec"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_goods_spec_flex_item_bg"
+        android:button="@null"
+        android:paddingStart="12dp"
+        android:paddingTop="9dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="9dp"
+        android:textColor="@color/selector_goods_spec_flex_item_text_color"
+        android:textSize="14sp"
+        tools:checked="true"
+        tools:text="20ml装" />
+</FrameLayout>
+
+
+

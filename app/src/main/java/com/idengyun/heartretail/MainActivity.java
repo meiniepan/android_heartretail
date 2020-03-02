@@ -2,8 +2,11 @@ package com.idengyun.heartretail;
 
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 
 import com.dengyun.baselibrary.base.activity.BaseActivity;
+
+import java.util.concurrent.Executors;
 
 public class MainActivity extends BaseActivity {
 
@@ -16,6 +19,13 @@ public class MainActivity extends BaseActivity {
                 .beginTransaction()
                 .add(android.R.id.content, new MainFragment())
                 .commit();
+        Executors.newSingleThreadExecutor().submit(new Runnable() {
+            @Override
+            public void run() {
+                HRNetApi.demo();
+            }
+        });
+
     }
 
     @Override
