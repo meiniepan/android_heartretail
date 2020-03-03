@@ -28,6 +28,7 @@ public final class BEvaluation {
             public String contents;
             public String orderId;
             public int isShow;
+            public String userImgUrl;
 
         }
     }

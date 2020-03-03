@@ -12,5 +12,14 @@ public final class BLogin {
 
     public static class Data {
         public String token;
+        public User user;
+
+        public static class User {
+            public int id;
+            public String mobile;
+            public String invitationCode;
+            public String headUrl;
+            public String nickName;
+        }
     }
 }

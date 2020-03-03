@@ -1,8 +1,10 @@
 package com.idengyun.heartretail.goods;
 
 import android.os.Bundle;
+import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,54 +13,37 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
+import com.dengyun.baselibrary.net.ImageApi;
 import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
+import com.dengyun.baselibrary.utils.ImageUtils;
+import com.dengyun.baselibrary.utils.ToastUtils;
 import com.idengyun.heartretail.HRConst;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.request.KVEvaluation;
 import com.idengyun.heartretail.model.response.BEvaluation;
 import com.lzy.okgo.model.Response;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
- * 商品评价
+ * 商品评价页
  *
  * @author aLang
  */
 public final class GoodsEvaluationFragment extends BaseFragment {
-
-
-    class LoadMore {
-        int totalSize;
-        int totalPage;
-        int pageSize;
-        int page;
-
-        public LoadMore() {
-
-
-            totalPage = (int) Math.ceil(1D * totalSize / pageSize);
-
-            if (page > totalPage) {
-                // 已经是最后一页了
-                return;
-            }
-
-            if ((page + 1) > totalPage) {
-                // 已经是最后一页了
-
-            } else {
-                int newPage = page + 1;
-
-            }
-
-            // clalback success page+=1 fail=page;
-        }
-    }
-
+    private int totalPageSize;
+    private int totalPage;
+    private int pageSize;
+    private int page;
+    private TextView tv_favorable_rate;
+    private RecyclerView recycler_view;
+    private EvaluationAdapter evaluationAdapter;
 
     @Override
     public int getLayoutId() {
@@ -67,23 +52,41 @@ public final class GoodsEvaluationFragment extends BaseFragment {
 
     @Override
     public void initViews(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        RecyclerView recycler_view = view.findViewById(R.id.recycler_view);
-        EvaluationAdapter adapter = new EvaluationAdapter();
-        recycler_view.setAdapter(adapter);
+        tv_favorable_rate = view.findViewById(R.id.tv_favorable_rate);
+        recycler_view = view.findViewById(R.id.recycler_view);
+        evaluationAdapter = new EvaluationAdapter();
+        recycler_view.setAdapter(evaluationAdapter);
+        recycler_view.addOnScrollListener(new LoadMore() {
+            @Override
+            public void onLoadMore(RecyclerView recyclerView) {
+                if (totalPageSize == 0) return;
+
+                if ((page + 1) > totalPage) {
+                    // 已经是最后一页了
+                    return;
+                }
+
+                requestAPI();
+            }
+        });
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        requestAPI();
+    }
+
+    private void requestAPI() {
         Map<String, Object> map = new KVEvaluation(
                 HRConst.VERSION,
                 "",
-                1,
-                100,
+                page + 1,
+                pageSize,
                 HRConst.PLATFORM
         ).toMap();
 
-        NetOption netOption = NetOption.newBuilder("http://10.10.8.22:3000/mock/39/user/register")
+        NetOption netOption = NetOption.newBuilder("http://10.10.8.22:3000/mock/39/evaluation/query/list")
                 .activity(getActivity())
                 .isShowDialog(true)
                 .params(map)
@@ -106,11 +109,29 @@ public final class GoodsEvaluationFragment extends BaseFragment {
                     return;
                 }
 
+                updateUI(body.data);
             }
         });
     }
 
+    @MainThread
+    private void updateUI(BEvaluation.Data model) {
+        String commentCounts = model.commentCounts;
+        String praiseRate = model.praiseRate;
+        List<BEvaluation.Data.Evaluation> evaluationList = model.evaluationList;
+
+        totalPageSize = Integer.parseInt(commentCounts);
+        totalPage = (int) Math.ceil(1D * totalPageSize / pageSize);
+        pageSize = 100;
+        ++page;
+
+        tv_favorable_rate.setText(commentCounts + "+条评论，" + praiseRate + "%好评率");
+        evaluationAdapter.evaluationList.addAll(evaluationList);
+        evaluationAdapter.notifyDataSetChanged();
+    }
+
     private class EvaluationAdapter extends RecyclerView.Adapter<EvaluationAdapter.EvaluationHolder> {
+        final ArrayList<BEvaluation.Data.Evaluation> evaluationList = new ArrayList<>();
         /* 布局填充器 */
         private LayoutInflater inflater;
 
@@ -124,13 +145,13 @@ public final class GoodsEvaluationFragment extends BaseFragment {
 
         @Override
         public void onBindViewHolder(@NonNull EvaluationHolder holder, int position) {
-            if (position == getItemCount() - 1) holder.tv_no_more.setVisibility(View.VISIBLE);
-            else holder.tv_no_more.setVisibility(View.GONE);
+            BEvaluation.Data.Evaluation evaluation = evaluationList.get(position);
+            holder.updateUI(evaluation);
         }
 
         @Override
         public int getItemCount() {
-            return 6;
+            return evaluationList.size();
         }
 
         class EvaluationHolder extends RecyclerView.ViewHolder {
@@ -147,6 +168,29 @@ public final class GoodsEvaluationFragment extends BaseFragment {
             EvaluationHolder(@NonNull View itemView) {
                 super(itemView);
                 findViewById(itemView);
+            }
+
+            @MainThread
+            void updateUI(BEvaluation.Data.Evaluation evaluation) {
+                String userImgUrl = evaluation.userImgUrl;
+                String userName = evaluation.userName;
+                int userLevel = evaluation.userLevel;
+                String commentTime = evaluation.commentTime;
+                int commentStar = evaluation.commentStar;
+                String contents = evaluation.contents;
+                String orderId = evaluation.orderId;
+                int isShow = evaluation.isShow;
+
+                ImageApi.displayImage(itemView.getContext(), iv_user_avatar, userImgUrl);
+                tv_user_name.setText(userName);
+                tv_user_level.setText("LV" + userLevel);
+                tv_user_evaluation_date.setText(commentTime);
+                rb_user_rating.setNumStars(commentStar);
+                tv_user_evaluation_content.setText(contents);
+
+                if (getAdapterPosition() == totalPageSize - 1)
+                    tv_no_more.setVisibility(View.VISIBLE);
+                else tv_no_more.setVisibility(View.GONE);
             }
 
             private void findViewById(@NonNull View itemView) {

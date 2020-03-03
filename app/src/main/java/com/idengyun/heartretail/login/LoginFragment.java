@@ -22,7 +22,9 @@ import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.baselibrary.utils.RegexUtils;
+import com.dengyun.baselibrary.utils.SharedPreferencesUtil;
 import com.dengyun.baselibrary.utils.ToastUtils;
+import com.dengyun.baselibrary.utils.Utils;
 import com.dengyun.baselibrary.utils.phoneapp.AppUtils;
 import com.idengyun.heartretail.HRConst;
 import com.idengyun.heartretail.MainActivity;
@@ -201,7 +203,7 @@ public final class LoginFragment extends BaseFragment
 //        }
     }
 
-    /* 请求注册api */
+    /* 请求注册API */
     private void requestRegister() {
         if (!RegexUtils.isMobileSimple(et_register_mobile.getEditableText())) {
             ToastUtils.showShort("请输入有效手机号码");
@@ -263,7 +265,7 @@ public final class LoginFragment extends BaseFragment
         });
     }
 
-    /* 发送手机验证码 */
+    /* 发送手机验证码API */
     private void sendVerifyCode() {
         if (RegexUtils.isMobileSimple(et_register_mobile.getEditableText())) {
             ToastUtils.showShort("请输入有效手机号码");
@@ -310,7 +312,7 @@ public final class LoginFragment extends BaseFragment
         });
     }
 
-    /* 开启主界面 */
+    /* 请求登录API */
     private void requestLogin() {
         if (!RegexUtils.isMobileSimple(et_login_mobile.getEditableText())) {
             ToastUtils.showShort("请输入有效手机号码");
@@ -353,7 +355,8 @@ public final class LoginFragment extends BaseFragment
                     return;
                 }
 
-                ToastUtils.showShort("登录成功");
+                SharedPreferencesUtil.saveDataBean(HRConst.CONTEXT, HRConst.XML_FILE_NAME_USER_INFO, body);
+                // oastUtils.showShort("登录成功");
                 startMainActivity();
             }
         });
