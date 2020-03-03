@@ -1,25 +1,23 @@
-package com.idengyun.heartretail;
+package com.idengyun.heartretail.activitys;
 
 import android.os.Bundle;
 
 import com.dengyun.baselibrary.base.activity.BaseActivity;
-import com.dengyun.baselibrary.widgets.toolbar.BaseToolBar;
-
-import butterknife.BindView;
+import com.idengyun.heartretail.R;
 
 /**
  * @author Burning
  * @description:
- * @date :2020-02-29 11:16
+ * @date :2020/3/3 0003 10:31
  */
-public class ConfirmOrderActivity extends BaseActivity {
-
+public class PaySuccessActivity extends BaseActivity {
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_confirm_order_retail;
+        return R.layout.activity_pay_success;
     }
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
+
     }
 }

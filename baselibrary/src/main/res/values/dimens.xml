@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="basetool_height">44dp</dimen>
-    <dimen name="basetool_textsize">19dp</dimen>
+    <dimen name="basetool_height">52dp</dimen>
+    <dimen name="basetool_textsize">18dp</dimen>
     <dimen name="dp_1">1dp</dimen>
     <dimen name="dp_2">2dp</dimen>
     <dimen name="dp_3">3dp</dimen>

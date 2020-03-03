@@ -12,6 +12,7 @@ import com.dengyun.baselibrary.utils.ToastUtils;
 import com.dengyun.baselibrary.widgets.imageview.RoundImageView;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.beans.ShopListBean;
+import com.idengyun.heartretail.shop.ShopDetailActivity;
 import com.idengyun.heartretail.utils.DecimalFormatUtil;
 
 import java.util.List;
@@ -57,8 +58,7 @@ public class ShopListAdapter extends BaseQuickAdapter<ShopListBean, BaseViewHold
         tvShopDistance.setText(distanceStr);
         //店铺详情按钮监听
         tvShopDetai.setOnClickListener(v -> {
-            // TODO: 2020-02-29 跳转店铺详情
-            ToastUtils.showShort("跳转店铺详情"+item.getShopId());
+            ShopDetailActivity.start(mContext,item.getShopId());
         });
 
     }
