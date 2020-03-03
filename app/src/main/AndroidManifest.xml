@@ -38,6 +38,7 @@
         <activity android:name=".activitys.ModifyPwdActivity" />
         <activity android:name=".activitys.PaySuccessActivity" />
         <activity android:name=".activitys.VerifyDeviceActivity" />
+        <activity android:name=".activitys.ConfirmOrderActivity" />
     </application>
 
 </manifest>
