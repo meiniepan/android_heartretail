@@ -7,7 +7,7 @@ import com.dengyun.baselibrary.utils.SharedPreferencesUtil;
  *
  * @author aLang
  */
-public final class HRUserUtil {
+public final class HRUser {
 
     /* 获取用户ID */
     public static int getId() {
