@@ -9,27 +9,33 @@ import com.dengyun.baselibrary.utils.SharedPreferencesUtil;
  */
 public final class HRUserUtil {
 
+    /* 获取用户ID */
     public static int getId() {
-        return getValueFromUserInfo("id");
+        return SharedPreferencesUtil.getData(HRConst.CONTEXT, HRConst.XML_FILE_NAME_USER_INFO, "id", -1);
     }
 
+    /* 获取用户手机号码 */
     public static String getMobile() {
         return getValueFromUserInfo("mobile");
     }
 
+    /* 获取用户好友邀请码 */
     public static String getInvitationCode() {
         return getValueFromUserInfo("invitationCode");
     }
 
+    /* 获取用户头像地址 */
     public static String getHeadUrl() {
         return getValueFromUserInfo("headUrl");
     }
 
+    /* 获取用户昵称 */
     public static String getNickName() {
         return getValueFromUserInfo("nickName");
     }
 
-    private static <T extends Object> T getValueFromUserInfo(String key) {
+    /* 不要使用这个 */
+    private static <T> T getValueFromUserInfo(String key) {
         return SharedPreferencesUtil.getData(HRConst.CONTEXT, HRConst.XML_FILE_NAME_USER_INFO, key, "");
     }
 
