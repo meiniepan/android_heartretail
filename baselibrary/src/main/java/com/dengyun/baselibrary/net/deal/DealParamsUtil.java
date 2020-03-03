@@ -231,7 +231,7 @@ public class DealParamsUtil {
      */
     private static String getHREncryptJson(Map map) {
         String paramJson0 = GsonConvertUtil.toJson(map);
-        String signMd5 = EncryptUtils.stringToMD5(paramJson0 + "secret");
+        String signMd5 = EncryptUtils.stringToMD5(paramJson0 + "xls");
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("jsonStr", paramJson0);
         paramMap.put("sign", signMd5);
@@ -333,9 +333,11 @@ public class DealParamsUtil {
      *
      * @param map 之前的参数map
      */
-    public static void setHRPublicParam(Map map) {
-        if (!map.containsKey("client")) map.put("client", "android");
-        if (!map.containsKey("version")) map.put("version", AppUtils.getAppVersionName());
+    public static void setHRPublicParam(Map<String, Object> map) {
+        if (null == map.get("platform")) map.put("platform", "Android");
+        if (null == map.get("version")) map.put("version", AppUtils.getAppVersionName());
+        // if (!map.containsKey("client")) map.put("client", "android");
+        // if (!map.containsKey("version")) map.put("version", AppUtils.getAppVersionName());
     }
 
 }

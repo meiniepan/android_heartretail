@@ -12,14 +12,23 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
+import com.dengyun.baselibrary.net.NetApi;
+import com.dengyun.baselibrary.net.NetOption;
+import com.dengyun.baselibrary.net.callback.JsonCallback;
+import com.idengyun.heartretail.HRConst;
 import com.idengyun.heartretail.R;
+import com.idengyun.heartretail.model.request.KVEvaluation;
+import com.idengyun.heartretail.model.response.BEvaluation;
+import com.lzy.okgo.model.Response;
+
+import java.util.Map;
 
 /**
- * 用户评价
+ * 商品评价
  *
  * @author aLang
  */
-public final class UserEvaluationFragment extends BaseFragment {
+public final class GoodsEvaluationFragment extends BaseFragment {
 
 
     class LoadMore {
@@ -53,7 +62,7 @@ public final class UserEvaluationFragment extends BaseFragment {
 
     @Override
     public int getLayoutId() {
-        return R.layout.fragment_user_evaluation;
+        return R.layout.fragment_goods_evaluation;
     }
 
     @Override
@@ -66,6 +75,39 @@ public final class UserEvaluationFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        Map<String, Object> map = new KVEvaluation(
+                HRConst.VERSION,
+                "",
+                1,
+                100,
+                HRConst.PLATFORM
+        ).toMap();
+
+        NetOption netOption = NetOption.newBuilder("http://10.10.8.22:3000/mock/39/user/register")
+                .activity(getActivity())
+                .isShowDialog(true)
+                .params(map)
+                .clazz(BEvaluation.class)
+                .build();
+
+        NetApi.getData(netOption, new JsonCallback<BEvaluation>(netOption) {
+            @Override
+            public void onSuccess(Response<BEvaluation> response) {
+                if (response.code() != 200) {
+                    return;
+                }
+
+                BEvaluation body = response.body();
+                if (body == null) {
+                    return;
+                }
+
+                if (!"200".equals(body.code)) {
+                    return;
+                }
+
+            }
+        });
     }
 
     private class EvaluationAdapter extends RecyclerView.Adapter<EvaluationAdapter.EvaluationHolder> {
@@ -76,7 +118,7 @@ public final class UserEvaluationFragment extends BaseFragment {
         @Override
         public EvaluationHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int position) {
             if (inflater == null) inflater = LayoutInflater.from(viewGroup.getContext());
-            View itemView = inflater.inflate(R.layout.fragment_user_evaluation_item, viewGroup, false);
+            View itemView = inflater.inflate(R.layout.fragment_goods_evaluation_item, viewGroup, false);
             return new EvaluationHolder(itemView);
         }
 

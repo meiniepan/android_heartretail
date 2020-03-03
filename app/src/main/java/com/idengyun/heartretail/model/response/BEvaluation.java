@@ -1,0 +1,34 @@
+package com.idengyun.heartretail.model.response;
+
+import java.util.List;
+
+/**
+ * 商品评价API 响应体
+ *
+ * @author aLang
+ */
+public final class BEvaluation {
+    public String code;
+    public String msg;
+    public Data data;
+
+    public static class Data {
+        public List<Evaluation> evaluationList;
+        public String commentCounts;
+        public String praiseRate;
+
+        public static class Evaluation {
+            public int commentId;
+            public int goodsId;
+            public int userId;
+            public String userName;
+            public int userLevel;
+            public String commentTime;
+            public int commentStar;
+            public String contents;
+            public String orderId;
+            public int isShow;
+
+        }
+    }
+}

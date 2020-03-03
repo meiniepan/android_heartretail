@@ -11,12 +11,16 @@ import android.view.View;
 import android.widget.RadioGroup;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
+import com.dengyun.baselibrary.utils.SharedPreferencesUtil;
+import com.dengyun.baselibrary.utils.SizeUtils;
+import com.dengyun.baselibrary.utils.Utils;
+import com.dengyun.baselibrary.utils.phoneapp.AppUtils;
 import com.idengyun.heartretail.R;
 
 import java.lang.ref.WeakReference;
 
 /**
- * 商品详情
+ * 商品详情主页
  *
  * @author aLang
  */
@@ -25,7 +29,7 @@ public final class GoodsDetailsFragment extends BaseFragment implements RadioGro
     private int middleHeight;
     private int endHeight;*/
     private GoodsFragment goodsFragment;
-    private UserEvaluationFragment evaluationFragment;
+    private GoodsEvaluationFragment evaluationFragment;
 
     private View layout_second_title;
     private View iv_back;
@@ -43,79 +47,6 @@ public final class GoodsDetailsFragment extends BaseFragment implements RadioGro
     private View layout_customer_service;
     private View layout_buy_now;
 
-    public class GoodsDetailsTitleBar implements RadioGroup.OnCheckedChangeListener, View.OnClickListener {
-        private final WeakReference<FragmentActivity> reference;
-        private final View view;
-        View layout_second_title;
-        View iv_back;
-
-        View layout_main_title;
-        View tv_back;
-        View iv_goods_1;
-        View iv_goods_2;
-        View iv_evaluation_1;
-        View iv_evaluation_2;
-        RadioGroup radio_group;
-        View rb_goods;
-        View rb_evaluation;
-
-
-        public GoodsDetailsTitleBar(Fragment fragment) {
-            view = fragment.getView();
-            reference = new WeakReference<>(fragment.getActivity());
-            if (view == null) return;
-
-            layout_second_title = view.findViewById(R.id.layout_second_title);
-            iv_back = view.findViewById(R.id.iv_back);
-            iv_back.setOnClickListener(this);
-
-            layout_main_title = view.findViewById(R.id.layout_main_title);
-            tv_back = view.findViewById(R.id.tv_back);
-            iv_goods_1 = view.findViewById(R.id.iv_goods_1);
-            iv_goods_2 = view.findViewById(R.id.iv_goods_2);
-            iv_evaluation_1 = view.findViewById(R.id.iv_evaluation_1);
-            iv_evaluation_2 = view.findViewById(R.id.iv_evaluation_2);
-            radio_group = view.findViewById(R.id.radio_group);
-            rb_goods = view.findViewById(R.id.rb_goods);
-            rb_evaluation = view.findViewById(R.id.rb_evaluation);
-
-            tv_back.setOnClickListener(this);
-            radio_group.setOnCheckedChangeListener(this);
-
-            radio_group.clearCheck();
-            radio_group.check(R.id.rb_goods);
-
-            layout_second_title.setVisibility(View.VISIBLE);
-            layout_main_title.setVisibility(View.GONE);
-        }
-
-        @Override
-        public void onCheckedChanged(RadioGroup group, int checkedId) {
-            if (checkedId == R.id.rb_goods) {
-                iv_goods_1.setVisibility(View.VISIBLE);
-                iv_goods_2.setVisibility(View.VISIBLE);
-                iv_evaluation_1.setVisibility(View.INVISIBLE);
-                iv_evaluation_2.setVisibility(View.INVISIBLE);
-            } else if (checkedId == R.id.rb_evaluation) {
-                iv_goods_1.setVisibility(View.INVISIBLE);
-                iv_goods_2.setVisibility(View.INVISIBLE);
-                iv_evaluation_1.setVisibility(View.VISIBLE);
-                iv_evaluation_2.setVisibility(View.VISIBLE);
-            }
-        }
-
-        @Override
-        public void onClick(View v) {
-            reference.get().onBackPressed();
-        }
-
-        void updateUI() {
-            if (view == null) return;
-            layout_second_title.setVisibility(View.GONE);
-            layout_main_title.setVisibility(View.GONE);
-        }
-    }
-
     /**
      * 周一 心项目-商品详情页 商品规格页 用户评价页 1.UI编写 2.api调试
      * 周二 心项目-确认订单页 1.UI编写 2.api调试
@@ -130,15 +61,15 @@ public final class GoodsDetailsFragment extends BaseFragment implements RadioGro
 
     @Override
     public void initViews(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        // new GoodsDetailsTitleBar(this);
         findViewById(view);
+
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         goodsFragment = new GoodsFragment();
-        evaluationFragment = new UserEvaluationFragment();
+        evaluationFragment = new GoodsEvaluationFragment();
         getChildFragmentManager()
                 .beginTransaction()
                 .add(R.id.layout_container, goodsFragment)
@@ -254,7 +185,8 @@ public final class GoodsDetailsFragment extends BaseFragment implements RadioGro
 
         // layout_second_title.setAlpha(1f);
         // layout_main_title.setAlpha(0f);
-        dimension = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 64f, getResources().getDisplayMetrics());
+        ;
+        dimension = SizeUtils.dp2px(64f);
 
     }
 }
