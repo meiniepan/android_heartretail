@@ -23,7 +23,6 @@ import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.baselibrary.utils.RegexUtils;
 import com.dengyun.baselibrary.utils.ToastUtils;
-import com.dengyun.baselibrary.utils.phoneapp.AppUtils;
 import com.idengyun.heartretail.HRConst;
 import com.idengyun.heartretail.MainActivity;
 import com.idengyun.heartretail.R;
@@ -274,7 +273,7 @@ public final class LoginFragment extends BaseFragment
 
         String query = new KVVerify(
                 et_register_mobile.getEditableText().toString(),
-                HRConst.IDENTIFY_TYPE,
+                HRConst.IDENTIFY_TYPE_0,
                 HRConst.VERSION,
                 HRConst.PLATFORM
         ).toQuery();
