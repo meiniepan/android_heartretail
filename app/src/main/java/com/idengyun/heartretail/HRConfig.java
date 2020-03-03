@@ -7,14 +7,30 @@ import com.dengyun.baselibrary.utils.SharedPreferencesUtil;
  *
  * @author aLang
  */
-public final class MCHelper {
+public final class HRConfig {
 
-    public static final String key_0 = "";
-    public static final String key_1 = "";
-    public static final String key_2 = "";
-    public static final String key_3 = "";
+    /* 获取商品评价URL */
+    public static String getGoodsEvaluationUrl() {
+        return getMainConfigUrl("evaluationList");
+    }
 
-    public static String getHRUrl(String key) {
+    /* 获取登录URL */
+    public static String getLoginUrl() {
+        return getMainConfigUrl("login");
+    }
+
+    /* 获取注册URL */
+    public static String getRegisterUrl() {
+        return getMainConfigUrl("register");
+    }
+
+    /* 获取手机验证码URL */
+    public static String getVerifyUrl() {
+        return getMainConfigUrl("");
+    }
+
+    /* 不要使用 */
+    private static String getMainConfigUrl(String key) {
         return SharedPreferencesUtil.getData(HRConst.CONTEXT, HRConst.XML_FILE_NAME_MAIN_CONFIG, key, "");
     }
 
