@@ -26,7 +26,7 @@ public final class HRConfig {
 
     /* 获取手机验证码URL */
     public static String getVerifyUrl() {
-        return getMainConfigUrl("");
+        return getMainConfigUrl("getIdentifyCode");
     }
 
     /* 不要使用 */
