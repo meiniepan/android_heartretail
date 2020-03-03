@@ -25,7 +25,7 @@ public class FirstActivity extends BaseActivity {
     }
 
     public void skipShopList(View view) {
-        ConfirmOrderActivity.start(this);
+        VerifyDeviceActivity.start(this);
     }
 
     public void skipFist(View view) {

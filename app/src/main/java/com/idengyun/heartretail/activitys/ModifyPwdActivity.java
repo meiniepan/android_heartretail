@@ -1,16 +1,64 @@
 package com.idengyun.heartretail.activitys;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
+import android.text.method.TransformationMethod;
+import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.activity.BaseActivity;
+import com.dengyun.baselibrary.net.NetApi;
+import com.dengyun.baselibrary.net.NetOption;
+import com.dengyun.baselibrary.net.callback.JsonCallback;
+import com.dengyun.baselibrary.net.constants.RequestMethod;
+import com.dengyun.baselibrary.utils.RegexUtils;
+import com.dengyun.baselibrary.utils.ToastUtils;
+import com.idengyun.heartretail.HRConst;
 import com.idengyun.heartretail.R;
+import com.idengyun.heartretail.login.SecondsTimer;
+import com.idengyun.heartretail.model.request.KVModifyPwd;
+import com.idengyun.heartretail.model.request.KVVerify;
+import com.idengyun.heartretail.model.response.BVerify;
+import com.idengyun.heartretail.model.response.HrApiBean;
+import com.lzy.okgo.model.Response;
+
+import java.util.Map;
+
+import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * @author Burning
  * @description:
  * @date :2020/3/3 0003 10:38
  */
-public class ModifyPwdActivity extends BaseActivity {
+public class ModifyPwdActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener {
+
+    @BindView(R.id.et_phone_num)
+    EditText etPhoneNum;
+    @BindView(R.id.et_v_code1)
+    EditText etVCode1;
+    @BindView(R.id.tv_get_v_code1)
+    TextView tvGetVCode1;
+    @BindView(R.id.et_new_pwd)
+    EditText etNewPwd;
+    @BindView(R.id.cb_pwd_eye)
+    CheckBox cbPwdEye;
+    @BindView(R.id.tv_modify_pwd)
+    TextView tvModifyPwd;
+    private SecondsTimer timer;
+
+    public static void start(Context context) {
+        Intent starter = new Intent(context, ModifyPwdActivity.class);
+        context.startActivity(starter);
+    }
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_modify_pwd;
@@ -18,6 +66,153 @@ public class ModifyPwdActivity extends BaseActivity {
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
+        cbPwdEye.setOnCheckedChangeListener(this);
+    }
 
+
+    @OnClick({R.id.tv_get_v_code1, R.id.tv_modify_pwd})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.tv_get_v_code1:
+                sendVerifyCode();
+                break;
+            case R.id.tv_modify_pwd:
+                modifyPwd();
+                break;
+        }
+    }
+
+    /* 发送手机验证码 */
+    private void sendVerifyCode() {
+        if (!RegexUtils.isMobileSimple(etPhoneNum.getEditableText())) {
+            ToastUtils.showShort("请输入有效手机号码");
+            return;
+        }
+        startTimer();
+
+        String query = new KVVerify(
+                etPhoneNum.getText().toString(),
+                HRConst.IDENTIFY_TYPE_2,
+                HRConst.VERSION,
+                HRConst.PLATFORM
+        ).toQuery();
+        String url = "http://10.10.8.22:3000/mock/39/user/send/msg" + query;
+
+        NetOption netOption = NetOption.newBuilder(url)
+                .activity(this)
+                .isShowDialog(true)
+                .clazz(BVerify.class)
+                .build();
+
+        NetApi.getData(RequestMethod.GET, netOption, new JsonCallback<BVerify>(netOption) {
+            @Override
+            public void onSuccess(Response<BVerify> response) {
+                if (200 != response.code()) {
+                    ToastUtils.showLong("验证码发送失败");
+                    return;
+                }
+
+                BVerify body = response.body();
+                if (null == body) {
+                    ToastUtils.showLong("验证码发送失败");
+                    return;
+                }
+
+                if (!"200".equals(body.code)) {
+                    ToastUtils.showLong(body.msg);
+                    return;
+                }
+
+                ToastUtils.showLong("验证码已发出");
+            }
+        });
+    }
+
+    /* 修改密码api */
+    private void modifyPwd() {
+        if (!RegexUtils.isMobileSimple(etPhoneNum.getEditableText())) {
+            ToastUtils.showShort("请输入有效手机号码");
+            return;
+        }
+
+        if (etVCode1.length() < 1) {
+            ToastUtils.showShort("请输入有效手机验证码");
+            return;
+        }
+
+        if (etNewPwd.length() < 1) {
+            ToastUtils.showShort("请输入有效密码");
+            return;
+        }
+
+        Map<String, Object> map = new KVModifyPwd(
+                etPhoneNum.getEditableText().toString(),
+                etVCode1.getEditableText().toString(),
+                etNewPwd.getEditableText().toString(),
+                HRConst.VERSION,
+                HRConst.PLATFORM
+        ).toMap();
+
+        NetOption netOption = NetOption.newBuilder("http://10.10.8.22:3000/mock/39/user/change/pwd")
+                .activity(this)
+                .isShowDialog(true)
+                .params(map)
+                .clazz(HrApiBean.class)
+                .build();
+
+        NetApi.getData(netOption, new JsonCallback<HrApiBean>(netOption) {
+            @Override
+            public void onSuccess(Response<HrApiBean> response) {
+                if (response.code() != 200) {
+                    return;
+                }
+
+                HrApiBean body = response.body();
+                if (body == null) {
+                    return;
+                }
+
+                if (!"200".equals(body.code)) {
+                    return;
+                }
+
+                ToastUtils.showShort("修改密码成功");
+
+            }
+        });
+    }
+
+    private void startTimer() {
+        tvGetVCode1.setEnabled(false);
+
+        if (timer == null) {
+            timer = new SecondsTimer(60L, new SecondsTimer.Callback() {
+                @Override
+                public void onTick(long secondsUntilFinished) {
+                    tvGetVCode1.setText(secondsUntilFinished + "s后重发");
+                }
+
+                @Override
+                public void onFinish() {
+                    tvGetVCode1.setText("再次获取");
+                    tvGetVCode1.setEnabled(true);
+                }
+            });
+        }
+
+        timer.start();
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        int id = buttonView.getId();
+        TransformationMethod method = isChecked ? HideReturnsTransformationMethod.getInstance() : PasswordTransformationMethod.getInstance();
+        switch (id) {
+            case R.id.cb_pwd_eye:
+                etNewPwd.setTransformationMethod(method);
+                break;
+            default:
+                break;
+        }
     }
 }
