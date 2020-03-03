@@ -13,6 +13,7 @@ import com.dengyun.baselibrary.utils.phoneapp.AppUtils;
 public final class HRConst {
     public static final Application CONTEXT = Utils.getApp();
 
+    /* 主配置.xml 登录API.xml */
     public static final String XML_FILE_NAME_MAIN_CONFIG = "hr_main_config";
     public static final String XML_FILE_NAME_USER_INFO = "hr_user_info";
 

@@ -24,6 +24,7 @@ import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.baselibrary.utils.RegexUtils;
 import com.dengyun.baselibrary.utils.SharedPreferencesUtil;
 import com.dengyun.baselibrary.utils.ToastUtils;
+import com.idengyun.heartretail.HRConfig;
 import com.idengyun.heartretail.HRConst;
 import com.idengyun.heartretail.MainActivity;
 import com.idengyun.heartretail.R;
@@ -230,7 +231,9 @@ public final class LoginFragment extends BaseFragment
                 HRConst.APP_NAME
         ).toMap();
 
-        NetOption netOption = NetOption.newBuilder("http://10.10.8.22:3000/mock/39/user/register")
+        String url = HRConfig.getRegisterUrl();
+        url = "http://10.10.8.22:3000/mock/39/user/register";
+        NetOption netOption = NetOption.newBuilder(url)
                 .activity(getActivity())
                 .isShowDialog(true)
                 .params(map)
@@ -278,7 +281,9 @@ public final class LoginFragment extends BaseFragment
                 HRConst.VERSION,
                 HRConst.PLATFORM
         ).toQuery();
-        String url = "http://10.10.8.22:3000/mock/39/user/send/msg" + query;
+        String url = HRConfig.getVerifyUrl();
+        url = "http://10.10.8.22:3000/mock/39/user/send/msg";
+        url += query;
 
         NetOption netOption = NetOption.newBuilder(url)
                 .activity(getActivity())
@@ -330,7 +335,9 @@ public final class LoginFragment extends BaseFragment
                 HRConst.PLATFORM);
         Map<String, Object> map = login.toMap();
 
-        NetOption netOption = NetOption.newBuilder("http://10.10.8.22:3000/mock/39/user/login")
+        String url = HRConfig.getLoginUrl();
+        url = "http://10.10.8.22:3000/mock/39/user/login";
+        NetOption netOption = NetOption.newBuilder(url)
                 .activity(getActivity())
                 .isShowDialog(true)
                 .params(map)

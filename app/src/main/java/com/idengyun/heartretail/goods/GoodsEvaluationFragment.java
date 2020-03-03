@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,22 +12,20 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.dengyun.baselibrary.base.ApiBean;
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.net.ImageApi;
 import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
-import com.dengyun.baselibrary.spconstants.SpMainConfigConstants;
 import com.google.gson.reflect.TypeToken;
+import com.idengyun.heartretail.HRConfig;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.beans.EvaluationListBean;
 import com.lzy.okgo.model.Response;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 商品评价页
@@ -77,12 +74,15 @@ public final class GoodsEvaluationFragment extends BaseFragment {
     }
 
     private void requestAPI() {
-        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.evaluationList())
+        String url = HRConfig.getGoodsEvaluationUrl();
+        url = "http://10.10.8.22:3000/mock/39/evaluation/query/list";
+        NetOption netOption = NetOption.newBuilder(url)
                 .fragment(this)
-                .type(new TypeToken<ApiBean<EvaluationListBean>>(){}.getType())
+                .type(new TypeToken<ApiBean<EvaluationListBean>>() {
+                }.getType())
                 .params("goodsId", "")
-                .params("page",page+1)
-                .params("pageSize",pageSize)
+                .params("page", page + 1)
+                .params("pageSize", pageSize)
                 .build();
         NetApi.<ApiBean<EvaluationListBean>>getData(netOption, new JsonCallback<ApiBean<EvaluationListBean>>(netOption) {
             @Override
