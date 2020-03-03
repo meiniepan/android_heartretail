@@ -78,8 +78,8 @@ public class JsonConvert<T> implements Converter<T> {
         }
     }
 
-    private String codeFeflectName = "result";
-    private String msgFeflectName = "message";
+    private String codeFeflectName = "code";
+    private String msgFeflectName = "msg";
 
     private T parseClass(Response response, Class<?> rawType) throws Exception {
         ResponseBody body = response.body();
@@ -184,7 +184,7 @@ public class JsonConvert<T> implements Converter<T> {
                     String json = GsonConvertUtil.toJson(simpleResponse);
                     printLog(json);
                 }
-                return setReturn(simpleResponse.result,simpleResponse.message, (T) simpleResponse.toApiBean(),true);
+                return setReturn(simpleResponse.code,simpleResponse.msg, (T) simpleResponse.toApiBean(),true);
 
             } else {
                 // 泛型格式如下： new JsonCallback<LzyResponse<内层JavaBean>>(this)
@@ -194,7 +194,7 @@ public class JsonConvert<T> implements Converter<T> {
                     String json = GsonConvertUtil.toJson(apiBean);
                     printLog(json);
                 }
-                return setReturn(apiBean.result,apiBean.message, (T) apiBean,true);
+                return setReturn(apiBean.code,apiBean.msg, (T) apiBean,true);
             }
         }
     }

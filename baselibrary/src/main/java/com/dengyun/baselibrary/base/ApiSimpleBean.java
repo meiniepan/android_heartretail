@@ -9,13 +9,13 @@ public class ApiSimpleBean{
 
 //    private static final long serialVersionUID = -1477609349345966116L;
 
-    public String result;
-    public String message;
+    public String code;
+    public String msg;
 
     public ApiBean toApiBean() {
         ApiBean apiBean = new ApiBean();
-        apiBean.result = result;
-        apiBean.message = message;
+        apiBean.code = code;
+        apiBean.msg = msg;
         return apiBean;
     }
 }

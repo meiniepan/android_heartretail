@@ -334,6 +334,7 @@ public final class LoginFragment extends BaseFragment
                 .activity(getActivity())
                 .isShowDialog(true)
                 .params(map)
+                .isInterceptErrorCode(false)
                 .clazz(BLogin.class)
                 .build();
 
