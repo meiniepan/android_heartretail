@@ -14,17 +14,16 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.dengyun.baselibrary.base.ApiBean;
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.net.ImageApi;
 import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
-import com.dengyun.baselibrary.utils.ImageUtils;
-import com.dengyun.baselibrary.utils.ToastUtils;
-import com.idengyun.heartretail.HRConst;
+import com.dengyun.baselibrary.spconstants.SpMainConfigConstants;
+import com.google.gson.reflect.TypeToken;
 import com.idengyun.heartretail.R;
-import com.idengyun.heartretail.model.request.KVEvaluation;
-import com.idengyun.heartretail.model.response.BEvaluation;
+import com.idengyun.heartretail.beans.EvaluationListBean;
 import com.lzy.okgo.model.Response;
 
 import java.util.ArrayList;
@@ -78,47 +77,26 @@ public final class GoodsEvaluationFragment extends BaseFragment {
     }
 
     private void requestAPI() {
-        Map<String, Object> map = new KVEvaluation(
-                HRConst.VERSION,
-                "",
-                page + 1,
-                pageSize,
-                HRConst.PLATFORM
-        ).toMap();
-
-        NetOption netOption = NetOption.newBuilder("http://10.10.8.22:3000/mock/39/evaluation/query/list")
-                .activity(getActivity())
-                .isShowDialog(true)
-                .params(map)
-                .clazz(BEvaluation.class)
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.evaluationList())
+                .fragment(this)
+                .type(new TypeToken<ApiBean<EvaluationListBean>>(){}.getType())
+                .params("goodsId", "")
+                .params("page",page+1)
+                .params("pageSize",pageSize)
                 .build();
-
-        NetApi.getData(netOption, new JsonCallback<BEvaluation>(netOption) {
+        NetApi.<ApiBean<EvaluationListBean>>getData(netOption, new JsonCallback<ApiBean<EvaluationListBean>>(netOption) {
             @Override
-            public void onSuccess(Response<BEvaluation> response) {
-                if (response.code() != 200) {
-                    return;
-                }
-
-                BEvaluation body = response.body();
-                if (body == null) {
-                    return;
-                }
-
-                if (!"200".equals(body.code)) {
-                    return;
-                }
-
-                updateUI(body.data);
+            public void onSuccess(Response<ApiBean<EvaluationListBean>> response) {
+                updateUI(response.body().data);
             }
         });
     }
 
     @MainThread
-    private void updateUI(BEvaluation.Data model) {
+    private void updateUI(EvaluationListBean model) {
         String commentCounts = model.commentCounts;
         String praiseRate = model.praiseRate;
-        List<BEvaluation.Data.Evaluation> evaluationList = model.evaluationList;
+        List<EvaluationListBean.Evaluation> evaluationList = model.evaluationList;
 
         totalPageSize = Integer.parseInt(commentCounts);
         totalPage = (int) Math.ceil(1D * totalPageSize / pageSize);
@@ -131,7 +109,7 @@ public final class GoodsEvaluationFragment extends BaseFragment {
     }
 
     private class EvaluationAdapter extends RecyclerView.Adapter<EvaluationAdapter.EvaluationHolder> {
-        final ArrayList<BEvaluation.Data.Evaluation> evaluationList = new ArrayList<>();
+        final ArrayList<EvaluationListBean.Evaluation> evaluationList = new ArrayList<>();
         /* 布局填充器 */
         private LayoutInflater inflater;
 
@@ -145,7 +123,7 @@ public final class GoodsEvaluationFragment extends BaseFragment {
 
         @Override
         public void onBindViewHolder(@NonNull EvaluationHolder holder, int position) {
-            BEvaluation.Data.Evaluation evaluation = evaluationList.get(position);
+            EvaluationListBean.Evaluation evaluation = evaluationList.get(position);
             holder.updateUI(evaluation);
         }
 
@@ -171,7 +149,7 @@ public final class GoodsEvaluationFragment extends BaseFragment {
             }
 
             @MainThread
-            void updateUI(BEvaluation.Data.Evaluation evaluation) {
+            void updateUI(EvaluationListBean.Evaluation evaluation) {
                 String userImgUrl = evaluation.userImgUrl;
                 String userName = evaluation.userName;
                 int userLevel = evaluation.userLevel;
