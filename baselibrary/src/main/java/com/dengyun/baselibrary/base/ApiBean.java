@@ -8,24 +8,24 @@ package com.dengyun.baselibrary.base;
 public class ApiBean<T>{
 //    private static final long serialVersionUID = 5213230387175987834L;
 
-    public String result;
-    public String message;
+    public String code;
+    public String msg;
     public T data;
 
-    public String getResult() {
-        return result;
+    public String getCode() {
+        return code;
     }
 
-    public void setResult(String result) {
-        this.result = result;
+    public void setCode(String code) {
+        this.code = code;
     }
 
-    public String getMessage() {
-        return message;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
     public T getData() {
@@ -39,8 +39,8 @@ public class ApiBean<T>{
     @Override
     public String toString() {
         return "ApiBean{" +
-                "result='" + result + '\'' +
-                ", message='" + message + '\'' +
+                "code='" + code + '\'' +
+                ", msg='" + msg + '\'' +
                 ", data=" + data +
                 '}';
     }

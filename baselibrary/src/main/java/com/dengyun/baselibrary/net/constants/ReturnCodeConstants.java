@@ -75,6 +75,15 @@ public class ReturnCodeConstants {
             "200",  // 请求成功
     };
 
+    /*------------------------------------------心零售 code常量--------------------------------------*/
+
+    //心零售全局拦截code，在application中全局配置拦截中操作
+    private static String[] HR_DEAL_GLOBAL_CODES = {};
+    //心零售需要处理的code，返回到success，例如成功、升级
+    private static String[] HR_DEAL_CODES = {
+            "200",  // 请求成功
+    };
+
 
     /**
      * 是否是需要返回处理的code
@@ -103,8 +112,11 @@ public class ReturnCodeConstants {
             //IM项目，判断code是否是需要返回success处理的code
             return isContains(IM_DEAL_CODES,code);
         }else if(netOption.getProjectType()==ProjectType.IDENGYUN_SOBOT){
-            //IM项目，判断code是否是需要返回success处理的code
+            //智齿项目，判断code是否是需要返回success处理的code
             return isContains(SOBOT_DEAL_CODES,code);
+        }else if(netOption.getProjectType()==ProjectType.IDENGYUN_HR){
+            //心零售项目，判断code是否是需要返回success处理的code
+            return isContains(HR_DEAL_CODES,code);
         }
         //不进行配置code，返回true（全返回到success)
         return true;
@@ -137,6 +149,9 @@ public class ReturnCodeConstants {
         }else if(netOption.getProjectType()==ProjectType.IDENGYUN_SOBOT){
             //IM项目，判断code是否是需要返回success处理的code
             return isContains(SOBOT_DEAL_GLOBAL_CODES,code);
+        }else if(netOption.getProjectType()==ProjectType.IDENGYUN_HR){
+            //心零售项目，判断code是否是需要返回success处理的code
+            return isContains(HR_DEAL_GLOBAL_CODES,code);
         }
         //不进行配置code，返回false，不进行全局拦截,继续向下判断
         return false;

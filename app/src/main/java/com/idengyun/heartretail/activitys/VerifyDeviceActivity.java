@@ -1,5 +1,7 @@
 package com.idengyun.heartretail.activitys;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -12,6 +14,7 @@ import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.baselibrary.utils.ToastUtils;
 import com.idengyun.heartretail.HRConst;
+import com.idengyun.heartretail.HRUser;
 import com.idengyun.heartretail.MainActivity;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.login.SecondsTimer;
@@ -20,6 +23,7 @@ import com.idengyun.heartretail.model.request.KVVerifyDevice;
 import com.idengyun.heartretail.model.response.BLogin;
 import com.idengyun.heartretail.model.response.BVerify;
 import com.idengyun.heartretail.model.response.HrApiBean;
+import com.idengyun.heartretail.utils.TransformPhoneNumUtil;
 import com.lzy.okgo.model.Response;
 
 import java.util.Map;
@@ -43,6 +47,10 @@ public class VerifyDeviceActivity extends BaseActivity {
     TextView confirmVerifyDevice;
     private SecondsTimer timer;
 
+    public static void start(Context context) {
+        Intent starter = new Intent(context, VerifyDeviceActivity.class);
+        context.startActivity(starter);
+    }
     @Override
     protected int getLayoutId() {
         return R.layout.activity_verify_device;
@@ -50,7 +58,7 @@ public class VerifyDeviceActivity extends BaseActivity {
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
-        tvPhoneNum.setText("18810472753");
+        tvPhoneNum.setText(TransformPhoneNumUtil.transform(HRUser.getMobile()));
     }
 
 
@@ -58,8 +66,10 @@ public class VerifyDeviceActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_get_v_code:
+                sendVerifyCode();
                 break;
             case R.id.confirm_verify_device:
+                verifyDevice();
                 break;
         }
     }
@@ -70,8 +80,8 @@ public class VerifyDeviceActivity extends BaseActivity {
         startTimer();
 
         String query = new KVVerify(
-                tvPhoneNum.getText().toString(),
-                HRConst.IDENTIFY_TYPE_0,
+                HRUser.getMobile(),
+                HRConst.IDENTIFY_TYPE_1,
                 HRConst.VERSION,
                 HRConst.PLATFORM
         ).toQuery();
@@ -119,7 +129,7 @@ public class VerifyDeviceActivity extends BaseActivity {
                 HRConst.PHONE_IMEI,
                 etVCode.getEditableText().toString(),
                 HRConst.VERSION,
-                123,
+                HRUser.getId(),
                 HRConst.PHONE_TYPE,
                 HRConst.PLATFORM);
         Map<String, Object> map = mapV.toMap();
