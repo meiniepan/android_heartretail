@@ -350,7 +350,11 @@ public final class LoginActivity extends BaseActivity
 
                 /* 保存用户信息 */
                 SharedPreferencesUtil.saveDataBean(HRConst.CONTEXT, HRConst.XML_FILE_NAME_USER_INFO, body);
-                startVerifyActivity();
+                if (body.data.isnewPhoneImei == 1) {
+                    startVerifyActivity();
+                } else {
+                    startMainActivity();
+                }
             }
         });
     }
@@ -363,6 +367,10 @@ public final class LoginActivity extends BaseActivity
     /* 开启设备认证页面 */
     private void startVerifyActivity() {
         VerifyDeviceActivity.start(getContext());
+    }
+
+    private void startMainActivity() {
+        //VerifyDeviceActivity.start(getContext());
     }
 
     private void startTimer() {

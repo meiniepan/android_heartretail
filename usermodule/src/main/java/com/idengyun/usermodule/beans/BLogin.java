@@ -13,6 +13,7 @@ public final class BLogin {
     public static class Data {
         public String token;
         public User user;
+        public int isnewPhoneImei;
 
         public static class User {
             public int id;
