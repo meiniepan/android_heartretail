@@ -29,7 +29,10 @@ android {
 
 }
 
+apply plugin: 'com.jakewharton.butterknife'
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':baselibrary')
+    //butterknife插件
+    annotationProcessor rootProject.ext.dependencies.butterknife_compiler
 }

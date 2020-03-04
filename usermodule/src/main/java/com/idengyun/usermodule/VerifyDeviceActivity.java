@@ -31,13 +31,13 @@ import butterknife.OnClick;
  * @date :2020/3/3 0003 10:39
  */
 public class VerifyDeviceActivity extends BaseActivity {
-    @BindView(R.id.tv_phone_num)
+    @BindView(R2.id.tv_phone_num)
     TextView tvPhoneNum;
-    @BindView(R.id.et_v_code)
+    @BindView(R2.id.et_v_code)
     EditText etVCode;
-    @BindView(R.id.tv_get_v_code)
+    @BindView(R2.id.tv_get_v_code)
     TextView tvGetVCode;
-    @BindView(R.id.confirm_verify_device)
+    @BindView(R2.id.confirm_verify_device)
     TextView confirmVerifyDevice;
     private SecondsTimer timer;
 
@@ -56,15 +56,13 @@ public class VerifyDeviceActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.tv_get_v_code, R.id.confirm_verify_device})
+    @OnClick({R2.id.tv_get_v_code, R2.id.confirm_verify_device})
     public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.tv_get_v_code:
-                sendVerifyCode();
-                break;
-            case R.id.confirm_verify_device:
-                verifyDevice();
-                break;
+        int i = view.getId();
+        if (i == R.id.tv_get_v_code) {
+            sendVerifyCode();
+        } else if (i == R.id.confirm_verify_device) {
+            verifyDevice();
         }
     }
 
