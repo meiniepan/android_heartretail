@@ -1,4 +1,4 @@
-package com.idengyun.heartretail.activitys;
+package com.idengyun.usermodule;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,17 +13,11 @@ import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.baselibrary.utils.ToastUtils;
-import com.idengyun.heartretail.HRConst;
-import com.idengyun.heartretail.HRUser;
-import com.idengyun.heartretail.MainActivity;
-import com.idengyun.heartretail.R;
-import com.idengyun.heartretail.login.SecondsTimer;
-import com.idengyun.heartretail.model.request.KVVerify;
-import com.idengyun.heartretail.model.request.KVVerifyDevice;
-import com.idengyun.heartretail.model.response.BLogin;
-import com.idengyun.heartretail.model.response.BVerify;
-import com.idengyun.heartretail.model.response.HrApiBean;
-import com.idengyun.heartretail.utils.TransformPhoneNumUtil;
+import com.idengyun.usermodule.beans.BVerify;
+import com.idengyun.usermodule.beans.HrApiBean;
+import com.idengyun.usermodule.beans.KVVerify;
+import com.idengyun.usermodule.beans.KVVerifyDevice;
+import com.idengyun.usermodule.utils.TransformPhoneNumUtil;
 import com.lzy.okgo.model.Response;
 
 import java.util.Map;
@@ -164,7 +158,7 @@ public class VerifyDeviceActivity extends BaseActivity {
     }
 
     private void startMainActivity() {
-        MainActivity.start(getContext());
+        //MainActivity.start(getContext());
     }
 
     private void startTimer() {

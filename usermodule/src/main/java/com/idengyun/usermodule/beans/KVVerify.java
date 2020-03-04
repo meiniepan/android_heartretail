@@ -1,6 +1,7 @@
 package com.idengyun.usermodule.beans;
 
-import com.idengyun.heartretail.HRNetUrlForGet;
+
+import com.idengyun.usermodule.HRNetUrlForGet;
 
 import java.util.HashMap;
 import java.util.Map;

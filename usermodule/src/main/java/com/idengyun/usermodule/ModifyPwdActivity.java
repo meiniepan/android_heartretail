@@ -1,4 +1,4 @@
-package com.idengyun.heartretail.activitys;
+package com.idengyun.usermodule;
 
 import android.content.Context;
 import android.content.Intent;
@@ -19,13 +19,10 @@ import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.baselibrary.utils.RegexUtils;
 import com.dengyun.baselibrary.utils.ToastUtils;
-import com.idengyun.heartretail.HRConst;
-import com.idengyun.heartretail.R;
-import com.idengyun.heartretail.login.SecondsTimer;
-import com.idengyun.heartretail.model.request.KVModifyPwd;
-import com.idengyun.heartretail.model.request.KVVerify;
-import com.idengyun.heartretail.model.response.BVerify;
-import com.idengyun.heartretail.model.response.HrApiBean;
+import com.idengyun.usermodule.beans.BVerify;
+import com.idengyun.usermodule.beans.HrApiBean;
+import com.idengyun.usermodule.beans.KVModifyPwd;
+import com.idengyun.usermodule.beans.KVVerify;
 import com.lzy.okgo.model.Response;
 
 import java.util.Map;

@@ -1,13 +1,6 @@
-package com.idengyun.heartretail;
+package com.idengyun.usermodule;
 
-import com.dengyun.baselibrary.net.NetApi;
-import com.dengyun.baselibrary.net.NetOption;
-import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.baselibrary.utils.encode.EncryptUtils;
-import com.lzy.okgo.model.Response;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -15,7 +8,6 @@ import java.util.Map;
 /**
  * 获取处理过的get请求方式的url（拼接参数）
  */
-@Deprecated
 public final class HRNetUrlForGet {
 
     /**

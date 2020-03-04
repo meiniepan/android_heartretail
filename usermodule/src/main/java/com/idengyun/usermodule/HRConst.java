@@ -1,4 +1,4 @@
-package com.idengyun.heartretail;
+package com.idengyun.usermodule;
 
 import android.app.Application;
 

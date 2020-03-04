@@ -1,9 +1,9 @@
 package com.idengyun.usermodule;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
@@ -16,7 +16,7 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.dengyun.baselibrary.base.fragment.BaseFragment;
+import com.dengyun.baselibrary.base.activity.BaseActivity;
 import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
@@ -40,8 +40,13 @@ import java.util.Map;
  *
  * @author aLang
  */
-public final class LoginFragment extends BaseFragment
+public final class LoginActivity extends BaseActivity
         implements RadioGroup.OnCheckedChangeListener, View.OnClickListener, CompoundButton.OnCheckedChangeListener, View.OnFocusChangeListener {
+
+    public static void start(Context context) {
+        Intent starter = new Intent(context, LoginActivity.class);
+        context.startActivity(starter);
+    }
 
     /* 标签指示器相关 */
     private RadioGroup radio_group;
@@ -71,19 +76,19 @@ public final class LoginFragment extends BaseFragment
     private SecondsTimer timer;
 
     @Override
-    public int getLayoutId() {
+    protected int getLayoutId() {
         return R.layout.fragment_login;
     }
 
     @Override
-    public void initViews(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        findViewById(view);
+    protected void initViews(Bundle savedInstanceState) {
+        findViewById();
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    protected void onDestroy() {
         cancelTimer();
+        super.onDestroy();
     }
 
     @Override
@@ -230,7 +235,7 @@ public final class LoginFragment extends BaseFragment
         String url = HRConfig.getRegisterUrl();
         url = "http://10.10.8.22:3000/mock/39/user/register";
         NetOption netOption = NetOption.newBuilder(url)
-                .activity(getActivity())
+                .activity(this)
                 .isShowDialog(true)
                 .params(map)
                 .clazz(BRegister.class)
@@ -282,7 +287,7 @@ public final class LoginFragment extends BaseFragment
         url += query;
 
         NetOption netOption = NetOption.newBuilder(url)
-                .activity(getActivity())
+                .activity(this)
                 .isShowDialog(true)
                 .clazz(BVerify.class)
                 .build();
@@ -334,7 +339,7 @@ public final class LoginFragment extends BaseFragment
         String url = HRConfig.getLoginUrl();
         url = "http://10.10.8.22:3000/mock/39/user/login";
         NetOption netOption = NetOption.newBuilder(url)
-                .activity(getActivity())
+                .activity(this)
                 .isShowDialog(true)
                 .params(map)
                 .isInterceptErrorCode(false)
@@ -401,28 +406,28 @@ public final class LoginFragment extends BaseFragment
         if (timer != null) timer.cancel();
     }
 
-    private void findViewById(@NonNull View view) {
-        radio_group = view.findViewById(R.id.radio_group);
-        tv_login_indicator = view.findViewById(R.id.tv_login_indicator);
-        view_login_indicator = view.findViewById(R.id.view_login_indicator);
-        tv_register_indicator = view.findViewById(R.id.tv_register_indicator);
-        view_register_indicator = view.findViewById(R.id.view_register_indicator);
+    private void findViewById() {
+        radio_group = findViewById(R.id.radio_group);
+        tv_login_indicator = findViewById(R.id.tv_login_indicator);
+        view_login_indicator = findViewById(R.id.view_login_indicator);
+        tv_register_indicator = findViewById(R.id.tv_register_indicator);
+        view_register_indicator = findViewById(R.id.view_register_indicator);
 
-        layout_login_content = view.findViewById(R.id.layout_login_content);
-        et_login_mobile = view.findViewById(R.id.et_login_mobile);
-        et_login_pwd = view.findViewById(R.id.et_login_pwd);
-        cb_login_eye = view.findViewById(R.id.cb_login_eye);
-        tv_forget_pwd = view.findViewById(R.id.tv_forget_pwd);
-        tv_login = view.findViewById(R.id.tv_login);
+        layout_login_content = findViewById(R.id.layout_login_content);
+        et_login_mobile = findViewById(R.id.et_login_mobile);
+        et_login_pwd = findViewById(R.id.et_login_pwd);
+        cb_login_eye = findViewById(R.id.cb_login_eye);
+        tv_forget_pwd = findViewById(R.id.tv_forget_pwd);
+        tv_login = findViewById(R.id.tv_login);
 
-        layout_register_content = view.findViewById(R.id.layout_register_content);
-        et_register_mobile = view.findViewById(R.id.et_register_mobile);
-        et_register_verify_code = view.findViewById(R.id.et_register_verify_code);
-        tv_verify_code = view.findViewById(R.id.tv_verify_code);
-        et_register_pwd = view.findViewById(R.id.et_register_pwd);
-        cb_register_eye = view.findViewById(R.id.cb_register_eye);
-        et_register_invite_code = view.findViewById(R.id.et_register_invite_code);
-        tv_register = view.findViewById(R.id.tv_register);
+        layout_register_content = findViewById(R.id.layout_register_content);
+        et_register_mobile = findViewById(R.id.et_register_mobile);
+        et_register_verify_code = findViewById(R.id.et_register_verify_code);
+        tv_verify_code = findViewById(R.id.tv_verify_code);
+        et_register_pwd = findViewById(R.id.et_register_pwd);
+        cb_register_eye = findViewById(R.id.cb_register_eye);
+        et_register_invite_code = findViewById(R.id.et_register_invite_code);
+        tv_register = findViewById(R.id.tv_register);
 
         radio_group.setOnCheckedChangeListener(this);
         radio_group.check(R.id.rb_login);

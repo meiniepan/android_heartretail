@@ -6,10 +6,9 @@ import android.view.View;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.dengyun.baselibrary.base.activity.BaseActivity;
 import com.dengyun.baselibrary.config.RouterPathConfig;
-import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
-import com.idengyun.heartretail.login.LoginFragment;
-import com.idengyun.heartretail.shop.ShopListActivity;
+import com.idengyun.usermodule.LoginActivity;
+import com.idengyun.usermodule.VerifyDeviceActivity;
 
 @Route(path = (RouterPathConfig.app_FirstActivity))
 public class FirstActivity extends BaseActivity {
@@ -29,6 +28,6 @@ public class FirstActivity extends BaseActivity {
     }
 
     public void skipFist(View view) {
-        HRActivity.start(this, LoginFragment.class);
+        LoginActivity.start(this);
     }
 }

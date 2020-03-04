@@ -1,4 +1,4 @@
-package com.idengyun.heartretail.utils;
+package com.idengyun.usermodule.utils;
 
 import com.dengyun.baselibrary.utils.RegexUtils;
 

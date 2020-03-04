@@ -19,9 +19,9 @@ import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.google.gson.reflect.TypeToken;
-import com.idengyun.heartretail.HRConfig;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.beans.EvaluationListBean;
+import com.idengyun.usermodule.HRConfig;
 import com.lzy.okgo.model.Response;
 
 import java.util.ArrayList;

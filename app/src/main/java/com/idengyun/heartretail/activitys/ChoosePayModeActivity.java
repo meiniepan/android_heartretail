@@ -13,7 +13,7 @@ import com.idengyun.heartretail.R;
 public class ChoosePayModeActivity extends BaseActivity {
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_pay_mode;
+        return R.layout.activity_modify_pwd;
     }
 
     @Override
