@@ -23,6 +23,7 @@ import com.idengyun.usermodule.beans.BVerify;
 import com.idengyun.usermodule.beans.HrApiBean;
 import com.idengyun.usermodule.beans.KVModifyPwd;
 import com.idengyun.usermodule.beans.KVVerify;
+import com.idengyun.usermodule.utils.SecondsTimer;
 import com.lzy.okgo.model.Response;
 
 import java.util.Map;
@@ -37,17 +38,17 @@ import butterknife.OnClick;
  */
 public class ModifyPwdActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener {
 
-    @BindView(R.id.et_phone_num)
+    @BindView(R2.id.et_phone_num)
     EditText etPhoneNum;
-    @BindView(R.id.et_v_code1)
+    @BindView(R2.id.et_v_code1)
     EditText etVCode1;
-    @BindView(R.id.tv_get_v_code1)
+    @BindView(R2.id.tv_get_v_code1)
     TextView tvGetVCode1;
-    @BindView(R.id.et_new_pwd)
+    @BindView(R2.id.et_new_pwd)
     EditText etNewPwd;
-    @BindView(R.id.cb_pwd_eye)
+    @BindView(R2.id.cb_pwd_eye)
     CheckBox cbPwdEye;
-    @BindView(R.id.tv_modify_pwd)
+    @BindView(R2.id.tv_modify_pwd)
     TextView tvModifyPwd;
     private SecondsTimer timer;
 
@@ -67,15 +68,13 @@ public class ModifyPwdActivity extends BaseActivity implements CompoundButton.On
     }
 
 
-    @OnClick({R.id.tv_get_v_code1, R.id.tv_modify_pwd})
+    @OnClick({R2.id.tv_get_v_code1, R2.id.tv_modify_pwd})
     public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.tv_get_v_code1:
-                sendVerifyCode();
-                break;
-            case R.id.tv_modify_pwd:
-                modifyPwd();
-                break;
+        int id = view.getId();
+        if (id == R.id.tv_get_v_code1) {
+            sendVerifyCode();
+        } else if (id == R.id.tv_modify_pwd) {
+            modifyPwd();
         }
     }
 
@@ -204,12 +203,8 @@ public class ModifyPwdActivity extends BaseActivity implements CompoundButton.On
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         int id = buttonView.getId();
         TransformationMethod method = isChecked ? HideReturnsTransformationMethod.getInstance() : PasswordTransformationMethod.getInstance();
-        switch (id) {
-            case R.id.cb_pwd_eye:
-                etNewPwd.setTransformationMethod(method);
-                break;
-            default:
-                break;
+        if (id == R.id.cb_pwd_eye) {
+            etNewPwd.setTransformationMethod(method);
         }
     }
     private void cancelTimer() {

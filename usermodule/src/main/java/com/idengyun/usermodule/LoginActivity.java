@@ -30,6 +30,7 @@ import com.idengyun.usermodule.beans.BVerify;
 import com.idengyun.usermodule.beans.KVLogin;
 import com.idengyun.usermodule.beans.KVRegister;
 import com.idengyun.usermodule.beans.KVVerify;
+import com.idengyun.usermodule.utils.SecondsTimer;
 import com.lzy.okgo.model.Response;
 
 import java.util.Map;

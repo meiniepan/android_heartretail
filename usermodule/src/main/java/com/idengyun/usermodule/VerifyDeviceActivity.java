@@ -17,6 +17,7 @@ import com.idengyun.usermodule.beans.BVerify;
 import com.idengyun.usermodule.beans.HrApiBean;
 import com.idengyun.usermodule.beans.KVVerify;
 import com.idengyun.usermodule.beans.KVVerifyDevice;
+import com.idengyun.usermodule.utils.SecondsTimer;
 import com.idengyun.usermodule.utils.TransformPhoneNumUtil;
 import com.lzy.okgo.model.Response;
 
