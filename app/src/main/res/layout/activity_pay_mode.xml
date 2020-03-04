@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     android:orientation="vertical">
 
@@ -76,7 +76,9 @@
             android:checked="true"
             android:drawableStart="@drawable/selector_pay_check" />
     </LinearLayout>
-    <include layout="@layout/spilit_1"/>
+
+    <include layout="@layout/spilit_1" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -106,7 +108,9 @@
             android:button="@null"
             android:drawableStart="@drawable/selector_pay_check" />
     </LinearLayout>
-    <include layout="@layout/spilit_1"/>
+
+    <include layout="@layout/spilit_1" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -130,25 +134,26 @@
             android:textSize="@dimen/sp_16" />
 
         <CheckBox
-            android:id="@+id/cb_pay2"
+            android:id="@+id/cb_pay3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@null"
             android:button="@null"
             android:drawableStart="@drawable/selector_pay_check" />
     </LinearLayout>
-<Space
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1"
-    />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="49dp"
         android:background="@color/heart_orange"
         android:gravity="center"
-        tools:text="确认支付 ¥370.35"
         android:textColor="@color/white"
+        android:textSize="@dimen/sp_16"
         android:textStyle="bold"
-        android:textSize="@dimen/sp_16" />
+        tools:text="确认支付 ¥370.35" />
 </LinearLayout>
