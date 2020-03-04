@@ -2,7 +2,7 @@ package com.dengyun.splashmodule.utils;
 
 import com.dengyun.baselibrary.utils.SharedPreferencesUtil;
 import com.dengyun.baselibrary.utils.Utils;
-import com.dengyun.baselibrary.spconstants.SpMainConfigConstants;
+import com.dengyun.splashmodule.config.SpMainConfigConstants;
 
 /**
  * @Title 本地广告信息的工具类
