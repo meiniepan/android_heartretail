@@ -10,7 +10,6 @@ import android.support.annotation.NonNull;
 import android.support.multidex.MultiDex;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.dengyun.baselibrary.config.AppConfig;
@@ -19,17 +18,17 @@ import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.deal.NetDealConfig;
 import com.dengyun.baselibrary.net.deal.NetDealGlobalCode;
-import com.dengyun.baselibrary.spconstants.SpUserConstants;
-import com.dengyun.baselibrary.utils.ToastUtils;
 import com.dengyun.baselibrary.utils.Utils;
 import com.dengyun.baselibrary.utils.activity.ActivityUtils;
 import com.dengyun.downloadlibrary.download.DownloadUtil;
 
+import com.dengyun.sharelibrary.utils.ShareUtil;
 import com.dengyun.splashmodule.beans.MainUrlConstants;
 import com.dengyun.splashmodule.utils.MyUpdateLoader;
 
 import com.idengyun.heartretail.R;
 import com.idengyun.updatelib.update.UpdateUtils;
+import com.meituan.android.walle.WalleChannelReader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshFooterCreator;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshHeaderCreator;
@@ -47,12 +46,20 @@ import org.litepal.LitePalApplication;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.List;
 
 /**
  * Created by seven on 2016/6/24.
  */
 public class MyApplication extends LitePalApplication {
+    // TODO: 2020-03-04 账号
+    private static final String UMENG_APPKEY = "";
+    private static final String WX_APPID = "";
+    private static final String WX_APPSECRET = "";
+    private static final String SINA_APPKEY = "";
+    private static final String SINA_APPSECRET = "";
+    private static final String SINA_REDIREC_URL = "";
+    private static final String QQ_APPID = "";
+    private static final String QQ_APPKEY = "";
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -73,7 +80,7 @@ public class MyApplication extends LitePalApplication {
             //全局的app引用以及初始化common，以及栈管理
             Utils.init(this);
             //友盟统计初始化
-//            initUmengChannel();
+            initUmengChannel();
             //设置全局需要处理的返回code
             setNetGlobalCode();
             //初始化升级模块
@@ -81,7 +88,7 @@ public class MyApplication extends LitePalApplication {
             //初始化下载模块
             initDownloadModule();
 //            initSADate();
-//            initShareModule();
+            initShareModule();
             //Android7.0相机权限问题
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
@@ -120,11 +127,38 @@ public class MyApplication extends LitePalApplication {
         return null;
     }
 
+    /**
+     * 友盟初始化，传入渠道信息
+     */
+    private void initUmengChannel() {
+        String channel = WalleChannelReader.getChannel(this.getApplicationContext());
+        UMConfigure.init(this, UMENG_APPKEY, channel, UMConfigure.DEVICE_TYPE_PHONE, null);
+    }
+
+    /**
+     * 分享模块初始化
+     */
+    private void initShareModule() {
+        ShareUtil.initShare(this,
+                R.mipmap.ic_launcher,// TODO: 2020-03-04 分享的默认图片(直角logo)
+                WX_APPID,
+                WX_APPSECRET,
+                QQ_APPID,
+                QQ_APPKEY,
+                SINA_APPKEY,
+                SINA_APPSECRET,
+                SINA_REDIREC_URL);
+    }
+
     private void initDownloadModule() {
         DownloadUtil.init(getFilesDir().getAbsolutePath() + "/download");
     }
 
+    /**
+     * 升级模块初始化
+     */
     private void initUpdateModule() {
+        // TODO: 2020-03-04 导航栏的小图标
         UpdateUtils.init(this, AppConfig.isDebug, R.mipmap.ic_launcher, new MyUpdateLoader());
     }
 
