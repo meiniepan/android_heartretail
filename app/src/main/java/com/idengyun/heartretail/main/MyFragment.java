@@ -4,15 +4,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.idengyun.heartretail.R;
-
-import java.util.ArrayList;
 
 /**
  * 我的页面
@@ -121,9 +116,6 @@ public final class MyFragment extends BaseFragment implements TabLayout.OnTabSel
         layout_my_not_login = view.findViewById(R.id.layout_my_not_login);
         layout_my_unauthorized = view.findViewById(R.id.layout_my_unauthorized);
         layout_my_authorized = view.findViewById(R.id.layout_my_authorized);
-        layout_my_not_login.setVisibility(View.VISIBLE);
-        layout_my_unauthorized.setVisibility(View.GONE);
-        layout_my_authorized.setVisibility(View.GONE);
 
         iv_my_pencil = view.findViewById(R.id.iv_my_pencil);
         iv_my_share = view.findViewById(R.id.iv_my_share);
@@ -151,5 +143,12 @@ public final class MyFragment extends BaseFragment implements TabLayout.OnTabSel
         layout_unauthorized_go_authorized = view.findViewById(R.id.layout_unauthorized_go_authorized);
 
         layout_authorized_ok = view.findViewById(R.id.layout_authorized_ok);
+
+        layout_my_not_login.setVisibility(View.VISIBLE);
+        layout_my_unauthorized.setVisibility(View.GONE);
+        layout_my_authorized.setVisibility(View.GONE);
+        tv_my_order_3.setOnClickListener(this);
+        tv_my_order_4.setOnClickListener(this);
+        tv_my_order_5.setOnClickListener(this);
     }
 }
