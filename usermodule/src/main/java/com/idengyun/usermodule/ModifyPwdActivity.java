@@ -12,6 +12,8 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.dengyun.baselibrary.base.ApiBean;
+import com.dengyun.baselibrary.base.ApiSimpleBean;
 import com.dengyun.baselibrary.base.activity.BaseActivity;
 import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
@@ -21,7 +23,6 @@ import com.dengyun.baselibrary.utils.RegexUtils;
 import com.dengyun.baselibrary.utils.ToastUtils;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.usermodule.beans.BVerify;
-import com.idengyun.usermodule.beans.HrApiBean;
 import com.idengyun.usermodule.beans.KVModifyPwd;
 import com.idengyun.usermodule.utils.SecondsTimer;
 import com.lzy.okgo.model.Response;
@@ -149,25 +150,12 @@ public class ModifyPwdActivity extends BaseActivity implements CompoundButton.On
                 .activity(this)
                 .isShowDialog(true)
                 .params(map)
-                .clazz(HrApiBean.class)
+                .clazz(ApiSimpleBean.class)
                 .build();
 
-        NetApi.getData(netOption, new JsonCallback<HrApiBean>(netOption) {
+        NetApi.getData(netOption, new JsonCallback<ApiSimpleBean>(netOption) {
             @Override
-            public void onSuccess(Response<HrApiBean> response) {
-                if (response.code() != 200) {
-                    return;
-                }
-
-                HrApiBean body = response.body();
-                if (body == null) {
-                    return;
-                }
-
-                if (!"200".equals(body.code)) {
-                    return;
-                }
-
+            public void onSuccess(Response<ApiSimpleBean> response) {
                 ToastUtils.showShort("修改密码成功");
 
             }

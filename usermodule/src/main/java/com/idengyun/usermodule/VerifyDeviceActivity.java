@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.dengyun.baselibrary.base.ApiSimpleBean;
 import com.dengyun.baselibrary.base.activity.BaseActivity;
 import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
@@ -15,7 +16,6 @@ import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.baselibrary.utils.ToastUtils;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.usermodule.beans.BVerify;
-import com.idengyun.usermodule.beans.HrApiBean;
 import com.idengyun.usermodule.beans.KVVerifyDevice;
 import com.idengyun.usermodule.utils.SecondsTimer;
 import com.idengyun.usermodule.utils.TransformPhoneNumUtil;
@@ -127,25 +127,12 @@ public class VerifyDeviceActivity extends BaseActivity {
                 .activity(this)
                 .isShowDialog(true)
                 .params(map)
-                .clazz(HrApiBean.class)
+                .clazz(ApiSimpleBean.class)
                 .build();
 
-        NetApi.getData(netOption, new JsonCallback<HrApiBean>(netOption) {
+        NetApi.getData(netOption, new JsonCallback<ApiSimpleBean>(netOption) {
             @Override
-            public void onSuccess(Response<HrApiBean> response) {
-                if (response.code() != 200) {
-                    return;
-                }
-
-                HrApiBean body = response.body();
-                if (body == null) {
-                    return;
-                }
-
-                if (!"200".equals(body.code)) {
-                    return;
-                }
-
+            public void onSuccess(Response<ApiSimpleBean> response) {
                 ToastUtils.showShort("验证新设备成功");
                 startMainActivity();
             }
