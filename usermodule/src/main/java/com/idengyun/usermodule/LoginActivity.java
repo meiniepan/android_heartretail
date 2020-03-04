@@ -126,21 +126,14 @@ public final class LoginActivity extends BaseActivity
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        switch (id) {
-            case R.id.tv_forget_pwd:
-                startForgetPwdActivity();
-                break;
-            case R.id.tv_login:
-                requestLogin();
-                break;
-            case R.id.tv_verify_code:
-                sendVerifyCode();
-                break;
-            case R.id.tv_register:
-                requestRegister();
-                break;
-            default:
-                break;
+        if (id == R.id.tv_forget_pwd) {
+            startForgetPwdActivity();
+        } else if (id == R.id.tv_login) {
+            requestLogin();
+        } else if (id == R.id.tv_verify_code) {
+            sendVerifyCode();
+        } else if (id == R.id.tv_register) {
+            requestRegister();
         }
     }
 
@@ -148,15 +141,10 @@ public final class LoginActivity extends BaseActivity
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         int id = buttonView.getId();
         TransformationMethod method = isChecked ? HideReturnsTransformationMethod.getInstance() : PasswordTransformationMethod.getInstance();
-        switch (id) {
-            case R.id.cb_login_eye:
-                et_login_pwd.setTransformationMethod(method);
-                break;
-            case R.id.cb_register_eye:
-                et_register_pwd.setTransformationMethod(method);
-                break;
-            default:
-                break;
+        if (id == R.id.cb_login_eye) {
+            et_login_pwd.setTransformationMethod(method);
+        } else if (id == R.id.cb_register_eye) {
+            et_register_pwd.setTransformationMethod(method);
         }
     }
 
@@ -482,27 +470,18 @@ public final class LoginActivity extends BaseActivity
         @Override
         public void afterTextChanged(Editable s) {
             int id = editText.getId();
-            switch (id) {
-                case R.id.et_login_mobile:
-                    loginMobile = s;
-                    break;
-                case R.id.et_login_pwd:
-                    loginPwd = s;
-                    break;
-                case R.id.et_register_mobile:
-                    registerMobile = s;
-                    break;
-                case R.id.et_register_verify_code:
-                    registerVerifyCode = s;
-                    break;
-                case R.id.et_register_pwd:
-                    registerPwd = s;
-                    break;
-                case R.id.et_register_invite_code:
-                    registerInviteCode = s;
-                    break;
-                default:
-                    break;
+            if (id == R.id.et_login_mobile) {
+                loginMobile = s;
+            } else if (id == R.id.et_login_pwd) {
+                loginPwd = s;
+            } else if (id == R.id.et_register_mobile) {
+                registerMobile = s;
+            } else if (id == R.id.et_register_verify_code) {
+                registerVerifyCode = s;
+            } else if (id == R.id.et_register_pwd) {
+                registerPwd = s;
+            } else if (id == R.id.et_register_invite_code) {
+                registerInviteCode = s;
             }
         }
 
