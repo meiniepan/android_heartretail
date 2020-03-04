@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.dengyun.baselibrary.base.ApiBean;
+import com.dengyun.baselibrary.base.ApiSimpleBean;
 import com.dengyun.baselibrary.base.activity.BaseActivity;
 import com.dengyun.baselibrary.widgets.toolbar.BaseToolBar;
 import com.idengyun.heartretail.R;
@@ -13,7 +15,7 @@ import butterknife.BindView;
 
 /**
  * @author Burning
- * @description:
+ * @description:确认订单
  * @date :2020-02-29 11:16
  */
 public class ConfirmOrderActivity extends BaseActivity {

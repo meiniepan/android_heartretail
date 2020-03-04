@@ -8,6 +8,7 @@ import com.dengyun.baselibrary.base.activity.BaseActivity;
 import com.dengyun.baselibrary.config.RouterPathConfig;
 import com.idengyun.heartretail.R;
 import com.idengyun.usermodule.LoginActivity;
+import com.idengyun.usermodule.ModifyPwdActivity;
 import com.idengyun.usermodule.VerifyDeviceActivity;
 
 @Route(path = (RouterPathConfig.app_FirstActivity))
@@ -24,7 +25,7 @@ public class FirstActivity extends BaseActivity {
     }
 
     public void skipShopList(View view) {
-        VerifyDeviceActivity.start(this);
+        ModifyPwdActivity.start(this);
     }
 
     public void skipFist(View view) {
