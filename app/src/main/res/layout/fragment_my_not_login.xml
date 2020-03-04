@@ -46,9 +46,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:layout_weight="1"
-                android:text="心零售用户"
                 android:textColor="#ffffffff"
-                android:textSize="24sp" />
+                android:textSize="24sp"
+                tools:text="心零售用户" />
 
             <TextView
                 android:id="@+id/tv_not_login_go_login"

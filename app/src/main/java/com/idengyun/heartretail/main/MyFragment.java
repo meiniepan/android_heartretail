@@ -20,6 +20,9 @@ import java.util.ArrayList;
  * @author aLang
  */
 public final class MyFragment extends BaseFragment implements TabLayout.OnTabSelectedListener, View.OnClickListener {
+    private View layout_my_not_login;
+    private View layout_my_unauthorized;
+    private View layout_my_authorized;
 
     /* 编辑 分享 设置 */
     private View iv_my_pencil;
@@ -100,15 +103,28 @@ public final class MyFragment extends BaseFragment implements TabLayout.OnTabSel
         } else if (id == R.id.tv_my_order_2) {
 
         } else if (id == R.id.tv_my_order_3) {
-
+            layout_my_not_login.setVisibility(View.VISIBLE);
+            layout_my_unauthorized.setVisibility(View.GONE);
+            layout_my_authorized.setVisibility(View.GONE);
         } else if (id == R.id.tv_my_order_4) {
-
+            layout_my_not_login.setVisibility(View.GONE);
+            layout_my_unauthorized.setVisibility(View.VISIBLE);
+            layout_my_authorized.setVisibility(View.GONE);
         } else if (id == R.id.tv_my_order_5) {
-
+            layout_my_not_login.setVisibility(View.GONE);
+            layout_my_unauthorized.setVisibility(View.GONE);
+            layout_my_authorized.setVisibility(View.VISIBLE);
         }
     }
 
     private void findViewById(@NonNull View view) {
+        layout_my_not_login = view.findViewById(R.id.layout_my_not_login);
+        layout_my_unauthorized = view.findViewById(R.id.layout_my_unauthorized);
+        layout_my_authorized = view.findViewById(R.id.layout_my_authorized);
+        layout_my_not_login.setVisibility(View.VISIBLE);
+        layout_my_unauthorized.setVisibility(View.GONE);
+        layout_my_authorized.setVisibility(View.GONE);
+
         iv_my_pencil = view.findViewById(R.id.iv_my_pencil);
         iv_my_share = view.findViewById(R.id.iv_my_share);
         iv_my_setting = view.findViewById(R.id.iv_my_setting);
