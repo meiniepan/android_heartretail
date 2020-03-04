@@ -20,13 +20,10 @@ public class SpMainConfigConstants {
         return getMainConfigUrl("index");
     }
 
-    public static String evaluationList(){
-        return "http://10.10.8.22:3000/mock/39/evaluation/query/list";
-    }
-
     /* 获取商品评价URL */
-    public static String getGoodsEvaluationUrl() {
-        return getMainConfigUrl("evaluationList");
+    public static String evaluationList(){
+//        return getMainConfigUrl("evaluationList");
+        return "http://10.10.8.22:3000/mock/39/evaluation/query/list";
     }
 
     /* 获取登录URL */
