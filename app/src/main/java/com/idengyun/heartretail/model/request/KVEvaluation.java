@@ -9,7 +9,6 @@ import java.util.Map;
  * @author aLang
  */
 public final class KVEvaluation {
-    private HashMap<String, Object> map = new HashMap<>();
 
     public String version;
     public String goodsId;
@@ -21,11 +20,13 @@ public final class KVEvaluation {
         super();
     }
 
-    public KVEvaluation(String version,
-                        String goodsId,
-                        int page,
-                        int pageSize,
-                        String platform) {
+    public KVEvaluation(
+            String version,
+            String goodsId,
+            int page,
+            int pageSize,
+            String platform
+    ) {
         this.version = version;
         this.goodsId = goodsId;
         this.page = page;
@@ -41,4 +42,6 @@ public final class KVEvaluation {
         map.put("platform", platform);
         return new HashMap<>(map);
     }
+
+    private HashMap<String, Object> map = new HashMap<>();
 }

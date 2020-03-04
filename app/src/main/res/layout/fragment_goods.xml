@@ -52,7 +52,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
-                android:src="@drawable/ic_goods_detail_disqualification" />
+                android:src="@drawable/ic_goods_detail_arrow_light" />
         </LinearLayout>
 
         <!-- 商品价格及描述 -->
@@ -197,7 +197,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
-                    android:src="@drawable/ic_goods_detail_arrow" />
+                    android:src="@drawable/ic_goods_detail_arrow_dark" />
             </LinearLayout>
         </LinearLayout>
 
@@ -254,7 +254,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
-                android:src="@drawable/ic_goods_detail_disqualification" />
+                android:src="@drawable/ic_goods_detail_arrow_light" />
         </LinearLayout>
 
         <LinearLayout

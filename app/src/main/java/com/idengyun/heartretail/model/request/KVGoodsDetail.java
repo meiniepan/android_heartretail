@@ -11,7 +11,6 @@ import io.reactivex.annotations.Nullable;
  * @author aLang
  */
 public final class KVGoodsDetail {
-    private HashMap<String, Object> map = new HashMap<>();
 
     public String version;
     public int goodsId;
@@ -44,4 +43,6 @@ public final class KVGoodsDetail {
         map.put("goodsType", goodsType);
         return new HashMap<>(map);
     }
+
+    private HashMap<String, Object> map = new HashMap<>();
 }

@@ -55,12 +55,12 @@ public final class HomeFragment extends BaseFragment implements TabLayout.OnTabS
     }
 }
 
-final class HomeAdapter extends RecyclerView.Adapter<MyHolder> {
+final class HomeAdapter extends RecyclerView.Adapter<HomeHolder> {
     ArrayList<String> items = new ArrayList<>();
 
     @NonNull
     @Override
-    public MyHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public HomeHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
         View itemView = inflater.inflate(R.layout.fragment_home_item, viewGroup, false);
         itemView.setOnClickListener(new View.OnClickListener() {
@@ -69,11 +69,11 @@ final class HomeAdapter extends RecyclerView.Adapter<MyHolder> {
                 HRActivity.start(v.getContext(), GoodsDetailsFragment.class);
             }
         });
-        return new MyHolder(itemView);
+        return new HomeHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyHolder myHolder, int i) {
+    public void onBindViewHolder(@NonNull HomeHolder myHolder, int i) {
 
     }
 
