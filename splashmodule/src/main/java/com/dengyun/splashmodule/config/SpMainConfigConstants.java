@@ -22,26 +22,22 @@ public class SpMainConfigConstants {
 
     /* 获取商品评价URL */
     public static String evaluationList(){
-//        return getMainConfigUrl("evaluationList");
-        return "http://10.10.8.22:3000/mock/39/evaluation/query/list";
+        return getMainConfigUrl("evaluationList");
     }
 
     /* 获取登录URL */
     public static String getLoginUrl() {
-//        return getMainConfigUrl("login");
-        return "http://10.10.8.22:3000/mock/39/user/login";
+        return getMainConfigUrl("login");
     }
 
     /* 获取注册URL */
     public static String getRegisterUrl() {
-//        return getMainConfigUrl("register");
-        return "http://10.10.8.22:3000/mock/39/user/register";
+        return getMainConfigUrl("register");
     }
 
     /* 获取手机验证码URL */
     public static String getVerifyUrl() {
-//        return getMainConfigUrl("getIdentifyCode");
-        return "http://10.10.8.22:3000/mock/39/user/send/msg";
+        return getMainConfigUrl("getIdentifyCode");
     }
 
 

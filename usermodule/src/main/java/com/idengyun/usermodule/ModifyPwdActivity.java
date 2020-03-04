@@ -12,6 +12,8 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.dengyun.baselibrary.base.ApiBean;
+import com.dengyun.baselibrary.base.ApiSimpleBean;
 import com.dengyun.baselibrary.base.activity.BaseActivity;
 import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
@@ -19,10 +21,9 @@ import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.baselibrary.utils.RegexUtils;
 import com.dengyun.baselibrary.utils.ToastUtils;
+import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.usermodule.beans.BVerify;
-import com.idengyun.usermodule.beans.HrApiBean;
 import com.idengyun.usermodule.beans.KVModifyPwd;
-import com.idengyun.usermodule.beans.KVVerify;
 import com.idengyun.usermodule.utils.SecondsTimer;
 import com.lzy.okgo.model.Response;
 
@@ -86,16 +87,12 @@ public class ModifyPwdActivity extends BaseActivity implements CompoundButton.On
         }
         startTimer();
 
-        String query = new KVVerify(
-                etPhoneNum.getText().toString(),
-                HRConst.IDENTIFY_TYPE_2,
-                HRConst.VERSION,
-                HRConst.PLATFORM
-        ).toQuery();
-        String url = "http://10.10.8.22:3000/mock/39/user/send/msg" + query;
-
-        NetOption netOption = NetOption.newBuilder(url)
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.getVerifyUrl())
                 .activity(this)
+                .params("mobile", etPhoneNum.getText().toString())
+                .params("identifyType", HRConst.IDENTIFY_TYPE_2)
+                .params("version", HRConst.VERSION)
+                .params("platform", HRConst.PLATFORM)
                 .isShowDialog(true)
                 .clazz(BVerify.class)
                 .build();
@@ -153,25 +150,12 @@ public class ModifyPwdActivity extends BaseActivity implements CompoundButton.On
                 .activity(this)
                 .isShowDialog(true)
                 .params(map)
-                .clazz(HrApiBean.class)
+                .clazz(ApiSimpleBean.class)
                 .build();
 
-        NetApi.getData(netOption, new JsonCallback<HrApiBean>(netOption) {
+        NetApi.getData(netOption, new JsonCallback<ApiSimpleBean>(netOption) {
             @Override
-            public void onSuccess(Response<HrApiBean> response) {
-                if (response.code() != 200) {
-                    return;
-                }
-
-                HrApiBean body = response.body();
-                if (body == null) {
-                    return;
-                }
-
-                if (!"200".equals(body.code)) {
-                    return;
-                }
-
+            public void onSuccess(Response<ApiSimpleBean> response) {
                 ToastUtils.showShort("修改密码成功");
 
             }
