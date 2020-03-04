@@ -13,9 +13,9 @@ import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.baselibrary.utils.ToastUtils;
+import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.usermodule.beans.BVerify;
 import com.idengyun.usermodule.beans.HrApiBean;
-import com.idengyun.usermodule.beans.KVVerify;
 import com.idengyun.usermodule.beans.KVVerifyDevice;
 import com.idengyun.usermodule.utils.SecondsTimer;
 import com.idengyun.usermodule.utils.TransformPhoneNumUtil;
@@ -72,16 +72,12 @@ public class VerifyDeviceActivity extends BaseActivity {
 
         startTimer();
 
-        String query = new KVVerify(
-                HRUser.getMobile(),
-                HRConst.IDENTIFY_TYPE_1,
-                HRConst.VERSION,
-                HRConst.PLATFORM
-        ).toQuery();
-        String url = "http://10.10.8.22:3000/mock/39/user/send/msg" + query;
-
-        NetOption netOption = NetOption.newBuilder(url)
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.getVerifyUrl())
                 .activity(this)
+                .params("mobile", HRUser.getMobile())
+                .params("identifyType", HRConst.IDENTIFY_TYPE_1)
+                .params("version", HRConst.VERSION)
+                .params("platform", HRConst.PLATFORM)
                 .isShowDialog(true)
                 .clazz(BVerify.class)
                 .build();

@@ -30,7 +30,6 @@ import com.idengyun.usermodule.beans.BRegister;
 import com.idengyun.usermodule.beans.BVerify;
 import com.idengyun.usermodule.beans.KVLogin;
 import com.idengyun.usermodule.beans.KVRegister;
-import com.idengyun.usermodule.beans.KVVerify;
 import com.idengyun.usermodule.utils.SecondsTimer;
 import com.lzy.okgo.model.Response;
 
@@ -264,17 +263,12 @@ public final class LoginActivity extends BaseActivity
 
         startTimer();
 
-        String query = new KVVerify(
-                et_register_mobile.getEditableText().toString(),
-                HRConst.IDENTIFY_TYPE_0,
-                HRConst.VERSION,
-                HRConst.PLATFORM
-        ).toQuery();
-        String url = SpMainConfigConstants.getVerifyUrl();
-        url += query;
-
-        NetOption netOption = NetOption.newBuilder(url)
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.getVerifyUrl())
                 .activity(this)
+                .params("mobile", et_register_mobile.getEditableText().toString())
+                .params("identifyType", HRConst.IDENTIFY_TYPE_0)
+                .params("version", HRConst.VERSION)
+                .params("platform", HRConst.PLATFORM)
                 .isShowDialog(true)
                 .clazz(BVerify.class)
                 .build();
