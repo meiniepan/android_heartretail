@@ -86,6 +86,7 @@ public class NetApi {
         pringLog(netOption.getUrl(),jsonParams);
 
         if(requestMethod == RequestMethod.GET){
+            DealParamsUtil.dealUrlForGet(netOption);
             OkGo.<T>get(netOption.getUrl())
                     .tag(getRequestTag(netOption))
                     .headers(netOption.getHeaders())
@@ -120,6 +121,7 @@ public class NetApi {
         pringLog(netOption.getUrl(),jsonParams);
 
         if(requestMethod == RequestMethod.GET){
+            DealParamsUtil.dealUrlForGet(netOption);
             try {
                 return OkGo.<T>get(netOption.getUrl())
                         .tag(getRequestTag(netOption))

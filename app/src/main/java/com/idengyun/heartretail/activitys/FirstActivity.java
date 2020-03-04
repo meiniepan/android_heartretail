@@ -11,6 +11,7 @@ import com.idengyun.heartretail.MainActivity;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.goods.GoodsDetailsFragment;
 import com.idengyun.usermodule.LoginActivity;
+import com.idengyun.usermodule.ModifyPwdActivity;
 import com.idengyun.usermodule.VerifyDeviceActivity;
 
 @Route(path = (RouterPathConfig.app_FirstActivity))
@@ -32,7 +33,7 @@ public class FirstActivity extends BaseActivity {
     }
 
     public void skipShopList(View view) {
-        VerifyDeviceActivity.start(this);
+        ModifyPwdActivity.start(this);
     }
 
     /* 开启商品详情界面 */

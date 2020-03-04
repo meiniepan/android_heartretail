@@ -7,13 +7,13 @@ import com.idengyun.heartretail.R;
 
 /**
  * @author Burning
- * @description:
+ * @description: 选择支付方式
  * @date :2020/3/3 0003 10:30
  */
 public class ChoosePayModeActivity extends BaseActivity {
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_modify_pwd;
+        return R.layout.activity_pay_mode;
     }
 
     @Override

@@ -15,18 +15,24 @@ import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.config.RouterPathConfig;
 import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
+import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.baselibrary.net.constants.ProjectType;
+import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.baselibrary.net.rx.RxObserver;
 import com.dengyun.baselibrary.net.rx.RxSchedulers;
 import com.dengyun.baselibrary.spconstants.SpUserConstants;
+import com.dengyun.baselibrary.utils.GsonConvertUtil;
+import com.dengyun.baselibrary.utils.ListUtils;
 import com.dengyun.baselibrary.utils.SharedPreferencesUtil;
 import com.dengyun.baselibrary.utils.Utils;
 import com.dengyun.splashmodule.R;
 import com.dengyun.splashmodule.beans.MainConfig;
 import com.dengyun.splashmodule.beans.MainUrlConstants;
+import com.dengyun.splashmodule.beans.UrlConfigBean;
 import com.dengyun.splashmodule.config.GuidePicData;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.google.gson.reflect.TypeToken;
+import com.lzy.okgo.model.Response;
 
 import java.lang.reflect.Type;
 
@@ -81,25 +87,17 @@ public class LeadFragment1 extends BaseFragment {
         String url = SpMainConfigConstants.index();
         if(TextUtils.isEmpty(url)){
             Type type = new TypeToken<ApiBean<MainConfig>>() {}.getType();
-            // TODO: 2020-03-02 项目类型妃子校 需修改
             NetOption netOption = NetOption.newBuilder(MainUrlConstants.MAINHTTP)
                     .fragment(this)
                     .type(type)
-                    .projectType(ProjectType.IDENGYUN_FZX)
-                    .isEncrypt(false)
-                    .isShowDialog(true)
                     .build();
-            NetApi.<MainConfig>getDataRX(netOption)
-                    .compose(RxSchedulers.<MainConfig>io_main())
-                    .subscribe(new RxObserver<MainConfig>(netOption) {
-                        @Override
-                        public void onNext(MainConfig mainConfig) {
-                            //保存本地MainConfig配置url
-                            saveLocalMainConfig(mainConfig);
-                        }
-                    });
-
-
+            NetApi.<ApiBean<MainConfig>>getData(RequestMethod.GET, netOption, new JsonCallback<ApiBean<MainConfig>>(netOption) {
+                @Override
+                public void onSuccess(Response<ApiBean<MainConfig>> response) {
+                    //保存本地MainConfig配置url
+                    saveLocalMainConfig(response.body().data);
+                }
+            });
             return false;
         }
         return true;
@@ -112,7 +110,9 @@ public class LeadFragment1 extends BaseFragment {
         RxSchedulers.doTask(this, new RxSchedulers.Task() {
             @Override
             public void doOnIOThread() {
-                SharedPreferencesUtil.saveDataBean(Utils.getApp(), SpMainConfigConstants.spFileName, mainConfigApiBean.getData());
+                if (null!=mainConfigApiBean && !ListUtils.isEmpty(mainConfigApiBean.urlConfig)){
+                    saveMainBean(mainConfigApiBean);
+                }
             }
 
             @Override
@@ -123,6 +123,17 @@ public class LeadFragment1 extends BaseFragment {
                 getActivity().finish();
             }
         });
+    }
+
+    private void saveMainBean(MainConfig mainConfig){
+        for (int i = 0; i < mainConfig.urlConfig.size(); i++) {
+            String urlConfigStr = mainConfig.urlConfig.get(i);
+            UrlConfigBean urlConfigBean = GsonConvertUtil.fromJson(urlConfigStr,UrlConfigBean.class);
+            SharedPreferencesUtil.saveData(Utils.getApp(),
+                    SpMainConfigConstants.spFileName,
+                    urlConfigBean.urlCode,
+                    urlConfigBean.urlHead+urlConfigBean.urlTail);
+        }
     }
 
 }

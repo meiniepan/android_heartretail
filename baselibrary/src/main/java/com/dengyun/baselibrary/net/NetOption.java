@@ -45,7 +45,7 @@ public class NetOption {
     private final boolean isShowDialog;
     private BaseDialogFragment loadingDialog;
     private final SmartRefreshLayout refreshLayout;
-    private final String url;
+    private String url;
     private final Map params;
     private final boolean isEncrypt;//是否启动加密，默认为true
     private final Type type;
@@ -110,6 +110,10 @@ public class NetOption {
 
     public String getUrl() {
         return url;
+    }
+
+    public void setUrl(String newUrl) {
+         url = newUrl;
     }
 
     public Map getParams() {
