@@ -21,6 +21,7 @@ import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.baselibrary.utils.RegexUtils;
 import com.dengyun.baselibrary.utils.ToastUtils;
+import com.dengyun.baselibrary.utils.phoneapp.AppUtils;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.usermodule.beans.BVerify;
 import com.idengyun.usermodule.beans.KVModifyPwd;
@@ -91,7 +92,7 @@ public class ModifyPwdActivity extends BaseActivity implements CompoundButton.On
                 .activity(this)
                 .params("mobile", etPhoneNum.getText().toString())
                 .params("identifyType", HRConst.IDENTIFY_TYPE_2)
-                .params("version", HRConst.VERSION)
+                .params("version", AppUtils.getAppVersionName())
                 .params("platform", HRConst.PLATFORM)
                 .isShowDialog(true)
                 .clazz(BVerify.class)
@@ -142,7 +143,7 @@ public class ModifyPwdActivity extends BaseActivity implements CompoundButton.On
                 etPhoneNum.getEditableText().toString(),
                 etVCode1.getEditableText().toString(),
                 etNewPwd.getEditableText().toString(),
-                HRConst.VERSION,
+                AppUtils.getAppVersionName(),
                 HRConst.PLATFORM
         ).toMap();
 

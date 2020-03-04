@@ -11,12 +11,10 @@ import com.dengyun.baselibrary.utils.phoneapp.AppUtils;
  * @author aLang
  */
 public final class HRConst {
-    public static final Application CONTEXT = Utils.getApp();
 
     /* 主配置.xml 登录API.xml */
     public static final String XML_FILE_NAME_USER_INFO = "hr_user_info";
 
-    public static final String VERSION = AppUtils.getAppVersionName();
     public static final String PLATFORM = "Android";
     public static final String APP_NAME = "app";
     //验证码类型0注册1换新设备2修改密码3忘记密码4绑定新手机号
