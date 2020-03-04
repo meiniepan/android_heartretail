@@ -60,14 +60,14 @@
                     android:layout_width="36dp"
                     android:layout_height="4dp"
                     android:layout_gravity="bottom"
-                    android:background="@drawable/shape_yellow_line_bg" />
+                    android:background="@drawable/shape_goods_yellow_line_bg" />
 
                 <ImageView
                     android:id="@+id/iv_goods_2"
                     android:layout_width="6dp"
                     android:layout_height="6dp"
                     android:layout_gravity="end"
-                    android:background="@drawable/shape_yellow_dot_bg" />
+                    android:background="@drawable/shape_goods_yellow_dot_bg" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -89,14 +89,14 @@
                     android:layout_width="36dp"
                     android:layout_height="4dp"
                     android:layout_gravity="bottom"
-                    android:background="@drawable/shape_yellow_line_bg" />
+                    android:background="@drawable/shape_goods_yellow_line_bg" />
 
                 <ImageView
                     android:id="@+id/iv_evaluation_2"
                     android:layout_width="6dp"
                     android:layout_height="6dp"
                     android:layout_gravity="end"
-                    android:background="@drawable/shape_yellow_dot_bg" />
+                    android:background="@drawable/shape_goods_yellow_dot_bg" />
 
                 <TextView
                     android:layout_width="wrap_content"

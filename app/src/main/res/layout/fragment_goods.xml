@@ -19,14 +19,14 @@
 
         <!-- 轮播图 -->
         <FrameLayout
-            android:id="@+id/layout_banner_container"
+            android:id="@+id/layout_goods_banner_container"
             android:layout_width="match_parent"
             android:layout_height="375dp"
             android:background="#fff" />
 
         <!-- 资格缺失 -->
         <LinearLayout
-            android:id="@+id/layout_disqualification"
+            android:id="@+id/layout_goods_disqualification"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:background="#FFDDDD"
@@ -77,7 +77,7 @@
                     android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/tv_price"
+                    android:id="@+id/tv_goods_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="#ffff6633"
@@ -85,7 +85,7 @@
                     tools:text="123.45" />
 
                 <TextView
-                    android:id="@+id/tv_price_small"
+                    android:id="@+id/tv_goods_price_small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -99,7 +99,7 @@
                     android:layout_weight="1" />
 
                 <TextView
-                    android:id="@+id/tv_sold"
+                    android:id="@+id/tv_goods_sold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="#ff666666"
@@ -130,7 +130,7 @@
             android:paddingEnd="15dp">
 
             <LinearLayout
-                android:id="@+id/layout_goods_specification"
+                android:id="@+id/layout_goods_spec"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:gravity="center_vertical">
@@ -148,7 +148,7 @@
                     android:layout_weight="1" />
 
                 <TextView
-                    android:id="@+id/tv_goods_specification"
+                    android:id="@+id/tv_goods_spec"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="#ff333333"
@@ -168,7 +168,7 @@
                 android:background="#DDDDDD" />
 
             <LinearLayout
-                android:id="@+id/layout_service_note"
+                android:id="@+id/layout_goods_service"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:gravity="center_vertical">
@@ -186,7 +186,7 @@
                     android:layout_weight="1" />
 
                 <TextView
-                    android:id="@+id/tv_service_note"
+                    android:id="@+id/tv_goods_service"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="#ff333333"
@@ -219,13 +219,13 @@
                     android:layout_width="72dp"
                     android:layout_height="4dp"
                     android:layout_gravity="bottom"
-                    android:background="@drawable/shape_yellow_line_bg" />
+                    android:background="@drawable/shape_goods_yellow_line_bg" />
 
                 <ImageView
                     android:layout_width="6dp"
                     android:layout_height="6dp"
                     android:layout_gravity="end"
-                    android:background="@drawable/shape_yellow_dot_bg" />
+                    android:background="@drawable/shape_goods_yellow_dot_bg" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -243,7 +243,7 @@
                 android:layout_weight="1" />
 
             <TextView
-                android:id="@+id/tv_favorable_rate"
+                android:id="@+id/tv_user_favorable_rate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#ff666666"
@@ -302,7 +302,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
-                        android:background="@drawable/shape_user_level_bg"
+                        android:background="@drawable/shape_goods_user_level_bg"
                         android:paddingStart="5dp"
                         android:paddingEnd="4dp"
                         android:textColor="#ffffffff"
@@ -403,13 +403,13 @@
                     android:layout_width="72dp"
                     android:layout_height="4dp"
                     android:layout_gravity="bottom"
-                    android:background="@drawable/shape_yellow_line_bg" />
+                    android:background="@drawable/shape_goods_yellow_line_bg" />
 
                 <ImageView
                     android:layout_width="6dp"
                     android:layout_height="6dp"
                     android:layout_gravity="end"
-                    android:background="@drawable/shape_yellow_dot_bg" />
+                    android:background="@drawable/shape_goods_yellow_dot_bg" />
 
                 <TextView
                     android:layout_width="wrap_content"
