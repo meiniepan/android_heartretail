@@ -9,21 +9,21 @@ import java.util.List;
  * @CreateDate: 2020-03-04 16:10
  */
 public class OrderStatusBean {
-    private int shopId;
-    private String shopName;
-    private String shopPhoto;
-    private String shopAddress;
-    private int status;
-    private int orderType;//批发、代销
-    private float totalPay;
-    private List<GoodsBean> goodsBeans;
+    public int shopId;
+    public String shopName;
+    public String shopPhoto;
+    public String shopAddress;
+    public int status;
+    public int orderType;//批发、代销
+    public float totalPay;
+    public List<GoodsBean> goodsBeans;
 
-    public class GoodsBean {
-        private int goodsId;
-        private String goodsName;
-        private String goodsTitle;
-        private String goodsSpec;
-        private float goodsPrice;
-        private int goodsQuantity;
+    public static class GoodsBean {
+        public int goodsId;
+        public String goodsName;
+        public String goodsTitle;
+        public String goodsSpec;
+        public float goodsPrice;
+        public int goodsQuantity;
     }
 }
