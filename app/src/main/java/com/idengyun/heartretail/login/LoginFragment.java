@@ -26,8 +26,9 @@ import com.dengyun.baselibrary.utils.SharedPreferencesUtil;
 import com.dengyun.baselibrary.utils.ToastUtils;
 import com.idengyun.heartretail.HRConfig;
 import com.idengyun.heartretail.HRConst;
-import com.idengyun.heartretail.MainActivity;
 import com.idengyun.heartretail.R;
+import com.idengyun.heartretail.activitys.ModifyPwdActivity;
+import com.idengyun.heartretail.activitys.VerifyDeviceActivity;
 import com.idengyun.heartretail.model.request.KVLogin;
 import com.idengyun.heartretail.model.request.KVRegister;
 import com.idengyun.heartretail.model.request.KVVerify;
@@ -361,20 +362,23 @@ public final class LoginFragment extends BaseFragment
                     return;
                 }
 
-                SharedPreferencesUtil.saveDataBean(HRConst.CONTEXT, HRConst.XML_FILE_NAME_USER_INFO, body);
                 // oastUtils.showShort("登录成功");
-                startMainActivity();
+
+                /* 保存用户信息 */
+                SharedPreferencesUtil.saveDataBean(HRConst.CONTEXT, HRConst.XML_FILE_NAME_USER_INFO, body);
+                startVerifyActivity();
             }
         });
     }
 
     /* 开启忘记密码界面 */
     private void startForgetPwdActivity() {
-        MainActivity.start(getContext());
+        ModifyPwdActivity.start(getContext());
     }
 
-    private void startMainActivity() {
-        MainActivity.start(getContext());
+    /* 开启设备认证页面 */
+    private void startVerifyActivity() {
+        VerifyDeviceActivity.start(getContext());
     }
 
     private void startTimer() {
