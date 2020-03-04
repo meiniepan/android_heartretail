@@ -138,7 +138,7 @@ public class VerifyDeviceActivity extends BaseActivity {
                 .activity(this)
                 .isShowDialog(true)
                 .params(map)
-                .clazz(BLogin.class)
+                .clazz(HrApiBean.class)
                 .build();
 
         NetApi.getData(netOption, new JsonCallback<HrApiBean>(netOption) {
@@ -186,5 +186,14 @@ public class VerifyDeviceActivity extends BaseActivity {
         }
 
         timer.start();
+    }
+    private void cancelTimer() {
+        if (timer != null) timer.cancel();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        cancelTimer();
     }
 }
