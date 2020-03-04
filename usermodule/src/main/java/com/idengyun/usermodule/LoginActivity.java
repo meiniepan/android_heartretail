@@ -24,6 +24,7 @@ import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.baselibrary.utils.RegexUtils;
 import com.dengyun.baselibrary.utils.SharedPreferencesUtil;
 import com.dengyun.baselibrary.utils.ToastUtils;
+import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.usermodule.beans.BLogin;
 import com.idengyun.usermodule.beans.BRegister;
 import com.idengyun.usermodule.beans.BVerify;
@@ -221,9 +222,7 @@ public final class LoginActivity extends BaseActivity
                 HRConst.APP_NAME
         ).toMap();
 
-        String url = HRConfig.getRegisterUrl();
-        url = "http://10.10.8.22:3000/mock/39/user/register";
-        NetOption netOption = NetOption.newBuilder(url)
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.getRegisterUrl())
                 .activity(this)
                 .isShowDialog(true)
                 .params(map)
@@ -271,8 +270,7 @@ public final class LoginActivity extends BaseActivity
                 HRConst.VERSION,
                 HRConst.PLATFORM
         ).toQuery();
-        String url = HRConfig.getVerifyUrl();
-        url = "http://10.10.8.22:3000/mock/39/user/send/msg";
+        String url = SpMainConfigConstants.getVerifyUrl();
         url += query;
 
         NetOption netOption = NetOption.newBuilder(url)
@@ -324,10 +322,7 @@ public final class LoginActivity extends BaseActivity
                 HRConst.PHONE_IMEI,
                 HRConst.PLATFORM);
         Map<String, Object> map = login.toMap();
-
-        String url = HRConfig.getLoginUrl();
-        url = "http://10.10.8.22:3000/mock/39/user/login";
-        NetOption netOption = NetOption.newBuilder(url)
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.getLoginUrl())
                 .activity(this)
                 .isShowDialog(true)
                 .params(map)

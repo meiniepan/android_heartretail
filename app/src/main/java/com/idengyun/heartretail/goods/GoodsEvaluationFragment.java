@@ -18,10 +18,10 @@ import com.dengyun.baselibrary.net.ImageApi;
 import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
+import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.google.gson.reflect.TypeToken;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.beans.EvaluationListBean;
-import com.idengyun.usermodule.HRConfig;
 import com.lzy.okgo.model.Response;
 
 import java.util.ArrayList;
@@ -74,9 +74,7 @@ public final class GoodsEvaluationFragment extends BaseFragment {
     }
 
     private void requestAPI() {
-        String url = HRConfig.getGoodsEvaluationUrl();
-        url = "http://10.10.8.22:3000/mock/39/evaluation/query/list";
-        NetOption netOption = NetOption.newBuilder(url)
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.evaluationList())
                 .fragment(this)
                 .type(new TypeToken<ApiBean<EvaluationListBean>>() {
                 }.getType())
