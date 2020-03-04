@@ -23,9 +23,9 @@ import com.dengyun.baselibrary.utils.SharedPreferencesUtil;
 import com.dengyun.baselibrary.utils.Utils;
 import com.dengyun.splashmodule.R;
 import com.dengyun.splashmodule.beans.MainConfig;
-import com.dengyun.baselibrary.spconstants.SpMainConfigConstants;
 import com.dengyun.splashmodule.beans.MainUrlConstants;
 import com.dengyun.splashmodule.config.GuidePicData;
+import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;

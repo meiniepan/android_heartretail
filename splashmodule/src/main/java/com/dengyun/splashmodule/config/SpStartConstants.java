@@ -1,4 +1,4 @@
-package com.dengyun.baselibrary.spconstants;
+package com.dengyun.splashmodule.config;
 
 import com.dengyun.baselibrary.utils.SharedPreferencesUtil;
 import com.dengyun.baselibrary.utils.Utils;
@@ -7,7 +7,7 @@ import com.dengyun.baselibrary.utils.phoneapp.AppUtils;
 /**
  * @Title 本地sp中start文件的存储常量
  * @Author: zhoubo
- * @CreateDate: 2019-08-28 13:59
+ * @CreateDate: 2020-03-04 09:50
  */
 public class SpStartConstants {
     private static String FILE_NAME = "start";
@@ -31,5 +31,4 @@ public class SpStartConstants {
     public static void saveLocalVersionName(){
         SharedPreferencesUtil.saveData(Utils.getApp(), FILE_NAME, "ver_num", AppUtils.getAppVersionName());
     }
-
 }

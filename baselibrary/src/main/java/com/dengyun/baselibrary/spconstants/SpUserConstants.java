@@ -7,7 +7,6 @@ import com.dengyun.baselibrary.utils.Utils;
 
 /**
  * @Title 本地sp中user文件的存储常量
- * @Desc: 描述
  * @Author: zhoubo
  * @CreateDate: 2019-08-28 14:01
  */

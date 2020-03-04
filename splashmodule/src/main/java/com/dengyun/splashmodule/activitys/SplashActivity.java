@@ -14,8 +14,8 @@ import com.dengyun.baselibrary.utils.SharedPreferencesUtil;
 import com.dengyun.baselibrary.utils.ToastUtils;
 import com.dengyun.baselibrary.utils.Utils;
 import com.dengyun.splashmodule.beans.MainConfig;
-import com.dengyun.baselibrary.spconstants.SpMainConfigConstants;
 import com.dengyun.splashmodule.beans.MainUrlConstants;
+import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.dengyun.splashmodule.listeners.OnLoadMainUrlsListener;
 import com.dengyun.splashmodule.utils.LocalAdInfoUtils;
 import com.google.gson.reflect.TypeToken;
@@ -68,28 +68,6 @@ public class SplashActivity extends BaseSplashActivity {
                 SharedPreferencesUtil.saveDataBean(Utils.getApp(), SpMainConfigConstants.spFileName, mainConfig.getData());
                 //广告信息
                 LocalAdInfoUtils.saveAdInfo(mainConfig.getAdvertising().ad_pic,mainConfig.getAdvertising().ad_url);
-                //删除之前的广告图本地存储，过几个版本之后删除
-                SharedPreferencesUtil.removeAll(Utils.getApp(),"advertising");
-
-                //新零售的存储主配置信息，待删除
-                try {
-                    SharedPreferences sp = activity.getSharedPreferences("nr_main_config", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor edit = sp.edit();
-
-                    JSONObject data = new JSONObject(GsonConvertUtil.toJson(mainConfig)).optJSONObject("data");
-                    if (data != null) {
-                        Iterator<String> keys = data.keys();
-                        while (keys.hasNext()) {
-                            String key = keys.next();
-                            String value = data.optString(key);
-                            String oldValue = sp.getString(key, "");
-                            if (!oldValue.equals(value)) edit.putString(key, value);
-                        }
-                    }
-                    edit.apply();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
             }
         });
     }
