@@ -256,7 +256,7 @@ public final class LoginActivity extends BaseActivity
 
     /* 发送手机验证码API */
     private void sendVerifyCode() {
-        if (RegexUtils.isMobileSimple(et_register_mobile.getEditableText())) {
+        if (!RegexUtils.isMobileSimple(et_register_mobile.getEditableText())) {
             ToastUtils.showShort("请输入有效手机号码");
             return;
         }
