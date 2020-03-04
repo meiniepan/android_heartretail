@@ -24,6 +24,8 @@ import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.baselibrary.utils.RegexUtils;
 import com.dengyun.baselibrary.utils.SharedPreferencesUtil;
 import com.dengyun.baselibrary.utils.ToastUtils;
+import com.dengyun.baselibrary.utils.Utils;
+import com.dengyun.baselibrary.utils.phoneapp.AppUtils;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.usermodule.beans.BLogin;
 import com.idengyun.usermodule.beans.BRegister;
@@ -211,7 +213,7 @@ public final class LoginActivity extends BaseActivity
 
         Map<String, Object> map = new KVRegister(
                 et_register_mobile.getEditableText().toString(),
-                HRConst.VERSION,
+                AppUtils.getAppVersionName(),
                 et_register_verify_code.getEditableText().toString(),
                 et_register_pwd.getEditableText().toString(),
                 et_register_invite_code.getEditableText().toString(),
@@ -267,7 +269,7 @@ public final class LoginActivity extends BaseActivity
                 .activity(this)
                 .params("mobile", et_register_mobile.getEditableText().toString())
                 .params("identifyType", HRConst.IDENTIFY_TYPE_0)
-                .params("version", HRConst.VERSION)
+                .params("version", AppUtils.getAppVersionName())
                 .params("platform", HRConst.PLATFORM)
                 .isShowDialog(true)
                 .clazz(BVerify.class)
@@ -311,7 +313,7 @@ public final class LoginActivity extends BaseActivity
 
         KVLogin login = new KVLogin(
                 et_login_mobile.getEditableText().toString(),
-                HRConst.VERSION,
+                AppUtils.getAppVersionName(),
                 et_login_pwd.getEditableText().toString(),
                 HRConst.PHONE_IMEI,
                 HRConst.PLATFORM);
@@ -343,7 +345,7 @@ public final class LoginActivity extends BaseActivity
                 // oastUtils.showShort("登录成功");
 
                 /* 保存用户信息 */
-                SharedPreferencesUtil.saveDataBean(HRConst.CONTEXT, HRConst.XML_FILE_NAME_USER_INFO, body);
+                SharedPreferencesUtil.saveDataBean(Utils.getApp(), HRConst.XML_FILE_NAME_USER_INFO, body);
                 if (body.data.isnewPhoneImei == 1) {
                     startVerifyActivity();
                 } else {

@@ -14,6 +14,7 @@ import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.baselibrary.utils.ToastUtils;
+import com.dengyun.baselibrary.utils.phoneapp.AppUtils;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.usermodule.beans.BVerify;
 import com.idengyun.usermodule.beans.KVVerifyDevice;
@@ -76,7 +77,7 @@ public class VerifyDeviceActivity extends BaseActivity {
                 .activity(this)
                 .params("mobile", HRUser.getMobile())
                 .params("identifyType", HRConst.IDENTIFY_TYPE_1)
-                .params("version", HRConst.VERSION)
+                .params("version", AppUtils.getAppVersionName())
                 .params("platform", HRConst.PLATFORM)
                 .isShowDialog(true)
                 .clazz(BVerify.class)
@@ -117,7 +118,7 @@ public class VerifyDeviceActivity extends BaseActivity {
         KVVerifyDevice mapV = new KVVerifyDevice(
                 HRConst.PHONE_IMEI,
                 etVCode.getEditableText().toString(),
-                HRConst.VERSION,
+                AppUtils.getAppVersionName(),
                 HRUser.getId(),
                 HRConst.PHONE_TYPE,
                 HRConst.PLATFORM);
