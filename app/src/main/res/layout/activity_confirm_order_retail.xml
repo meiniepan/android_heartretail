@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/ic_goods_detail_arrow" />
+            android:src="@drawable/ic_goods_detail_arrow_dark" />
 
         <TextView
             android:id="@+id/tv_tag2"

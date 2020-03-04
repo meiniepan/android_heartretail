@@ -13,8 +13,6 @@ import android.view.View;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.idengyun.heartretail.R;
-import com.idengyun.heartretail.adapters.MainPagerAdapter;
-import com.idengyun.heartretail.model.PageInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -143,6 +141,64 @@ public final class MainFragment extends BaseFragment implements TabLayout.OnTabS
 
         if (viewPager.getAdapter() != null) viewPager.setAdapter(null);
         viewPager.clearOnPageChangeListeners();
+    }
+
+    private static class MainPagerAdapter extends FragmentPagerAdapter {
+        private List<PageInfo> pageInfos;
+
+        MainPagerAdapter(FragmentManager fm, List<PageInfo> pageInfos) {
+            super(fm);
+            this.pageInfos = pageInfos;
+        }
+
+        @Override
+        public Fragment getItem(int i) {
+            PageInfo info = pageInfos.get(i);
+            if (info.fragment == null) {
+                info.fragment = createFragment(i);
+                if (info.fragment instanceof TabLayout.OnTabSelectedListener) {
+                    info.onTabSelectedListener = (TabLayout.OnTabSelectedListener) info.fragment;
+                }
+                if (info.fragment instanceof ViewPager.OnPageChangeListener) {
+                    info.onPageChangeListener = (ViewPager.OnPageChangeListener) info.fragment;
+                }
+            }
+            return info.fragment;
+        }
+
+        @Override
+        public int getCount() {
+            return pageInfos.size();
+        }
+
+        private Fragment createFragment(int position) {
+            final Fragment fragment;
+            switch (position) {
+                case 0:
+                    fragment = new HomeFragment();
+                    break;
+                case 1:
+                    fragment = new RedPacketFragment();
+                    break;
+                case 2:
+                    fragment = new MyFragment();
+                    break;
+                default:
+                    fragment = new Fragment();
+            }
+            fragment.setUserVisibleHint(false);
+            return fragment;
+        }
+    }
+
+    private static class PageInfo {
+        public int position;
+        public Fragment fragment;
+        public String tabText;
+        @DrawableRes
+        public int tabIcon;
+        public TabLayout.OnTabSelectedListener onTabSelectedListener;
+        public ViewPager.OnPageChangeListener onPageChangeListener;
     }
 }
 
