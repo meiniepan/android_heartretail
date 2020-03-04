@@ -215,4 +215,13 @@ public class ModifyPwdActivity extends BaseActivity implements CompoundButton.On
                 break;
         }
     }
+    private void cancelTimer() {
+        if (timer != null) timer.cancel();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        cancelTimer();
+    }
 }
