@@ -15,6 +15,7 @@ import com.sensorsdata.analytics.android.sdk.util.SensorsDataUtils;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -34,7 +35,6 @@ public class DealParamsUtil {
      * @return 处理之后的参数Json
      */
     public static String getDealParams(NetOption netOption) {
-
         if (netOption.getProjectType() == ProjectType.IDENGYUN_MTMY) {
             //每天美耶项目配置参数
             return getDealMtmyParams(netOption.getParams(), netOption.isEncrypt());
@@ -65,6 +65,39 @@ public class DealParamsUtil {
             return getDealHRParams(netOption.getParams(), netOption.isEncrypt());
         } else {
             return GsonConvertUtil.toJson(netOption.getParams());
+        }
+    }
+
+    /**
+     * 获取处理过的url（当请求是get请求时，参数在url上,可能需要拼接url）
+     *
+     * @return 处理之后的url
+     */
+    public static void dealUrlForGet(NetOption netOption) {
+        if (netOption.getProjectType() == ProjectType.IDENGYUN_HR) {
+            Map queryMap = netOption.getParams();
+            if (queryMap.isEmpty()) return;
+            if (netOption.getUrl().contains("?")) return;
+            if (queryMap.get("sign") != null) queryMap.remove("sign");
+
+            StringBuilder builder = new StringBuilder().append("?");
+            /* 真实请求参数 */
+            Object[] array = queryMap.keySet().toArray();
+            Arrays.sort(array);
+            for (Object key : array) {
+                Object value = queryMap.get(key);
+                builder.append(key).append("=").append(value).append("&");
+            }
+            /* MD5加密参数 */
+            String parameters = builder.substring(0, builder.length() - 1);
+            String sign = EncryptUtils.stringToMD5(parameters + "xls");
+            builder.append("sign").append("=").append(sign);
+
+            String newUrl = netOption.getUrl()+builder.toString();
+            netOption.setUrl(newUrl);
+        } else {
+            //其他项目的暂时没有配置get方式的拼接处理
+            //doNothing;
         }
     }
 
