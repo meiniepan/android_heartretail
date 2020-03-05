@@ -26,6 +26,8 @@ import butterknife.OnClick;
  * @date :2020/3/5 0005 10:35
  */
 public class OrderDetailActivity extends BaseActivity {
+    @BindView(R.id.back)
+    View backView;
     @BindView(R.id.ll_dl_detail)
     LinearLayout llDlDetail;
     @BindView(R.id.sr_goods)
@@ -85,9 +87,12 @@ public class OrderDetailActivity extends BaseActivity {
         srGoods.setAdapter(adapter);
     }
 
-    @OnClick({R.id.ll_dl_detail, R.id.tv_customer_service})
+    @OnClick({R.id.back, R.id.ll_dl_detail, R.id.tv_customer_service})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.back:
+                finish();
+                break;
             case R.id.ll_dl_detail:
                 break;
             case R.id.tv_customer_service:
