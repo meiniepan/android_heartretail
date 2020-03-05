@@ -27,6 +27,7 @@ import com.dengyun.splashmodule.beans.MainUrlConstants;
 import com.dengyun.splashmodule.utils.MyUpdateLoader;
 
 import com.idengyun.heartretail.R;
+import com.idengyun.msgmodule.MsgPushConfig;
 import com.idengyun.updatelib.update.UpdateUtils;
 import com.meituan.android.walle.WalleChannelReader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -57,7 +58,7 @@ import java.lang.reflect.Method;
  */
 public class MyApplication extends LitePalApplication {
     // TODO: 2020-03-04 账号
-    private static final String UMENG_APPKEY = "";
+    private static final String UMENG_APPKEY = "5e60505b895cca565b0000f4";
     private static final String WX_APPID = "";
     private static final String WX_APPSECRET = "";
     private static final String SINA_APPKEY = "";
@@ -92,7 +93,9 @@ public class MyApplication extends LitePalApplication {
             initUpdateModule();
             //初始化下载模块
             initDownloadModule();
+            //初始化埋点模块
             initSADate();
+            //初始化分享模块
             initShareModule();
             //Android7.0相机权限问题
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -102,6 +105,8 @@ public class MyApplication extends LitePalApplication {
             initSmartRefreshHeaderFooter();
             //初始化banner配置
             initBannerConfig();
+            //初始化配置推送消息
+            initMsgPushConfig();
         }
     }
 
@@ -261,7 +266,6 @@ public class MyApplication extends LitePalApplication {
         });
     }
 
-
     private void initBannerConfig() {
         BannerConfig.setBannerDisplayImageHolder(new BannerDisplayImageHolder() {
             @Override
@@ -269,7 +273,13 @@ public class MyApplication extends LitePalApplication {
                 ImageApi.displayImage(context, iv, data.getBannerImageUrl(), data.getBannerImageDefult(), data.getBannerImageDefult());
             }
         });
+    }
 
+    /**
+     * 初始化配置推送消息
+     */
+    private void initMsgPushConfig() {
+        MsgPushConfig.initPush();
     }
 
     /**
