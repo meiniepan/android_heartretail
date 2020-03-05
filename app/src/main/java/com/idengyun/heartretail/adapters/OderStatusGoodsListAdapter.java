@@ -21,7 +21,8 @@ public class OderStatusGoodsListAdapter extends BaseQuickAdapter<OrderStatusBean
 
     @Override
     protected void convert(BaseViewHolder helper, OrderStatusBean.GoodsBean item) {
-        helper.setText(R.id.tv_goods_title1, item.goodsTitle);
+        helper.setText(R.id.tv_goods_title1, item.goodsTitle)
+        .setText(R.id.tv_quantity1,"X"+item.goodsQuantity);
     }
 
 }
