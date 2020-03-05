@@ -55,7 +55,10 @@ public class OrderStatusFragment extends BaseFragment {
             OrderStatusBean orderStatusBean = new OrderStatusBean();
             OrderStatusBean.GoodsBean goodsBean = new OrderStatusBean.GoodsBean();
             goodsBean.goodsTitle = "测试标题";
+            goodsBean.goodsQuantity = 3;
             List<OrderStatusBean.GoodsBean> goodsBeanList = new ArrayList<>();
+            goodsBeanList.add(goodsBean);
+            goodsBeanList.add(goodsBean);
             goodsBeanList.add(goodsBean);
             orderStatusBean.goodsBeans = goodsBeanList;
             orderStatusBean.shopName = "什么什么店"+status;
