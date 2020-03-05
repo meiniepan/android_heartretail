@@ -10,6 +10,7 @@ import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.MainActivity;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.goods.GoodsDetailsFragment;
+import com.idengyun.heartretail.shop.ShopListActivity;
 import com.idengyun.usermodule.LoginActivity;
 import com.idengyun.usermodule.ModifyPwdActivity;
 import com.idengyun.usermodule.VerifyDeviceActivity;
@@ -32,8 +33,9 @@ public class FirstActivity extends BaseActivity {
         LoginActivity.start(this);
     }
 
+    /* 跳到店铺列表 */
     public void skipShopList(View view) {
-        OrderListActivity.start(this,1);
+        ShopListActivity.start(this);
     }
 
     /* 开启商品详情界面 */
@@ -44,5 +46,10 @@ public class FirstActivity extends BaseActivity {
     /* 开启主界面 */
     public void skipMain(View view) {
         MainActivity.start(this);
+    }
+
+    /* 跳到订单列表 */
+    public void skipOrderList(View view) {
+        OrderListActivity.start(this,1);
     }
 }
