@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.adapters.OderStatusListAdapter;
@@ -39,6 +40,12 @@ public class OrderStatusFragment extends BaseFragment {
         OderStatusListAdapter adapter = new OderStatusListAdapter(R.layout.item_order_status, data);
         rsrOrderStatus.setLayoutManager(new LinearLayoutManager(getActivity()));
         rsrOrderStatus.setAdapter(adapter);
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                OrderDetailActivity.start(getActivity(), data.get(position));
+            }
+        });
     }
 
     private void initData() {

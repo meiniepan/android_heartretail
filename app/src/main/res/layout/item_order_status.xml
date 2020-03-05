@@ -31,7 +31,7 @@
 
         <LinearLayout
             android:id="@+id/ll_surplus_pay_time"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical">
 
@@ -39,7 +39,7 @@
                 android:id="@+id/tv_order_status_time_h"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
-                android:background="@drawable/shape_rec_corner_bac_orange"
+                android:background="@drawable/shape_orange_bac_rec_2"
                 android:gravity="center"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp_12" />
@@ -56,7 +56,7 @@
                 android:id="@+id/tv_order_status_time_m"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
-                android:background="@drawable/shape_rec_corner_bac_orange"
+                android:background="@drawable/shape_orange_bac_rec_2"
                 android:gravity="center"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp_12" />
@@ -73,7 +73,7 @@
                 android:id="@+id/tv_order_status_time_s"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
-                android:background="@drawable/shape_rec_corner_bac_orange"
+                android:background="@drawable/shape_orange_bac_rec_2"
                 android:gravity="center"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp_12" />

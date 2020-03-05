@@ -77,7 +77,7 @@
             android:drawableStart="@drawable/selector_pay_check" />
     </LinearLayout>
 
-    <include layout="@layout/spilit_1" />
+    <include layout="@layout/split_999" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -109,7 +109,7 @@
             android:drawableStart="@drawable/selector_pay_check" />
     </LinearLayout>
 
-    <include layout="@layout/spilit_1" />
+    <include layout="@layout/split_999" />
 
     <LinearLayout
         android:layout_width="match_parent"
