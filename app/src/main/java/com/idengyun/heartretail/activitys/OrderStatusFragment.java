@@ -50,6 +50,7 @@ public class OrderStatusFragment extends BaseFragment {
             goodsBeanList.add(goodsBean);
             orderStatusBean.goodsBeans = goodsBeanList;
             orderStatusBean.shopName = "什么什么店"+status;
+            data.add(orderStatusBean);
         }else if (status == 1){
             OrderStatusBean orderStatusBean = new OrderStatusBean();
             OrderStatusBean.GoodsBean goodsBean = new OrderStatusBean.GoodsBean();
@@ -58,6 +59,14 @@ public class OrderStatusFragment extends BaseFragment {
             goodsBeanList.add(goodsBean);
             orderStatusBean.goodsBeans = goodsBeanList;
             orderStatusBean.shopName = "什么什么店"+status;
+            data.add(orderStatusBean);
+            data.add(orderStatusBean);
+            data.add(orderStatusBean);
+            data.add(orderStatusBean);
+            data.add(orderStatusBean);
+            data.add(orderStatusBean);
+
+
         }
     }
 

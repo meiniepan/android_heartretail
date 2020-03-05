@@ -47,7 +47,6 @@ public class OrderListActivity extends BaseActivity {
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
-        registBus();
         initWhatTabSelect();
         initData();
         setData();

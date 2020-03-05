@@ -33,7 +33,7 @@ public class FirstActivity extends BaseActivity {
     }
 
     public void skipShopList(View view) {
-        ModifyPwdActivity.start(this);
+        OrderListActivity.start(this,1);
     }
 
     /* 开启商品详情界面 */
