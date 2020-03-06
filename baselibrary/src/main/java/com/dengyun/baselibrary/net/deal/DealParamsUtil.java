@@ -90,7 +90,7 @@ public class DealParamsUtil {
                 builder.append(key).append("=").append(value).append("&");
             }
             /* MD5加密参数 */
-            String parameters = builder.substring(0, builder.length() - 1);
+            String parameters = builder.substring(1, builder.length() - 1);
             String sign = EncryptUtils.stringToMD5(parameters + "xls");
             builder.append("sign").append("=").append(sign);
 
@@ -175,8 +175,17 @@ public class DealParamsUtil {
         String paramJson0 = GsonConvertUtil.toJson(paramsMap);
         if (isEncrypt) {
             //加密参数放在header中
-            String signMd5 = EncryptUtils.stringToMD5(paramJson0 + "xls");
-            netOption.addHeaders("sign",signMd5);
+            Object[] array = paramsMap.keySet().toArray();
+            Arrays.sort(array);
+            StringBuilder builder = new StringBuilder();
+            for (Object key : array) {
+                Object value = paramsMap.get(key);
+                builder.append(key).append("=").append(value).append("&");
+            }
+            /* MD5加密参数 */
+            String parameters = builder.substring(1, builder.length() - 1);
+            String sign = EncryptUtils.stringToMD5(parameters + "xls");
+            netOption.addHeaders("sign",sign);
         }
         return paramJson0;
 
