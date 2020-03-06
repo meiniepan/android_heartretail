@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.adapters.OderStatusListAdapter;
@@ -39,6 +40,12 @@ public class OrderStatusFragment extends BaseFragment {
         OderStatusListAdapter adapter = new OderStatusListAdapter(R.layout.item_order_status, data);
         rsrOrderStatus.setLayoutManager(new LinearLayoutManager(getActivity()));
         rsrOrderStatus.setAdapter(adapter);
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                OrderDetailActivity.start(getActivity(), data.get(position));
+            }
+        });
     }
 
     private void initData() {
@@ -50,14 +57,26 @@ public class OrderStatusFragment extends BaseFragment {
             goodsBeanList.add(goodsBean);
             orderStatusBean.goodsBeans = goodsBeanList;
             orderStatusBean.shopName = "什么什么店"+status;
+            data.add(orderStatusBean);
         }else if (status == 1){
             OrderStatusBean orderStatusBean = new OrderStatusBean();
             OrderStatusBean.GoodsBean goodsBean = new OrderStatusBean.GoodsBean();
             goodsBean.goodsTitle = "测试标题";
+            goodsBean.goodsQuantity = 3;
             List<OrderStatusBean.GoodsBean> goodsBeanList = new ArrayList<>();
+            goodsBeanList.add(goodsBean);
+            goodsBeanList.add(goodsBean);
             goodsBeanList.add(goodsBean);
             orderStatusBean.goodsBeans = goodsBeanList;
             orderStatusBean.shopName = "什么什么店"+status;
+            data.add(orderStatusBean);
+            data.add(orderStatusBean);
+            data.add(orderStatusBean);
+            data.add(orderStatusBean);
+            data.add(orderStatusBean);
+            data.add(orderStatusBean);
+
+
         }
     }
 

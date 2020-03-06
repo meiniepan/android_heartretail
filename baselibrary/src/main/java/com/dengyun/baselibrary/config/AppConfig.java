@@ -27,11 +27,11 @@ public class AppConfig {
 
     //是否开启activity的生命周期打印log--使用aaaaaa过滤日志查看
     //上线时需要改成false
-    public static boolean isActivityLCLog = false;
+    public static boolean isActivityLCLog = true;
 
     //是否开启fragment的生命周期打印log--使用ffffff过滤日志查看
     //上线时需要改成false
-    public static boolean isFragmentLCLog = false;
+    public static boolean isFragmentLCLog = true;
 
 
 }

@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+// 依赖插件脚本
+apply plugin: 'com.sensorsdata.analytics.android'
 
 android {
     compileSdkVersion rootProject.ext.android.compileSdkVersion
@@ -12,9 +14,9 @@ android {
         multiDexKeepProguard file('multidex.pro')
         multiDexEnabled true
         manifestPlaceholders = [
-                GETUI_APP_ID    : "hiTFn7zSlO7wz9LDRklFy4",
-                GETUI_APP_KEY   : "TO4lMW1FGT6b25knkS5vj6",
-                GETUI_APP_SECRET: "uyrjpF2LmT7R8pBg9UK7w9",
+                GETUI_APP_ID    : "ItoHnmkn6C85IMRpRuvfV9",
+                GETUI_APP_KEY   : "JAdg9eoKjK94FddpcDZd14",
+                GETUI_APP_SECRET: "7NNlkZ1WrS6oOHxVxdRSrA",
                 PACKAGE_NAME    : applicationId
         ]
         ndk {
@@ -100,6 +102,7 @@ dependencies {
     implementation project(':commonmodule')
     implementation project(':routermodule')
     implementation project(':splashmodule')
+    implementation project(':msgmodule')
     implementation rootProject.ext.dependencies.updatelib
     //路由插件
     annotationProcessor rootProject.ext.dependencies.arouter_compiler
@@ -107,6 +110,11 @@ dependencies {
     annotationProcessor rootProject.ext.dependencies.butterknife_compiler
     //适配
     implementation 'me.jessyan:autosize:1.1.2'
+    //walle打包渠道信息
+    implementation(rootProject.ext.dependencies.walle) { exclude group: 'com.android.support' }
+    //分享组件
+    implementation rootProject.ext.dependencies.sharelibrary
+
 
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     implementation rootProject.ext.dependencies.flexbox

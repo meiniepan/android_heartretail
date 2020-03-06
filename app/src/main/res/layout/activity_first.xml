@@ -28,4 +28,10 @@
         android:layout_height="wrap_content"
         android:onClick="skipMain"
         android:text="主页" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="skipOrderList"
+        android:text="订单列表" />
 </LinearLayout>

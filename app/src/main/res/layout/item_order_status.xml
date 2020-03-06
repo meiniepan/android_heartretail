@@ -6,6 +6,7 @@
     android:background="@color/white"
     android:orientation="vertical"
     android:paddingStart="15dp"
+    android:layout_marginBottom="@dimen/dp_12"
     android:paddingEnd="15dp">
 
     <LinearLayout
@@ -30,7 +31,7 @@
 
         <LinearLayout
             android:id="@+id/ll_surplus_pay_time"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical">
 
@@ -38,47 +39,41 @@
                 android:id="@+id/tv_order_status_time_h"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
-                android:background="@drawable/shape_rec_corner_bac_orange"
+                android:background="@drawable/shape_orange_bac_rec_2"
                 android:gravity="center"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp_12" />
 
-            <TextView
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:src="@drawable/ic_colon"
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="4dp"
-                android:rotation="90"
-                android:text="‥"
-                android:textColor="@color/heart_orange"
-                android:textSize="30dp"
-                android:textStyle="bold" />
+                />
 
             <TextView
                 android:id="@+id/tv_order_status_time_m"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
-                android:background="@drawable/shape_rec_corner_bac_orange"
+                android:background="@drawable/shape_orange_bac_rec_2"
                 android:gravity="center"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp_12" />
 
-            <TextView
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:src="@drawable/ic_colon"
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="4dp"
-                android:rotation="90"
-                android:text="‥"
-                android:textColor="@color/heart_orange"
-                android:textSize="30dp"
-                android:textStyle="bold" />
+                />
 
             <TextView
                 android:id="@+id/tv_order_status_time_s"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
-                android:background="@drawable/shape_rec_corner_bac_orange"
+                android:background="@drawable/shape_orange_bac_rec_2"
                 android:gravity="center"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp_12" />
@@ -127,7 +122,7 @@
         android:id="@+id/ll_advanced_operate"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_marginBottom="@dimen/dp_12"
+
         android:gravity="center_vertical">
 
         <Space

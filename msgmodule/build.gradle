@@ -31,4 +31,6 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':baselibrary')
+    //个推
+    implementation 'com.getui:sdk:2.13.3.0'
 }

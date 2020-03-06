@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:layout_toRightOf="@id/tv_tag1"
-            android:background="@drawable/shape_orange_corner_rec"
+            android:background="@drawable/shape_orange_bac_rec_4"
             android:gravity="center"
             android:text="距您最近"
             android:paddingStart="4dp"
