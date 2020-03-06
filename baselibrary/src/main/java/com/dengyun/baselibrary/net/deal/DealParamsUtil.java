@@ -9,6 +9,7 @@ import com.dengyun.baselibrary.utils.SharedPreferencesUtil;
 import com.dengyun.baselibrary.utils.Utils;
 import com.dengyun.baselibrary.utils.encode.EncryptUtils;
 import com.dengyun.baselibrary.utils.phoneapp.AppUtils;
+import com.lzy.okgo.model.HttpHeaders;
 import com.sensorsdata.analytics.android.sdk.SensorsDataAPI;
 import com.sensorsdata.analytics.android.sdk.util.SensorsDataUtils;
 
@@ -62,7 +63,7 @@ public class DealParamsUtil {
             netOption.getParams().put("paramString", imDealParams);
             return imDealParams;
         } else if (netOption.getProjectType() == ProjectType.IDENGYUN_HR) {
-            return getDealHRParams(netOption.getParams(), netOption.isEncrypt());
+            return getDealHRParams(netOption, netOption.getParams(), netOption.isEncrypt());
         } else {
             return GsonConvertUtil.toJson(netOption.getParams());
         }
@@ -93,7 +94,7 @@ public class DealParamsUtil {
             String sign = EncryptUtils.stringToMD5(parameters + "xls");
             builder.append("sign").append("=").append(sign);
 
-            String newUrl = netOption.getUrl()+builder.toString();
+            String newUrl = netOption.getUrl() + builder.toString();
             netOption.setUrl(newUrl);
         } else {
             //其他项目的暂时没有配置get方式的拼接处理
@@ -169,13 +170,16 @@ public class DealParamsUtil {
         }
     }
 
-    public static String getDealHRParams(Map paramsMap, boolean isEncrypt) {
+    public static String getDealHRParams(NetOption netOption, Map paramsMap, boolean isEncrypt) {
         setHRPublicParam(paramsMap);//添加公共参数
+        String paramJson0 = GsonConvertUtil.toJson(paramsMap);
         if (isEncrypt) {
-            return getHREncryptJson(paramsMap);//妃子校参数加密
-        } else {
-            return GsonConvertUtil.toJson(paramsMap);
+            //加密参数放在header中
+            String signMd5 = EncryptUtils.stringToMD5(paramJson0 + "xls");
+            netOption.addHeaders("sign",signMd5);
         }
+        return paramJson0;
+
     }
 
 
@@ -254,21 +258,6 @@ public class DealParamsUtil {
         String signMd5 = EncryptUtils.stringToMD5(sbu.toString());
         map.put("sign", signMd5);
         return GsonConvertUtil.toJson(map);
-    }
-
-    /**
-     * 心零售请求加密
-     *
-     * @param map
-     * @return
-     */
-    private static String getHREncryptJson(Map map) {
-        String paramJson0 = GsonConvertUtil.toJson(map);
-        String signMd5 = EncryptUtils.stringToMD5(paramJson0 + "xls");
-        Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("jsonStr", paramJson0);
-        paramMap.put("sign", signMd5);
-        return GsonConvertUtil.toJson(paramMap);
     }
 
     /**

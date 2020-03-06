@@ -26,6 +26,7 @@ import com.dengyun.baselibrary.utils.GsonConvertUtil;
 import com.dengyun.baselibrary.utils.ReflectUtils;
 import com.google.gson.stream.JsonReader;
 import com.lzy.okgo.convert.Converter;
+import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
 
@@ -99,7 +100,16 @@ public class JsonConvert<T> implements Converter<T> {
                 isNormalApiBean = false;
             }
         }  else {
-            t = GsonConvertUtil.fromJson(jsonReader, rawType);
+            try {
+                t = GsonConvertUtil.fromJson(jsonReader, rawType);
+            }catch (Exception e){
+                if (AppConfig.isDebug){
+                    String json = GsonConvertUtil.fromJson(jsonReader,String.class);
+                    printRealRequset(json);
+                }
+                response.close();
+                throw e;
+            }
             try {
                 code = ReflectUtils.reflect(t).field(codeFeflectName).<String>get();    //反射获取返回的bean中的code字段，泛型不能传错
                 msg = ReflectUtils.reflect(t).field(msgFeflectName).<String>get();   //反射获取返回的bean中的message字段，泛型不能传错
@@ -129,7 +139,19 @@ public class JsonConvert<T> implements Converter<T> {
         JsonReader jsonReader = new JsonReader(body.charStream());
 
         // 泛型格式如下： new JsonCallback<任意JavaBean>(this)
-        T t = GsonConvertUtil.fromJson(jsonReader, type);
+        T t = null;
+        try {
+            t = GsonConvertUtil.fromJson(jsonReader, type);
+        }catch (Exception e){
+            if (AppConfig.isDebug){
+                String json = GsonConvertUtil.fromJson(jsonReader,String.class);
+                printRealRequset(json);
+            }
+            throw e;
+        }finally {
+            response.close();
+        }
+
         String code = null, msg = null;
         boolean isNormalApiBean = true;//是否是标准的ApiBean的格式
         try {
@@ -139,7 +161,6 @@ public class JsonConvert<T> implements Converter<T> {
 //            AppLogUtil.setNetLog("返回信息非标准code、msg");
             isNormalApiBean = false;
         }
-        response.close();
         if (AppConfig.isDebug) {
             String json = GsonConvertUtil.toJson(t);
             printLog(json);
@@ -158,8 +179,18 @@ public class JsonConvert<T> implements Converter<T> {
         boolean isNormalApiBean = true;//是否是标准的ApiBean的格式
         if (rawType != ApiBean.class) {
             // 泛型格式如下： new JsonCallback<外层BaseBean<内层JavaBean>>(this)
-            T t = GsonConvertUtil.fromJson(jsonReader, type);
-            response.close();
+            T t = null;
+            try {
+                 t = GsonConvertUtil.fromJson(jsonReader, type);
+            }catch (Exception e){
+                if (AppConfig.isDebug){
+                    String json = GsonConvertUtil.fromJson(jsonReader,String.class);
+                    printRealRequset(json);
+                }
+                throw e;
+            }finally {
+                response.close();
+            }
 
             if (AppConfig.isDebug) {
                 String json = GsonConvertUtil.toJson(t);
@@ -185,11 +216,21 @@ public class JsonConvert<T> implements Converter<T> {
                     printLog(json);
                 }
                 return setReturn(simpleResponse.code,simpleResponse.msg, (T) simpleResponse.toApiBean(),true);
-
             } else {
                 // 泛型格式如下： new JsonCallback<LzyResponse<内层JavaBean>>(this)
-                ApiBean apiBean = GsonConvertUtil.fromJson(jsonReader, type);
-                response.close();
+                ApiBean apiBean;
+                try {
+                    apiBean = GsonConvertUtil.fromJson(jsonReader, type);
+                }catch (Exception e){
+                    if (AppConfig.isDebug){
+                        String json = GsonConvertUtil.fromJson(jsonReader,String.class);
+                        printRealRequset(json);
+                    }
+                    throw e;
+                }finally {
+                    response.close();
+                }
+
                 if (AppConfig.isDebug) {
                     String json = GsonConvertUtil.toJson(apiBean);
                     printLog(json);
@@ -204,6 +245,10 @@ public class JsonConvert<T> implements Converter<T> {
         AppLogUtil.setNetLog(netOption.getParams());
         AppLogUtil.setNetLogJson(json);
 //        AppLogUtil.setNetLog(json);
+    }
+
+    private void printRealRequset(String json){
+        Logger.t("real-request").json(json);
     }
 
     private T setReturn(String code,String msg,T t,boolean isNormalApiBean) throws ApiException {
