@@ -103,7 +103,7 @@ public final class MyFragment extends BaseFragment implements TabLayout.OnTabSel
 
         } else if (id == R.id.iv_my_setting) {
             HRActivity.start(getContext(), SettingFragment.class);
-        } else if (id == R.id.iv_user_avatar) {
+        } else if (id == R.id.iv_my_user_avatar) {
 
         } else if (id == R.id.tv_my_account) {
 

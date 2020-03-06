@@ -21,14 +21,14 @@ import java.util.List;
  *
  * @author aLang
  */
-public final class PersonalDataFragment extends BaseFragment implements View.OnClickListener {
+public final class PersonDataFragment extends BaseFragment implements View.OnClickListener {
     private final List<String> settingList = new ArrayList<>();
     private RecyclerView recycler_view;
     private View layout_logout;
 
     @Override
     public int getLayoutId() {
-        return R.layout.fragment_personal_data;
+        return R.layout.fragment_person_data;
     }
 
     @Override
@@ -102,7 +102,7 @@ public final class PersonalDataFragment extends BaseFragment implements View.OnC
                 super(itemView);
                 tv_setting_name = itemView.findViewById(R.id.tv_setting_name);
                 v_setting_divider = itemView.findViewById(R.id.v_setting_divider);
-                itemView.setOnClickListener(PersonalDataFragment.this);
+                itemView.setOnClickListener(PersonDataFragment.this);
             }
 
             @MainThread

@@ -50,18 +50,45 @@ public final class SettingFragment extends BaseFragment implements View.OnClickL
 
     @Override
     public void onClick(View v) {
+        /*
+         * 0.个人资料
+         * 1.账号管理
+         * 2.当前版本
+         * 3.用户协议
+         * -1. 退出登录
+         *  */
         int position = (int) v.getTag();
         if (0 == position) {
-            HRActivity.start(getContext(), PersonalDataFragment.class);
+            startPersonDataActivity();
         } else if (1 == position) {
-
+            startAccountActivity();
         } else if (2 == position) {
-
+            startVersionActivity();
         } else if (3 == position) {
-
+            startUserAgreeActivity();
         } else {
-
+            logout();
         }
+    }
+
+    private void logout() {
+        // TODO: 2020/3/6
+    }
+
+    private void startUserAgreeActivity() {
+        // TODO: 2020/3/6
+    }
+
+    private void startVersionActivity() {
+        // TODO: 2020/3/6
+    }
+
+    private void startAccountActivity() {
+        HRActivity.start(getContext(), AccountManageFragment.class);
+    }
+
+    private void startPersonDataActivity() {
+        HRActivity.start(getContext(), PersonDataFragment.class);
     }
 
     private void findViewById(View view) {
