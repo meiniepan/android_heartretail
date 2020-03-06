@@ -183,7 +183,7 @@ public class DealParamsUtil {
                 builder.append(key).append("=").append(value).append("&");
             }
             /* MD5加密参数 */
-            String parameters = builder.substring(1, builder.length() - 1);
+            String parameters = builder.substring(0, builder.length() - 1);
             String sign = EncryptUtils.stringToMD5(parameters + "xls");
             netOption.addHeaders("sign",sign);
         }
