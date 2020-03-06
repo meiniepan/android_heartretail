@@ -9,14 +9,15 @@
     <ImageView
         android:id="@+id/iv_my_not_login_bg"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/ic_my_header_bg" />
+        android:layout_height="200dp"
+        android:background="@drawable/ic_my_header_bg_small" />
 
+    <!-- android:background="@drawable/shape_my_header_bg" -->
     <ImageView
         android:id="@+id/iv_my_login_bg"
         android:layout_width="match_parent"
         android:layout_height="265dp"
-        android:background="@drawable/shape_my_header_bg" />
+        android:background="@drawable/ic_my_header_bg_big" />
 
     <!-- 编辑 分享 设置 -->
     <LinearLayout
