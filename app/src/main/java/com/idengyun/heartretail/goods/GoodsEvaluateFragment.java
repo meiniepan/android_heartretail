@@ -28,11 +28,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 商品评价页
+ * 商品详情-用户评价
  *
  * @author aLang
  */
-public final class GoodsEvaluationFragment extends BaseFragment {
+public final class GoodsEvaluateFragment extends BaseFragment {
     private int totalPageSize;
     private int totalPage;
     private int pageSize;
@@ -43,7 +43,7 @@ public final class GoodsEvaluationFragment extends BaseFragment {
 
     @Override
     public int getLayoutId() {
-        return R.layout.fragment_goods_evaluation;
+        return R.layout.fragment_goods_evaluae;
     }
 
     @Override
@@ -115,7 +115,7 @@ public final class GoodsEvaluationFragment extends BaseFragment {
         @Override
         public EvaluationHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int position) {
             if (inflater == null) inflater = LayoutInflater.from(viewGroup.getContext());
-            View itemView = inflater.inflate(R.layout.fragment_goods_evaluation_item, viewGroup, false);
+            View itemView = inflater.inflate(R.layout.fragment_goods_evaluate_item, viewGroup, false);
             return new EvaluationHolder(itemView);
         }
 

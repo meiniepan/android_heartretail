@@ -22,10 +22,14 @@ public final class BGoodsDetail {
         public String goodsTitle;
         public int soldCounts;
         public int goodsType;
+        public int shopId;
+        public String shopName;
+        public int wholesaleFlag;
         public List<Banner> imageList;
         public List<Protocol> protocolList;
         public List<GoodsSpec> goodsSpecList;
         public List<GoodsSku> goodsSkuList;
+        public List<String> goodsDetailList;
 
         public static class Banner {
             public String imgUrl;
@@ -34,7 +38,12 @@ public final class BGoodsDetail {
 
         public static class GoodsSpec {
             public String skuName;
-            public List<String> skuValueList;
+            public List<SkuValue> skuValueList;
+
+            public static class SkuValue {
+                public int specItemId;
+                public String specItemName;
+            }
         }
 
         public static class GoodsSku {
@@ -44,6 +53,7 @@ public final class BGoodsDetail {
             public int goodsSkuId;
             public String goodsPrice;
             public int canBuyCount;
+            public String skuImgUrl;
         }
 
         public static class Protocol {

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_goods_spec_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:textColor="#ff666666"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        tools:text="商品规格" />
+
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/flexbox_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:alignContent="flex_start"
+        app:alignItems="baseline"
+        app:flexDirection="row"
+        app:flexWrap="wrap"
+        app:justifyContent="flex_start"
+        app:showDivider="none"
+        app:showDividerHorizontal="none"
+        app:showDividerVertical="none">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="6dp">
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selector_goods_spec_flex_item_bg"
+                android:button="@null"
+                android:paddingStart="12dp"
+                android:paddingTop="9dp"
+                android:paddingEnd="12dp"
+                android:paddingBottom="9dp"
+                android:text="20ml装"
+                android:textColor="@color/selector_goods_spec_flex_item_text_color"
+                android:textSize="14sp" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="6dp">
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selector_goods_spec_flex_item_bg"
+                android:button="@null"
+                android:paddingStart="12dp"
+                android:paddingTop="9dp"
+                android:paddingEnd="12dp"
+                android:paddingBottom="9dp"
+                android:text="20ml装(2020春节限定)"
+                android:textColor="@color/selector_goods_spec_flex_item_text_color"
+                android:textSize="14sp" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="6dp">
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selector_goods_spec_flex_item_bg"
+                android:button="@null"
+                android:paddingStart="12dp"
+                android:paddingTop="9dp"
+                android:paddingEnd="12dp"
+                android:paddingBottom="9dp"
+                android:text="50ml装"
+                android:textColor="@color/selector_goods_spec_flex_item_text_color"
+                android:textSize="14sp" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="6dp">
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selector_goods_spec_flex_item_bg"
+                android:button="@null"
+                android:checked="true"
+                android:paddingStart="12dp"
+                android:paddingTop="9dp"
+                android:paddingEnd="12dp"
+                android:paddingBottom="9dp"
+                android:text="20ml装(2020春节限定款)"
+                android:textColor="@color/selector_goods_spec_flex_item_text_color"
+                android:textSize="14sp" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="6dp">
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selector_goods_spec_flex_item_bg"
+                android:button="@null"
+                android:paddingStart="12dp"
+                android:paddingTop="9dp"
+                android:paddingEnd="12dp"
+                android:paddingBottom="9dp"
+                android:text="100ml装"
+                android:textColor="@color/selector_goods_spec_flex_item_text_color"
+                android:textSize="14sp" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="6dp">
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selector_goods_spec_flex_item_bg"
+                android:button="@null"
+                android:paddingStart="12dp"
+                android:paddingTop="9dp"
+                android:paddingEnd="12dp"
+                android:paddingBottom="9dp"
+                android:text="20ml装(2020情人节限定款)"
+                android:textColor="@color/selector_goods_spec_flex_item_text_color"
+                android:textSize="14sp" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="6dp">
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selector_goods_spec_flex_item_bg"
+                android:button="@null"
+                android:paddingStart="12dp"
+                android:paddingTop="9dp"
+                android:paddingEnd="12dp"
+                android:paddingBottom="9dp"
+                android:text="20ml装(2020元旦限定款)"
+                android:textColor="@color/selector_goods_spec_flex_item_text_color"
+                android:textSize="14sp" />
+        </FrameLayout>
+    </com.google.android.flexbox.FlexboxLayout>
+</LinearLayout>

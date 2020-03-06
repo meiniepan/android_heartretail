@@ -3,33 +3,28 @@ package com.idengyun.heartretail.goods;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.NestedScrollView;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.RadioGroup;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
-import com.dengyun.baselibrary.utils.SharedPreferencesUtil;
 import com.dengyun.baselibrary.utils.SizeUtils;
-import com.dengyun.baselibrary.utils.Utils;
-import com.dengyun.baselibrary.utils.phoneapp.AppUtils;
 import com.idengyun.heartretail.R;
+import com.idengyun.heartretail.model.response.BGoodsDetail;
 
-import java.lang.ref.WeakReference;
+import java.util.List;
 
 /**
- * 商品详情主页
+ * 商品详情-控制器
  *
  * @author aLang
  */
-public final class GoodsDetailsFragment extends BaseFragment implements RadioGroup.OnCheckedChangeListener, View.OnClickListener, NestedScrollView.OnScrollChangeListener {
+public final class GoodsDetailFragment extends BaseFragment implements RadioGroup.OnCheckedChangeListener, View.OnClickListener, NestedScrollView.OnScrollChangeListener {
     /*private int homeHeight;
     private int middleHeight;
     private int endHeight;*/
-    private GoodsFragment goodsFragment;
-    private GoodsEvaluationFragment evaluationFragment;
+    private GoodsInfoFragment goodsInfoFragment;
+    private GoodsEvaluateFragment evaluationFragment;
 
     private View layout_second_title;
     private View iv_back;
@@ -68,11 +63,11 @@ public final class GoodsDetailsFragment extends BaseFragment implements RadioGro
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        goodsFragment = new GoodsFragment();
-        evaluationFragment = new GoodsEvaluationFragment();
+        goodsInfoFragment = new GoodsInfoFragment();
+        evaluationFragment = new GoodsEvaluateFragment();
         getChildFragmentManager()
                 .beginTransaction()
-                .add(R.id.layout_container, goodsFragment)
+                .add(R.id.layout_container, goodsInfoFragment)
                 .add(R.id.layout_container, evaluationFragment)
                 //.hide(goodsFragment)
                 .hide(evaluationFragment)
@@ -89,10 +84,10 @@ public final class GoodsDetailsFragment extends BaseFragment implements RadioGro
             iv_goods_2.setVisibility(View.VISIBLE);
             iv_evaluation_1.setVisibility(View.INVISIBLE);
             iv_evaluation_2.setVisibility(View.INVISIBLE);
-            if (goodsFragment != null && evaluationFragment != null) {
+            if (goodsInfoFragment != null && evaluationFragment != null) {
                 getChildFragmentManager()
                         .beginTransaction()
-                        .show(goodsFragment)
+                        .show(goodsInfoFragment)
                         .hide(evaluationFragment)
                         .commit();
             }
@@ -101,11 +96,11 @@ public final class GoodsDetailsFragment extends BaseFragment implements RadioGro
             iv_goods_2.setVisibility(View.INVISIBLE);
             iv_evaluation_1.setVisibility(View.VISIBLE);
             iv_evaluation_2.setVisibility(View.VISIBLE);
-            if (goodsFragment != null && evaluationFragment != null) {
+            if (goodsInfoFragment != null && evaluationFragment != null) {
                 getChildFragmentManager()
                         .beginTransaction()
                         .show(evaluationFragment)
-                        .hide(goodsFragment)
+                        .hide(goodsInfoFragment)
                         .commit();
             }
         }
@@ -151,6 +146,20 @@ public final class GoodsDetailsFragment extends BaseFragment implements RadioGro
                 layout_main_title.setAlpha(1f);
             }
         }*/
+    }
+
+    private String getDefaultSpecText(List<BGoodsDetail.Data.GoodsSpec> goodsSpecList, String skuCombinationCode) {
+        StringBuilder sb = new StringBuilder();
+        for (BGoodsDetail.Data.GoodsSpec goodsSpec : goodsSpecList) {
+            for (BGoodsDetail.Data.GoodsSpec.SkuValue skuValue : goodsSpec.skuValueList) {
+                String specItemId = String.valueOf(skuValue.specItemId);
+                String specItemName = skuValue.specItemName;
+                if (skuCombinationCode.contains(specItemId)) {
+                    sb.append(specItemName).append("/");
+                }
+            }
+        }
+        return sb.substring(0, sb.length() - 1);
     }
 
     private void findViewById(@NonNull View view) {
