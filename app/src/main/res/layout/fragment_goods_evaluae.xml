@@ -68,7 +68,7 @@
         android:scrollbars="none"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         tools:itemCount="3"
-        tools:listitem="@layout/fragment_goods_evaluation_item" />
+        tools:listitem="@layout/fragment_goods_evaluate_item" />
 
     <TextView
         android:id="@+id/tv_no_more"

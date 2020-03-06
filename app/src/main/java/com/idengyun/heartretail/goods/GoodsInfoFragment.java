@@ -1,7 +1,6 @@
 package com.idengyun.heartretail.goods;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
@@ -14,7 +13,6 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
-import com.dengyun.baselibrary.utils.SizeUtils;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.BGoodsDetail;
 import com.zhoubo07.bannerlib.ConvenientBanner;
@@ -28,11 +26,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 商品详情
+ * 商品详情-首页
  *
  * @author aLang
  */
-public final class GoodsFragment extends BaseFragment implements View.OnClickListener {
+public final class GoodsInfoFragment extends BaseFragment implements View.OnClickListener {
 
     /* 滚动器 */
     private NestedScrollView nested_scroll_view;
@@ -66,7 +64,7 @@ public final class GoodsFragment extends BaseFragment implements View.OnClickLis
 
     @Override
     public int getLayoutId() {
-        return R.layout.fragment_goods;
+        return R.layout.fragment_goods_info;
     }
 
     @Override
@@ -98,6 +96,7 @@ public final class GoodsFragment extends BaseFragment implements View.OnClickLis
         List<BGoodsDetail.Data.Protocol> protocolList = data.protocolList;
         List<BGoodsDetail.Data.GoodsSpec> goodsSpecList = data.goodsSpecList;
         List<BGoodsDetail.Data.GoodsSku> goodsSkuList = data.goodsSkuList;
+        List<String> goodsDetailList = data.goodsDetailList;
 
         ArrayList<String> urls = new ArrayList<>();
         for (BGoodsDetail.Data.Banner banner : imageList) {
@@ -158,7 +157,7 @@ public final class GoodsFragment extends BaseFragment implements View.OnClickLis
         iv_goods_detail = view.findViewById(R.id.iv_goods_detail);
     }
 
-    static class GoodsBanner implements CBViewHolderCreator, OnItemClickListener {
+    private static class GoodsBanner implements CBViewHolderCreator, OnItemClickListener {
         static void setupBanner(ViewGroup parent, List<String> urls) {
             new GoodsBanner(parent, urls);
         }
@@ -201,7 +200,7 @@ public final class GoodsFragment extends BaseFragment implements View.OnClickLis
 
         @Override
         public int getLayoutId() {
-            return R.layout.fragment_goods_banner_item;
+            return R.layout.fragment_goods_info_banner_item;
         }
 
         @Override

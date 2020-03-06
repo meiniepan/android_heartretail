@@ -9,10 +9,10 @@ import com.dengyun.baselibrary.config.RouterPathConfig;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.MainActivity;
 import com.idengyun.heartretail.R;
-import com.idengyun.heartretail.goods.GoodsDetailsFragment;
+import com.idengyun.heartretail.goods.GoodsDetailFragment;
+import com.idengyun.heartretail.goods.GoodsSpecFragment;
 import com.idengyun.usermodule.LoginActivity;
 import com.idengyun.usermodule.ModifyPwdActivity;
-import com.idengyun.usermodule.VerifyDeviceActivity;
 
 @Route(path = (RouterPathConfig.app_FirstActivity))
 public class FirstActivity extends BaseActivity {
@@ -38,7 +38,8 @@ public class FirstActivity extends BaseActivity {
 
     /* 开启商品详情界面 */
     public void skipGoodsDetail(View view) {
-        HRActivity.start(this, GoodsDetailsFragment.class);
+//        HRActivity.start(this, GoodsDetailFragment.class);
+        HRActivity.start(this, GoodsSpecFragment.class);
     }
 
     /* 开启主界面 */

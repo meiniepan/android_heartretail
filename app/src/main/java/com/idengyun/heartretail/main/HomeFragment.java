@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
-import com.idengyun.heartretail.goods.GoodsDetailsFragment;
+import com.idengyun.heartretail.goods.GoodsDetailFragment;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
 
@@ -66,7 +66,7 @@ final class HomeAdapter extends RecyclerView.Adapter<HomeHolder> {
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HRActivity.start(v.getContext(), GoodsDetailsFragment.class);
+                HRActivity.start(v.getContext(), GoodsDetailFragment.class);
             }
         });
         return new HomeHolder(itemView);
