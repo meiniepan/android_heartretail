@@ -21,6 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -31,9 +32,10 @@ import java.util.List;
 public final class GoodsSpecFragment extends BaseFragment {
 
     private RecyclerView recycler_view;
-    private GoodsSpecAdapter goodsSpecAdapter;
-    private List<BGoodsDetail.Data.GoodsSku> goodsSkuList;
-    private List<BGoodsDetail.Data.GoodsSpec> goodsSpecList;
+    private GoodsSpecAdapter mGoodsSpecAdapter;
+    private final List<Section> mSectionList = new ArrayList<>();
+    private List<BGoodsDetail.Data.GoodsSku> mGoodsSkuList;
+    private List<BGoodsDetail.Data.GoodsSpec> mGoodsSpecList;
 
     @Override
     public int getLayoutId() {
@@ -48,8 +50,8 @@ public final class GoodsSpecFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        goodsSpecAdapter = new GoodsSpecAdapter();
-        recycler_view.setAdapter(goodsSpecAdapter);
+        mGoodsSpecAdapter = new GoodsSpecAdapter();
+        recycler_view.setAdapter(mGoodsSpecAdapter);
 
         try {
             String s = new JSONObject(GoodsJson.json).toString();
@@ -62,10 +64,10 @@ public final class GoodsSpecFragment extends BaseFragment {
 
     @MainThread
     private void updateUI(List<BGoodsDetail.Data.GoodsSpec> goodsSpecList, List<BGoodsDetail.Data.GoodsSku> goodsSkuList) {
-        this.goodsSpecList = goodsSpecList;
-        this.goodsSkuList = goodsSkuList;
+        this.mGoodsSpecList = goodsSpecList;
+        this.mGoodsSkuList = goodsSkuList;
 
-        /* 数据模型转视图模型 */
+        /* DataModel to ViewModel */
         List<Section> sectionList = new ArrayList<>();
         for (int i = 0; i < goodsSpecList.size(); i++) {
             BGoodsDetail.Data.GoodsSpec goodsSpec = goodsSpecList.get(i);
@@ -101,46 +103,18 @@ public final class GoodsSpecFragment extends BaseFragment {
                     if (skuCombinationCode.contains(cell.specItemId)) {
                         /* 选中默认规格 */
                         cell.checked = true;
-
-                        /* 子规格 */
-                        ArrayList<BGoodsDetail.Data.GoodsSku> subSkuList = new ArrayList<>();
-                        for (BGoodsDetail.Data.GoodsSku goodsSku : goodsSkuList) {
-                            if (goodsSku.skuCombinationCode.contains(cell.specItemId)) {
-                                subSkuList.add(goodsSku);
-                            }
-                        }
-
-                        /* 子选区 */
-                        ArrayList<Section> subSectionList = new ArrayList<>(sectionList);
-                        subSectionList.remove(section);
-
-                        /* 更新启用状态 */
-                        switchEnabledStatus(subSectionList, subSkuList);
-
                         break;
                     }
                 }
             }
         }
 
-        goodsSpecAdapter.goodsSpecItems.clear();
-        goodsSpecAdapter.goodsSpecItems.addAll(sectionList);
-        goodsSpecAdapter.notifyDataSetChanged();
-    }
+        /* 数据相关操作 */
+        mSectionList.clear();
+        mSectionList.addAll(sectionList);
+        executeSpecMutex();
 
-    /* 切换启用状态 */
-    private void switchEnabledStatus(List<Section> sectionList, List<BGoodsDetail.Data.GoodsSku> goodsSkuList) {
-        for (Section section : sectionList) {
-            for (Section.Cell cell : section.cellList) {
-                cell.enabled = false;
-                for (BGoodsDetail.Data.GoodsSku goodsSku : goodsSkuList) {
-                    if (goodsSku.skuCombinationCode.contains(cell.specItemId)) {
-                        cell.enabled = true;
-                        break;
-                    }
-                }
-            }
-        }
+        mGoodsSpecAdapter.notifyDataSetChanged();
     }
 
     /* 搜索默认规格 */
@@ -151,10 +125,73 @@ public final class GoodsSpecFragment extends BaseFragment {
         return null;
     }
 
+    /* 搜索被选中选框 */
+    private List<String> searchCheckedIdList() {
+        ArrayList<String> checkedSpecItemIdList = new ArrayList<>();
+
+        for (Section section : mSectionList) {
+            for (Section.Cell cell : section.cellList) {
+                if (cell.checked) {
+                    checkedSpecItemIdList.add(cell.specItemId);
+                    break;
+                }
+            }
+        }
+
+        return checkedSpecItemIdList;
+    }
+
+    /* 筛选有效的规格 */
+    private List<BGoodsDetail.Data.GoodsSku> searchValidSkuList() {
+        ArrayList<BGoodsDetail.Data.GoodsSku> validSkuList = new ArrayList<>();
+
+        List<String> checkedIdList = searchCheckedIdList();
+        for (BGoodsDetail.Data.GoodsSku goodsSku : mGoodsSkuList) {
+            if (Arrays.asList(goodsSku.skuCombinationCode.split("_")).containsAll(checkedIdList)) {
+                validSkuList.add(goodsSku);
+            }
+        }
+
+        /* 打印日志 */
+        System.out.println(checkedIdList.toString());
+
+        return validSkuList;
+    }
+
+    /* 切换启用状态 */
+    private void switchEnabledStatus(List<Section> sectionList, List<BGoodsDetail.Data.GoodsSku> goodsSkuList) {
+        for (Section section : sectionList) {
+            for (Section.Cell cell : section.cellList) {
+                cell.enabled = false;
+                for (BGoodsDetail.Data.GoodsSku goodsSku : goodsSkuList) {
+                    if (Arrays.asList(goodsSku.skuCombinationCode.split("_")).contains(cell.specItemId)) {
+                        cell.enabled = true;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    /* 执行规格间互斥性 高复杂度逻辑操作 修改请慎重 */
+    private void executeSpecMutex() {
+        /* 筛选有效的规格 */
+        List<BGoodsDetail.Data.GoodsSku> validSkuList = searchValidSkuList();
+
+        /* 打印日志 */
+        StringBuilder sb = new StringBuilder();
+        for (BGoodsDetail.Data.GoodsSku gs : validSkuList) {
+            sb.append(gs.skuCombinationCode).append(", ");
+        }
+        System.out.println(sb.toString());
+
+        /* 更新启用状态 */
+        switchEnabledStatus(mSectionList, validSkuList);
+    }
+
     /* 商品规格适配器 */
     private class GoodsSpecAdapter extends RecyclerView.Adapter<GoodsSpecAdapter.GoodsSpecHolder> {
         private LayoutInflater inflater;
-        final List<Section> goodsSpecItems = new ArrayList<>();
 
         @NonNull
         @Override
@@ -171,7 +208,7 @@ public final class GoodsSpecFragment extends BaseFragment {
 
         @Override
         public int getItemCount() {
-            return goodsSpecItems.size();
+            return mSectionList.size();
         }
 
         class GoodsSpecHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -186,8 +223,8 @@ public final class GoodsSpecFragment extends BaseFragment {
 
             @Override
             public void onClick(View v) {
-                Section clickedSection = (Section) flexbox_layout.getTag();
-                Section.Cell clickedCell = (Section.Cell) v.getTag();
+                /*Section clickedSection = (Section) flexbox_layout.getTag();
+                Section.Cell clickedCell = (Section.Cell) v.getTag();*/
 
                 /* 一个选区遵守单选规则 */
                 for (int i = 0; i < flexbox_layout.getChildCount(); i++) {
@@ -200,28 +237,33 @@ public final class GoodsSpecFragment extends BaseFragment {
                     }
                 }
 
-                if (clickedCell.checked) {
-                    /* 子选区 */
-                    ArrayList<Section> subSectionList = new ArrayList<>(goodsSpecItems);
-                    subSectionList.remove(clickedSection);
+                /* 执行规格间互斥性 */
+                executeSpecMutex();
 
-                    /* 子规格 */
-                    ArrayList<BGoodsDetail.Data.GoodsSku> subSkuList = new ArrayList<>();
-                    for (BGoodsDetail.Data.GoodsSku goodsSku : goodsSkuList) {
-                        if (goodsSku.skuCombinationCode.contains(clickedCell.specItemId)) {
-                            subSkuList.add(goodsSku);
+                /* 解决单个规格被选中时的bug */
+                List<String> checkedSpecItemIdList = searchCheckedIdList();
+                if (checkedSpecItemIdList.size() == 1) {
+                    Section tmp = null;
+                    for (Section section : mSectionList) {
+                        for (Section.Cell cell : section.cellList) {
+                            if (cell.checked) {
+                                tmp = section;
+                                break;
+                            }
                         }
                     }
 
-                    /* 更新启用状态 */
-                    switchEnabledStatus(subSectionList, subSkuList);
-                } else {
-                    /* 子选区 */
-                    ArrayList<Section> subSectionList = new ArrayList<>(goodsSpecItems);
-                    subSectionList.remove(clickedSection);
-
-                    /* 更新启用状态 */
-                    switchEnabledStatus(subSectionList, goodsSkuList);
+                    if (tmp != null) {
+                        for (Section.Cell cell : tmp.cellList) {
+                            cell.enabled = false;
+                            for (BGoodsDetail.Data.GoodsSku goodsSku : mGoodsSkuList) {
+                                if (Arrays.asList(goodsSku.skuCombinationCode.split("_")).contains(cell.specItemId)) {
+                                    cell.enabled = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
                 }
 
                 /* 更新数据 */
@@ -232,7 +274,7 @@ public final class GoodsSpecFragment extends BaseFragment {
             void updateUI(int position) {
                 flexbox_layout.removeAllViews();
 
-                Section section = goodsSpecItems.get(position);
+                Section section = mSectionList.get(position);
                 List<Section.Cell> cellList = section.cellList;
                 flexbox_layout.setTag(section);
                 tv_goods_spec_name.setText(section.skuName);
