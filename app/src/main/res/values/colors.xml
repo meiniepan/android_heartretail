@@ -8,6 +8,7 @@
     <color name="textGray">#666666</color>
     <color name="yellow">#FFBB22</color>
     <color name="lineColor">#DDDDDD</color>
+    <color name="lineColorEEE">#EEEEEE</color>
     <color name="heart_orange">#FF6633</color>
     <color name="tint">#fff8f8f8</color>
 </resources>
