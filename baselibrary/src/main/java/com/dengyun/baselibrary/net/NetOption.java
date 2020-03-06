@@ -35,17 +35,15 @@ import java.util.Map;
 
 public class NetOption {
 
-    /**
-     * 网络请求的 TAG
-     */
+    private String url;
+    private HttpHeaders headers;
+
     private final String tag;
-    private final HttpHeaders headers;
     private final Fragment fragment;
     private final FragmentActivity activity;
     private final boolean isShowDialog;
     private BaseDialogFragment loadingDialog;
     private final SmartRefreshLayout refreshLayout;
-    private String url;
     private final Map params;
     private final boolean isEncrypt;//是否启动加密，默认为true
     private final Type type;
@@ -82,6 +80,18 @@ public class NetOption {
     public HttpHeaders getHeaders() {
         return headers;
     }
+
+    public void addHeaders(HttpHeaders addHeaders){
+        if (null==headers) headers = new HttpHeaders();
+        headers.put(addHeaders);
+    }
+
+    public void addHeaders(String key,String value){
+        if (null==headers) headers = new HttpHeaders();
+        headers.put(key,value);
+    }
+
+
 
     public Fragment getFragment() {
         return fragment;

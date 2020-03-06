@@ -34,9 +34,6 @@ allprojects {
         maven { url "https://raw.githubusercontent.com/idengyun/CosBeauty/master" }
         maven { url "https://raw.githubusercontent.com/idengyun/JinMu/master" }
         maven { url "https://raw.githubusercontent.com/idengyun/AlivcLivePusher/master" }
-        maven() { url 'https://maven.aliyun.com/repository/releases' }
-        maven {url  "https://dl.bintray.com/rongcloud/maven"}//融云
-
         flatDir { dirs 'libs' }
         
     }
