@@ -9,7 +9,7 @@ import com.idengyun.heartretail.R;
 
 /**
  * @author Burning
- * @description:
+ * @description:帮助中心
  * @date :2020/3/6 0006 16:00
  */
 public class HelpCenterActivity extends BaseActivity {
