@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
@@ -31,9 +32,14 @@ import java.util.List;
  */
 public final class GoodsSpecFragment extends BaseFragment {
 
+    private ImageView iv_goods_spec_logo;
+    private TextView tv_goods_spec_price;
+    private TextView tv_goods_spec_stock;
     private RecyclerView recycler_view;
+
     private GoodsSpecAdapter mGoodsSpecAdapter;
     private final List<Section> mSectionList = new ArrayList<>();
+    private BGoodsDetail model;
     private List<BGoodsDetail.Data.GoodsSku> mGoodsSkuList;
     private List<BGoodsDetail.Data.GoodsSpec> mGoodsSpecList;
 
@@ -44,7 +50,7 @@ public final class GoodsSpecFragment extends BaseFragment {
 
     @Override
     public void initViews(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        recycler_view = view.findViewById(R.id.recycler_view);
+        findViewById(view);
     }
 
     @Override
@@ -56,16 +62,40 @@ public final class GoodsSpecFragment extends BaseFragment {
         try {
             String s = new JSONObject(GoodsJson.json).toString();
             BGoodsDetail detail = new Gson().fromJson(s, BGoodsDetail.class);
-            updateUI(detail.data.goodsSpecList, detail.data.goodsSkuList);
+            this.mGoodsSpecList = detail.data.goodsSpecList;
+            this.mGoodsSkuList = detail.data.goodsSkuList;
+            model = detail;
+            updateUI();
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        getView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getParentFragment() instanceof GoodsDetailFragment) {
+                    ((GoodsDetailFragment) getParentFragment()).showGoodsSpecFragment(false);
+                }
+            }
+        });
+    }
+
+    private void findViewById(@NonNull View view) {
+        iv_goods_spec_logo = view.findViewById(R.id.iv_goods_spec_logo);
+        tv_goods_spec_price = view.findViewById(R.id.tv_goods_spec_price);
+        tv_goods_spec_stock = view.findViewById(R.id.tv_goods_spec_stock);
+        recycler_view = view.findViewById(R.id.recycler_view);
     }
 
     @MainThread
-    private void updateUI(List<BGoodsDetail.Data.GoodsSpec> goodsSpecList, List<BGoodsDetail.Data.GoodsSku> goodsSkuList) {
-        this.mGoodsSpecList = goodsSpecList;
-        this.mGoodsSkuList = goodsSkuList;
+    private void updateUI() {
+        BGoodsDetail.Data data = model.data;
+        iv_goods_spec_logo.setImageDrawable(null);
+        tv_goods_spec_price.setText("110");
+        tv_goods_spec_stock.setText("1024");
+
+        List<BGoodsDetail.Data.GoodsSpec> goodsSpecList = mGoodsSpecList;
+        List<BGoodsDetail.Data.GoodsSku> goodsSkuList = mGoodsSkuList;
 
         /* DataModel to ViewModel */
         List<Section> sectionList = new ArrayList<>();

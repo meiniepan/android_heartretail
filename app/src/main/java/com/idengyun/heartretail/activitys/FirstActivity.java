@@ -9,7 +9,7 @@ import com.dengyun.baselibrary.config.RouterPathConfig;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.MainActivity;
 import com.idengyun.heartretail.R;
-import com.idengyun.heartretail.goods.GoodsSpecFragment;
+import com.idengyun.heartretail.goods.GoodsDetailFragment;
 import com.idengyun.heartretail.shop.ShopListActivity;
 import com.idengyun.usermodule.LoginActivity;
 
@@ -38,8 +38,7 @@ public class FirstActivity extends BaseActivity {
 
     /* 开启商品详情界面 */
     public void skipGoodsDetail(View view) {
-//        HRActivity.start(this, GoodsDetailFragment.class);
-        HRActivity.start(this, GoodsSpecFragment.class);
+        HRActivity.start(this, GoodsDetailFragment.class);
     }
 
     /* 开启主界面 */
@@ -49,6 +48,6 @@ public class FirstActivity extends BaseActivity {
 
     /* 跳到订单列表 */
     public void skipOrderList(View view) {
-        OrderListActivity.start(this,1);
+        OrderListActivity.start(this, 1);
     }
 }

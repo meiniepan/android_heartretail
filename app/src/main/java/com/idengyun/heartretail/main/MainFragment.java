@@ -127,7 +127,7 @@ public final class MainFragment extends BaseFragment implements TabLayout.OnTabS
             tabLayout.addTab(tab, pageInfo.position, false);
         }
 
-        viewPager.setOffscreenPageLimit(1);
+        viewPager.setOffscreenPageLimit(2);
         viewPager.setAdapter(mainAdapter);
 
         TabLayout.Tab tab = tabLayout.getTabAt(0);

@@ -3,38 +3,32 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:minHeight="64dp"
+    android:paddingTop="24dp">
 
     <!-- 标题 -->
-    <FrameLayout
-        android:id="@+id/layout_second_title"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:paddingTop="24dp"
-        android:visibility="gone">
+    <ImageView
+        android:id="@+id/iv_goods_detail_back"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        android:src="@drawable/ic_goods_detail_back_arrow_alpha" />
 
-        <ImageView
-            android:id="@+id/iv_back"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingStart="15dp"
-            android:paddingEnd="15dp"
-            android:src="@drawable/ic_goods_detail_back_arrow_alpha" />
-    </FrameLayout>
-
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/layout_main_title"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
+        android:layout_height="match_parent"
         android:layout_gravity="bottom"
         android:background="#fff"
-        android:gravity="center_vertical"
-        android:paddingTop="24dp">
+        android:gravity="center_vertical">
 
         <TextView
-            android:id="@+id/tv_back"
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_goods_detail_back"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:drawableStart="@drawable/ic_goods_detail_back_arrow"
             android:drawablePadding="8dp"
             android:gravity="center_vertical"
@@ -44,16 +38,21 @@
             android:textColor="#ff333333"
             android:textSize="16sp" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center">
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
 
             <FrameLayout
+                android:id="@+id/layout_tab_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingStart="12dp"
-                android:paddingEnd="12dp">
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/layout_tab_2"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
                     android:id="@+id/iv_goods_1"
@@ -79,10 +78,15 @@
             </FrameLayout>
 
             <FrameLayout
+                android:id="@+id/layout_tab_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingStart="12dp"
-                android:paddingEnd="12dp">
+                android:layout_marginStart="24dp"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/layout_tab_1"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
                     android:id="@+id/iv_evaluation_1"
@@ -106,35 +110,44 @@
                     android:textColor="#ff333333"
                     android:textSize="16sp" />
             </FrameLayout>
-        </LinearLayout>
 
-        <RadioGroup
-            android:id="@+id/radio_group"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="100dp"
-            android:layout_marginEnd="100dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/rb_goods"
+            <RadioGroup
+                android:id="@+id/radio_group"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@null"
-                android:button="@null"
-                android:checked="true" />
+                android:layout_height="0dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-            <RadioButton
-                android:id="@+id/rb_evaluation"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@null"
-                android:button="@null" />
-        </RadioGroup>
-    </FrameLayout>
+                <RadioButton
+                    android:id="@+id/rb_goods"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:button="@null"
+                    android:checked="true"
+                    android:gravity="center" />
+
+                <RadioButton
+                    android:id="@+id/rb_evaluation"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:button="@null"
+                    android:gravity="center" />
+            </RadioGroup>
+        </android.support.constraint.ConstraintLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+    </LinearLayout>
 </FrameLayout>
 
 

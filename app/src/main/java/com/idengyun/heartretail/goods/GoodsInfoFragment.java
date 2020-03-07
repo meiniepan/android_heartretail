@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,7 +82,15 @@ public final class GoodsInfoFragment extends BaseFragment implements View.OnClic
 
     @Override
     public void onClick(View v) {
-
+        if (layout_goods_spec == v) {
+            if (getParentFragment() instanceof GoodsDetailFragment) {
+                ((GoodsDetailFragment) getParentFragment()).showGoodsSpecFragment(true);
+            }
+        } else if (layout_goods_service == v) {
+            if (getParentFragment() instanceof GoodsDetailFragment) {
+                ((GoodsDetailFragment) getParentFragment()).showGoodsServiceFragment(true);
+            }
+        }
     }
 
     /* 请求商品详情 */
@@ -139,11 +148,10 @@ public final class GoodsInfoFragment extends BaseFragment implements View.OnClic
         tv_goods_sold = view.findViewById(R.id.tv_goods_sold);
         tv_goods_info = view.findViewById(R.id.tv_goods_info);
 
-        layout_goods_spec = view.findViewById(R.id.layout_goods_spec);
-        tv_goods_spec = view.findViewById(R.id.tv_goods_spec);
         layout_goods_service = view.findViewById(R.id.layout_goods_service);
         tv_goods_service = view.findViewById(R.id.tv_goods_service);
-        layout_goods_spec.setOnClickListener(this);
+        layout_goods_spec = view.findViewById(R.id.layout_goods_spec);
+        tv_goods_spec = view.findViewById(R.id.tv_goods_spec);
 
         tv_user_favorable_rate = view.findViewById(R.id.tv_user_favorable_rate);
         iv_user_avatar = view.findViewById(R.id.iv_user_avatar);
@@ -155,6 +163,9 @@ public final class GoodsInfoFragment extends BaseFragment implements View.OnClic
         tv_user_evaluation_content = view.findViewById(R.id.tv_user_evaluation_content);
 
         iv_goods_detail = view.findViewById(R.id.iv_goods_detail);
+
+        layout_goods_spec.setOnClickListener(this);
+        layout_goods_service.setOnClickListener(this);
     }
 
     private static class GoodsBanner implements CBViewHolderCreator, OnItemClickListener {
