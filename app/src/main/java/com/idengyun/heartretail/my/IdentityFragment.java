@@ -9,16 +9,16 @@ import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.idengyun.heartretail.R;
 
 /**
- * 修改密码界面
+ * 身份验证界面
  *
  * @author aLang
  */
-public final class PwdModifyFragment extends BaseFragment implements View.OnClickListener {
+public final class IdentityFragment extends BaseFragment implements View.OnClickListener {
     private View layout_logout;
 
     @Override
     public int getLayoutId() {
-        return R.layout.fragment_pwd_modify;
+        return R.layout.fragment_id_verify;
     }
 
     @Override

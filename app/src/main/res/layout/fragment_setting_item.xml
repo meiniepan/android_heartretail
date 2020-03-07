@@ -27,19 +27,23 @@
             tools:text="当前版本" />
 
         <ImageView
+            android:id="@+id/iv_setting_avatar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_marginStart="9dp"
             tools:src="@drawable/ic_goods_detail_arrow_dark" />
 
         <TextView
+            android:id="@+id/tv_setting_version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="9dp"
             android:textColor="#ff333333"
             android:textSize="14sp"
             tools:text="V1.0.0" />
 
         <ImageView
+            android:id="@+id/iv_setting_arrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="9dp"

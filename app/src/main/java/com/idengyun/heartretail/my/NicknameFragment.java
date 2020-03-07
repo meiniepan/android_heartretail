@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.EditText;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.idengyun.heartretail.R;
@@ -13,8 +14,9 @@ import com.idengyun.heartretail.R;
  *
  * @author aLang
  */
-public final class NickModifyFragment extends BaseFragment implements View.OnClickListener {
-    private View layout_logout;
+public final class NicknameFragment extends BaseFragment implements View.OnClickListener {
+
+    private EditText et_nick_name;
 
     @Override
     public int getLayoutId() {
@@ -37,6 +39,6 @@ public final class NickModifyFragment extends BaseFragment implements View.OnCli
     }
 
     private void findViewById(View view) {
-//        recycler_view = view.findViewById(R.id.recycler_view);
+        et_nick_name = view.findViewById(R.id.et_nick_name);
     }
 }

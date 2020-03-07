@@ -1,23 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F8F8F8"
-    android:orientation="vertical"
-    android:paddingTop="100dp">
+    android:orientation="vertical">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="68dp"
+        android:background="@android:color/white"
+        android:paddingTop="24dp">
+
+        <com.dengyun.baselibrary.widgets.toolbar.BaseToolBar
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/basetool_height"
+            app:toolbar_title="修改昵称" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#fff"
         android:orientation="vertical"
-        android:overScrollMode="never"
-        android:scrollbars="none"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-        tools:itemCount="4"
-        tools:listitem="@layout/fragment_setting_item" />
+        android:paddingStart="30dp"
+        android:paddingTop="68dp"
+        android:paddingEnd="30dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="新昵称"
+            android:textColor="#ff333333"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/et_nick_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:background="@null"
+            android:gravity="center_vertical"
+            android:hint="请输入10字符以内昵称"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:lines="1"
+            android:maxLength="10"
+            android:minHeight="52dp"
+            android:textColor="#ff999999"
+            android:textColorHint="#ff999999"
+            android:textCursorDrawable="@null"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#EEEEEE" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:drawableStart="@drawable/shape_nick_dot_red"
+            android:drawablePadding="8dp"
+            android:gravity="center_vertical"
+            android:text="仅支持汉字、数字和字母"
+            android:textColor="#ff999999"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:drawableStart="@drawable/shape_nick_dot_red"
+            android:drawablePadding="8dp"
+            android:gravity="center_vertical"
+            android:text="不支持特殊字符、表情符号等特殊字符"
+            android:textColor="#ff999999"
+            android:textSize="14sp" />
+    </LinearLayout>
 </LinearLayout>
 
 

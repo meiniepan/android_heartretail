@@ -9,16 +9,16 @@ import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.idengyun.heartretail.R;
 
 /**
- * 身份验证界面
+ * 绑定新手机界面
  *
  * @author aLang
  */
-public final class IDVerifyFragment extends BaseFragment implements View.OnClickListener {
+public final class PhoneFragment extends BaseFragment implements View.OnClickListener {
     private View layout_logout;
 
     @Override
     public int getLayoutId() {
-        return R.layout.fragment_id_verify;
+        return R.layout.fragment_phone_bind;
     }
 
     @Override
