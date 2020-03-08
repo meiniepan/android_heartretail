@@ -44,6 +44,7 @@
         <activity android:name=".activitys.MyEvaluateActivity" />
         <activity android:name=".activitys.EvaluateDetailActivity" />
         <activity android:name=".activitys.HelpCenterActivity" />
+        <activity android:name=".activitys.SendGoodsTimeActivity" />
     </application>
 
 </manifest>
