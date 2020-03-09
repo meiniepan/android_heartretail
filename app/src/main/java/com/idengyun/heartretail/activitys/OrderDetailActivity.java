@@ -55,7 +55,8 @@ public class OrderDetailActivity extends BaseActivity {
     @BindView(R.id.tv_bottom_operate1)
     TextView tvBottomOperate1;
     @BindView(R.id.tv_bottom_operate2)
-    TextView tvBottomOperate2;@BindView(R.id.tv_order_status_shop_name)
+    TextView tvBottomOperate2;
+    @BindView(R.id.tv_order_status_shop_name)
     TextView tvShopName;
     @BindView(R.id.ll_bottom)
     LinearLayout llBottom;
