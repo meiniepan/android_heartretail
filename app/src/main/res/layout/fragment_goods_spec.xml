@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="418dp"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="49dp">
+        android:layout_marginBottom="49dp"
+        android:clickable="true">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -41,6 +42,7 @@
                 app:layout_constraintLeft_toRightOf="@+id/iv_goods_banner" />
 
             <TextView
+                android:id="@+id/tv_goods_spec_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#ffff6633"
@@ -56,10 +58,10 @@
                 android:textColor="#ff666666"
                 android:textSize="14sp"
                 app:layout_constraintBaseline_toBaselineOf="@+id/tv_rmb"
-                app:layout_constraintRight_toLeftOf="@+id/tv_stock" />
+                app:layout_constraintRight_toLeftOf="@+id/tv_goods_spec_stock" />
 
             <TextView
-                android:id="@+id/tv_stock"
+                android:id="@+id/tv_goods_spec_stock"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#ff333333"
@@ -73,6 +75,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginTop="18dp"
+                android:layout_marginBottom="18dp"
                 android:orientation="vertical"
                 android:overScrollMode="never"
                 android:scrollbars="none"
@@ -107,6 +110,7 @@
         </android.support.constraint.ConstraintLayout>
 
         <ImageView
+            android:id="@+id/iv_goods_spec_logo"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginStart="15dp"

@@ -28,20 +28,14 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="skipShopList"
-        android:text="店铺列表" />
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="skipGoodsDetail"
-        android:text="商品详情" />
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:onClick="skipMain"
         android:text="主页" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="skipShopList"
+        android:text="店铺列表" />
 
     <Button
         android:layout_width="match_parent"

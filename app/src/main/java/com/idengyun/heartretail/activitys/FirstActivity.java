@@ -16,9 +16,9 @@ import com.dengyun.baselibrary.config.RouterPathConfig;
 import com.dengyun.baselibrary.utils.ListUtils;
 import com.dengyun.baselibrary.utils.ToastUtils;
 import com.idengyun.heartretail.HRActivity;
+
 import com.idengyun.heartretail.MainActivity;
 import com.idengyun.heartretail.R;
-import com.idengyun.heartretail.goods.GoodsSpecFragment;
 import com.idengyun.heartretail.shop.ShopListActivity;
 import com.idengyun.maplibrary.MyMapActivity;
 import com.idengyun.maplibrary.utils.AmapLocationUtil;
@@ -88,25 +88,19 @@ public class FirstActivity extends BaseActivity {
         LoginActivity.start(this);
     }
 
-    /* 跳到店铺列表 */
-    public void skipShopList(View view) {
-        ShopListActivity.start(this);
-    }
-
-    /* 开启商品详情界面 */
-    public void skipGoodsDetail(View view) {
-//        HRActivity.start(this, GoodsDetailFragment.class);
-        HRActivity.start(this, GoodsSpecFragment.class);
-    }
-
     /* 开启主界面 */
     public void skipMain(View view) {
         MainActivity.start(this);
     }
 
+    /* 跳到店铺列表 */
+    public void skipShopList(View view) {
+        ShopListActivity.start(this);
+    }
+
     /* 跳到订单列表 */
     public void skipOrderList(View view) {
-        OrderListActivity.start(this,1);
+        OrderListActivity.start(this, 1);
     }
 
     /* 跳到地图页面 */

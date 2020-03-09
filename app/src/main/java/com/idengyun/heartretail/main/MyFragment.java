@@ -8,16 +8,18 @@ import android.support.design.widget.TabLayout;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.utils.SizeUtils;
+import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
+import com.idengyun.heartretail.bases.PagerChildFragment;
+import com.idengyun.heartretail.my.SettingFragment;
 
 /**
  * 我的页面
  *
  * @author aLang
  */
-public final class MyFragment extends BaseFragment implements TabLayout.OnTabSelectedListener, View.OnClickListener {
+public final class MyFragment extends PagerChildFragment implements View.OnClickListener {
     /* 头部背景色 */
     private View iv_my_not_login_bg;
     private View iv_my_login_bg;
@@ -71,6 +73,7 @@ public final class MyFragment extends BaseFragment implements TabLayout.OnTabSel
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         updateUI(true, false);
+        iv_my_setting.setOnClickListener(this);
         tv_my_order_3.setOnClickListener(this);
         tv_my_order_4.setOnClickListener(this);
         tv_my_order_5.setOnClickListener(this);
@@ -99,8 +102,8 @@ public final class MyFragment extends BaseFragment implements TabLayout.OnTabSel
         } else if (id == R.id.iv_my_share) {
 
         } else if (id == R.id.iv_my_setting) {
-
-        } else if (id == R.id.iv_user_avatar) {
+            HRActivity.start(getContext(), SettingFragment.class);
+        } else if (id == R.id.iv_my_user_avatar) {
 
         } else if (id == R.id.tv_my_account) {
 
