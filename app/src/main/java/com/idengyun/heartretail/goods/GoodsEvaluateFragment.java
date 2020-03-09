@@ -75,7 +75,7 @@ public final class GoodsEvaluateFragment extends BaseFragment {
         NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.evaluationList())
                 .fragment(this)
                 .clazz(GoodsEvaluateBean.class)
-                .params("goodsId", "")
+                .params("goodsId", "123")
                 .params("page", page + 1)
                 .params("pageSize", pageSize)
                 .build();

@@ -1,6 +1,7 @@
 package com.idengyun.heartretail.goods;
 
 import android.os.Bundle;
+import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.NestedScrollView;
@@ -8,9 +9,16 @@ import android.view.View;
 import android.widget.RadioGroup;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
+import com.dengyun.baselibrary.net.NetApi;
+import com.dengyun.baselibrary.net.NetOption;
+import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.baselibrary.utils.SizeUtils;
+import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.GoodsDetailBean;
+import com.idengyun.heartretail.model.response.GoodsEvaluateBean;
+import com.idengyun.usermodule.HRUser;
+import com.lzy.okgo.model.Response;
 
 import java.util.List;
 

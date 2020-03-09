@@ -13,8 +13,16 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
+import com.dengyun.baselibrary.net.ImageApi;
+import com.dengyun.baselibrary.net.NetApi;
+import com.dengyun.baselibrary.net.NetOption;
+import com.dengyun.baselibrary.net.callback.JsonCallback;
+import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.GoodsDetailBean;
+import com.idengyun.heartretail.model.response.GoodsEvaluateBean;
+import com.idengyun.usermodule.HRUser;
+import com.lzy.okgo.model.Response;
 import com.zhoubo07.bannerlib.ConvenientBanner;
 import com.zhoubo07.bannerlib.banner.SimpleImageBannerBean;
 import com.zhoubo07.bannerlib.banner.SimpleImageHolder;
@@ -77,6 +85,8 @@ public final class GoodsInfoFragment extends BaseFragment implements View.OnClic
         super.onActivityCreated(savedInstanceState);
         NestedScrollView.OnScrollChangeListener listener = (NestedScrollView.OnScrollChangeListener) getParentFragment();
         nested_scroll_view.setOnScrollChangeListener(listener);
+        requestGoodsDetailAPI();
+        requestEvaluateAPI();
     }
 
     @Override
@@ -92,9 +102,63 @@ public final class GoodsInfoFragment extends BaseFragment implements View.OnClic
         }
     }
 
+    private void requestEvaluateAPI() {
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.evaluationList())
+                .fragment(this)
+                .clazz(GoodsEvaluateBean.class)
+                .params("goodsId", "123")
+                .params("page", 1)
+                .params("pageSize", 1)
+                .build();
+        NetApi.<GoodsEvaluateBean>getData(netOption, new JsonCallback<GoodsEvaluateBean>(netOption) {
+            @Override
+            public void onSuccess(Response<GoodsEvaluateBean> response) {
+                updateUI(response.body().data);
+            }
+        });
+    }
+
+    @MainThread
+    private void updateUI(GoodsEvaluateBean.Data data) {
+        String praiseRate = data.praiseRate;
+        tv_user_favorable_rate.setText(praiseRate);
+
+        List<GoodsEvaluateBean.Data.Evaluation> evaluationList = data.evaluationList;
+        if (evaluationList.isEmpty()) return;
+
+        GoodsEvaluateBean.Data.Evaluation evaluation = evaluationList.get(0);
+        String userImgUrl = evaluation.userImgUrl;
+        String userName = evaluation.userName;
+        int userLevel = evaluation.userLevel;
+        String commentTime = evaluation.commentTime;
+        int commentStar = evaluation.commentStar;
+        String contents = evaluation.contents;
+        String orderId = evaluation.orderId;
+        int isShow = evaluation.isShow;
+
+        ImageApi.displayImage(iv_user_avatar.getContext(), iv_user_avatar, userImgUrl);
+        tv_user_name.setText(userName);
+        tv_user_level.setText("LV" + userLevel);
+        tv_user_evaluation_date.setText(commentTime);
+        rb_user_rating.setNumStars(commentStar);
+        tv_user_evaluation_content.setText(contents);
+    }
+
     /* 请求商品详情 */
     private void requestGoodsDetailAPI() {
-
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.goodsDetail())
+                .fragment(this)
+                .clazz(GoodsDetailBean.class)
+                .params("goodsId", "123")
+                .params("userId", HRUser.getId())
+                .params("goodsType", 0)// 0零售1批发
+                .build();
+        NetApi.<GoodsDetailBean>getData(netOption, new JsonCallback<GoodsDetailBean>(netOption) {
+            @Override
+            public void onSuccess(Response<GoodsDetailBean> response) {
+                updateUI(response.body().data);
+            }
+        });
     }
 
     /* 更新页面信息 */
@@ -124,15 +188,6 @@ public final class GoodsInfoFragment extends BaseFragment implements View.OnClic
 
         tv_goods_spec.setText(null);
         tv_goods_service.setText(null);
-
-        tv_user_favorable_rate.setText(null);
-        iv_user_avatar.setImageDrawable(null);
-        tv_user_name.setText(null);
-        tv_user_level.setText(null);
-        rb_user_rating.setNumStars(-1);
-        tv_user_evaluation_date.setText(null);
-        tv_user_likes.setText(null);
-        tv_user_evaluation_content.setText(null);
 
         iv_goods_detail.setImageDrawable(null);
     }
