@@ -17,6 +17,7 @@ import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.bases.PagerChildFragment;
 import com.idengyun.heartretail.goods.GoodsDetailFragment;
+import com.idengyun.heartretail.message.NoticeFragment;
 
 import java.util.ArrayList;
 
@@ -25,8 +26,10 @@ import java.util.ArrayList;
  *
  * @author aLang
  */
-public final class HomeFragment extends PagerChildFragment {
+public final class HomeFragment extends PagerChildFragment implements View.OnClickListener {
 
+    private View tv_home_share;
+    private View tv_home_notice;
     private NestedScrollView nested_scroll_view;
     private RecyclerView recycler_view;
 
@@ -43,30 +46,7 @@ public final class HomeFragment extends PagerChildFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        recycler_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                System.out.println(recyclerView);
-            }
-
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                nested_scroll_view.scrollBy(0, dy);
-
-                System.out.println("dy=" + dy);
-                System.out.println(nested_scroll_view.getScrollY());
-            }
-        });
         updateUI();
-    }
-
-    @MainThread
-    private void updateUI() {
-        GoodsAdapter goodsAdapter = new GoodsAdapter();
-        for (int i = 0; i < 16; i++) goodsAdapter.items.add("");
-        recycler_view.setAdapter(goodsAdapter);
     }
 
     @Override
@@ -84,7 +64,45 @@ public final class HomeFragment extends PagerChildFragment {
 
     }
 
+    @Override
+    public void onClick(View v) {
+        if (tv_home_share == v) {
+
+        } else if (tv_home_notice == v) {
+            HRActivity.start(getContext(), NoticeFragment.class);
+        }
+    }
+
+    @MainThread
+    private void updateUI() {
+        tv_home_notice.setOnClickListener(this);
+
+        recycler_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                System.out.println(recyclerView);
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                nested_scroll_view.scrollBy(0, dy);
+
+                System.out.println("dy=" + dy);
+                System.out.println(nested_scroll_view.getScrollY());
+            }
+        });
+
+        GoodsAdapter goodsAdapter = new GoodsAdapter();
+        for (int i = 0; i < 2; i++) goodsAdapter.items.add("");
+        recycler_view.setAdapter(goodsAdapter);
+    }
+
+
     private void findViewById(@NonNull View view) {
+        tv_home_share = view.findViewById(R.id.tv_home_share);
+        tv_home_notice = view.findViewById(R.id.tv_home_notice);
         nested_scroll_view = view.findViewById(R.id.nested_scroll_view);
         recycler_view = view.findViewById(R.id.recycler_view);
     }

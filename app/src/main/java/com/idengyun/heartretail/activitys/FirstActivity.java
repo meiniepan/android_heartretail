@@ -6,10 +6,8 @@ import android.view.View;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.dengyun.baselibrary.base.activity.BaseActivity;
 import com.dengyun.baselibrary.config.RouterPathConfig;
-import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.MainActivity;
 import com.idengyun.heartretail.R;
-import com.idengyun.heartretail.message.NoticeFragment;
 import com.idengyun.heartretail.shop.ShopListActivity;
 import com.idengyun.usermodule.LoginActivity;
 
@@ -31,20 +29,14 @@ public class FirstActivity extends BaseActivity {
         LoginActivity.start(this);
     }
 
-    /* 跳到店铺列表 */
-    public void skipShopList(View view) {
-        ShopListActivity.start(this);
-    }
-
-    /* 开启商品详情界面 */
-    public void skipGoodsDetail(View view) {
-//        HRActivity.start(this, GoodsDetailFragment.class);
-        HRActivity.start(this, NoticeFragment.class);
-    }
-
     /* 开启主界面 */
     public void skipMain(View view) {
         MainActivity.start(this);
+    }
+
+    /* 跳到店铺列表 */
+    public void skipShopList(View view) {
+        ShopListActivity.start(this);
     }
 
     /* 跳到订单列表 */
