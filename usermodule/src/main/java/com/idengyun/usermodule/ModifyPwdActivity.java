@@ -146,7 +146,7 @@ public class ModifyPwdActivity extends BaseActivity implements CompoundButton.On
                 HRConst.PLATFORM
         ).toMap();
 
-        NetOption netOption = NetOption.newBuilder("http://10.10.8.22:3000/mock/39/user/change/pwd")
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.changePwd())
                 .activity(this)
                 .isShowDialog(true)
                 .params(map)

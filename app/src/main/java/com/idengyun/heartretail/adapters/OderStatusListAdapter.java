@@ -26,7 +26,7 @@ public class OderStatusListAdapter extends BaseQuickAdapter<OrderStatusBean, Bas
     @Override
     protected void convert(BaseViewHolder helper, OrderStatusBean item) {
         helper.setText(R.id.tv_order_status_shop_name, item.shopName);
-        initGoodsListRecyclerView(helper.getView(R.id.sr_goods), item.goodsBeans);
+        initGoodsListRecyclerView(helper.getView(R.id.sr_goods), item.orderGoods);
     }
 
     private void initGoodsListRecyclerView(StatusRecyclerView recyclerView, List<OrderStatusBean.GoodsBean> goodsBeans) {

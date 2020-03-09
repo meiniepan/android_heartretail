@@ -81,7 +81,7 @@ public class OrderDetailActivity extends BaseActivity {
 
     private void initRecyclerView() {
         data = getIntent().getParcelableExtra(Constants.ORDER_STATUS_BEAN);
-        OderStatusGoodsListAdapter adapter = new OderStatusGoodsListAdapter(R.layout.item_order_status_goods, data.goodsBeans);
+        OderStatusGoodsListAdapter adapter = new OderStatusGoodsListAdapter(R.layout.item_order_status_goods, data.orderGoods);
         srGoods.setLayoutManager(new LinearLayoutManager(this));
         RecycleViewDivider divider = new RecycleViewDivider(SizeUtils.dp2px(1), getResources().getColor(R.color.lineColor));
         srGoods.addItemDecoration(divider);
