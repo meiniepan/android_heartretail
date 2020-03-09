@@ -16,7 +16,7 @@ import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.gson.Gson;
 import com.idengyun.heartretail.R;
-import com.idengyun.heartretail.model.response.BGoodsDetail;
+import com.idengyun.heartretail.model.response.GoodsDetailBean;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,9 +39,9 @@ public final class GoodsSpecFragment extends BaseFragment {
 
     private GoodsSpecAdapter mGoodsSpecAdapter;
     private final List<Section> mSectionList = new ArrayList<>();
-    private BGoodsDetail model;
-    private List<BGoodsDetail.Data.GoodsSku> mGoodsSkuList;
-    private List<BGoodsDetail.Data.GoodsSpec> mGoodsSpecList;
+    private GoodsDetailBean model;
+    private List<GoodsDetailBean.Data.GoodsSku> mGoodsSkuList;
+    private List<GoodsDetailBean.Data.GoodsSpec> mGoodsSpecList;
 
     @Override
     public int getLayoutId() {
@@ -61,7 +61,7 @@ public final class GoodsSpecFragment extends BaseFragment {
 
         try {
             String s = new JSONObject(GoodsJson.json).toString();
-            BGoodsDetail detail = new Gson().fromJson(s, BGoodsDetail.class);
+            GoodsDetailBean detail = new Gson().fromJson(s, GoodsDetailBean.class);
             this.mGoodsSpecList = detail.data.goodsSpecList;
             this.mGoodsSkuList = detail.data.goodsSkuList;
             model = detail;
@@ -89,22 +89,22 @@ public final class GoodsSpecFragment extends BaseFragment {
 
     @MainThread
     private void updateUI() {
-        BGoodsDetail.Data data = model.data;
+        GoodsDetailBean.Data data = model.data;
         iv_goods_spec_logo.setImageDrawable(null);
         tv_goods_spec_price.setText("110");
         tv_goods_spec_stock.setText("1024");
 
-        List<BGoodsDetail.Data.GoodsSpec> goodsSpecList = mGoodsSpecList;
-        List<BGoodsDetail.Data.GoodsSku> goodsSkuList = mGoodsSkuList;
+        List<GoodsDetailBean.Data.GoodsSpec> goodsSpecList = mGoodsSpecList;
+        List<GoodsDetailBean.Data.GoodsSku> goodsSkuList = mGoodsSkuList;
 
         /* DataModel to ViewModel */
         List<Section> sectionList = new ArrayList<>();
         for (int i = 0; i < goodsSpecList.size(); i++) {
-            BGoodsDetail.Data.GoodsSpec goodsSpec = goodsSpecList.get(i);
+            GoodsDetailBean.Data.GoodsSpec goodsSpec = goodsSpecList.get(i);
             Section section = new Section();
             section.skuName = goodsSpec.skuName;
             List<Section.Cell> cellList = new ArrayList<>();
-            for (BGoodsDetail.Data.GoodsSpec.SkuValue skuValue : goodsSpec.skuValueList) {
+            for (GoodsDetailBean.Data.GoodsSpec.SkuValue skuValue : goodsSpec.skuValueList) {
                 Section.Cell cell = new Section.Cell();
                 cell.position = i;
                 cell.specItemId = String.valueOf(skuValue.specItemId);
@@ -148,8 +148,8 @@ public final class GoodsSpecFragment extends BaseFragment {
     }
 
     /* 搜索默认规格 */
-    private String searchDefaultSkuCombinationCode(List<BGoodsDetail.Data.GoodsSku> goodsSkuList) {
-        for (BGoodsDetail.Data.GoodsSku goodsSku : goodsSkuList) {
+    private String searchDefaultSkuCombinationCode(List<GoodsDetailBean.Data.GoodsSku> goodsSkuList) {
+        for (GoodsDetailBean.Data.GoodsSku goodsSku : goodsSkuList) {
             if (goodsSku.isDefault == 1) return goodsSku.skuCombinationCode;
         }
         return null;
@@ -172,11 +172,11 @@ public final class GoodsSpecFragment extends BaseFragment {
     }
 
     /* 筛选有效的规格 */
-    private List<BGoodsDetail.Data.GoodsSku> searchValidSkuList() {
-        ArrayList<BGoodsDetail.Data.GoodsSku> validSkuList = new ArrayList<>();
+    private List<GoodsDetailBean.Data.GoodsSku> searchValidSkuList() {
+        ArrayList<GoodsDetailBean.Data.GoodsSku> validSkuList = new ArrayList<>();
 
         List<String> checkedIdList = searchCheckedIdList();
-        for (BGoodsDetail.Data.GoodsSku goodsSku : mGoodsSkuList) {
+        for (GoodsDetailBean.Data.GoodsSku goodsSku : mGoodsSkuList) {
             if (Arrays.asList(goodsSku.skuCombinationCode.split("_")).containsAll(checkedIdList)) {
                 validSkuList.add(goodsSku);
             }
@@ -189,11 +189,11 @@ public final class GoodsSpecFragment extends BaseFragment {
     }
 
     /* 切换启用状态 */
-    private void switchEnabledStatus(List<Section> sectionList, List<BGoodsDetail.Data.GoodsSku> goodsSkuList) {
+    private void switchEnabledStatus(List<Section> sectionList, List<GoodsDetailBean.Data.GoodsSku> goodsSkuList) {
         for (Section section : sectionList) {
             for (Section.Cell cell : section.cellList) {
                 cell.enabled = false;
-                for (BGoodsDetail.Data.GoodsSku goodsSku : goodsSkuList) {
+                for (GoodsDetailBean.Data.GoodsSku goodsSku : goodsSkuList) {
                     if (Arrays.asList(goodsSku.skuCombinationCode.split("_")).contains(cell.specItemId)) {
                         cell.enabled = true;
                         break;
@@ -206,11 +206,11 @@ public final class GoodsSpecFragment extends BaseFragment {
     /* 执行规格间互斥性 高复杂度逻辑操作 修改请慎重 */
     private void executeSpecMutex() {
         /* 筛选有效的规格 */
-        List<BGoodsDetail.Data.GoodsSku> validSkuList = searchValidSkuList();
+        List<GoodsDetailBean.Data.GoodsSku> validSkuList = searchValidSkuList();
 
         /* 打印日志 */
         StringBuilder sb = new StringBuilder();
-        for (BGoodsDetail.Data.GoodsSku gs : validSkuList) {
+        for (GoodsDetailBean.Data.GoodsSku gs : validSkuList) {
             sb.append(gs.skuCombinationCode).append(", ");
         }
         System.out.println(sb.toString());
@@ -286,7 +286,7 @@ public final class GoodsSpecFragment extends BaseFragment {
                     if (tmp != null) {
                         for (Section.Cell cell : tmp.cellList) {
                             cell.enabled = false;
-                            for (BGoodsDetail.Data.GoodsSku goodsSku : mGoodsSkuList) {
+                            for (GoodsDetailBean.Data.GoodsSku goodsSku : mGoodsSkuList) {
                                 if (Arrays.asList(goodsSku.skuCombinationCode.split("_")).contains(cell.specItemId)) {
                                     cell.enabled = true;
                                     break;

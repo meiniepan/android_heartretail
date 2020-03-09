@@ -27,9 +27,9 @@ import com.dengyun.baselibrary.utils.ToastUtils;
 import com.dengyun.baselibrary.utils.Utils;
 import com.dengyun.baselibrary.utils.phoneapp.AppUtils;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
-import com.idengyun.usermodule.beans.BLogin;
-import com.idengyun.usermodule.beans.BRegister;
-import com.idengyun.usermodule.beans.BVerify;
+import com.idengyun.usermodule.beans.LoginBean;
+import com.idengyun.usermodule.beans.RegisterBean;
+import com.idengyun.usermodule.beans.VerifyCodeBean;
 import com.idengyun.usermodule.beans.KVLogin;
 import com.idengyun.usermodule.beans.KVRegister;
 import com.idengyun.usermodule.utils.SecondsTimer;
@@ -223,21 +223,21 @@ public final class LoginActivity extends BaseActivity
                 HRConst.APP_NAME
         ).toMap();
 
-        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.getRegisterUrl())
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.register())
                 .activity(this)
                 .isShowDialog(true)
                 .params(map)
-                .clazz(BRegister.class)
+                .clazz(RegisterBean.class)
                 .build();
 
-        NetApi.getData(netOption, new JsonCallback<BRegister>(netOption) {
+        NetApi.getData(netOption, new JsonCallback<RegisterBean>(netOption) {
             @Override
-            public void onSuccess(Response<BRegister> response) {
+            public void onSuccess(Response<RegisterBean> response) {
                 if (response.code() != 200) {
                     return;
                 }
 
-                BRegister body = response.body();
+                RegisterBean body = response.body();
                 if (body == null) {
                     return;
                 }
@@ -265,25 +265,25 @@ public final class LoginActivity extends BaseActivity
 
         startTimer();
 
-        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.getVerifyUrl())
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.getIdentifyCode())
                 .activity(this)
                 .params("mobile", et_register_mobile.getEditableText().toString())
                 .params("identifyType", HRConst.IDENTIFY_TYPE_0)
                 .params("version", AppUtils.getAppVersionName())
                 .params("platform", HRConst.PLATFORM)
                 .isShowDialog(true)
-                .clazz(BVerify.class)
+                .clazz(VerifyCodeBean.class)
                 .build();
 
-        NetApi.getData(RequestMethod.GET, netOption, new JsonCallback<BVerify>(netOption) {
+        NetApi.getData(RequestMethod.GET, netOption, new JsonCallback<VerifyCodeBean>(netOption) {
             @Override
-            public void onSuccess(Response<BVerify> response) {
+            public void onSuccess(Response<VerifyCodeBean> response) {
                 if (200 != response.code()) {
                     ToastUtils.showLong("验证码发送失败");
                     return;
                 }
 
-                BVerify body = response.body();
+                VerifyCodeBean body = response.body();
                 if (null == body) {
                     ToastUtils.showLong("验证码发送失败");
                     return;
@@ -318,22 +318,22 @@ public final class LoginActivity extends BaseActivity
                 HRConst.PHONE_IMEI,
                 HRConst.PLATFORM);
         Map<String, Object> map = login.toMap();
-        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.getLoginUrl())
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.login())
                 .activity(this)
                 .isShowDialog(true)
                 .params(map)
                 .isInterceptErrorCode(false)
-                .clazz(BLogin.class)
+                .clazz(LoginBean.class)
                 .build();
 
-        NetApi.getData(netOption, new JsonCallback<BLogin>(netOption) {
+        NetApi.getData(netOption, new JsonCallback<LoginBean>(netOption) {
             @Override
-            public void onSuccess(Response<BLogin> response) {
+            public void onSuccess(Response<LoginBean> response) {
                 if (response.code() != 200) {
                     return;
                 }
 
-                BLogin body = response.body();
+                LoginBean body = response.body();
                 if (body == null) {
                     return;
                 }

@@ -5,7 +5,7 @@ package com.idengyun.usermodule.beans;
  *
  * @author aLang
  */
-public final class BLogin {
+public final class LoginBean {
     public String code;
     public String msg;
     public Data data;

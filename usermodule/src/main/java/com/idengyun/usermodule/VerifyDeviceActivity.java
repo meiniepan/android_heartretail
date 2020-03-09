@@ -16,7 +16,7 @@ import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.baselibrary.utils.ToastUtils;
 import com.dengyun.baselibrary.utils.phoneapp.AppUtils;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
-import com.idengyun.usermodule.beans.BVerify;
+import com.idengyun.usermodule.beans.VerifyCodeBean;
 import com.idengyun.usermodule.beans.KVVerifyDevice;
 import com.idengyun.usermodule.utils.SecondsTimer;
 import com.idengyun.usermodule.utils.TransformPhoneNumUtil;
@@ -73,25 +73,25 @@ public class VerifyDeviceActivity extends BaseActivity {
 
         startTimer();
 
-        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.getVerifyUrl())
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.getIdentifyCode())
                 .activity(this)
                 .params("mobile", HRUser.getMobile())
                 .params("identifyType", HRConst.IDENTIFY_TYPE_1)
                 .params("version", AppUtils.getAppVersionName())
                 .params("platform", HRConst.PLATFORM)
                 .isShowDialog(true)
-                .clazz(BVerify.class)
+                .clazz(VerifyCodeBean.class)
                 .build();
 
-        NetApi.getData(RequestMethod.GET, netOption, new JsonCallback<BVerify>(netOption) {
+        NetApi.getData(RequestMethod.GET, netOption, new JsonCallback<VerifyCodeBean>(netOption) {
             @Override
-            public void onSuccess(Response<BVerify> response) {
+            public void onSuccess(Response<VerifyCodeBean> response) {
                 if (200 != response.code()) {
                     ToastUtils.showLong("验证码发送失败");
                     return;
                 }
 
-                BVerify body = response.body();
+                VerifyCodeBean body = response.body();
                 if (null == body) {
                     ToastUtils.showLong("验证码发送失败");
                     return;

@@ -49,6 +49,7 @@
                 android:textSize="14sp" />
 
             <TextView
+                android:id="@+id/tv_pwd_mobile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#ff333333"
@@ -71,6 +72,7 @@
             android:minHeight="55dp">
 
             <EditText
+                android:id="@+id/et_pwd_verify_code"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -84,6 +86,7 @@
                 android:textSize="14sp" />
 
             <TextView
+                android:id="@+id/tv_pwd_verify_code"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingEnd="15dp"
@@ -112,6 +115,7 @@
             android:minHeight="55dp">
 
             <EditText
+                android:id="@+id/et_pwd_new_pwd"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -124,12 +128,15 @@
                 android:textCursorDrawable="@null"
                 android:textSize="14sp" />
 
-            <ImageView
+            <CheckBox
+                android:id="@+id/cb_pwd_eye"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:paddingStart="15dp"
-                android:paddingEnd="15dp"
-                android:src="@drawable/selector_login_eye" />
+                android:background="@null"
+                android:button="@null"
+                android:checked="true"
+                android:drawableStart="@drawable/selector_login_eye"
+                android:padding="10dp" />
         </LinearLayout>
 
         <View
@@ -151,6 +158,7 @@
                 android:textSize="14sp" />
 
             <TextView
+                android:id="@+id/tv_pwd_contact_service"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="联系客服"
@@ -166,6 +174,7 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/tv_pwd_confirm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="65dp"

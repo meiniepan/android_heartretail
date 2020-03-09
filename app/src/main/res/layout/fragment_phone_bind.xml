@@ -43,6 +43,7 @@
             android:textSize="16sp" />
 
         <EditText
+            android:id="@+id/et_phone_mobile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@null"
@@ -77,6 +78,7 @@
             android:orientation="horizontal">
 
             <EditText
+                android:id="@+id/et_phone_verify_code"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -92,6 +94,7 @@
                 android:textSize="14sp" />
 
             <TextView
+                android:id="@+id/tv_phone_verify_code"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="获取验证码"
@@ -105,6 +108,7 @@
             android:background="#EEEEEE" />
 
         <TextView
+            android:id="@+id/tv_phone_next"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="65dp"

@@ -148,7 +148,7 @@ public final class HomeFragment extends PagerChildFragment implements View.OnCli
 
             @MainThread
             void updateUI() {
-                iv_home_goods_url.setImageResource(R.drawable.ic_home_bg);
+                iv_home_goods_url.setImageResource(R.drawable.ic_home_red_packet);
                 tv_home_goods_name.setText("这里是一段商品标题信息最多展示2行");
                 tv_home_goods_price.setText("¥123.45");
             }

@@ -12,16 +12,14 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.dengyun.baselibrary.base.ApiBean;
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.net.ImageApi;
 import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
-import com.google.gson.reflect.TypeToken;
 import com.idengyun.heartretail.R;
-import com.idengyun.heartretail.beans.EvaluationListBean;
+import com.idengyun.heartretail.model.response.GoodsEvaluateBean;
 import com.lzy.okgo.model.Response;
 
 import java.util.ArrayList;
@@ -35,8 +33,8 @@ import java.util.List;
 public final class GoodsEvaluateFragment extends BaseFragment {
     private int totalPageSize;
     private int totalPage;
-    private int pageSize;
-    private int page;
+    private int pageSize = 100;
+    private int page = 0;
     private TextView tv_favorable_rate;
     private RecyclerView recycler_view;
     private EvaluationAdapter evaluationAdapter;
@@ -76,29 +74,27 @@ public final class GoodsEvaluateFragment extends BaseFragment {
     private void requestAPI() {
         NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.evaluationList())
                 .fragment(this)
-                .type(new TypeToken<ApiBean<EvaluationListBean>>() {
-                }.getType())
+                .clazz(GoodsEvaluateBean.class)
                 .params("goodsId", "")
                 .params("page", page + 1)
                 .params("pageSize", pageSize)
                 .build();
-        NetApi.<ApiBean<EvaluationListBean>>getData(netOption, new JsonCallback<ApiBean<EvaluationListBean>>(netOption) {
+        NetApi.<GoodsEvaluateBean>getData(netOption, new JsonCallback<GoodsEvaluateBean>(netOption) {
             @Override
-            public void onSuccess(Response<ApiBean<EvaluationListBean>> response) {
+            public void onSuccess(Response<GoodsEvaluateBean> response) {
                 updateUI(response.body().data);
             }
         });
     }
 
     @MainThread
-    private void updateUI(EvaluationListBean model) {
-        String commentCounts = model.commentCounts;
-        String praiseRate = model.praiseRate;
-        List<EvaluationListBean.Evaluation> evaluationList = model.evaluationList;
+    private void updateUI(GoodsEvaluateBean.Data data) {
+        String commentCounts = data.commentCounts;
+        String praiseRate = data.praiseRate;
+        List<GoodsEvaluateBean.Data.Evaluation> evaluationList = data.evaluationList;
 
         totalPageSize = Integer.parseInt(commentCounts);
         totalPage = (int) Math.ceil(1D * totalPageSize / pageSize);
-        pageSize = 100;
         ++page;
 
         tv_favorable_rate.setText(commentCounts + "+条评论，" + praiseRate + "%好评率");
@@ -107,7 +103,7 @@ public final class GoodsEvaluateFragment extends BaseFragment {
     }
 
     private class EvaluationAdapter extends RecyclerView.Adapter<EvaluationAdapter.EvaluationHolder> {
-        final ArrayList<EvaluationListBean.Evaluation> evaluationList = new ArrayList<>();
+        final ArrayList<GoodsEvaluateBean.Data.Evaluation> evaluationList = new ArrayList<>();
         /* 布局填充器 */
         private LayoutInflater inflater;
 
@@ -121,7 +117,7 @@ public final class GoodsEvaluateFragment extends BaseFragment {
 
         @Override
         public void onBindViewHolder(@NonNull EvaluationHolder holder, int position) {
-            EvaluationListBean.Evaluation evaluation = evaluationList.get(position);
+            GoodsEvaluateBean.Data.Evaluation evaluation = evaluationList.get(position);
             holder.updateUI(evaluation);
         }
 
@@ -147,7 +143,7 @@ public final class GoodsEvaluateFragment extends BaseFragment {
             }
 
             @MainThread
-            void updateUI(EvaluationListBean.Evaluation evaluation) {
+            void updateUI(GoodsEvaluateBean.Data.Evaluation evaluation) {
                 String userImgUrl = evaluation.userImgUrl;
                 String userName = evaluation.userName;
                 int userLevel = evaluation.userLevel;

@@ -5,8 +5,11 @@ package com.idengyun.usermodule.beans;
  *
  * @author aLang
  */
-public final class BVerify {
+public final class VerifyCodeBean {
     public String code;
     public String msg;
-    public Object data;
+    public Data data;
+
+    public static class Data {
+    }
 }
