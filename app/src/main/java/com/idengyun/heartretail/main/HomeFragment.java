@@ -1,18 +1,22 @@
 package com.idengyun.heartretail.main;
 
 import android.os.Bundle;
+import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.dengyun.baselibrary.base.fragment.BaseFragment;
-import com.idengyun.heartretail.goods.GoodsDetailFragment;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
+import com.idengyun.heartretail.bases.PagerChildFragment;
+import com.idengyun.heartretail.goods.GoodsDetailFragment;
 
 import java.util.ArrayList;
 
@@ -21,7 +25,10 @@ import java.util.ArrayList;
  *
  * @author aLang
  */
-public final class HomeFragment extends BaseFragment implements TabLayout.OnTabSelectedListener {
+public final class HomeFragment extends PagerChildFragment {
+
+    private NestedScrollView nested_scroll_view;
+    private RecyclerView recycler_view;
 
     @Override
     public int getLayoutId() {
@@ -30,13 +37,36 @@ public final class HomeFragment extends BaseFragment implements TabLayout.OnTabS
 
     @Override
     public void initViews(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        RecyclerView recycler_view = view.findViewById(R.id.recycler_view);
-        HomeAdapter homeAdapter = new HomeAdapter();
-        recycler_view.setAdapter(homeAdapter);
-        for (int i = 0; i < 6; i++) {
-            homeAdapter.items.add("");
-        }
-        homeAdapter.notifyDataSetChanged();
+        findViewById(view);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        recycler_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                System.out.println(recyclerView);
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                nested_scroll_view.scrollBy(0, dy);
+
+                System.out.println("dy=" + dy);
+                System.out.println(nested_scroll_view.getScrollY());
+            }
+        });
+        updateUI();
+    }
+
+    @MainThread
+    private void updateUI() {
+        GoodsAdapter goodsAdapter = new GoodsAdapter();
+        for (int i = 0; i < 16; i++) goodsAdapter.items.add("");
+        recycler_view.setAdapter(goodsAdapter);
     }
 
     @Override
@@ -53,40 +83,64 @@ public final class HomeFragment extends BaseFragment implements TabLayout.OnTabS
     public void onTabReselected(TabLayout.Tab tab) {
 
     }
-}
 
-final class HomeAdapter extends RecyclerView.Adapter<HomeHolder> {
-    ArrayList<String> items = new ArrayList<>();
+    private void findViewById(@NonNull View view) {
+        nested_scroll_view = view.findViewById(R.id.nested_scroll_view);
+        recycler_view = view.findViewById(R.id.recycler_view);
+    }
 
-    @NonNull
-    @Override
-    public HomeHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
-        View itemView = inflater.inflate(R.layout.fragment_home_item, viewGroup, false);
-        itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                HRActivity.start(v.getContext(), GoodsDetailFragment.class);
+    private class GoodsAdapter extends RecyclerView.Adapter<GoodsAdapter.GoodsHolder> {
+        ArrayList<String> items = new ArrayList<>();
+        private LayoutInflater inflater;
+
+        @NonNull
+        @Override
+        public GoodsHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
+            if (inflater == null) inflater = LayoutInflater.from(parent.getContext());
+            View itemView = inflater.inflate(R.layout.fragment_home_item, parent, false);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    HRActivity.start(v.getContext(), GoodsDetailFragment.class);
+                }
+            });
+            return new GoodsHolder(itemView);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull GoodsHolder holder, int position) {
+            holder.updateUI();
+        }
+
+        @Override
+        public int getItemCount() {
+            return items.size();
+        }
+
+        private class GoodsHolder extends RecyclerView.ViewHolder {
+
+            private ImageView iv_home_goods_url;
+            private TextView tv_home_goods_name;
+            private TextView tv_home_goods_price;
+
+            GoodsHolder(@NonNull View itemView) {
+                super(itemView);
+                findViewById(itemView);
             }
-        });
-        return new HomeHolder(itemView);
-    }
 
-    @Override
-    public void onBindViewHolder(@NonNull HomeHolder myHolder, int i) {
+            @MainThread
+            void updateUI() {
+                iv_home_goods_url.setImageResource(R.drawable.ic_home_bg);
+                tv_home_goods_name.setText("这里是一段商品标题信息最多展示2行");
+                tv_home_goods_price.setText("¥123.45");
+            }
 
-    }
+            private void findViewById(@NonNull View itemView) {
+                iv_home_goods_url = itemView.findViewById(R.id.iv_home_goods_url);
+                tv_home_goods_name = itemView.findViewById(R.id.tv_home_goods_name);
+                tv_home_goods_price = itemView.findViewById(R.id.tv_home_goods_price);
+            }
+        }
 
-    @Override
-    public int getItemCount() {
-        return items.size();
-    }
-
-
-}
-
-final class HomeHolder extends RecyclerView.ViewHolder {
-    HomeHolder(@NonNull View itemView) {
-        super(itemView);
     }
 }

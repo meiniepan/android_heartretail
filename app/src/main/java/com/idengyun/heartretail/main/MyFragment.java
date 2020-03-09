@@ -8,10 +8,10 @@ import android.support.design.widget.TabLayout;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.utils.SizeUtils;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
+import com.idengyun.heartretail.bases.PagerChildFragment;
 import com.idengyun.heartretail.my.SettingFragment;
 
 /**
@@ -19,7 +19,7 @@ import com.idengyun.heartretail.my.SettingFragment;
  *
  * @author aLang
  */
-public final class MyFragment extends BaseFragment implements TabLayout.OnTabSelectedListener, View.OnClickListener {
+public final class MyFragment extends PagerChildFragment implements View.OnClickListener {
     /* 头部背景色 */
     private View iv_my_not_login_bg;
     private View iv_my_login_bg;

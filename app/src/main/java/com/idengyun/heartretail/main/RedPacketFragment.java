@@ -6,15 +6,15 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.view.View;
 
-import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.idengyun.heartretail.R;
+import com.idengyun.heartretail.bases.PagerChildFragment;
 
 /**
  * 红包页面
  *
  * @author aLang
  */
-public final class RedPacketFragment extends BaseFragment implements TabLayout.OnTabSelectedListener {
+public final class RedPacketFragment extends PagerChildFragment {
 
     @Override
     public int getLayoutId() {

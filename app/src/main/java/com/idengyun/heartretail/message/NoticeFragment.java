@@ -1,4 +1,4 @@
-package com.idengyun.heartretail.main;
+package com.idengyun.heartretail.message;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,17 +14,18 @@ import com.idengyun.heartretail.bases.PagerChildFragment;
 import com.idengyun.heartretail.bases.PagerParentFragment;
 
 /**
- * 心零售项目主页
+ * 消息模块
  *
  * @author aLang
  */
-public final class MainFragment extends PagerParentFragment {
+public final class NoticeFragment extends PagerParentFragment {
+
     private TabLayout tab_layout;
     private ViewPager view_pager;
 
     @Override
     public int getLayoutId() {
-        return R.layout.fragment_main;
+        return R.layout.fragment_notice;
     }
 
     @Override
@@ -88,13 +89,13 @@ public final class MainFragment extends PagerParentFragment {
         tab.setCustomView(R.layout.fragment_message_tab);
         switch (position) {
             case 1:
-                updateCustomView(tab.getCustomView(), "邀请返利");
+                updateCustomView(tab.getCustomView(), "账户通知");
                 break;
             case 2:
-                updateCustomView(tab.getCustomView(), "我的");
+                updateCustomView(tab.getCustomView(), "服务通知");
                 break;
             default:
-                updateCustomView(tab.getCustomView(), "首页");
+                updateCustomView(tab.getCustomView(), "促销优惠");
                 break;
         }
         return tab;
@@ -105,11 +106,11 @@ public final class MainFragment extends PagerParentFragment {
     public PagerChildFragment getFragment(int position) {
         switch (position) {
             case 1:
-                return new RedPacketFragment();
+                return new AccountNoticeFragment();
             case 2:
-                return new MyFragment();
+                return new ServiceNoticeFragment();
             default:
-                return new HomeFragment();
+                return new PromoteNoticeFragment();
         }
     }
 
@@ -137,6 +138,4 @@ public final class MainFragment extends PagerParentFragment {
         tab_layout = view.findViewById(R.id.tab_layout);
         view_pager = view.findViewById(R.id.view_pager);
     }
-
 }
-
