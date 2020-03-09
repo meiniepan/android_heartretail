@@ -33,9 +33,9 @@ dependencies {
     implementation project(':baselibrary')
 
     //高德地图--3D地图
-    implementation 'com.amap.api:3dmap:7.2.0'
+    api 'com.amap.api:3dmap:7.2.0'
     //高德地图--搜索
-    implementation 'com.amap.api:search:7.1.0'
+    api 'com.amap.api:search:7.1.0'
     //高德地图--定位
-//    implementation 'com.amap.api:location:4.9.0'
+    api 'com.amap.api:location:4.9.0'
 }
