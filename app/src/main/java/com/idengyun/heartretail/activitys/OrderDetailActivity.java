@@ -8,14 +8,27 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.dengyun.baselibrary.base.ApiBean;
 import com.dengyun.baselibrary.base.activity.BaseActivity;
+import com.dengyun.baselibrary.net.NetApi;
+import com.dengyun.baselibrary.net.NetOption;
+import com.dengyun.baselibrary.net.callback.JsonCallback;
+import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.baselibrary.utils.SizeUtils;
+import com.dengyun.baselibrary.utils.phoneapp.AppUtils;
+import com.dengyun.splashmodule.config.SpMainConfigConstants;
+import com.google.gson.reflect.TypeToken;
 import com.idengyun.heartretail.Constants;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.adapters.OderStatusGoodsListAdapter;
 import com.idengyun.heartretail.beans.OrderStatusBean;
 import com.idengyun.statusrecyclerviewlib.RecycleViewDivider;
 import com.idengyun.statusrecyclerviewlib.StatusRecyclerView;
+import com.idengyun.usermodule.HRConst;
+import com.idengyun.usermodule.HRUser;
+import com.lzy.okgo.model.Response;
+
+import java.lang.reflect.Type;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -60,6 +73,7 @@ public class OrderDetailActivity extends BaseActivity {
     TextView tvShopName;
     @BindView(R.id.ll_bottom)
     LinearLayout llBottom;
+    OrderStatusBean dataSource;
     OrderStatusBean data;
 
     public static void start(Context context, OrderStatusBean data) {
@@ -75,12 +89,41 @@ public class OrderDetailActivity extends BaseActivity {
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
-        initRecyclerView();
+        dataSource = getIntent().getParcelableExtra(Constants.ORDER_STATUS_BEAN);
+        getData();
+    }
+
+    private void getData() {
+        Type type = new TypeToken<ApiBean<OrderStatusBean>>() {
+        }.getType();
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.queryOrderDetail())
+                .activity(this)
+                .params("version", AppUtils.getAppVersionName())
+                .params("userId", HRUser.getId())
+                .params("orderId", dataSource.orderId)
+                .params("platform", HRConst.PLATFORM)
+                .isShowDialog(true)
+                .type(type)
+                .build();
+
+        NetApi.getData(RequestMethod.GET, netOption, new JsonCallback<ApiBean<OrderStatusBean>>(netOption) {
+            @Override
+            public void onSuccess(Response<ApiBean<OrderStatusBean>> response) {
+                ApiBean<OrderStatusBean> body = response.body();
+                data = body.data;
+                if (data != null) {
+                    initUI();
+                }
+            }
+        });
+    }
+
+    private void initUI() {
         tvShopName.setText(data.shopName);
+        initRecyclerView();
     }
 
     private void initRecyclerView() {
-        data = getIntent().getParcelableExtra(Constants.ORDER_STATUS_BEAN);
         OderStatusGoodsListAdapter adapter = new OderStatusGoodsListAdapter(R.layout.item_order_status_goods, data.orderGoods);
         srGoods.setLayoutManager(new LinearLayoutManager(this));
         RecycleViewDivider divider = new RecycleViewDivider(SizeUtils.dp2px(1), getResources().getColor(R.color.lineColor));

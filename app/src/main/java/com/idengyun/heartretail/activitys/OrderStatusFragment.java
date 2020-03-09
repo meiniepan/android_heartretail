@@ -13,7 +13,6 @@ import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.baselibrary.net.constants.RequestMethod;
-import com.dengyun.baselibrary.utils.ToastUtils;
 import com.dengyun.baselibrary.utils.phoneapp.AppUtils;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.google.gson.reflect.TypeToken;
@@ -92,7 +91,7 @@ public class OrderStatusFragment extends BaseFragment {
 //            goodsBeanList.add(goodsBean);
 //            orderStatusBean.orderGoods = goodsBeanList;
 //            orderStatusBean.shopName = "什么什么店"+status;
-//            data.add(orderStatusBean);
+//            dataSource.add(orderStatusBean);
 //        }else if (status == 1){
 //            OrderStatusBean orderStatusBean = new OrderStatusBean();
 //            OrderStatusBean.GoodsBean goodsBean = new OrderStatusBean.GoodsBean();
@@ -104,12 +103,12 @@ public class OrderStatusFragment extends BaseFragment {
 //            goodsBeanList.add(goodsBean);
 //            orderStatusBean.goodsBeans = goodsBeanList;
 //            orderStatusBean.shopName = "什么什么店"+status;
-//            data.add(orderStatusBean);
-//            data.add(orderStatusBean);
-//            data.add(orderStatusBean);
-//            data.add(orderStatusBean);
-//            data.add(orderStatusBean);
-//            data.add(orderStatusBean);
+//            dataSource.add(orderStatusBean);
+//            dataSource.add(orderStatusBean);
+//            dataSource.add(orderStatusBean);
+//            dataSource.add(orderStatusBean);
+//            dataSource.add(orderStatusBean);
+//            dataSource.add(orderStatusBean);
 //        } else if (status == 2) {
 //            OrderStatusBean orderStatusBean = new OrderStatusBean();
 //            OrderStatusBean.GoodsBean goodsBean = new OrderStatusBean.GoodsBean();
@@ -119,7 +118,7 @@ public class OrderStatusFragment extends BaseFragment {
 //            goodsBeanList.add(goodsBean);
 //            orderStatusBean.goodsBeans = goodsBeanList;
 //            orderStatusBean.shopName = "什么什么店" + status;
-//            data.add(orderStatusBean);
+//            dataSource.add(orderStatusBean);
 //        } else if (status == 3) {
 //            OrderStatusBean orderStatusBean = new OrderStatusBean();
 //            OrderStatusBean.GoodsBean goodsBean = new OrderStatusBean.GoodsBean();
@@ -129,7 +128,7 @@ public class OrderStatusFragment extends BaseFragment {
 //            goodsBeanList.add(goodsBean);
 //            orderStatusBean.goodsBeans = goodsBeanList;
 //            orderStatusBean.shopName = "什么什么店" + status;
-//            data.add(orderStatusBean);
+//            dataSource.add(orderStatusBean);
 //        } else if (status == 4) {
 //            OrderStatusBean orderStatusBean = new OrderStatusBean();
 //            OrderStatusBean.GoodsBean goodsBean = new OrderStatusBean.GoodsBean();
@@ -139,7 +138,7 @@ public class OrderStatusFragment extends BaseFragment {
 //            goodsBeanList.add(goodsBean);
 //            orderStatusBean.goodsBeans = goodsBeanList;
 //            orderStatusBean.shopName = "什么什么店" + status;
-//            data.add(orderStatusBean);
+//            dataSource.add(orderStatusBean);
 //        } else if (status == 5) {
 //            OrderStatusBean orderStatusBean = new OrderStatusBean();
 //            OrderStatusBean.GoodsBean goodsBean = new OrderStatusBean.GoodsBean();
@@ -149,7 +148,7 @@ public class OrderStatusFragment extends BaseFragment {
 //            goodsBeanList.add(goodsBean);
 //            orderStatusBean.goodsBeans = goodsBeanList;
 //            orderStatusBean.shopName = "什么什么店" + status;
-//            data.add(orderStatusBean);
+//            dataSource.add(orderStatusBean);
 //        }
     }
 
@@ -173,17 +172,10 @@ public class OrderStatusFragment extends BaseFragment {
             public void onSuccess(Response<ApiBean<List<OrderStatusBean>>> response) {
                 rsrOrderStatus.finishRefreshLoadMore();
                 ApiBean<List<OrderStatusBean>> body = response.body();
-                if (null == body) {
-                    ToastUtils.showLong("验证码发送失败");
-                    return;
-                }
-
-                if (!"200".equals(body.code)) {
-                    ToastUtils.showLong(body.msg);
-                    return;
-                }
                 data = body.data;
-                initUI();
+                if (data != null) {
+                    initUI();
+                }
             }
         });
     }
