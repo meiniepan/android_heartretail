@@ -12,34 +12,78 @@ import java.util.List;
  * @CreateDate: 2020-03-04 16:10
  */
 public class OrderStatusBean implements Parcelable {
+    public String orderId;
+    public String payOrderId;
+    public int userId;
+    public int orderStatus;
     public int shopId;
     public String shopName;
-    public String shopPhoto;
-    public String shopAddress;
-    public int status;
-    public int orderType;//批发、代销
-    public float totalPay;
-    public List<GoodsBean> goodsBeans;
+    public String shippingPrice;
+    public String couponPrice;
+    public float totalAmount;
+    public float orderAmount;
+    public String createTime;
+    public String payTime;
+    public int orderType;//订单类型1零售2
+    public int proxySalesId;
+    public String proxySalesCode;
+    public String proxySalesName;
+    public String proxySalesTime;
+    public List<GoodsBean> orderGoods;
 
     public OrderStatusBean() {
 
     }
 
     public static class GoodsBean implements Parcelable{
+        public String orderId;
+        public int userId;
         public int goodsId;
         public String goodsName;
+        public int goodsNum;
         public String goodsTitle;
-        public String goodsSpec;
-        public float goodsPrice;
-        public int goodsQuantity;
+        public String originalImg;
+        public String skuSpecname;
+        public String skuItemvalue;
+        public String goodsPrice;
 
-        public GoodsBean(Parcel in) {
+
+
+        public GoodsBean() {
+
+        }
+
+
+        protected GoodsBean(Parcel in) {
+            orderId = in.readString();
+            userId = in.readInt();
             goodsId = in.readInt();
             goodsName = in.readString();
+            goodsNum = in.readInt();
             goodsTitle = in.readString();
-            goodsSpec = in.readString();
-            goodsPrice = in.readFloat();
-            goodsQuantity = in.readInt();
+            originalImg = in.readString();
+            skuSpecname = in.readString();
+            skuItemvalue = in.readString();
+            goodsPrice = in.readString();
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(orderId);
+            dest.writeInt(userId);
+            dest.writeInt(goodsId);
+            dest.writeString(goodsName);
+            dest.writeInt(goodsNum);
+            dest.writeString(goodsTitle);
+            dest.writeString(originalImg);
+            dest.writeString(skuSpecname);
+            dest.writeString(skuItemvalue);
+            dest.writeString(goodsPrice);
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
         }
 
         public static final Creator<GoodsBean> CREATOR = new Creator<GoodsBean>() {
@@ -53,48 +97,50 @@ public class OrderStatusBean implements Parcelable {
                 return new GoodsBean[size];
             }
         };
-
-        public GoodsBean() {
-
-        }
-
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            dest.writeInt(goodsId);
-            dest.writeString(goodsName);
-            dest.writeString(goodsTitle);
-            dest.writeString(goodsSpec);
-            dest.writeFloat(goodsPrice);
-            dest.writeInt(goodsQuantity);
-        }
     }
 
-    public OrderStatusBean(Parcel in) {
+
+    protected OrderStatusBean(Parcel in) {
+        orderId = in.readString();
+        payOrderId = in.readString();
+        userId = in.readInt();
+        orderStatus = in.readInt();
         shopId = in.readInt();
         shopName = in.readString();
-        shopPhoto = in.readString();
-        shopAddress = in.readString();
-        status = in.readInt();
+        shippingPrice = in.readString();
+        couponPrice = in.readString();
+        totalAmount = in.readFloat();
+        orderAmount = in.readFloat();
+        createTime = in.readString();
+        payTime = in.readString();
         orderType = in.readInt();
-        totalPay = in.readFloat();
-        goodsBeans = in.createTypedArrayList(GoodsBean.CREATOR);
+        proxySalesId = in.readInt();
+        proxySalesCode = in.readString();
+        proxySalesName = in.readString();
+        proxySalesTime = in.readString();
+        orderGoods = in.createTypedArrayList(GoodsBean.CREATOR);
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(orderId);
+        dest.writeString(payOrderId);
+        dest.writeInt(userId);
+        dest.writeInt(orderStatus);
         dest.writeInt(shopId);
         dest.writeString(shopName);
-        dest.writeString(shopPhoto);
-        dest.writeString(shopAddress);
-        dest.writeInt(status);
+        dest.writeString(shippingPrice);
+        dest.writeString(couponPrice);
+        dest.writeFloat(totalAmount);
+        dest.writeFloat(orderAmount);
+        dest.writeString(createTime);
+        dest.writeString(payTime);
         dest.writeInt(orderType);
-        dest.writeFloat(totalPay);
-        dest.writeTypedList(goodsBeans);
+        dest.writeInt(proxySalesId);
+        dest.writeString(proxySalesCode);
+        dest.writeString(proxySalesName);
+        dest.writeString(proxySalesTime);
+        dest.writeTypedList(orderGoods);
     }
 
     @Override

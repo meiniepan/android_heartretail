@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,7 @@ import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.idengyun.heartretail.R;
-import com.idengyun.heartretail.model.response.BGoodsDetail;
+import com.idengyun.heartretail.model.response.GoodsDetailBean;
 import com.zhoubo07.bannerlib.ConvenientBanner;
 import com.zhoubo07.bannerlib.banner.SimpleImageBannerBean;
 import com.zhoubo07.bannerlib.banner.SimpleImageHolder;
@@ -100,15 +99,15 @@ public final class GoodsInfoFragment extends BaseFragment implements View.OnClic
 
     /* 更新页面信息 */
     @MainThread
-    private void updateUI(BGoodsDetail.Data data) {
-        List<BGoodsDetail.Data.Banner> imageList = data.imageList;
-        List<BGoodsDetail.Data.Protocol> protocolList = data.protocolList;
-        List<BGoodsDetail.Data.GoodsSpec> goodsSpecList = data.goodsSpecList;
-        List<BGoodsDetail.Data.GoodsSku> goodsSkuList = data.goodsSkuList;
+    private void updateUI(GoodsDetailBean.Data data) {
+        List<GoodsDetailBean.Data.Banner> imageList = data.imageList;
+        List<GoodsDetailBean.Data.Protocol> protocolList = data.protocolList;
+        List<GoodsDetailBean.Data.GoodsSpec> goodsSpecList = data.goodsSpecList;
+        List<GoodsDetailBean.Data.GoodsSku> goodsSkuList = data.goodsSkuList;
         List<String> goodsDetailList = data.goodsDetailList;
 
         ArrayList<String> urls = new ArrayList<>();
-        for (BGoodsDetail.Data.Banner banner : imageList) {
+        for (GoodsDetailBean.Data.Banner banner : imageList) {
             urls.add(banner.imgUrl);
         }
         GoodsBanner.setupBanner(layout_goods_banner_container, urls);

@@ -1,4 +1,4 @@
-package com.idengyun.heartretail.my;
+package com.idengyun.heartretail.my.setting;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,6 +8,9 @@ import android.view.View;
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
+import com.idengyun.heartretail.my.setting.account.PasswordFragment;
+import com.idengyun.heartretail.my.setting.account.PhoneFragment;
+import com.idengyun.heartretail.my.setting.account.RealFragment;
 
 /**
  * 账号管理界面

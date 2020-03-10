@@ -3,13 +3,16 @@ package com.idengyun.heartretail.my;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.InputType;
 import android.view.View;
+import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.utils.ToastUtils;
+import com.dengyun.baselibrary.utils.phoneapp.AppUtils;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
+import com.idengyun.heartretail.my.setting.AccountFragment;
+import com.idengyun.heartretail.my.setting.PersonalFragment;
 
 /**
  * 设置界面
@@ -21,6 +24,7 @@ public final class SettingFragment extends BaseFragment implements View.OnClickL
     private View layout_personal;
     private View layout_account;
     private View layout_version;
+    private TextView tv_setting_version;
     private View layout_agreement;
     private View layout_logout;
 
@@ -37,6 +41,7 @@ public final class SettingFragment extends BaseFragment implements View.OnClickL
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        tv_setting_version.setText(AppUtils.getAppVersionName());
     }
 
     @Override
@@ -82,6 +87,7 @@ public final class SettingFragment extends BaseFragment implements View.OnClickL
         layout_personal = view.findViewById(R.id.layout_personal);
         layout_account = view.findViewById(R.id.layout_account);
         layout_version = view.findViewById(R.id.layout_version);
+        tv_setting_version = view.findViewById(R.id.tv_setting_version);
         layout_agreement = view.findViewById(R.id.layout_agreement);
         layout_logout = view.findViewById(R.id.layout_logout);
 

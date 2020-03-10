@@ -5,7 +5,7 @@ package com.idengyun.usermodule.beans;
  *
  * @author aLang
  */
-public final class BRegister {
+public final class RegisterBean {
     public String code;
     public String msg;
     public Object data;

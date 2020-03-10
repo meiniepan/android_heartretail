@@ -12,7 +12,6 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.dengyun.baselibrary.base.ApiBean;
 import com.dengyun.baselibrary.base.ApiSimpleBean;
 import com.dengyun.baselibrary.base.activity.BaseActivity;
 import com.dengyun.baselibrary.net.NetApi;
@@ -23,7 +22,7 @@ import com.dengyun.baselibrary.utils.RegexUtils;
 import com.dengyun.baselibrary.utils.ToastUtils;
 import com.dengyun.baselibrary.utils.phoneapp.AppUtils;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
-import com.idengyun.usermodule.beans.BVerify;
+import com.idengyun.usermodule.beans.VerifyCodeBean;
 import com.idengyun.usermodule.beans.KVModifyPwd;
 import com.idengyun.usermodule.utils.SecondsTimer;
 import com.lzy.okgo.model.Response;
@@ -88,25 +87,25 @@ public class ModifyPwdActivity extends BaseActivity implements CompoundButton.On
         }
         startTimer();
 
-        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.getVerifyUrl())
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.getIdentifyCode())
                 .activity(this)
                 .params("mobile", etPhoneNum.getText().toString())
                 .params("identifyType", HRConst.IDENTIFY_TYPE_2)
                 .params("version", AppUtils.getAppVersionName())
                 .params("platform", HRConst.PLATFORM)
                 .isShowDialog(true)
-                .clazz(BVerify.class)
+                .clazz(VerifyCodeBean.class)
                 .build();
 
-        NetApi.getData(RequestMethod.GET, netOption, new JsonCallback<BVerify>(netOption) {
+        NetApi.getData(RequestMethod.GET, netOption, new JsonCallback<VerifyCodeBean>(netOption) {
             @Override
-            public void onSuccess(Response<BVerify> response) {
+            public void onSuccess(Response<VerifyCodeBean> response) {
                 if (200 != response.code()) {
                     ToastUtils.showLong("验证码发送失败");
                     return;
                 }
 
-                BVerify body = response.body();
+                VerifyCodeBean body = response.body();
                 if (null == body) {
                     ToastUtils.showLong("验证码发送失败");
                     return;
@@ -147,7 +146,7 @@ public class ModifyPwdActivity extends BaseActivity implements CompoundButton.On
                 HRConst.PLATFORM
         ).toMap();
 
-        NetOption netOption = NetOption.newBuilder("http://10.10.8.22:3000/mock/39/user/change/pwd")
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.changePwd())
                 .activity(this)
                 .isShowDialog(true)
                 .params(map)

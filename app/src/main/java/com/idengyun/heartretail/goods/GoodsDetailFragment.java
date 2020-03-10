@@ -10,7 +10,7 @@ import android.widget.RadioGroup;
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.utils.SizeUtils;
 import com.idengyun.heartretail.R;
-import com.idengyun.heartretail.model.response.BGoodsDetail;
+import com.idengyun.heartretail.model.response.GoodsDetailBean;
 
 import java.util.List;
 
@@ -164,10 +164,10 @@ public final class GoodsDetailFragment extends BaseFragment implements RadioGrou
 
     }
 
-    private String getDefaultSpecText(List<BGoodsDetail.Data.GoodsSpec> goodsSpecList, String skuCombinationCode) {
+    private String getDefaultSpecText(List<GoodsDetailBean.Data.GoodsSpec> goodsSpecList, String skuCombinationCode) {
         StringBuilder sb = new StringBuilder();
-        for (BGoodsDetail.Data.GoodsSpec goodsSpec : goodsSpecList) {
-            for (BGoodsDetail.Data.GoodsSpec.SkuValue skuValue : goodsSpec.skuValueList) {
+        for (GoodsDetailBean.Data.GoodsSpec goodsSpec : goodsSpecList) {
+            for (GoodsDetailBean.Data.GoodsSpec.SkuValue skuValue : goodsSpec.skuValueList) {
                 String specItemId = String.valueOf(skuValue.specItemId);
                 String specItemName = skuValue.specItemName;
                 if (skuCombinationCode.contains(specItemId)) {

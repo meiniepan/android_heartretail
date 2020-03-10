@@ -7,7 +7,7 @@ import java.util.List;
  *
  * @author aLang
  */
-public final class BGoodsDetail {
+public final class GoodsDetailBean {
     public String code;
     public String msg;
     public Data data;

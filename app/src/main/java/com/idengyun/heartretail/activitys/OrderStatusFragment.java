@@ -7,12 +7,26 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.dengyun.baselibrary.base.ApiBean;
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
+import com.dengyun.baselibrary.net.NetApi;
+import com.dengyun.baselibrary.net.NetOption;
+import com.dengyun.baselibrary.net.callback.JsonCallback;
+import com.dengyun.baselibrary.net.constants.RequestMethod;
+import com.dengyun.baselibrary.utils.phoneapp.AppUtils;
+import com.dengyun.splashmodule.config.SpMainConfigConstants;
+import com.google.gson.reflect.TypeToken;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.adapters.OderStatusListAdapter;
 import com.idengyun.heartretail.beans.OrderStatusBean;
 import com.idengyun.statusrecyclerviewlib.RefreshStatusRecyclerView;
+import com.idengyun.usermodule.HRConst;
+import com.idengyun.usermodule.HRUser;
+import com.lzy.okgo.model.Response;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +50,26 @@ public class OrderStatusFragment extends BaseFragment {
     @Override
     public void initViews(@NonNull View view, @Nullable Bundle savedInstanceState) {
         status = getBundle().getInt("status");
+        initRefreshLoadMore();
         initData();
+
+    }
+
+    private void initRefreshLoadMore() {
+        rsrOrderStatus.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
+            @Override
+            public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+
+            }
+
+            @Override
+            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+                getData();
+            }
+        });
+    }
+
+    private void initUI() {
         OderStatusListAdapter adapter = new OderStatusListAdapter(R.layout.item_order_status, data);
         rsrOrderStatus.setLayoutManager(new LinearLayoutManager(getActivity()));
         rsrOrderStatus.setAdapter(adapter);
@@ -49,35 +82,102 @@ public class OrderStatusFragment extends BaseFragment {
     }
 
     private void initData() {
-        if (status == 0){
-            OrderStatusBean orderStatusBean = new OrderStatusBean();
-            OrderStatusBean.GoodsBean goodsBean = new OrderStatusBean.GoodsBean();
-            goodsBean.goodsTitle = "测试标题";
-            List<OrderStatusBean.GoodsBean> goodsBeanList = new ArrayList<>();
-            goodsBeanList.add(goodsBean);
-            orderStatusBean.goodsBeans = goodsBeanList;
-            orderStatusBean.shopName = "什么什么店"+status;
-            data.add(orderStatusBean);
-        }else if (status == 1){
-            OrderStatusBean orderStatusBean = new OrderStatusBean();
-            OrderStatusBean.GoodsBean goodsBean = new OrderStatusBean.GoodsBean();
-            goodsBean.goodsTitle = "测试标题";
-            goodsBean.goodsQuantity = 3;
-            List<OrderStatusBean.GoodsBean> goodsBeanList = new ArrayList<>();
-            goodsBeanList.add(goodsBean);
-            goodsBeanList.add(goodsBean);
-            goodsBeanList.add(goodsBean);
-            orderStatusBean.goodsBeans = goodsBeanList;
-            orderStatusBean.shopName = "什么什么店"+status;
-            data.add(orderStatusBean);
-            data.add(orderStatusBean);
-            data.add(orderStatusBean);
-            data.add(orderStatusBean);
-            data.add(orderStatusBean);
-            data.add(orderStatusBean);
+        getData();
+//        if (status == 0){
+//            OrderStatusBean orderStatusBean = new OrderStatusBean();
+//            OrderStatusBean.GoodsBean goodsBean = new OrderStatusBean.GoodsBean();
+//            goodsBean.goodsTitle = "测试标题";
+//            List<OrderStatusBean.GoodsBean> goodsBeanList = new ArrayList<>();
+//            goodsBeanList.add(goodsBean);
+//            orderStatusBean.orderGoods = goodsBeanList;
+//            orderStatusBean.shopName = "什么什么店"+status;
+//            dataSource.add(orderStatusBean);
+//        }else if (status == 1){
+//            OrderStatusBean orderStatusBean = new OrderStatusBean();
+//            OrderStatusBean.GoodsBean goodsBean = new OrderStatusBean.GoodsBean();
+//            goodsBean.goodsTitle = "测试标题";
+//            goodsBean.goodsQuantity = 3;
+//            List<OrderStatusBean.GoodsBean> goodsBeanList = new ArrayList<>();
+//            goodsBeanList.add(goodsBean);
+//            goodsBeanList.add(goodsBean);
+//            goodsBeanList.add(goodsBean);
+//            orderStatusBean.goodsBeans = goodsBeanList;
+//            orderStatusBean.shopName = "什么什么店"+status;
+//            dataSource.add(orderStatusBean);
+//            dataSource.add(orderStatusBean);
+//            dataSource.add(orderStatusBean);
+//            dataSource.add(orderStatusBean);
+//            dataSource.add(orderStatusBean);
+//            dataSource.add(orderStatusBean);
+//        } else if (status == 2) {
+//            OrderStatusBean orderStatusBean = new OrderStatusBean();
+//            OrderStatusBean.GoodsBean goodsBean = new OrderStatusBean.GoodsBean();
+//            goodsBean.goodsTitle = "测试标题";
+//            goodsBean.goodsQuantity = 3;
+//            List<OrderStatusBean.GoodsBean> goodsBeanList = new ArrayList<>();
+//            goodsBeanList.add(goodsBean);
+//            orderStatusBean.goodsBeans = goodsBeanList;
+//            orderStatusBean.shopName = "什么什么店" + status;
+//            dataSource.add(orderStatusBean);
+//        } else if (status == 3) {
+//            OrderStatusBean orderStatusBean = new OrderStatusBean();
+//            OrderStatusBean.GoodsBean goodsBean = new OrderStatusBean.GoodsBean();
+//            goodsBean.goodsTitle = "测试标题";
+//            goodsBean.goodsQuantity = 3;
+//            List<OrderStatusBean.GoodsBean> goodsBeanList = new ArrayList<>();
+//            goodsBeanList.add(goodsBean);
+//            orderStatusBean.goodsBeans = goodsBeanList;
+//            orderStatusBean.shopName = "什么什么店" + status;
+//            dataSource.add(orderStatusBean);
+//        } else if (status == 4) {
+//            OrderStatusBean orderStatusBean = new OrderStatusBean();
+//            OrderStatusBean.GoodsBean goodsBean = new OrderStatusBean.GoodsBean();
+//            goodsBean.goodsTitle = "测试标题";
+//            goodsBean.goodsQuantity = 3;
+//            List<OrderStatusBean.GoodsBean> goodsBeanList = new ArrayList<>();
+//            goodsBeanList.add(goodsBean);
+//            orderStatusBean.goodsBeans = goodsBeanList;
+//            orderStatusBean.shopName = "什么什么店" + status;
+//            dataSource.add(orderStatusBean);
+//        } else if (status == 5) {
+//            OrderStatusBean orderStatusBean = new OrderStatusBean();
+//            OrderStatusBean.GoodsBean goodsBean = new OrderStatusBean.GoodsBean();
+//            goodsBean.goodsTitle = "测试标题";
+//            goodsBean.goodsQuantity = 3;
+//            List<OrderStatusBean.GoodsBean> goodsBeanList = new ArrayList<>();
+//            goodsBeanList.add(goodsBean);
+//            orderStatusBean.goodsBeans = goodsBeanList;
+//            orderStatusBean.shopName = "什么什么店" + status;
+//            dataSource.add(orderStatusBean);
+//        }
+    }
 
+    private void getData() {
+        Type type = new TypeToken<ApiBean<List<OrderStatusBean>>>() {
+        }.getType();
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.queryOrderList())
+                .activity(getActivity())
+                .params("version", AppUtils.getAppVersionName())
+                .params("page", 1)
+                .params("userId", HRUser.getId())
+                .params("flag", status)
+                .params("pageSize", 10)
+                .params("platform", HRConst.PLATFORM)
+                .isShowDialog(true)
+                .type(type)
+                .build();
 
-        }
+        NetApi.getData(RequestMethod.GET, netOption, new JsonCallback<ApiBean<List<OrderStatusBean>>>(netOption) {
+            @Override
+            public void onSuccess(Response<ApiBean<List<OrderStatusBean>>> response) {
+                rsrOrderStatus.finishRefreshLoadMore();
+                ApiBean<List<OrderStatusBean>> body = response.body();
+                data = body.data;
+                if (data != null) {
+                    initUI();
+                }
+            }
+        });
     }
 
 
