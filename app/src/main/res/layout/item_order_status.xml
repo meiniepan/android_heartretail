@@ -18,13 +18,14 @@
         <ImageView
             android:layout_width="16dp"
             android:layout_height="15dp"
+            android:visibility="gone"
+            android:layout_marginEnd="@dimen/dp_7"
             android:src="@drawable/ic_shop" />
 
         <TextView
             android:id="@+id/tv_order_status_shop_name1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp_7"
             android:layout_weight="1"
             android:textStyle="bold"
             tools:text="可诺丹婷大族广场店" />
@@ -114,7 +115,7 @@
             android:id="@+id/tv_total_pay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp_5"
+            android:layout_marginStart="@dimen/dp_2"
             android:textColor="@color/gray333" />
     </LinearLayout>
 
@@ -133,6 +134,7 @@
             android:id="@+id/tv_operate1"
             android:layout_width="@dimen/dp_72"
             android:layout_height="24dp"
+            android:gravity="center"
             android:background="@drawable/shape_line_bac_gray666"
             android:textColor="@color/gray666" />
 
@@ -141,6 +143,7 @@
             android:layout_width="@dimen/dp_72"
             android:layout_height="24dp"
             android:layout_marginStart="@dimen/dp_8"
+            android:gravity="center"
             android:background="@drawable/shape_line_bac_gray666"
             android:textColor="@color/gray666" />
     </LinearLayout>
