@@ -22,11 +22,13 @@ import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.shop.ShopListActivity;
 import com.idengyun.maplibrary.MyMapActivity;
 import com.idengyun.maplibrary.utils.AmapLocationUtil;
+import com.idengyun.maplibrary.utils.PoiListComparator;
 import com.idengyun.maplibrary.utils.PoiSearchUtil;
 import com.idengyun.usermodule.LoginActivity;
 import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 @Route(path = (RouterPathConfig.app_FirstActivity))
 public class FirstActivity extends BaseActivity {
@@ -67,6 +69,7 @@ public class FirstActivity extends BaseActivity {
                             @Override
                             public void onPoiSearched(PoiResult poiResult, int i) {
                                 ArrayList<PoiItem> pois = poiResult.getPois();
+                                Collections.sort(pois,new PoiListComparator());
                                 if (!ListUtils.isEmpty(pois) && null!=tvFirstLocation){
                                     cityName = pois.get(0).getCityName();
                                     nearShop = pois.get(0).getTitle();
