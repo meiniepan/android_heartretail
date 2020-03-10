@@ -13,6 +13,7 @@ import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.baselibrary.net.constants.RequestMethod;
+import com.dengyun.baselibrary.utils.ToastUtils;
 import com.dengyun.baselibrary.utils.phoneapp.AppUtils;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.google.gson.reflect.TypeToken;
@@ -40,8 +41,10 @@ import butterknife.BindView;
 public class OrderStatusFragment extends BaseFragment {
     @BindView(R.id.rsr_order_status)
     RefreshStatusRecyclerView rsrOrderStatus;
-    List<OrderStatusBean> data = new ArrayList<>();
+    List<OrderStatusBean> mData = new ArrayList<>();
     int status;
+    private int page = 1;
+
     @Override
     public int getLayoutId() {
         return R.layout.fragment_order_status;
@@ -51,7 +54,8 @@ public class OrderStatusFragment extends BaseFragment {
     public void initViews(@NonNull View view, @Nullable Bundle savedInstanceState) {
         status = getBundle().getInt("status");
         initRefreshLoadMore();
-        initData();
+        initUI();
+        getData();
 
     }
 
@@ -59,97 +63,29 @@ public class OrderStatusFragment extends BaseFragment {
         rsrOrderStatus.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-
+                page++;
+                getData();
             }
 
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+                mData.clear();
+                page = 1;
                 getData();
             }
         });
     }
 
     private void initUI() {
-        OderStatusListAdapter adapter = new OderStatusListAdapter(R.layout.item_order_status, data);
+        OderStatusListAdapter adapter = new OderStatusListAdapter(R.layout.item_order_status, mData);
         rsrOrderStatus.setLayoutManager(new LinearLayoutManager(getActivity()));
         rsrOrderStatus.setAdapter(adapter);
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                OrderDetailActivity.start(getActivity(), data.get(position));
+                OrderDetailActivity.start(getActivity(), mData.get(position));
             }
         });
-    }
-
-    private void initData() {
-        getData();
-//        if (status == 0){
-//            OrderStatusBean orderStatusBean = new OrderStatusBean();
-//            OrderStatusBean.GoodsBean goodsBean = new OrderStatusBean.GoodsBean();
-//            goodsBean.goodsTitle = "测试标题";
-//            List<OrderStatusBean.GoodsBean> goodsBeanList = new ArrayList<>();
-//            goodsBeanList.add(goodsBean);
-//            orderStatusBean.orderGoods = goodsBeanList;
-//            orderStatusBean.shopName = "什么什么店"+status;
-//            dataSource.add(orderStatusBean);
-//        }else if (status == 1){
-//            OrderStatusBean orderStatusBean = new OrderStatusBean();
-//            OrderStatusBean.GoodsBean goodsBean = new OrderStatusBean.GoodsBean();
-//            goodsBean.goodsTitle = "测试标题";
-//            goodsBean.goodsQuantity = 3;
-//            List<OrderStatusBean.GoodsBean> goodsBeanList = new ArrayList<>();
-//            goodsBeanList.add(goodsBean);
-//            goodsBeanList.add(goodsBean);
-//            goodsBeanList.add(goodsBean);
-//            orderStatusBean.goodsBeans = goodsBeanList;
-//            orderStatusBean.shopName = "什么什么店"+status;
-//            dataSource.add(orderStatusBean);
-//            dataSource.add(orderStatusBean);
-//            dataSource.add(orderStatusBean);
-//            dataSource.add(orderStatusBean);
-//            dataSource.add(orderStatusBean);
-//            dataSource.add(orderStatusBean);
-//        } else if (status == 2) {
-//            OrderStatusBean orderStatusBean = new OrderStatusBean();
-//            OrderStatusBean.GoodsBean goodsBean = new OrderStatusBean.GoodsBean();
-//            goodsBean.goodsTitle = "测试标题";
-//            goodsBean.goodsQuantity = 3;
-//            List<OrderStatusBean.GoodsBean> goodsBeanList = new ArrayList<>();
-//            goodsBeanList.add(goodsBean);
-//            orderStatusBean.goodsBeans = goodsBeanList;
-//            orderStatusBean.shopName = "什么什么店" + status;
-//            dataSource.add(orderStatusBean);
-//        } else if (status == 3) {
-//            OrderStatusBean orderStatusBean = new OrderStatusBean();
-//            OrderStatusBean.GoodsBean goodsBean = new OrderStatusBean.GoodsBean();
-//            goodsBean.goodsTitle = "测试标题";
-//            goodsBean.goodsQuantity = 3;
-//            List<OrderStatusBean.GoodsBean> goodsBeanList = new ArrayList<>();
-//            goodsBeanList.add(goodsBean);
-//            orderStatusBean.goodsBeans = goodsBeanList;
-//            orderStatusBean.shopName = "什么什么店" + status;
-//            dataSource.add(orderStatusBean);
-//        } else if (status == 4) {
-//            OrderStatusBean orderStatusBean = new OrderStatusBean();
-//            OrderStatusBean.GoodsBean goodsBean = new OrderStatusBean.GoodsBean();
-//            goodsBean.goodsTitle = "测试标题";
-//            goodsBean.goodsQuantity = 3;
-//            List<OrderStatusBean.GoodsBean> goodsBeanList = new ArrayList<>();
-//            goodsBeanList.add(goodsBean);
-//            orderStatusBean.goodsBeans = goodsBeanList;
-//            orderStatusBean.shopName = "什么什么店" + status;
-//            dataSource.add(orderStatusBean);
-//        } else if (status == 5) {
-//            OrderStatusBean orderStatusBean = new OrderStatusBean();
-//            OrderStatusBean.GoodsBean goodsBean = new OrderStatusBean.GoodsBean();
-//            goodsBean.goodsTitle = "测试标题";
-//            goodsBean.goodsQuantity = 3;
-//            List<OrderStatusBean.GoodsBean> goodsBeanList = new ArrayList<>();
-//            goodsBeanList.add(goodsBean);
-//            orderStatusBean.goodsBeans = goodsBeanList;
-//            orderStatusBean.shopName = "什么什么店" + status;
-//            dataSource.add(orderStatusBean);
-//        }
     }
 
     private void getData() {
@@ -158,7 +94,7 @@ public class OrderStatusFragment extends BaseFragment {
         NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.queryOrderList())
                 .activity(getActivity())
                 .params("version", AppUtils.getAppVersionName())
-                .params("page", 1)
+                .params("page", page)
                 .params("userId", HRUser.getId())
                 .params("flag", status)
                 .params("pageSize", 10)
@@ -172,10 +108,20 @@ public class OrderStatusFragment extends BaseFragment {
             public void onSuccess(Response<ApiBean<List<OrderStatusBean>>> response) {
                 rsrOrderStatus.finishRefreshLoadMore();
                 ApiBean<List<OrderStatusBean>> body = response.body();
-                data = body.data;
-                if (data != null) {
-                    initUI();
+                if (body.data != null && body.data.size() > 0) {
+                    mData.addAll(body.data);
+                } else {
+                    if (page != 1) {
+                        ToastUtils.showShort(R.string.load_more_end);
+                    }
                 }
+                rsrOrderStatus.notifyDataSetChange();
+            }
+
+            @Override
+            public void onError(Response<ApiBean<List<OrderStatusBean>>> response) {
+                super.onError(response);
+                rsrOrderStatus.finishRefreshLoadMore();
             }
         });
     }
