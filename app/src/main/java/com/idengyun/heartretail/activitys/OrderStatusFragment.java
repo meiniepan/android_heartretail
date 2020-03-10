@@ -19,6 +19,7 @@ import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.google.gson.reflect.TypeToken;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.adapters.OderStatusListAdapter;
+import com.idengyun.heartretail.beans.OrderListBean;
 import com.idengyun.heartretail.beans.OrderStatusBean;
 import com.idengyun.statusrecyclerviewlib.RefreshStatusRecyclerView;
 import com.idengyun.usermodule.HRConst;
@@ -89,7 +90,7 @@ public class OrderStatusFragment extends BaseFragment {
     }
 
     private void getData() {
-        Type type = new TypeToken<ApiBean<List<OrderStatusBean>>>() {
+        Type type = new TypeToken<ApiBean<OrderListBean>>() {
         }.getType();
         NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.queryOrderList())
                 .activity(getActivity())
@@ -103,13 +104,13 @@ public class OrderStatusFragment extends BaseFragment {
                 .type(type)
                 .build();
 
-        NetApi.getData(RequestMethod.GET, netOption, new JsonCallback<ApiBean<List<OrderStatusBean>>>(netOption) {
+        NetApi.getData(RequestMethod.GET, netOption, new JsonCallback<ApiBean<OrderListBean>>(netOption) {
             @Override
-            public void onSuccess(Response<ApiBean<List<OrderStatusBean>>> response) {
+            public void onSuccess(Response<ApiBean<OrderListBean>> response) {
                 rsrOrderStatus.finishRefreshLoadMore();
-                ApiBean<List<OrderStatusBean>> body = response.body();
-                if (body.data != null && body.data.size() > 0) {
-                    mData.addAll(body.data);
+                ApiBean<OrderListBean> body = response.body();
+                if (body.data.orders != null && body.data.orders.size() > 0) {
+                    mData.addAll(body.data.orders);
                 } else {
                     if (page != 1) {
                         ToastUtils.showShort(R.string.load_more_end);
@@ -119,7 +120,7 @@ public class OrderStatusFragment extends BaseFragment {
             }
 
             @Override
-            public void onError(Response<ApiBean<List<OrderStatusBean>>> response) {
+            public void onError(Response<ApiBean<OrderListBean>> response) {
                 super.onError(response);
                 rsrOrderStatus.finishRefreshLoadMore();
             }
