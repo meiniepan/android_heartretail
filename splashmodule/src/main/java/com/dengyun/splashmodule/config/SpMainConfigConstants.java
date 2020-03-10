@@ -33,8 +33,8 @@ public class SpMainConfigConstants {
     /* ================================== 协议 ================================== */
 
     /* 协议详情查询 */
-    public static String todo4() {
-        return getMainConfigUrl("todo4");
+    public static String protocolDetail() {
+        return getMainConfigUrl("protocolDetail");
     }
 
     /* 协议状态更新 */

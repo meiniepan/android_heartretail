@@ -1,5 +1,6 @@
 package com.idengyun.heartretail.goods;
 
+import android.arch.lifecycle.Observer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +15,7 @@ import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
+import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.GoodsDetailBean;
@@ -49,12 +51,29 @@ public final class GoodsServiceFragment extends BaseFragment implements View.OnC
         super.onActivityCreated(savedInstanceState);
         serviceAdapter = new ServiceAdapter();
         recycler_view.setAdapter(serviceAdapter);
-        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.goodsDetail())
+
+//        GDViewModel.observe(getActivity(), this, new Observer<GoodsDetailBean.Data>() {
+//            @Override
+//            public void onChanged(@Nullable GoodsDetailBean.Data data) {
+//                List<GoodsDetailBean.Data.Protocol> protocolList = data.protocolList;
+//                int[] protocolIds = new int[protocolList.size()];
+//                for (int i = 0; i < protocolList.size(); i++) {
+//                    GoodsDetailBean.Data.Protocol protocol = protocolList.get(i);
+//                    protocolIds[i] = protocol.protocolId;
+//                }
+//                requestAPI(protocolIds);
+//            }
+//        });
+        SpMainConfigConstants.protocolDetail();
+    }
+
+    private void requestAPI(int[] protocolIds) {
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.protocolDetail())
                 .fragment(this)
                 .clazz(ProtocolsBean.class)
-                .params("protocolIds", new int[]{1, 2})
+                .params("protocolIds", protocolIds)
                 .build();
-        NetApi.<ProtocolsBean>getData(netOption, new JsonCallback<ProtocolsBean>(netOption) {
+        NetApi.<ProtocolsBean>getData(RequestMethod.GET, netOption, new JsonCallback<ProtocolsBean>(netOption) {
             @Override
             public void onSuccess(Response<ProtocolsBean> response) {
                 List<ProtocolsBean.Data> data = response.body().data;
