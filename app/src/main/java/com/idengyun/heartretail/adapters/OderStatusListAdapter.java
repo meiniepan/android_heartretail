@@ -11,13 +11,13 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.dengyun.baselibrary.utils.SizeUtils;
-import com.dengyun.baselibrary.utils.TimeUtils;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.beans.OrderStatusBean;
 import com.idengyun.statusrecyclerviewlib.RecycleViewDivider;
 import com.idengyun.statusrecyclerviewlib.StatusRecyclerView;
 import com.idengyun.usermodule.utils.SecondsTimer;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -26,7 +26,7 @@ import java.util.List;
  * @date :2020/3/4 0004 16:43
  */
 public class OderStatusListAdapter extends BaseQuickAdapter<OrderStatusBean, BaseViewHolder> {
-    private SecondsTimer timer;
+    private HashMap<String, SecondsTimer> timerMap = new HashMap();
     public OderStatusListAdapter(int layoutResId, @Nullable List<OrderStatusBean> data) {
         super(layoutResId, data);
     }
@@ -92,9 +92,8 @@ public class OderStatusListAdapter extends BaseQuickAdapter<OrderStatusBean, Bas
     }
 
     private void startTimer(String orderId, int senconds, TextView tvH, TextView tvM, TextView tvS) {
-
-        if (timer == null) {
-            timer = new SecondsTimer(senconds, new SecondsTimer.Callback() {
+        if (timerMap.get(orderId)==null){
+        SecondsTimer timer = new SecondsTimer(senconds, new SecondsTimer.Callback() {
                 @Override
                 public void onTick(long secondsUntilFinished) {
                     int h = (int) (secondsUntilFinished / 3600);
@@ -110,16 +109,22 @@ public class OderStatusListAdapter extends BaseQuickAdapter<OrderStatusBean, Bas
                     cancelOrder(orderId);
                 }
             });
-        }
 
         timer.start();
+        timerMap.put(orderId, timer);}
     }
 
     private void cancelOrder(String orderId) {
     }
 
     private void cancelTimer() {
-        if (timer != null) timer.cancel();
+        if (timerMap.size() > 0) {
+            for (String orderId : timerMap.keySet()
+            ) {
+                timerMap.get(orderId).cancel();
+            }
+        }
+        ;
     }
 
     @Override
