@@ -16,6 +16,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.dengyun.baselibrary.base.activity.BaseActivity;
 import com.dengyun.baselibrary.utils.ListUtils;
 import com.dengyun.baselibrary.utils.SizeUtils;
+import com.idengyun.maplibrary.citylist.CityListActivity;
 import com.idengyun.maplibrary.utils.AmapLocationUtil;
 import com.idengyun.maplibrary.utils.PoiListComparator;
 import com.idengyun.maplibrary.utils.PoiSearchUtil;
@@ -193,4 +194,16 @@ public class MyMapActivity extends BaseActivity {
         });
     }
 
+    /**
+     * @param view 点击选择城市按钮
+     */
+    public void chooseCity(View view) {
+        CityListActivity.start(this,cityName);
+    }
+
+    /**
+     * @param view 点击选择地址按钮
+     */
+    public void chooseAddr(View view) {
+    }
 }
