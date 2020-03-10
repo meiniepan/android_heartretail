@@ -57,7 +57,7 @@ public final class GEViewModel extends ViewModel {
             public void onSuccess(Response<GoodsEvaluateBean> response) {
                 GoodsEvaluateBean.Data data = response.body().data;
 
-                totalPageSize = data.evaluationCounts;
+                totalPageSize = data.total;
                 totalPage = (int) Math.ceil(1D * totalPageSize / pageSize);
                 loadMore = ++page < totalPage;
 

@@ -3,12 +3,14 @@ package com.idengyun.heartretail.goods;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
 import android.view.View;
 import android.widget.RadioGroup;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.utils.SizeUtils;
+import com.dengyun.baselibrary.utils.ToastUtils;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
 
@@ -56,19 +58,9 @@ public final class GoodsDetailFragment extends BaseFragment implements RadioGrou
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         if (checkedId == R.id.rb_goods) {
-            iv_goods_1.setVisibility(View.VISIBLE);
-            iv_goods_2.setVisibility(View.VISIBLE);
-            iv_evaluation_1.setVisibility(View.INVISIBLE);
-            iv_evaluation_2.setVisibility(View.INVISIBLE);
-            HRActivity.showFragment(getActivity(), GoodsInfoFragment.class.getName());
-            HRActivity.hideFragment(getActivity(), GoodsEvaluateFragment.class.getName());
+            updateGoodsInfoUI();
         } else if (checkedId == R.id.rb_evaluation) {
-            iv_goods_1.setVisibility(View.INVISIBLE);
-            iv_goods_2.setVisibility(View.INVISIBLE);
-            iv_evaluation_1.setVisibility(View.VISIBLE);
-            iv_evaluation_2.setVisibility(View.VISIBLE);
-            HRActivity.showFragment(getActivity(), GoodsEvaluateFragment.class.getName());
-            HRActivity.hideFragment(getActivity(), GoodsInfoFragment.class.getName());
+            updateGoodsEvaluationUI();
         }
     }
 
@@ -79,7 +71,11 @@ public final class GoodsDetailFragment extends BaseFragment implements RadioGrou
         } else if (layout_goods_detail_customer_service == v) {
 
         } else if (layout_goods_detail_buy_now == v) {
-
+            GoodsSpecFragment goodsSpecFragment = (GoodsSpecFragment) HRActivity.findFragmentByTag(getActivity(), GoodsSpecFragment.class.getName());
+            if (goodsSpecFragment == null || !goodsSpecFragment.isCanBuy()) {
+                ToastUtils.showShort("去选择规格");
+                return;
+            }
         }
     }
 
@@ -93,6 +89,28 @@ public final class GoodsDetailFragment extends BaseFragment implements RadioGrou
             layout_second_title.setVisibility(View.GONE);
             layout_main_title.setVisibility(View.VISIBLE);
         }
+    }
+
+    public void checkGoodsEvaluation() {
+        radio_group.check(R.id.rb_evaluation);
+    }
+
+    private void updateGoodsInfoUI() {
+        iv_goods_1.setVisibility(View.VISIBLE);
+        iv_goods_2.setVisibility(View.VISIBLE);
+        iv_evaluation_1.setVisibility(View.INVISIBLE);
+        iv_evaluation_2.setVisibility(View.INVISIBLE);
+        HRActivity.showFragment(getActivity(), GoodsInfoFragment.class.getName());
+        HRActivity.hideFragment(getActivity(), GoodsEvaluateFragment.class.getName());
+    }
+
+    private void updateGoodsEvaluationUI() {
+        iv_goods_1.setVisibility(View.INVISIBLE);
+        iv_goods_2.setVisibility(View.INVISIBLE);
+        iv_evaluation_1.setVisibility(View.VISIBLE);
+        iv_evaluation_2.setVisibility(View.VISIBLE);
+        HRActivity.showFragment(getActivity(), GoodsEvaluateFragment.class.getName());
+        HRActivity.hideFragment(getActivity(), GoodsInfoFragment.class.getName());
     }
 
     private void init() {

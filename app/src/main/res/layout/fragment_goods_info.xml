@@ -203,6 +203,7 @@
 
         <!-- 用户单条评价 -->
         <LinearLayout
+            android:id="@+id/layout_goods_info_evaluate_header"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_marginTop="12dp"
@@ -332,10 +333,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
+                        android:layout_marginTop="6dp"
                         android:textColor="#ff666666"
                         android:textSize="12sp"
                         app:layout_constraintBottom_toBottomOf="@+id/iv_user_avatar"
                         app:layout_constraintLeft_toRightOf="@+id/iv_user_avatar"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_user_name"
                         tools:text="2020-01-01" />
 
                     <TextView
@@ -347,6 +350,7 @@
                         android:gravity="center_vertical"
                         android:textColor="#ff666666"
                         android:textSize="12sp"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="@+id/iv_user_avatar"
                         app:layout_constraintRight_toRightOf="parent"
                         tools:text="1234" />
@@ -429,6 +433,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#fff"
+            android:gravity="center_horizontal"
             android:orientation="vertical">
 
             <ImageView
