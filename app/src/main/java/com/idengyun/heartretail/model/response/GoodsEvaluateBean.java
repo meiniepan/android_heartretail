@@ -14,7 +14,7 @@ public final class GoodsEvaluateBean {
 
     public static class Data {
         public List<Evaluation> evaluationList;
-        public String commentCounts;
+        public int evaluationCounts;
         public String praiseRate;
 
         public static class Evaluation {

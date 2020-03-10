@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,13 +15,8 @@ import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.net.ImageApi;
-import com.dengyun.baselibrary.net.NetApi;
-import com.dengyun.baselibrary.net.NetOption;
-import com.dengyun.baselibrary.net.callback.JsonCallback;
-import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.GoodsEvaluateBean;
-import com.lzy.okgo.model.Response;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,13 +27,11 @@ import java.util.List;
  * @author aLang
  */
 public final class GoodsEvaluateFragment extends BaseFragment {
-    private int totalPageSize;
-    private int totalPage;
-    private int pageSize = 100;
-    private int page = 0;
     private TextView tv_favorable_rate;
     private RecyclerView recycler_view;
     private EvaluationAdapter evaluationAdapter;
+
+    private GEViewModel geViewModel;
 
     @Override
     public int getLayoutId() {
@@ -53,14 +47,9 @@ public final class GoodsEvaluateFragment extends BaseFragment {
         recycler_view.addOnScrollListener(new LoadMore() {
             @Override
             public void onLoadMore(RecyclerView recyclerView) {
-                if (totalPageSize == 0) return;
-
-                if ((page + 1) > totalPage) {
-                    // 已经是最后一页了
-                    return;
+                if (geViewModel.isLoadMore()) {
+                    geViewModel.requestEvaluationAPI(GoodsEvaluateFragment.this, "123");
                 }
-
-                requestAPI();
             }
         });
     }
@@ -68,36 +57,27 @@ public final class GoodsEvaluateFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        requestAPI();
-    }
+        FragmentActivity activity = getActivity();
+        assert activity != null;
 
-    private void requestAPI() {
-        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.evaluationList())
-                .fragment(this)
-                .clazz(GoodsEvaluateBean.class)
-                .params("goodsId", "123")
-                .params("page", page + 1)
-                .params("pageSize", pageSize)
-                .build();
-        NetApi.<GoodsEvaluateBean>getData(netOption, new JsonCallback<GoodsEvaluateBean>(netOption) {
+        GEViewModel.observe(activity, this, new android.arch.lifecycle.Observer<GoodsEvaluateBean.Data>() {
             @Override
-            public void onSuccess(Response<GoodsEvaluateBean> response) {
-                updateUI(response.body().data);
+            public void onChanged(@Nullable GoodsEvaluateBean.Data data) {
+                if (data != null) updateUI(data);
             }
         });
+
+        geViewModel = GEViewModel.getInstance(activity);
+        geViewModel.requestEvaluationAPI(this, "123");
     }
 
     @MainThread
     private void updateUI(GoodsEvaluateBean.Data data) {
-        String commentCounts = data.commentCounts;
+        int evaluationCounts = data.evaluationCounts;
         String praiseRate = data.praiseRate;
         List<GoodsEvaluateBean.Data.Evaluation> evaluationList = data.evaluationList;
 
-        totalPageSize = Integer.parseInt(commentCounts);
-        totalPage = (int) Math.ceil(1D * totalPageSize / pageSize);
-        ++page;
-
-        tv_favorable_rate.setText(commentCounts + "+条评论，" + praiseRate + "%好评率");
+        tv_favorable_rate.setText(evaluationCounts + "+条评论，" + praiseRate + "%好评率");
         evaluationAdapter.evaluationList.addAll(evaluationList);
         evaluationAdapter.notifyDataSetChanged();
     }
@@ -160,9 +140,12 @@ public final class GoodsEvaluateFragment extends BaseFragment {
                 rb_user_rating.setNumStars(commentStar);
                 tv_user_evaluation_content.setText(contents);
 
-                if (getAdapterPosition() == totalPageSize - 1)
+
+                if (getAdapterPosition() + 1 == geViewModel.getTotalPageSize()) {
                     tv_no_more.setVisibility(View.VISIBLE);
-                else tv_no_more.setVisibility(View.GONE);
+                } else {
+                    tv_no_more.setVisibility(View.GONE);
+                }
             }
 
             private void findViewById(@NonNull View itemView) {

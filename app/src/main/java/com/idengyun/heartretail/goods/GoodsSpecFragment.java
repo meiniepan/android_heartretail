@@ -1,9 +1,12 @@
 package com.idengyun.heartretail.goods;
 
+import android.arch.lifecycle.Observer;
 import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,12 +17,8 @@ import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.google.android.flexbox.FlexboxLayout;
-import com.google.gson.Gson;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.GoodsDetailBean;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,7 +29,7 @@ import java.util.List;
  *
  * @author aLang
  */
-public final class GoodsSpecFragment extends BaseFragment {
+public final class GoodsSpecFragment extends BaseFragment implements View.OnClickListener {
 
     private ImageView iv_goods_spec_logo;
     private TextView tv_goods_spec_price;
@@ -39,9 +38,7 @@ public final class GoodsSpecFragment extends BaseFragment {
 
     private GoodsSpecAdapter mGoodsSpecAdapter;
     private final List<Section> mSectionList = new ArrayList<>();
-    private GoodsDetailBean model;
-    private List<GoodsDetailBean.Data.GoodsSku> mGoodsSkuList;
-    private List<GoodsDetailBean.Data.GoodsSpec> mGoodsSpecList;
+    private GoodsDetailBean.Data data;
 
     @Override
     public int getLayoutId() {
@@ -59,43 +56,42 @@ public final class GoodsSpecFragment extends BaseFragment {
         mGoodsSpecAdapter = new GoodsSpecAdapter();
         recycler_view.setAdapter(mGoodsSpecAdapter);
 
-        try {
+        /*try {
             String s = new JSONObject(GoodsJson.json).toString();
             GoodsDetailBean detail = new Gson().fromJson(s, GoodsDetailBean.class);
-            this.mGoodsSpecList = detail.data.goodsSpecList;
-            this.mGoodsSkuList = detail.data.goodsSkuList;
-            model = detail;
-            updateUI();
+            data = detail.data;
+            updateUI(data);
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
 
-        getView().setOnClickListener(new View.OnClickListener() {
+        FragmentActivity activity = getActivity();
+        assert activity != null;
+
+        GDViewModel.observe(activity, this, new Observer<GoodsDetailBean.Data>() {
             @Override
-            public void onClick(View v) {
-                if (getParentFragment() instanceof GoodsDetailFragment) {
-                    ((GoodsDetailFragment) getParentFragment()).showGoodsSpecFragment(false);
-                }
+            public void onChanged(@Nullable GoodsDetailBean.Data data) {
+                if (data != null) updateUI(data);
             }
         });
     }
 
-    private void findViewById(@NonNull View view) {
-        iv_goods_spec_logo = view.findViewById(R.id.iv_goods_spec_logo);
-        tv_goods_spec_price = view.findViewById(R.id.tv_goods_spec_price);
-        tv_goods_spec_stock = view.findViewById(R.id.tv_goods_spec_stock);
-        recycler_view = view.findViewById(R.id.recycler_view);
+    @Override
+    public void onClick(View v) {
+        FragmentManager fragmentManager = getFragmentManager();
+        if (fragmentManager != null) fragmentManager.beginTransaction().hide(this).commit();
     }
 
     @MainThread
-    private void updateUI() {
-        GoodsDetailBean.Data data = model.data;
+    private void updateUI(GoodsDetailBean.Data data) {
+        this.data = data;
+
         iv_goods_spec_logo.setImageDrawable(null);
         tv_goods_spec_price.setText("110");
         tv_goods_spec_stock.setText("1024");
 
-        List<GoodsDetailBean.Data.GoodsSpec> goodsSpecList = mGoodsSpecList;
-        List<GoodsDetailBean.Data.GoodsSku> goodsSkuList = mGoodsSkuList;
+        List<GoodsDetailBean.Data.GoodsSpec> goodsSpecList = data.goodsSpecList;
+        List<GoodsDetailBean.Data.GoodsSku> goodsSkuList = data.goodsSkuList;
 
         /* DataModel to ViewModel */
         List<Section> sectionList = new ArrayList<>();
@@ -176,7 +172,7 @@ public final class GoodsSpecFragment extends BaseFragment {
         ArrayList<GoodsDetailBean.Data.GoodsSku> validSkuList = new ArrayList<>();
 
         List<String> checkedIdList = searchCheckedIdList();
-        for (GoodsDetailBean.Data.GoodsSku goodsSku : mGoodsSkuList) {
+        for (GoodsDetailBean.Data.GoodsSku goodsSku : data.goodsSkuList) {
             if (Arrays.asList(goodsSku.skuCombinationCode.split("_")).containsAll(checkedIdList)) {
                 validSkuList.add(goodsSku);
             }
@@ -217,6 +213,15 @@ public final class GoodsSpecFragment extends BaseFragment {
 
         /* 更新启用状态 */
         switchEnabledStatus(mSectionList, validSkuList);
+    }
+
+    private void findViewById(@NonNull View view) {
+        iv_goods_spec_logo = view.findViewById(R.id.iv_goods_spec_logo);
+        tv_goods_spec_price = view.findViewById(R.id.tv_goods_spec_price);
+        tv_goods_spec_stock = view.findViewById(R.id.tv_goods_spec_stock);
+        recycler_view = view.findViewById(R.id.recycler_view);
+
+        view.setOnClickListener(this);
     }
 
     /* 商品规格适配器 */
@@ -286,7 +291,7 @@ public final class GoodsSpecFragment extends BaseFragment {
                     if (tmp != null) {
                         for (Section.Cell cell : tmp.cellList) {
                             cell.enabled = false;
-                            for (GoodsDetailBean.Data.GoodsSku goodsSku : mGoodsSkuList) {
+                            for (GoodsDetailBean.Data.GoodsSku goodsSku : data.goodsSkuList) {
                                 if (Arrays.asList(goodsSku.skuCombinationCode.split("_")).contains(cell.specItemId)) {
                                     cell.enabled = true;
                                     break;

@@ -1,28 +1,29 @@
 package com.idengyun.heartretail.goods;
 
+import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.NestedScrollView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.net.ImageApi;
-import com.dengyun.baselibrary.net.NetApi;
-import com.dengyun.baselibrary.net.NetOption;
-import com.dengyun.baselibrary.net.callback.JsonCallback;
-import com.dengyun.splashmodule.config.SpMainConfigConstants;
+import com.dengyun.baselibrary.utils.SizeUtils;
+import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.GoodsDetailBean;
 import com.idengyun.heartretail.model.response.GoodsEvaluateBean;
-import com.idengyun.usermodule.HRUser;
-import com.lzy.okgo.model.Response;
 import com.zhoubo07.bannerlib.ConvenientBanner;
 import com.zhoubo07.bannerlib.banner.SimpleImageBannerBean;
 import com.zhoubo07.bannerlib.banner.SimpleImageHolder;
@@ -31,6 +32,7 @@ import com.zhoubo07.bannerlib.holder.Holder;
 import com.zhoubo07.bannerlib.listener.OnItemClickListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -68,7 +70,7 @@ public final class GoodsInfoFragment extends BaseFragment implements View.OnClic
     private TextView tv_user_evaluation_content;
 
     /* 商品详情 */
-    private ImageView iv_goods_detail;
+    private LinearLayout layout_goods_detail;
 
     @Override
     public int getLayoutId() {
@@ -83,45 +85,46 @@ public final class GoodsInfoFragment extends BaseFragment implements View.OnClic
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        NestedScrollView.OnScrollChangeListener listener = (NestedScrollView.OnScrollChangeListener) getParentFragment();
-        nested_scroll_view.setOnScrollChangeListener(listener);
-        requestGoodsDetailAPI();
-        requestEvaluateAPI();
+        FragmentActivity activity = getActivity();
+        assert activity != null;
+
+        Fragment fragment = HRActivity.findFragmentByTag(getActivity(), GoodsDetailFragment.class.getName());
+        if (fragment instanceof NestedScrollView.OnScrollChangeListener) {
+            nested_scroll_view.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) fragment);
+        }
+
+
+        GDViewModel.getInstance(activity).requestGoodsDetailAPI(this, "123", 0);
+
+        GDViewModel.observe(activity, this, new Observer<GoodsDetailBean.Data>() {
+            @Override
+            public void onChanged(@Nullable GoodsDetailBean.Data data) {
+                if (data != null) updateUI(data);
+            }
+        });
+
+        GEViewModel.observe(activity, this, new Observer<GoodsEvaluateBean.Data>() {
+            @Override
+            public void onChanged(@Nullable GoodsEvaluateBean.Data data) {
+                if (data != null) updateUI(data);
+            }
+        });
     }
 
     @Override
     public void onClick(View v) {
         if (layout_goods_spec == v) {
-            if (getParentFragment() instanceof GoodsDetailFragment) {
-                ((GoodsDetailFragment) getParentFragment()).showGoodsSpecFragment(true);
-            }
+            HRActivity.showFragment(getActivity(), GoodsSpecFragment.class.getName());
         } else if (layout_goods_service == v) {
-            if (getParentFragment() instanceof GoodsDetailFragment) {
-                ((GoodsDetailFragment) getParentFragment()).showGoodsServiceFragment(true);
-            }
+            HRActivity.showFragment(getActivity(), GoodsServiceFragment.class.getName());
         }
-    }
-
-    private void requestEvaluateAPI() {
-        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.evaluationList())
-                .fragment(this)
-                .clazz(GoodsEvaluateBean.class)
-                .params("goodsId", "123")
-                .params("page", 1)
-                .params("pageSize", 1)
-                .build();
-        NetApi.<GoodsEvaluateBean>getData(netOption, new JsonCallback<GoodsEvaluateBean>(netOption) {
-            @Override
-            public void onSuccess(Response<GoodsEvaluateBean> response) {
-                updateUI(response.body().data);
-            }
-        });
     }
 
     @MainThread
     private void updateUI(GoodsEvaluateBean.Data data) {
+        int evaluationCounts = data.evaluationCounts;
         String praiseRate = data.praiseRate;
-        tv_user_favorable_rate.setText(praiseRate);
+        tv_user_favorable_rate.setText(evaluationCounts + "+条评论，" + praiseRate + "%好评率");
 
         List<GoodsEvaluateBean.Data.Evaluation> evaluationList = data.evaluationList;
         if (evaluationList.isEmpty()) return;
@@ -144,24 +147,6 @@ public final class GoodsInfoFragment extends BaseFragment implements View.OnClic
         tv_user_evaluation_content.setText(contents);
     }
 
-    /* 请求商品详情 */
-    private void requestGoodsDetailAPI() {
-        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.goodsDetail())
-                .fragment(this)
-                .clazz(GoodsDetailBean.class)
-                .params("goodsId", "123")
-                .params("userId", HRUser.getId())
-                .params("goodsType", 0)// 0零售1批发
-                .build();
-        NetApi.<GoodsDetailBean>getData(netOption, new JsonCallback<GoodsDetailBean>(netOption) {
-            @Override
-            public void onSuccess(Response<GoodsDetailBean> response) {
-                updateUI(response.body().data);
-            }
-        });
-    }
-
-    /* 更新页面信息 */
     @MainThread
     private void updateUI(GoodsDetailBean.Data data) {
         List<GoodsDetailBean.Data.Banner> imageList = data.imageList;
@@ -170,26 +155,92 @@ public final class GoodsInfoFragment extends BaseFragment implements View.OnClic
         List<GoodsDetailBean.Data.GoodsSku> goodsSkuList = data.goodsSkuList;
         List<String> goodsDetailList = data.goodsDetailList;
 
+        int wholesaleFlag = data.wholesaleFlag;
+        String retailPrice = data.retailPrice;
+        String wholesalePrice = data.wholesalePrice;
+        int goodsType = data.goodsType;
+        int soldCounts = data.soldCounts;
+        String goodsTitle = data.goodsTitle;
+
+        /* 轮播图 */
         ArrayList<String> urls = new ArrayList<>();
         for (GoodsDetailBean.Data.Banner banner : imageList) {
             urls.add(banner.imgUrl);
         }
         GoodsBanner.setupBanner(layout_goods_banner_container, urls);
 
-        String retailPrice = data.retailPrice;
-        String wholesalePrice = data.wholesalePrice;
-        int goodsType = data.goodsType;
-        int soldCounts = data.soldCounts;
-        String goodsTitle = data.goodsTitle;
+        /* 批发资格 */
+        layout_goods_disqualification.setVisibility(wholesaleFlag == 1 ? View.VISIBLE : View.GONE);
+
+        /* 商品价格 */
         tv_goods_price.setText(goodsType == 0 ? retailPrice : wholesalePrice);
         tv_goods_price_small.setText(goodsType == 0 ? retailPrice : wholesalePrice);
         tv_goods_sold.setText("已售" + soldCounts + "件");
         tv_goods_info.setText(goodsTitle);
 
-        tv_goods_spec.setText(null);
-        tv_goods_service.setText(null);
+        /* 选择规格 */
+        List<String> idList = null;
+        for (GoodsDetailBean.Data.GoodsSku goodsSku : goodsSkuList) {
+            if (goodsSku.isDefault == 1) {
+                idList = Arrays.asList(goodsSku.skuCombinationCode.split("_"));
+                break;
+            }
+        }
+        if (idList != null && !idList.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            for (GoodsDetailBean.Data.GoodsSpec goodsSpec : goodsSpecList) {
+                for (GoodsDetailBean.Data.GoodsSpec.SkuValue skuValue : goodsSpec.skuValueList) {
+                    String specItemId = String.valueOf(skuValue.specItemId);
+                    String specItemName = skuValue.specItemName;
+                    if (idList.contains(specItemId)) {
+                        sb.append(specItemName).append("/");
+                        break;
+                    }
+                }
+            }
+            tv_goods_spec.setText(sb.subSequence(0, sb.length() - 1));
+        }
 
-        iv_goods_detail.setImageDrawable(null);
+        /* 服务说明 */
+        if (!protocolList.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            for (GoodsDetailBean.Data.Protocol protocol : protocolList) {
+                sb.append(protocol.protocolName).append("&");
+            }
+            tv_goods_service.setText(sb.subSequence(0, sb.length() - 1));
+        }
+
+        /* 商品详情 */
+        layout_goods_detail.removeAllViews();
+        int width = SizeUtils.dp2px(345f);
+        int height = SizeUtils.dp2px(281f);
+        int topMargin = SizeUtils.dp2px(8f);
+        for (String url : goodsDetailList) {
+            ImageView child = new ImageView(layout_goods_detail.getContext());
+            ViewGroup.MarginLayoutParams params = new LinearLayout.MarginLayoutParams(width, height);
+            params.topMargin = topMargin;
+            ImageApi.displayImage(child.getContext(), child, url);
+            layout_goods_detail.addView(child, params);
+        }
+    }
+
+    private String getGoodsSpecText(@Nullable GoodsDetailBean.Data.GoodsSku goodsSku, List<GoodsDetailBean.Data.GoodsSpec> goodsSpecList) {
+        if (goodsSku == null) return "";
+
+        StringBuilder sb = new StringBuilder();
+        List<String> idList = Arrays.asList(goodsSku.skuCombinationCode.split("_"));
+        for (GoodsDetailBean.Data.GoodsSpec goodsSpec : goodsSpecList) {
+            for (GoodsDetailBean.Data.GoodsSpec.SkuValue skuValue : goodsSpec.skuValueList) {
+                String specItemId = String.valueOf(skuValue.specItemId);
+                String specItemName = skuValue.specItemName;
+                if (idList.contains(specItemId)) {
+                    sb.append(specItemName).append("/");
+                    break;
+                }
+            }
+        }
+
+        return sb.substring(0, sb.length() - 1);
     }
 
     private void findViewById(@NonNull View view) {
@@ -216,7 +267,7 @@ public final class GoodsInfoFragment extends BaseFragment implements View.OnClic
         tv_user_likes = view.findViewById(R.id.tv_user_likes);
         tv_user_evaluation_content = view.findViewById(R.id.tv_user_evaluation_content);
 
-        iv_goods_detail = view.findViewById(R.id.iv_goods_detail);
+        layout_goods_detail = view.findViewById(R.id.layout_goods_detail);
 
         layout_goods_spec.setOnClickListener(this);
         layout_goods_service.setOnClickListener(this);

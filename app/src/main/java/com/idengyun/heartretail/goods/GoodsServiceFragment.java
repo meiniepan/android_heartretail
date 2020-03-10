@@ -3,17 +3,36 @@ package com.idengyun.heartretail.goods;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
+import com.dengyun.baselibrary.net.NetApi;
+import com.dengyun.baselibrary.net.NetOption;
+import com.dengyun.baselibrary.net.callback.JsonCallback;
+import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.heartretail.R;
+import com.idengyun.heartretail.model.response.GoodsDetailBean;
+import com.idengyun.heartretail.model.response.ProtocolsBean;
+import com.lzy.okgo.model.Response;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 商品详情-服务
  *
  * @author aLang
  */
-public final class GoodsServiceFragment extends BaseFragment {
+public final class GoodsServiceFragment extends BaseFragment implements View.OnClickListener {
+
+    private RecyclerView recycler_view;
+    private final ArrayList<ProtocolsBean.Data> serviceItems = new ArrayList<>();
+    private ServiceAdapter serviceAdapter;
 
     @Override
     public int getLayoutId() {
@@ -22,19 +41,86 @@ public final class GoodsServiceFragment extends BaseFragment {
 
     @Override
     public void initViews(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
+        findViewById(view);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getView().setOnClickListener(new View.OnClickListener() {
+        serviceAdapter = new ServiceAdapter();
+        recycler_view.setAdapter(serviceAdapter);
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.goodsDetail())
+                .fragment(this)
+                .clazz(ProtocolsBean.class)
+                .params("protocolIds", new int[]{1, 2})
+                .build();
+        NetApi.<ProtocolsBean>getData(netOption, new JsonCallback<ProtocolsBean>(netOption) {
             @Override
-            public void onClick(View v) {
-                if (getParentFragment() instanceof GoodsDetailFragment) {
-                    ((GoodsDetailFragment) getParentFragment()).showGoodsServiceFragment(false);
-                }
+            public void onSuccess(Response<ProtocolsBean> response) {
+                List<ProtocolsBean.Data> data = response.body().data;
+                updateUI(data);
             }
         });
+    }
+
+    @Override
+    public void onClick(View v) {
+        FragmentManager fragmentManager = getFragmentManager();
+        if (fragmentManager != null) fragmentManager.beginTransaction().hide(this).commit();
+    }
+
+    private void updateUI(List<ProtocolsBean.Data> data) {
+        serviceItems.addAll(data);
+        serviceAdapter.notifyDataSetChanged();
+    }
+
+    private void findViewById(@NonNull View view) {
+        recycler_view = view.findViewById(R.id.recycler_view);
+        view.setOnClickListener(this);
+    }
+
+    private class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ServiceHolder> {
+        private LayoutInflater inflater;
+
+        @NonNull
+        @Override
+        public ServiceHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
+            if (inflater == null) inflater = LayoutInflater.from(parent.getContext());
+            View itemView = inflater.inflate(R.layout.fragment_goods_service_item, parent, false);
+            return new ServiceHolder(itemView);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull ServiceHolder holder, int position) {
+            holder.updateUI(serviceItems.get(position));
+        }
+
+        @Override
+        public int getItemCount() {
+            return serviceItems.size();
+        }
+
+        private class ServiceHolder extends RecyclerView.ViewHolder {
+
+            private TextView tv_goods_service_title;
+            private TextView tv_goods_service_content;
+
+            public ServiceHolder(@NonNull View itemView) {
+                super(itemView);
+                findViewById(itemView);
+            }
+
+            public void updateUI(ProtocolsBean.Data data) {
+                String protocolName = data.protocolName;
+                String protocolContent = data.protocolContent;
+                tv_goods_service_title.setText(protocolName);
+                tv_goods_service_content.setText(protocolContent);
+            }
+
+            private void findViewById(@NonNull View itemView) {
+                tv_goods_service_title = itemView.findViewById(R.id.tv_goods_service_title);
+                tv_goods_service_content = itemView.findViewById(R.id.tv_goods_service_content);
+            }
+        }
     }
 }

@@ -5,8 +5,10 @@ import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,10 @@ import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.bases.PagerChildFragment;
 import com.idengyun.heartretail.goods.GoodsDetailFragment;
+import com.idengyun.heartretail.goods.GoodsEvaluateFragment;
+import com.idengyun.heartretail.goods.GoodsInfoFragment;
+import com.idengyun.heartretail.goods.GoodsServiceFragment;
+import com.idengyun.heartretail.goods.GoodsSpecFragment;
 import com.idengyun.heartretail.message.NoticeFragment;
 
 import java.util.ArrayList;
@@ -119,7 +125,14 @@ public final class HomeFragment extends PagerChildFragment implements View.OnCli
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    HRActivity.start(v.getContext(), GoodsDetailFragment.class);
+                    Class[] classes = new Class[]{
+                            GoodsInfoFragment.class,
+                            GoodsEvaluateFragment.class,
+                            GoodsSpecFragment.class,
+                            GoodsServiceFragment.class,
+                            GoodsDetailFragment.class
+                    };
+                    HRActivity.start(getContext(), classes, null);
                 }
             });
             return new GoodsHolder(itemView);

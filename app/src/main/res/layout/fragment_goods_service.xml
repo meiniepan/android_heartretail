@@ -1,46 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#80000000">
 
-    <android.support.v4.widget.NestedScrollView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="427dp"
         android:layout_gravity="bottom"
         android:background="@drawable/shape_goods_spec_bg"
-        android:clickable="true"
-        android:fillViewport="true"
-        android:paddingBottom="49dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="bottom"
-            android:layout_marginTop="32dp"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:paddingStart="30dp"
-            android:paddingEnd="30dp">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_goods_detail_service_title" />
-
-            <TextView
-                android:id="@+id/tv_goods_service"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="24dp"
-                android:layout_marginBottom="24dp"
-                android:lineSpacingExtra="4dp"
-                android:textColor="#ff333333"
-                android:textSize="14sp"
-                tools:text="律历能话斯府同很面术最子压如白再常得由整千制任习界收总成条号论当往示时导品着种现资们验育相生种内你决花。阶种广积格及北复易持作数义世层会连想验却音己京界照全求如具认已候些因快机志百级给生。步满传收始现实些经设热何界其改之作着事单标它号半关位省六效看单用油花三这传起好他整全即区按断劳放据许。高去今示就立阶十最近样反题最列张人位称八叫高品影求容空常做油西支民长白点什布特后且为增为化外拉原育话把电可机。列都习对严料教展土些革查更转选化回阶查路矿信须见公题生信决从解建社青次还两度强质为标放层员象何。水高角和利人养期亲式定间集它的等改导技下造程命院算向斗日步术以务条法果军流约花素京学由工集法。" />
-        </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+        android:orientation="vertical"
+        android:overScrollMode="never"
+        android:paddingBottom="49dp"
+        android:scrollbars="none"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        tools:itemCount="6"
+        tools:listitem="@layout/fragment_goods_service_item" />
 </FrameLayout>
 
 
