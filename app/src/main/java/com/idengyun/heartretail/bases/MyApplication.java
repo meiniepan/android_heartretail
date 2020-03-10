@@ -61,9 +61,9 @@ public class MyApplication extends LitePalApplication {
     private static final String UMENG_APPKEY = "5e60505b895cca565b0000f4";
     private static final String WX_APPID = "";
     private static final String WX_APPSECRET = "";
-    private static final String SINA_APPKEY = "";
-    private static final String SINA_APPSECRET = "";
-    private static final String SINA_REDIREC_URL = "";
+    private static final String SINA_APPKEY = "2989634418";
+    private static final String SINA_APPSECRET = "81c7bf4eba719c63a40af9a1cc590b6d";
+    private static final String SINA_REDIREC_URL = "https://api.weibo.com/oauth2/default.html";
     private static final String QQ_APPID = "";
     private static final String QQ_APPKEY = "";
 

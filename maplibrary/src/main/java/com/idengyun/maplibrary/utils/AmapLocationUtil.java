@@ -8,6 +8,7 @@ import com.amap.api.maps.CameraUpdate;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.dengyun.baselibrary.utils.Utils;
+import com.idengyun.maplibrary.R;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
@@ -32,7 +33,11 @@ public class AmapLocationUtil {
         //myLocationStyle.interval(2000);
         myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_SHOW);
         //定位一次，且将视角移动到地图中心点。
-        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE) ;
+        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE);
+        //设置定位蓝点精度圆圈的填充颜色的方法
+        myLocationStyle.radiusFillColor(Utils.getApp().getResources().getColor(R.color.transparent));
+        //设置定位蓝点精度圆圈的边框颜色的方法
+        myLocationStyle.strokeColor(Utils.getApp().getResources().getColor(R.color.transparent));
         //设置定位蓝点的Style
         aMap.setMyLocationStyle(myLocationStyle);
         //aMap.getUiSettings().setMyLocationButtonEnabled(true);设置默认定位按钮是否显示，非必需设置。

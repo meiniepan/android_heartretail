@@ -254,7 +254,9 @@ public class PoiScrollLayout extends ViewGroup {
                 if (scrollY > slideSlop) {//展开
                     toggle(STATUS_EXTEND);
                 } else if (scrollY < -slideSlop) {//关闭
-                    toggle(STATUS_CLOSE);
+//                    toggle(STATUS_CLOSE);
+                    //不关闭最小高度，若要关闭解开上面一行代码
+                    toggle(STATUS_DEFAULT);
                 } else {
                     toggle(STATUS_DEFAULT);
                 }

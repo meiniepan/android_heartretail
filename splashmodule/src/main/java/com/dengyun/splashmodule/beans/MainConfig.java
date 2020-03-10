@@ -7,5 +7,5 @@ import java.util.List;
  */
 
 public class MainConfig {
-    public List<String> urlConfig;
+    public List<UrlConfigBean> urlConfig;
 }

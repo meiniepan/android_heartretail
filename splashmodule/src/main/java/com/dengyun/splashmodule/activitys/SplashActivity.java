@@ -54,8 +54,7 @@ public class SplashActivity extends BaseSplashActivity {
 
     private void saveMainBean(MainConfig mainConfig){
         for (int i = 0; i < mainConfig.urlConfig.size(); i++) {
-            String urlConfigStr = mainConfig.urlConfig.get(i);
-            UrlConfigBean urlConfigBean = GsonConvertUtil.fromJson(urlConfigStr,UrlConfigBean.class);
+            UrlConfigBean urlConfigBean = mainConfig.urlConfig.get(i);
             SharedPreferencesUtil.saveData(Utils.getApp(),
                     SpMainConfigConstants.spFileName,
                     urlConfigBean.urlCode,
