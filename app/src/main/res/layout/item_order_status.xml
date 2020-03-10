@@ -21,7 +21,7 @@
             android:src="@drawable/ic_shop" />
 
         <TextView
-            android:id="@+id/tv_order_status_shop_name"
+            android:id="@+id/tv_order_status_shop_name1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_7"
@@ -122,7 +122,6 @@
         android:id="@+id/ll_advanced_operate"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-
         android:gravity="center_vertical">
 
         <Space

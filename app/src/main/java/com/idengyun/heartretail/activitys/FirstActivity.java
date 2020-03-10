@@ -15,15 +15,20 @@ import com.dengyun.baselibrary.base.activity.BaseActivity;
 import com.dengyun.baselibrary.config.RouterPathConfig;
 import com.dengyun.baselibrary.utils.ListUtils;
 import com.dengyun.baselibrary.utils.ToastUtils;
+import com.idengyun.heartretail.HRActivity;
+
 import com.idengyun.heartretail.MainActivity;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.shop.ShopListActivity;
 import com.idengyun.maplibrary.MyMapActivity;
 import com.idengyun.maplibrary.utils.AmapLocationUtil;
+import com.idengyun.maplibrary.utils.PoiListComparator;
 import com.idengyun.maplibrary.utils.PoiSearchUtil;
 import com.idengyun.usermodule.LoginActivity;
+import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 @Route(path = (RouterPathConfig.app_FirstActivity))
 public class FirstActivity extends BaseActivity {
@@ -64,7 +69,8 @@ public class FirstActivity extends BaseActivity {
                             @Override
                             public void onPoiSearched(PoiResult poiResult, int i) {
                                 ArrayList<PoiItem> pois = poiResult.getPois();
-                                if (!ListUtils.isEmpty(pois) && null != tvFirstLocation) {
+                                Collections.sort(pois,new PoiListComparator());
+                                if (!ListUtils.isEmpty(pois) && null!=tvFirstLocation){
                                     cityName = pois.get(0).getCityName();
                                     nearShop = pois.get(0).getTitle();
                                     tvFirstLocation.setText(pois.get(0).getTitle());
@@ -102,10 +108,10 @@ public class FirstActivity extends BaseActivity {
 
     /* 跳到地图页面 */
     public void skipToMap(View view) {
-        if (TextUtils.isEmpty(cityName)) {
+        if (TextUtils.isEmpty(cityName)){
             ToastUtils.showShort("还没有定位成功");
-        } else {
-            MyMapActivity.start(this, cityName, nearShop);
+        }else {
+            MyMapActivity.start(this,cityName,nearShop);
         }
     }
 }

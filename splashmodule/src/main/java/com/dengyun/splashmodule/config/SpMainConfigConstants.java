@@ -237,21 +237,18 @@ public class SpMainConfigConstants {
     /* ================================= 我的订单 ================================= */
 
     /* 订单详情 */
-    public static String todo22() {
-        // TODO: 2020/3/9
-        return getMainConfigUrl("todo22");
+    public static String queryOrderDetail() {
+        return getMainConfigUrl("queryOrderDetail");
     }
 
     /* 订单列表 */
-    public static String todo23() {
-        // TODO: 2020/3/9
-        return getMainConfigUrl("todo23");
+    public static String queryOrderList() {
+        return getMainConfigUrl("queryOrderList");
     }
 
     /* 修改订单状态(取消订单) */
-    public static String todo24() {
-        // TODO: 2020/3/9
-        return getMainConfigUrl("todo24");
+    public static String changeOrderState() {
+        return getMainConfigUrl("changeOrderState");
     }
 
     /* ================================= 物流 ================================= */
