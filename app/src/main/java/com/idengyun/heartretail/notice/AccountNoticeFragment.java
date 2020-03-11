@@ -1,4 +1,4 @@
-package com.idengyun.heartretail.message;
+package com.idengyun.heartretail.notice;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,15 +8,15 @@ import android.view.View;
 import com.idengyun.heartretail.bases.PagerChildFragment;
 
 /**
- * 促销优惠
+ * 账户通知
  *
  * @author aLang
  */
-public final class PromoteNoticeFragment extends PagerChildFragment {
+public final class AccountNoticeFragment extends PagerChildFragment {
 
     @Override
     public int getLayoutId() {
-        return android.R.layout.activity_list_item;
+        return android.R.layout.two_line_list_item;
     }
 
     @Override

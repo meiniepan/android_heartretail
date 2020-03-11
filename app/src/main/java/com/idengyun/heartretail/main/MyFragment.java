@@ -7,12 +7,23 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.dengyun.baselibrary.net.ImageApi;
+import com.dengyun.baselibrary.net.NetApi;
+import com.dengyun.baselibrary.net.NetOption;
+import com.dengyun.baselibrary.net.callback.JsonCallback;
+import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.baselibrary.utils.SizeUtils;
+import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.bases.PagerChildFragment;
+import com.idengyun.heartretail.model.response.BalanceBean;
 import com.idengyun.heartretail.my.SettingFragment;
+import com.idengyun.usermodule.HRUser;
+import com.lzy.okgo.model.Response;
 
 /**
  * 我的页面
@@ -25,24 +36,21 @@ public final class MyFragment extends PagerChildFragment implements View.OnClick
     private View iv_my_login_bg;
 
     /* 编辑 分享 设置 */
-    private View layout_my_title;
-    private View iv_my_pencil;
-    private View iv_my_share;
     private View iv_my_setting;
 
     /* 用户信息 登录状态 是否认证 */
     private View layout_my_user;
-    private View iv_my_user_avatar;
-    private View tv_my_user_name;
-    private View tv_my_user_mobile;
+    private ImageView iv_my_user_avatar;
+    private TextView tv_my_user_name;
+    private TextView tv_my_user_mobile;
     private View iv_my_user_logo;
     private View tv_my_go_login;
 
     /* 余额相关 */
     private View layout_my_money;
-    private View tv_my_money_1;
-    private View tv_my_money_2;
-    private View tv_my_money_3;
+    private TextView tv_my_money_1;
+    private TextView tv_my_money_2;
+    private TextView tv_my_money_3;
     private View tv_my_account;
 
     /* 未登录相关 未认证相关 已认证相关 */
@@ -58,6 +66,10 @@ public final class MyFragment extends PagerChildFragment implements View.OnClick
     private View tv_my_order_3;
     private View tv_my_order_4;
     private View tv_my_order_5;
+
+    private View layout_my_evaluation;
+    private View layout_my_help;
+    private View layout_my_customer_service;
 
     @Override
     public int getLayoutId() {
@@ -77,6 +89,12 @@ public final class MyFragment extends PagerChildFragment implements View.OnClick
         tv_my_order_3.setOnClickListener(this);
         tv_my_order_4.setOnClickListener(this);
         tv_my_order_5.setOnClickListener(this);
+
+        layout_my_evaluation.setOnClickListener(this);
+        layout_my_help.setOnClickListener(this);
+        layout_my_customer_service.setOnClickListener(this);
+
+        requestAPI();
     }
 
     @Override
@@ -96,40 +114,64 @@ public final class MyFragment extends PagerChildFragment implements View.OnClick
 
     @Override
     public void onClick(View v) {
-        int id = v.getId();
-        if (id == R.id.iv_my_pencil) {
-
-        } else if (id == R.id.iv_my_share) {
-
-        } else if (id == R.id.iv_my_setting) {
+        if (iv_my_setting == v) {
             HRActivity.start(getContext(), SettingFragment.class);
-        } else if (id == R.id.iv_my_user_avatar) {
+        } else if (iv_my_user_avatar == v) {
 
-        } else if (id == R.id.tv_my_account) {
+        } else if (tv_my_account == v) {
 
-        } else if (id == R.id.tv_my_all_orders) {
+        } else if (tv_my_all_orders == v) {
 
-        } else if (id == R.id.tv_my_order_1) {
+        } else if (tv_my_order_1 == v) {
 
-        } else if (id == R.id.tv_my_order_2) {
+        } else if (tv_my_order_2 == v) {
 
-        } else if (id == R.id.tv_my_order_3) {
+        } else if (tv_my_order_3 == v) {
             updateUI(false, false);
-        } else if (id == R.id.tv_my_order_4) {
+        } else if (tv_my_order_4 == v) {
             updateUI(true, false);
-        } else if (id == R.id.tv_my_order_5) {
+        } else if (tv_my_order_5 == v) {
             updateUI(true, true);
+        } else if (layout_my_evaluation == v) {
+        } else if (layout_my_help == v) {
+        } else if (layout_my_customer_service == v) {
         }
+    }
+
+    private void requestAPI() {
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.balanceInfo())
+                .fragment(this)
+                .clazz(BalanceBean.class)
+                .params("userId", HRUser.getId())
+                .build();
+        NetApi.<BalanceBean>getData(RequestMethod.GET, netOption, new JsonCallback<BalanceBean>(netOption) {
+            @Override
+            public void onSuccess(Response<BalanceBean> response) {
+                updateUI(response.body().data);
+            }
+        });
+    }
+
+    @MainThread
+    private void updateUI(BalanceBean.Data data) {
+        BalanceBean.Data.Balance balance = data.balance;
+        String canExchange = balance.canExchange;
+        String total = balance.total;
+        String willSend = balance.willSend;
+
+        tv_my_money_1.setText(total);
+        tv_my_money_2.setText(willSend);
+        tv_my_money_3.setText(canExchange);
     }
 
     @MainThread
     private void updateUI(boolean isLogin, boolean isAuthorized) {
+        ImageApi.displayImage(iv_my_user_avatar.getContext(), iv_my_user_avatar, HRUser.getHeadUrl());
+        tv_my_user_name.setText(HRUser.getNickName());
+        tv_my_user_mobile.setText(HRUser.getMobile());
         if (isLogin) {
             iv_my_not_login_bg.setVisibility(View.GONE);
             iv_my_login_bg.setVisibility(View.VISIBLE);
-
-            iv_my_pencil.setVisibility(View.VISIBLE);
-            iv_my_share.setVisibility(View.VISIBLE);
 
             iv_my_user_logo.setVisibility(View.VISIBLE);
             tv_my_go_login.setVisibility(View.GONE);
@@ -144,14 +186,9 @@ public final class MyFragment extends PagerChildFragment implements View.OnClick
                 layout_my_unauthorized.setVisibility(View.VISIBLE);
                 layout_my_authorized.setVisibility(View.GONE);
             }
-
-            setTopMargin(layout_my_order, 325F);
         } else {
             iv_my_not_login_bg.setVisibility(View.VISIBLE);
             iv_my_login_bg.setVisibility(View.GONE);
-
-            iv_my_pencil.setVisibility(View.GONE);
-            iv_my_share.setVisibility(View.GONE);
 
             iv_my_user_logo.setVisibility(View.GONE);
             tv_my_go_login.setVisibility(View.VISIBLE);
@@ -161,8 +198,6 @@ public final class MyFragment extends PagerChildFragment implements View.OnClick
             layout_my_not_login.setVisibility(View.VISIBLE);
             layout_my_unauthorized.setVisibility(View.GONE);
             layout_my_authorized.setVisibility(View.GONE);
-
-            setTopMargin(layout_my_order, 245F);
         }
     }
 
@@ -179,9 +214,6 @@ public final class MyFragment extends PagerChildFragment implements View.OnClick
         iv_my_not_login_bg = view.findViewById(R.id.iv_my_not_login_bg);
         iv_my_login_bg = view.findViewById(R.id.iv_my_login_bg);
 
-        layout_my_title = view.findViewById(R.id.layout_my_title);
-        iv_my_pencil = view.findViewById(R.id.iv_my_pencil);
-        iv_my_share = view.findViewById(R.id.iv_my_share);
         iv_my_setting = view.findViewById(R.id.iv_my_setting);
 
         layout_my_user = view.findViewById(R.id.layout_my_user);
@@ -208,5 +240,9 @@ public final class MyFragment extends PagerChildFragment implements View.OnClick
         tv_my_order_3 = view.findViewById(R.id.tv_my_order_3);
         tv_my_order_4 = view.findViewById(R.id.tv_my_order_4);
         tv_my_order_5 = view.findViewById(R.id.tv_my_order_5);
+
+        layout_my_evaluation = view.findViewById(R.id.layout_my_evaluation);
+        layout_my_help = view.findViewById(R.id.layout_my_help);
+        layout_my_customer_service = view.findViewById(R.id.layout_my_customer_service);
     }
 }

@@ -24,7 +24,7 @@ import com.idengyun.usermodule.HRUser;
 import com.lzy.okgo.model.Response;
 
 /**
- * 个人资料界面
+ * 个人资料
  *
  * @author aLang
  */

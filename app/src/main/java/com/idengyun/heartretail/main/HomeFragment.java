@@ -5,10 +5,8 @@ import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +21,7 @@ import com.idengyun.heartretail.goods.GoodsEvaluateFragment;
 import com.idengyun.heartretail.goods.GoodsInfoFragment;
 import com.idengyun.heartretail.goods.GoodsServiceFragment;
 import com.idengyun.heartretail.goods.GoodsSpecFragment;
-import com.idengyun.heartretail.message.NoticeFragment;
+import com.idengyun.heartretail.notice.NoticeFragment;
 
 import java.util.ArrayList;
 

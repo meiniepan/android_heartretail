@@ -38,8 +38,9 @@ public class SpMainConfigConstants {
     }
 
     /* 协议状态更新 */
-    public static String todo5() {
-        return getMainConfigUrl("todo4");
+    public static String todo() {
+        // TODO: 2020/3/11
+        return getMainConfigUrl("todo");
     }
 
     /* ================================== 商品 ================================== */
@@ -82,23 +83,20 @@ public class SpMainConfigConstants {
     /* ================================== 门店 ================================== */
 
     /* 门店列表 */
-    public static String todo6() {
-        // TODO: 2020/3/9
-        return getMainConfigUrl("todo6");
+    public static String shopList() {
+        return getMainConfigUrl("shopList");
     }
 
     /* 门店详情 */
-    public static String todo7() {
-        // TODO: 2020/3/9
-        return getMainConfigUrl("todo7");
+    public static String shopDetail() {
+        return getMainConfigUrl("shopDetail");
     }
 
     /* ================================== 订单 ================================== */
 
     /* 提交订单 */
-    public static String todo8() {
-        // TODO: 2020/3/9
-        return getMainConfigUrl("todo8");
+    public static String commitOrder() {
+        return getMainConfigUrl("commitOrder");
     }
 
     /* 支付方式查询-删除 */
@@ -108,9 +106,8 @@ public class SpMainConfigConstants {
     }
 
     /* 查询用户代销资格 */
-    public static String todo10() {
-        // TODO: 2020/3/9
-        return getMainConfigUrl("todo10");
+    public static String checkProxyState() {
+        return getMainConfigUrl("checkProxyState");
     }
 
     /* 支付参数获取 */
@@ -142,15 +139,13 @@ public class SpMainConfigConstants {
     /* ================================== 常见问题 ================================== */
 
     /* 常见问题分类 */
-    public static String todo15() {
-        // TODO: 2020/3/9
-        return getMainConfigUrl("todo15");
+    public static String questionClassify() {
+        return getMainConfigUrl("questionClassify");
     }
 
     /* 分类问题查询 */
-    public static String todo16() {
-        // TODO: 2020/3/9
-        return getMainConfigUrl("todo16");
+    public static String questionSpecific() {
+        return getMainConfigUrl("questionSpecific");
     }
 
     /* 问题详情 */
@@ -253,50 +248,53 @@ public class SpMainConfigConstants {
 
     /* ================================= 物流 ================================= */
 
-    /* 查看物流) */
-    public static String todo25() {
-        // TODO: 2020/3/9
-        return getMainConfigUrl("todo25");
+    /* 查看物流 */
+    public static String queryShippingOrderId() {
+        return getMainConfigUrl("queryShippingOrderId");
     }
 
     /* 物流详情 */
-    public static String todo26() {
-        // TODO: 2020/3/9
-        return getMainConfigUrl("todo26");
+    public static String queryShippingDetail() {
+        return getMainConfigUrl("queryShippingDetail");
     }
 
     /* 运费接口 */
-    public static String todo27() {
-        // TODO: 2020/3/9
-        return getMainConfigUrl("todo27");
+    public static String calculatePrice() {
+        return getMainConfigUrl("calculatePrice");
     }
 
     /* ================================= 红包 ================================= */
 
     /* 查看红包 */
-    public static String todo28() {
-        // TODO: 2020/3/9
-        return getMainConfigUrl("todo28");
+    public static String packetDetail() {
+        return getMainConfigUrl("packetDetail");
     }
 
     /* 查看红包记录 */
-    public static String todo29() {
-        // TODO: 2020/3/9
-        return getMainConfigUrl("todo29");
+    public static String packetRecord() {
+        return getMainConfigUrl("packetRecord");
     }
 
     /* ================================= 余额 ================================= */
 
     /* 我的余额 */
-    public static String todo30() {
-        // TODO: 2020/3/9
-        return getMainConfigUrl("todo30");
+    public static String balanceInfo() {
+        return getMainConfigUrl("balanceInfo");
     }
 
     /* 查看账单记录 */
-    public static String todo31() {
-        // TODO: 2020/3/9
-        return getMainConfigUrl("todo31");
+    public static String balanceRecord() {
+        return getMainConfigUrl("balanceRecord");
+    }
+
+    /* 提现详情 */
+    public static String balanceRecordDetail() {
+        return getMainConfigUrl("balanceRecordDetail");
+    }
+
+    /* 提现 */
+    public static String exchange() {
+        return getMainConfigUrl("exchange");
     }
 
 }
