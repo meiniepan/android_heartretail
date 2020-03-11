@@ -11,13 +11,14 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.dengyun.baselibrary.utils.SizeUtils;
-import com.dengyun.baselibrary.utils.TimeUtils;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.beans.OrderStatusBean;
 import com.idengyun.statusrecyclerviewlib.RecycleViewDivider;
 import com.idengyun.statusrecyclerviewlib.StatusRecyclerView;
 import com.idengyun.usermodule.utils.SecondsTimer;
+import com.orhanobut.logger.Logger;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -26,7 +27,7 @@ import java.util.List;
  * @date :2020/3/4 0004 16:43
  */
 public class OderStatusListAdapter extends BaseQuickAdapter<OrderStatusBean, BaseViewHolder> {
-    private SecondsTimer timer;
+    private HashMap<String, SecondsTimer> timerMap = new HashMap();
     public OderStatusListAdapter(int layoutResId, @Nullable List<OrderStatusBean> data) {
         super(layoutResId, data);
     }
@@ -64,7 +65,7 @@ public class OderStatusListAdapter extends BaseQuickAdapter<OrderStatusBean, Bas
             startTimer(item.orderId,3700,tv_order_status_time_h,tv_order_status_time_m,tv_order_status_time_s);
         }else if(item.orderStatus == 2){
             ll_surplus_pay_time.setVisibility(View.GONE);
-            ll_advanced_operate.setVisibility(View.VISIBLE);
+            ll_advanced_operate.setVisibility(View.GONE);
             tv_order_status_status.setText("代销中");
         }else if(item.orderStatus == 3){
             ll_surplus_pay_time.setVisibility(View.GONE);
@@ -92,11 +93,11 @@ public class OderStatusListAdapter extends BaseQuickAdapter<OrderStatusBean, Bas
     }
 
     private void startTimer(String orderId, int senconds, TextView tvH, TextView tvM, TextView tvS) {
-
-        if (timer == null) {
-            timer = new SecondsTimer(senconds, new SecondsTimer.Callback() {
+        if (timerMap.get(orderId+"")==null){
+        SecondsTimer timer = new SecondsTimer(senconds, new SecondsTimer.Callback() {
                 @Override
                 public void onTick(long secondsUntilFinished) {
+                    Logger.e("tick"+orderId+"++++"+secondsUntilFinished);
                     int h = (int) (secondsUntilFinished / 3600);
                     int m = (int) (secondsUntilFinished % 3600 / 60);
                     int s = (int) (secondsUntilFinished % 60);
@@ -110,21 +111,37 @@ public class OderStatusListAdapter extends BaseQuickAdapter<OrderStatusBean, Bas
                     cancelOrder(orderId);
                 }
             });
-        }
 
         timer.start();
+        timerMap.put(orderId+"", timer);}
     }
 
     private void cancelOrder(String orderId) {
     }
 
-    private void cancelTimer() {
-        if (timer != null) timer.cancel();
+    private void cancelTimer(BaseViewHolder holder) {
+
+        SecondsTimer timer = timerMap.get(mData.get(holder.getLayoutPosition()).orderId);
+        if (timer!=null){
+            timer.cancel();
+            timerMap.remove(mData.get(holder.getLayoutPosition()).orderId);
+        }
+    }
+
+    @Override
+    public void onViewRecycled(@NonNull BaseViewHolder holder) {
+        super.onViewRecycled(holder);
+        cancelTimer(holder);
     }
 
     @Override
     public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onDetachedFromRecyclerView(recyclerView);
-        cancelTimer();
+        if (timerMap.size() > 0) {
+            for (String orderId : timerMap.keySet()
+            ) {
+                timerMap.get(orderId).cancel();
+            }
+        }
     }
 }

@@ -45,6 +45,7 @@ public class OrderStatusFragment extends BaseFragment {
     List<OrderStatusBean> mData = new ArrayList<>();
     int status;
     private int page = 1;
+    private OderStatusListAdapter adapter;
 
     @Override
     public int getLayoutId() {
@@ -78,7 +79,7 @@ public class OrderStatusFragment extends BaseFragment {
     }
 
     private void initUI() {
-        OderStatusListAdapter adapter = new OderStatusListAdapter(R.layout.item_order_status, mData);
+         adapter = new OderStatusListAdapter(R.layout.item_order_status, mData);
         rsrOrderStatus.setLayoutManager(new LinearLayoutManager(getActivity()));
         rsrOrderStatus.setAdapter(adapter);
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -127,9 +128,10 @@ public class OrderStatusFragment extends BaseFragment {
         });
     }
 
-
     @Override
     public void onDestroyView() {
+        adapter.onDetachedFromRecyclerView(rsrOrderStatus.getRecyclerView());
         super.onDestroyView();
     }
+
 }
