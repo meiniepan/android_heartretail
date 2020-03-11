@@ -13,6 +13,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.dengyun.baselibrary.net.NetApi;
+import com.dengyun.baselibrary.net.NetOption;
+import com.dengyun.baselibrary.net.callback.JsonCallback;
+import com.dengyun.baselibrary.net.constants.RequestMethod;
+import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.bases.PagerChildFragment;
@@ -21,7 +26,11 @@ import com.idengyun.heartretail.goods.GoodsEvaluateFragment;
 import com.idengyun.heartretail.goods.GoodsInfoFragment;
 import com.idengyun.heartretail.goods.GoodsServiceFragment;
 import com.idengyun.heartretail.goods.GoodsSpecFragment;
+import com.idengyun.heartretail.model.response.GoodsListBean;
+import com.idengyun.heartretail.model.response.PersonalDataBean;
 import com.idengyun.heartretail.notice.NoticeFragment;
+import com.idengyun.usermodule.HRUser;
+import com.lzy.okgo.model.Response;
 
 import java.util.ArrayList;
 
@@ -75,6 +84,29 @@ public final class HomeFragment extends PagerChildFragment implements View.OnCli
         } else if (tv_home_notice == v) {
             HRActivity.start(getContext(), NoticeFragment.class);
         }
+    }
+
+    private void requestAPI() {
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.goodsList())
+                .fragment(this)
+                .clazz(GoodsListBean.class)
+                .params("userId", HRUser.getId())
+                .params("goodsType", 0)
+                .params("page", 1)
+                .params("pageSize", 10)
+                .params("sortType", 0)
+                .params("sortStyle", 0)
+                .build();
+        NetApi.<GoodsListBean>getData(netOption, new JsonCallback<GoodsListBean>(netOption) {
+            @Override
+            public void onSuccess(Response<GoodsListBean> response) {
+                updateUI(response.body().data);
+            }
+        });
+    }
+
+    @MainThread
+    private void updateUI(GoodsListBean.Data data) {
     }
 
     @MainThread

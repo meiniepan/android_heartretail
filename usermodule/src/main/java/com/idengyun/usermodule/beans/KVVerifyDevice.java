@@ -14,7 +14,7 @@ public final class KVVerifyDevice {
     public String phoneImei;
     public String identifyCode;
     public String version;
-    public int userId;
+    public String userId;
     public String phoneType;
     public String platform;
 
@@ -25,7 +25,7 @@ public final class KVVerifyDevice {
     public KVVerifyDevice(String phoneImei,
                           String identifyCode,
                           String version,
-                          int userId,
+                          String userId,
                           String phoneType,
                           String platform) {
         this.phoneImei = phoneImei;

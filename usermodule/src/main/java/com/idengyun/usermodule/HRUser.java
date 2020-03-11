@@ -11,8 +11,8 @@ import com.dengyun.baselibrary.utils.Utils;
 public final class HRUser {
 
     /* 获取用户ID */
-    public static int getId() {
-        return SharedPreferencesUtil.getData(Utils.getApp(), HRConst.XML_FILE_NAME_USER_INFO, "id", -1);
+    public static String getId() {
+        return getValueFromUserInfo("id");
     }
 
     /* 获取用户手机号码 */
@@ -36,8 +36,10 @@ public final class HRUser {
     }
 
     /* 不要使用这个 */
-    private static <T> T getValueFromUserInfo(String key) {
+    private static String getValueFromUserInfo(String key) {
         return SharedPreferencesUtil.getData(Utils.getApp(), HRConst.XML_FILE_NAME_USER_INFO, key, "");
     }
 
+    private HRUser() {
+    }
 }

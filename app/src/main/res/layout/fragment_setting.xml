@@ -29,7 +29,7 @@
         android:paddingEnd="15dp">
 
         <TextView
-            android:id="@+id/layout_personal"
+            android:id="@+id/layout_setting_personal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableEnd="@drawable/ic_goods_detail_arrow_dark"
@@ -46,7 +46,7 @@
             android:background="#EEEEEE" />
 
         <TextView
-            android:id="@+id/layout_account"
+            android:id="@+id/layout_setting_account"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableEnd="@drawable/ic_goods_detail_arrow_dark"
@@ -62,8 +62,25 @@
             android:layout_gravity="bottom"
             android:background="#EEEEEE" />
 
+        <TextView
+            android:id="@+id/layout_setting_pay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ic_goods_detail_arrow_dark"
+            android:gravity="center_vertical"
+            android:minHeight="50dp"
+            android:text="支付设置"
+            android:textColor="#ff333333"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_gravity="bottom"
+            android:background="#EEEEEE" />
+
         <LinearLayout
-            android:id="@+id/layout_version"
+            android:id="@+id/layout_setting_version"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="#FFF"
@@ -104,7 +121,7 @@
             android:background="#EEEEEE" />
 
         <TextView
-            android:id="@+id/layout_agreement"
+            android:id="@+id/layout_setting_agreement"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableEnd="@drawable/ic_goods_detail_arrow_dark"
@@ -128,7 +145,7 @@
     <!--        tools:listitem="@layout/fragment_setting_item" />-->
 
     <LinearLayout
-        android:id="@+id/layout_logout"
+        android:id="@+id/layout_setting_logout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
