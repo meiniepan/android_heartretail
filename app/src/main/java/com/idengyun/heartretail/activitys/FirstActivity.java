@@ -122,6 +122,9 @@ public class FirstActivity extends BaseActivity {
 
     /* 跳到订单列表 */
     public void skipOrderList(View view) {
+        OrderListActivity.start(this, 1);
+    } /* 跳到订单列表 */
+    public void skipOrderCommit(View view) {
 //        OrderListActivity.start(this, 1);
         ConfirmOrderActivity.start(this, null);
     }
