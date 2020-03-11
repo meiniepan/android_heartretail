@@ -1,5 +1,6 @@
 package com.idengyun.heartretail.activitys;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -45,6 +46,7 @@ public class OrderListActivity extends BaseActivity {
         return R.layout.activity_order_list;
     }
 
+    @SuppressLint("ResourceType")
     @Override
     protected void initViews(Bundle savedInstanceState) {
         initWhatTabSelect();

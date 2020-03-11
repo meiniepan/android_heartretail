@@ -13,7 +13,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.dengyun.baselibrary.utils.SizeUtils;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.beans.OrderStatusBean;
-import com.idengyun.statusrecyclerviewlib.RecycleViewDivider;
+import com.idengyun.heartretail.widget.RecycleViewDivider;
 import com.idengyun.statusrecyclerviewlib.StatusRecyclerView;
 import com.idengyun.usermodule.utils.SecondsTimer;
 import com.orhanobut.logger.Logger;

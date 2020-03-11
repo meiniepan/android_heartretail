@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.View;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.dengyun.baselibrary.base.activity.BaseActivity;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.adapters.ShopListAdapter;
@@ -76,6 +78,16 @@ public class ShopListActivity extends BaseActivity {
         ShopListAdapter shopListAdapter = new ShopListAdapter(R.layout.item_shoplist,shopListBeans);
         rrvShoplist.setLayoutManager(new LinearLayoutManager(this));
         rrvShoplist.setAdapter(shopListAdapter);
+        shopListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Intent i = new Intent();
+                i.putExtra("result", shopListBeans.get(position).getShopName());
+                setResult(3, i);
+                finish();
+
+            }
+        });
     }
 
 }

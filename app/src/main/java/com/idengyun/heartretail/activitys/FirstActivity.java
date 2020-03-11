@@ -122,7 +122,8 @@ public class FirstActivity extends BaseActivity {
 
     /* 跳到订单列表 */
     public void skipOrderList(View view) {
-        OrderListActivity.start(this, 1);
+//        OrderListActivity.start(this, 1);
+        ConfirmOrderActivity.start(this, null);
     }
 
     /* 跳到地图页面 */
