@@ -16,7 +16,7 @@ public final class LoginBean {
         public int isnewPhoneImei;
 
         public static class User {
-            public int id;
+            public String id;
             public String mobile;
             public String invitationCode;
             public String headUrl;

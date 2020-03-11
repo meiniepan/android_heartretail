@@ -131,7 +131,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="125dp"
-            android:background="@drawable/shape_phone_bind_btn"
+            android:background="@drawable/shape_real_btn_bg"
             android:gravity="center"
             android:minHeight="44dp"
             android:text="下一步"

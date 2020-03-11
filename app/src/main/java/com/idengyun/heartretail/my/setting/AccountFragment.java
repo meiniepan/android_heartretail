@@ -8,6 +8,7 @@ import android.view.View;
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
+import com.idengyun.heartretail.my.setting.account.IdentityFragment;
 import com.idengyun.heartretail.my.setting.account.PasswordFragment;
 import com.idengyun.heartretail.my.setting.account.PhoneFragment;
 import com.idengyun.heartretail.my.setting.account.RealFragment;
@@ -54,7 +55,7 @@ public final class AccountFragment extends BaseFragment implements View.OnClickL
     }
 
     private void startPhoneBindActivity() {
-        HRActivity.start(getContext(), PhoneFragment.class);
+        HRActivity.start(getContext(), IdentityFragment.class);
     }
 
     private void startPwdModifyActivity() {

@@ -53,6 +53,7 @@
                 android:paddingEnd="4dp"
                 android:textColor="#ffffffff"
                 android:textSize="11sp"
+                android:visibility="invisible"
                 app:layout_constraintBaseline_toBaselineOf="@+id/tv_user_name"
                 app:layout_constraintLeft_toRightOf="@+id/tv_user_name"
                 tools:text="LV5" />

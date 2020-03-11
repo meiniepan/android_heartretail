@@ -15,6 +15,7 @@ import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.baselibrary.utils.ToastUtils;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
+import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
 import com.idengyun.usermodule.HRConst;
 import com.idengyun.usermodule.HRUser;
@@ -71,7 +72,7 @@ public final class IdentityFragment extends BaseFragment implements View.OnClick
         } else if (tv_identity_contact_service == v) {
             // TODO: 2020/3/9
         } else if (tv_identity_next == v) {
-            // TODO: 2020/3/9
+            HRActivity.start(getActivity(), PhoneFragment.class);
         }
     }
 

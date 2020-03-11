@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F8F8F8"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="68dp"
+        android:background="@android:color/white"
+        android:paddingTop="24dp">
+
+        <com.dengyun.baselibrary.widgets.toolbar.BaseToolBar
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/basetool_height"
+            app:toolbar_title="支付设置" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="#fff"
+        android:orientation="vertical"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp">
+
+        <TextView
+            android:id="@+id/layout_pay_setting_modify_pwd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ic_goods_detail_arrow_dark"
+            android:gravity="center_vertical"
+            android:minHeight="50dp"
+            android:text="修改支付密码"
+            android:textColor="#ff333333"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_gravity="bottom"
+            android:background="#EEEEEE" />
+
+        <TextView
+            android:id="@+id/layout_pay_setting_forget_pwd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ic_goods_detail_arrow_dark"
+            android:gravity="center_vertical"
+            android:minHeight="50dp"
+            android:text="忘记支付密码"
+            android:textColor="#ff333333"
+            android:textSize="16sp" />
+    </LinearLayout>
+</LinearLayout>
+
+

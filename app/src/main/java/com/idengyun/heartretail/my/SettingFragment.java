@@ -12,6 +12,7 @@ import com.dengyun.baselibrary.utils.phoneapp.AppUtils;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.my.setting.AccountFragment;
+import com.idengyun.heartretail.my.setting.PaySettingFragment;
 import com.idengyun.heartretail.my.setting.PersonalFragment;
 import com.idengyun.heartretail.my.setting.UserAgreeFragment;
 import com.idengyun.heartretail.my.setting.VersionFragment;
@@ -23,13 +24,14 @@ import com.idengyun.heartretail.my.setting.VersionFragment;
  */
 public final class SettingFragment extends BaseFragment implements View.OnClickListener {
 
-    private View layout_personal;
-    private View layout_account;
-    private View layout_version;
+    private View layout_setting_personal;
+    private View layout_setting_account;
+    private View layout_setting_pay;
+    private View layout_setting_version;
     private View iv_setting_new;
     private TextView tv_setting_version;
-    private View layout_agreement;
-    private View layout_logout;
+    private View layout_setting_agreement;
+    private View layout_setting_logout;
 
     @Override
     public int getLayoutId() {
@@ -50,15 +52,17 @@ public final class SettingFragment extends BaseFragment implements View.OnClickL
     @Override
     public void onClick(View v) {
         /* 个人资料 账号管理 当前版本 用户协议 退出登录 */
-        if (layout_personal == v) {
+        if (layout_setting_personal == v) {
             startPersonalActivity();
-        } else if (layout_account == v) {
+        } else if (layout_setting_account == v) {
             startAccountActivity();
-        } else if (layout_version == v) {
+        } else if (layout_setting_pay == v) {
+            startPaySettingActivity();
+        } else if (layout_setting_version == v) {
             startVersionActivity();
-        } else if (layout_agreement == v) {
+        } else if (layout_setting_agreement == v) {
             startAgreementActivity();
-        } else if (layout_logout == v) {
+        } else if (layout_setting_logout == v) {
             logout();
         }
     }
@@ -69,11 +73,15 @@ public final class SettingFragment extends BaseFragment implements View.OnClickL
     }
 
     private void startAgreementActivity() {
-        HRActivity.showFragment(getActivity(), UserAgreeFragment.class.getName());
+        HRActivity.start(getActivity(), UserAgreeFragment.class);
     }
 
     private void startVersionActivity() {
-        HRActivity.showFragment(getActivity(), VersionFragment.class.getName());
+        HRActivity.start(getActivity(), VersionFragment.class);
+    }
+
+    private void startPaySettingActivity() {
+        HRActivity.start(getContext(), PaySettingFragment.class);
     }
 
     private void startAccountActivity() {
@@ -85,18 +93,20 @@ public final class SettingFragment extends BaseFragment implements View.OnClickL
     }
 
     private void findViewById(View view) {
-        layout_personal = view.findViewById(R.id.layout_personal);
-        layout_account = view.findViewById(R.id.layout_account);
-        layout_version = view.findViewById(R.id.layout_version);
+        layout_setting_personal = view.findViewById(R.id.layout_setting_personal);
+        layout_setting_account = view.findViewById(R.id.layout_setting_account);
+        layout_setting_pay = view.findViewById(R.id.layout_setting_pay);
+        layout_setting_version = view.findViewById(R.id.layout_setting_version);
         iv_setting_new = view.findViewById(R.id.iv_setting_new);
         tv_setting_version = view.findViewById(R.id.tv_setting_version);
-        layout_agreement = view.findViewById(R.id.layout_agreement);
-        layout_logout = view.findViewById(R.id.layout_logout);
+        layout_setting_agreement = view.findViewById(R.id.layout_setting_agreement);
+        layout_setting_logout = view.findViewById(R.id.layout_setting_logout);
 
-        layout_personal.setOnClickListener(this);
-        layout_account.setOnClickListener(this);
-        layout_version.setOnClickListener(this);
-        layout_agreement.setOnClickListener(this);
-        layout_logout.setOnClickListener(this);
+        layout_setting_personal.setOnClickListener(this);
+        layout_setting_account.setOnClickListener(this);
+        layout_setting_pay.setOnClickListener(this);
+        layout_setting_version.setOnClickListener(this);
+        layout_setting_agreement.setOnClickListener(this);
+        layout_setting_logout.setOnClickListener(this);
     }
 }
