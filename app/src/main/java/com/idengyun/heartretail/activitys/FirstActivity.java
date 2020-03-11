@@ -8,7 +8,10 @@ import android.widget.TextView;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationListener;
+import com.amap.api.maps.model.LatLng;
+import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.core.PoiItem;
+import com.amap.api.services.help.Tip;
 import com.amap.api.services.poisearch.PoiResult;
 import com.amap.api.services.poisearch.PoiSearch;
 import com.dengyun.baselibrary.base.activity.BaseActivity;
@@ -21,11 +24,16 @@ import com.idengyun.heartretail.MainActivity;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.shop.ShopListActivity;
 import com.idengyun.maplibrary.MyMapActivity;
+import com.idengyun.maplibrary.beans.EventChooseAddrTip;
 import com.idengyun.maplibrary.utils.AmapLocationUtil;
+import com.idengyun.maplibrary.utils.AmapPointUtil;
 import com.idengyun.maplibrary.utils.PoiListComparator;
 import com.idengyun.maplibrary.utils.PoiSearchUtil;
 import com.idengyun.usermodule.LoginActivity;
 import com.orhanobut.logger.Logger;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,6 +45,7 @@ public class FirstActivity extends BaseActivity {
     private TextView tvFirstLocation;
     private String cityName;
     private String nearShop;
+    private String poiId;
 
     @Override
     protected int getLayoutId() {
@@ -45,9 +54,9 @@ public class FirstActivity extends BaseActivity {
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
+        registBus();
         tvFirstLocation = findViewById(R.id.tv_first_location);
         startLocation();
-
     }
 
     @Override
@@ -55,6 +64,15 @@ public class FirstActivity extends BaseActivity {
         super.onDestroy();
         amapLocationUtil.stopLocation();
         amapLocationUtil.onDestroy();
+    }
+
+    /*选择完地址*/
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(EventChooseAddrTip eventChooseAddrTip) {
+        cityName = eventChooseAddrTip.cityName;
+        nearShop = eventChooseAddrTip.choosePoiName;
+        poiId = eventChooseAddrTip.poiId;
+        tvFirstLocation.setText(nearShop);
     }
 
     private void startLocation() {
@@ -73,6 +91,7 @@ public class FirstActivity extends BaseActivity {
                                 if (!ListUtils.isEmpty(pois) && null != tvFirstLocation) {
                                     cityName = pois.get(0).getCityName();
                                     nearShop = pois.get(0).getTitle();
+                                    poiId = pois.get(0).getPoiId();
                                     tvFirstLocation.setText(pois.get(0).getTitle());
                                 }
                             }
@@ -103,15 +122,16 @@ public class FirstActivity extends BaseActivity {
 
     /* 跳到订单列表 */
     public void skipOrderList(View view) {
-        OrderListActivity.start(this, 1);
+//        OrderListActivity.start(this, 1);
+        ConfirmOrderActivity.start(this, null);
     }
 
     /* 跳到地图页面 */
     public void skipToMap(View view) {
         if (TextUtils.isEmpty(cityName)) {
             ToastUtils.showShort("还没有定位成功");
-        } else {
-            MyMapActivity.start(this, cityName, nearShop);
+        }else {
+            MyMapActivity.start(this,cityName,nearShop,poiId);
         }
     }
 }
