@@ -17,7 +17,12 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.idengyun.maplibrary.R;
 import com.idengyun.maplibrary.beans.CityBean;
+import com.idengyun.maplibrary.beans.EventChooseAddrTip;
+
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -62,6 +67,7 @@ public class CityListActivity extends BaseActivity {
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
+        registBus();
         tvMapSelectCity = findViewById(R.id.tv_map_select_city);
         tvMapSelectAddr = findViewById(R.id.tv_map_select_addr);
         sortListView = (ListView) findViewById(R.id.country_lvcountry);
@@ -75,6 +81,12 @@ public class CityListActivity extends BaseActivity {
         }.getType());
         listCity.addAll(apiBean.getData());
         initViews();
+    }
+
+    /*选择完地址*/
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(EventChooseAddrTip eventChooseAddrTip) {
+       this.finish();
     }
 
 
@@ -115,7 +127,8 @@ public class CityListActivity extends BaseActivity {
                 GlobalProperty.getInstance().setProvince("");
                 GlobalProperty.getInstance().setDistrict("");
 
-                tvMapSelectCity.setText(sourceDateList.get(position).getName());
+                cityName = sourceDateList.get(position).getName();
+                tvMapSelectCity.setText(cityName);
 
 
             }
@@ -170,5 +183,19 @@ public class CityListActivity extends BaseActivity {
 
     public void back(View view) {
         this.finish();
+    }
+
+    /**
+     * @param view 点击选择城市按钮
+     */
+    public void chooseCity(View view) {
+
+    }
+
+    /**
+     * @param view 点击选择地址按钮
+     */
+    public void chooseAddr(View view) {
+        ChooseAddrActivity.start(this,cityName);
     }
 }

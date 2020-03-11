@@ -51,14 +51,17 @@
 
         <TextView
             android:id="@+id/tv_map_select_addr"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="12dp"
             android:onClick="chooseAddr"
-            android:text="可诺丹婷"
             android:textColor="#333333"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:hint="搜索小区、学校、大厦等" />
     </LinearLayout>
 
 </RelativeLayout>

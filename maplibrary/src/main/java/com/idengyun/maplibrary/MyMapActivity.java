@@ -6,18 +6,34 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
+import android.view.animation.LinearInterpolator;
 import android.widget.TextView;
 
 import com.amap.api.maps.AMap;
+import com.amap.api.maps.CameraUpdate;
+import com.amap.api.maps.CameraUpdateFactory;
+import com.amap.api.maps.model.CameraPosition;
+import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.Marker;
+import com.amap.api.maps.model.MarkerOptions;
+import com.amap.api.maps.model.animation.Animation;
+import com.amap.api.maps.model.animation.EmergeAnimation;
+import com.amap.api.maps.model.animation.RotateAnimation;
+import com.amap.api.maps.model.animation.TranslateAnimation;
+import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.core.PoiItem;
+import com.amap.api.services.help.Tip;
 import com.amap.api.services.poisearch.PoiResult;
 import com.amap.api.services.poisearch.PoiSearch;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.dengyun.baselibrary.base.activity.BaseActivity;
 import com.dengyun.baselibrary.utils.ListUtils;
 import com.dengyun.baselibrary.utils.SizeUtils;
+import com.idengyun.maplibrary.beans.EventChooseAddrTip;
+import com.idengyun.maplibrary.citylist.ChooseAddrActivity;
 import com.idengyun.maplibrary.citylist.CityListActivity;
 import com.idengyun.maplibrary.utils.AmapLocationUtil;
+import com.idengyun.maplibrary.utils.AmapPointUtil;
 import com.idengyun.maplibrary.utils.PoiListComparator;
 import com.idengyun.maplibrary.utils.PoiSearchUtil;
 import com.idengyun.maplibrary.view.DyMapView;
@@ -25,6 +41,9 @@ import com.idengyun.maplibrary.view.PoiScrollLayout;
 import com.idengyun.maplibrary.view.PoiScrollRecyclerView;
 import com.idengyun.statusrecyclerviewlib.RecycleViewDivider;
 import com.orhanobut.logger.Logger;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -73,6 +92,7 @@ public class MyMapActivity extends BaseActivity {
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
+        registBus();
         //findview
         mMapView = findViewById(R.id.map);
         tvMapSelectCity = findViewById(R.id.tv_map_select_city);
@@ -136,18 +156,24 @@ public class MyMapActivity extends BaseActivity {
         mMapView.onSaveInstanceState(outState);
     }
 
+    /*选择完地址*/
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(EventChooseAddrTip eventChooseAddrTip) {
+        // TODO: 2020-03-11
+        Tip tip = eventChooseAddrTip.chooseTip;
+        LatLonPoint point = tip.getPoint();
+        LatLng latLng = new LatLng(point.getLatitude(),point.getLongitude());
+        //绘制点
+        AmapPointUtil.drawOnePoint(aMap,latLng,tip.getName(),tip.getDistrict());
+
+    }
+
     public void back(View view) {
         this.finish();
     }
 
-    private final int minBottomHeight = SizeUtils.dp2px(192);
-    private final int maxBottomHeight = SizeUtils.dp2px(392);
-
-    private int bottomPoiHeight;
 
     private void initPoiList() {
-        bottomPoiHeight = minBottomHeight;
-
         rvMapPoi.setLayoutManager(new LinearLayoutManager(this));
         rvMapPoi.addItemDecoration(new RecycleViewDivider(this, SizeUtils.dp2px(10)));
         poiListAdapter = new PoiListAdapter(R.layout.item_map_poi,pois);
@@ -205,5 +231,6 @@ public class MyMapActivity extends BaseActivity {
      * @param view 点击选择地址按钮
      */
     public void chooseAddr(View view) {
+        ChooseAddrActivity.start(this,cityName);
     }
 }

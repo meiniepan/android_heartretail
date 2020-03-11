@@ -38,4 +38,5 @@ dependencies {
     api 'com.amap.api:search:7.1.0'
     //高德地图--定位
     api 'com.amap.api:location:4.9.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
 }

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".citylist.ChooseAddrActivity">
+    <RelativeLayout android:id="@+id/rl_map_title"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/white"
+        android:elevation="10dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
+            android:drawableStart="@drawable/base_back_toolbar"
+            android:drawablePadding="8dp"
+            android:gravity="center_vertical"
+            android:onClick="back"
+            android:text="返回"
+            android:textColor="#333333"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:id="@+id/ll_map_select_addr"
+            android:layout_width="277dp"
+            android:layout_height="32dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/shape_map_title"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_map_select_city"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="9dp"
+                android:drawableEnd="@drawable/ic_map_up"
+                android:drawablePadding="23dp"
+                android:gravity="center_vertical"
+                android:onClick="chooseCity"
+                android:text="北京"
+                android:textColor="#333333"
+                android:textSize="14sp" />
+            <View
+                android:layout_width="1dp"
+                android:layout_height="22dp"
+                android:layout_gravity="center_vertical"
+                android:background="#ffd8d8d8" />
+            <EditText
+                android:id="@+id/et_map_select_addr"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:layout_marginStart="12dp"
+                android:textColor="#333333"
+                android:textSize="14sp"
+                android:hint="搜索小区、学校、大厦等" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_addr_recommend"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"/>
+
+</LinearLayout>
