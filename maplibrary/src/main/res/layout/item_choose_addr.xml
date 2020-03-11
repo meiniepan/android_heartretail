@@ -9,7 +9,7 @@
         android:layout_gravity="center_vertical"
         android:maxLines="2"
         android:textSize="14sp"
-        android:textColor="@color/gray333"
+        android:textColor="@color/gray999"
         android:text="可诺丹婷（大族广场店）"/>
 
 </LinearLayout>

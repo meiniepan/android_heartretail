@@ -1,6 +1,7 @@
 package com.idengyun.maplibrary;
 
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -16,7 +17,8 @@ import java.util.List;
  * @CreateDate: 2020-03-09 15:46
  */
 public class PoiListAdapter extends BaseQuickAdapter<PoiItem, BaseViewHolder> {
-    private int currentIndex = 0;
+    //当前选中的poi id
+    private String currentPoiId;
     public PoiListAdapter(int layoutResId, @Nullable List<PoiItem> data) {
         super(layoutResId, data);
     }
@@ -26,10 +28,15 @@ public class PoiListAdapter extends BaseQuickAdapter<PoiItem, BaseViewHolder> {
         helper.setText(R.id.tv_poi_title,item.getTitle());
         helper.setText(R.id.tv_poi_addr,item.getSnippet());
         TextView tvPoiCurrent = helper.getView(R.id.tv_poi_current);
-        tvPoiCurrent.setVisibility(helper.getAdapterPosition()==currentIndex? View.VISIBLE:View.GONE);
+
+        if (!TextUtils.isEmpty(currentPoiId) && currentPoiId.equals(item.getPoiId())){
+            tvPoiCurrent.setVisibility(View.VISIBLE);
+        }else {
+            tvPoiCurrent.setVisibility(View.GONE);
+        }
     }
 
-    public void setCurrentIndex(int currentIndex){
-        this.currentIndex = currentIndex;
+    public void setCurrentPoiId(String currentPoiId){
+        this.currentPoiId = currentPoiId;
     }
 }

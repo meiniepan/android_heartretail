@@ -54,6 +54,10 @@ public class CityListActivity extends BaseActivity {
     private PinyinComparator pinyinComparator;
 
 
+    /**
+     * 从地图页面跳过来要带着城市名称
+     * @param city
+     */
     public static void start(Context context, String city) {
         Intent starter = new Intent(context, CityListActivity.class);
         starter.putExtra("cityName", city);
@@ -73,14 +77,27 @@ public class CityListActivity extends BaseActivity {
         sortListView = (ListView) findViewById(R.id.country_lvcountry);
         sideBar = (SideBar) findViewById(R.id.sidrbar);
         dialog = (TextView) findViewById(R.id.dialog);
-
-        cityName = getIntent().getStringExtra("cityName");
-        tvMapSelectCity.setText(cityName);
+        //初始化cityName
+        initCityName();
 
         ApiBean<List<CityBean>> apiBean = new Gson().fromJson(CityList.cityjson, new TypeToken<ApiBean<List<CityBean>>>() {
         }.getType());
         listCity.addAll(apiBean.getData());
         initViews();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        initCityName();
+    }
+
+    /**
+     * 初始化城市名
+     */
+    private void initCityName() {
+        cityName = getIntent().getStringExtra("cityName");
+        tvMapSelectCity.setText(cityName);
     }
 
     /*选择完地址*/

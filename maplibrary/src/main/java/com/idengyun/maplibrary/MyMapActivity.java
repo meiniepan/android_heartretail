@@ -42,6 +42,7 @@ import com.idengyun.maplibrary.view.PoiScrollRecyclerView;
 import com.idengyun.statusrecyclerviewlib.RecycleViewDivider;
 import com.orhanobut.logger.Logger;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -63,9 +64,7 @@ public class MyMapActivity extends BaseActivity {
     private AMap aMap;
 
     //从上个页面传过来的定位城市和最近的店
-    private String cityName,nearShop;
-    //当前选中的poi数据下标
-    private int currentIndex = 0;
+    private String cityName,nearShop,poiId;
 
     //poi数据列表适配器
     private PoiListAdapter poiListAdapter;
@@ -78,10 +77,11 @@ public class MyMapActivity extends BaseActivity {
      * @param cityName  定位的城市名称
      * @param nearShop  定位的推荐最近的店铺
      */
-    public static void start(Context context,String cityName,String nearShop) {
+    public static void start(Context context,String cityName,String nearShop,String poiId) {
         Intent starter = new Intent(context, MyMapActivity.class);
         starter.putExtra("cityName",cityName);
         starter.putExtra("nearShop",nearShop);
+        starter.putExtra("poiId",poiId);
         context.startActivity(starter);
     }
 
@@ -103,6 +103,7 @@ public class MyMapActivity extends BaseActivity {
         //getIntent
         cityName = getIntent().getStringExtra("cityName");
         nearShop = getIntent().getStringExtra("nearShop");
+        poiId = getIntent().getStringExtra("poiId");
 
         //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，创建地图
         mMapView.onCreate(savedInstanceState);
@@ -159,13 +160,12 @@ public class MyMapActivity extends BaseActivity {
     /*选择完地址*/
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(EventChooseAddrTip eventChooseAddrTip) {
-        // TODO: 2020-03-11
-        Tip tip = eventChooseAddrTip.chooseTip;
+        this.finish();
+        /*Tip tip = eventChooseAddrTip.chooseTip;
         LatLonPoint point = tip.getPoint();
         LatLng latLng = new LatLng(point.getLatitude(),point.getLongitude());
         //绘制点
-        AmapPointUtil.drawOnePoint(aMap,latLng,tip.getName(),tip.getDistrict());
-
+        AmapPointUtil.drawOnePoint(aMap,latLng,tip.getName(),tip.getDistrict());*/
     }
 
     public void back(View view) {
@@ -181,8 +181,10 @@ public class MyMapActivity extends BaseActivity {
         poiListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                currentIndex = position;
-                tvMapSelectAddr.setText(pois.get(currentIndex).getTitle());
+                PoiItem poiItem = pois.get(position);
+                EventChooseAddrTip eventChooseAddrTip = new EventChooseAddrTip(cityName,poiItem.getPoiId(),pois.get(position).getTitle());
+                EventBus.getDefault().post(eventChooseAddrTip);
+                MyMapActivity.this.finish();
             }
         });
     }
@@ -203,10 +205,9 @@ public class MyMapActivity extends BaseActivity {
                                 ArrayList<PoiItem> resultPois = poiResult.getPois();
                                 if (!ListUtils.isEmpty(resultPois)){
                                     Collections.sort(resultPois,new PoiListComparator());
-                                    currentIndex = 0;
                                     pois.clear();
                                     pois.addAll(resultPois);
-                                    poiListAdapter.setCurrentIndex(currentIndex);
+                                    poiListAdapter.setCurrentPoiId(poiId);
                                     poiListAdapter.notifyDataSetChanged();
                                 }
                             }

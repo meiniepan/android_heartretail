@@ -75,8 +75,7 @@ public class ChooseAddrActivity extends BaseActivity {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Tip tip = tips.get(position);
-                EventChooseAddrTip eventChooseAddrTip = new EventChooseAddrTip();
-                eventChooseAddrTip.chooseTip = tip;
+                EventChooseAddrTip eventChooseAddrTip = new EventChooseAddrTip(cityName,tip.getPoiID(),tip.getName());
                 EventBus.getDefault().post(eventChooseAddrTip);
                 ChooseAddrActivity.this.finish();
             }
@@ -102,6 +101,7 @@ public class ChooseAddrActivity extends BaseActivity {
                     searchPoiTips(addr);
                 }else {
                     tips.clear();
+                    chooseAddrAdapter.setSearchStr(null);
                     chooseAddrAdapter.notifyDataSetChanged();
                 }
             }
@@ -120,6 +120,7 @@ public class ChooseAddrActivity extends BaseActivity {
                             tips.add(list.get(j));
                         }
                     }
+                    chooseAddrAdapter.setSearchStr(newStr);
                     chooseAddrAdapter.notifyDataSetChanged();
                 }
             }
@@ -134,7 +135,7 @@ public class ChooseAddrActivity extends BaseActivity {
      * @param view 点击选择城市按钮
      */
     public void chooseCity(View view) {
-        //这个页面是从城市选择页面或者地图页面过来的，所以点击这个按钮只需关闭本页面就行了
+        CityListActivity.start(this,cityName);
         finish();
     }
 }
