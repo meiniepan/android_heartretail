@@ -28,9 +28,12 @@ import com.dengyun.baselibrary.utils.Utils;
 import com.dengyun.splashmodule.R;
 import com.dengyun.splashmodule.beans.MainConfig;
 import com.dengyun.splashmodule.beans.MainUrlConstants;
+import com.dengyun.splashmodule.beans.ProtocolConfigs;
 import com.dengyun.splashmodule.beans.UrlConfigBean;
 import com.dengyun.splashmodule.config.GuidePicData;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
+import com.dengyun.splashmodule.config.SpProtocol;
+import com.dengyun.splashmodule.utils.SaveMainConfigUtil;
 import com.google.gson.reflect.TypeToken;
 import com.lzy.okgo.model.Response;
 
@@ -95,7 +98,23 @@ public class LeadFragment1 extends BaseFragment {
                 @Override
                 public void onSuccess(Response<ApiBean<MainConfig>> response) {
                     //保存本地MainConfig配置url
-                    saveLocalMainConfig(response.body().data);
+                    final MainConfig mainConfigApiBean = response.body().data;
+                    RxSchedulers.doTask(getMyActivity(), new RxSchedulers.Task() {
+                        @Override
+                        public void doOnIOThread() {
+                            if (null!=mainConfigApiBean && !ListUtils.isEmpty(mainConfigApiBean.urlConfig)){
+                                SaveMainConfigUtil.saveMainBean(mainConfigApiBean);
+                            }
+                        }
+
+                        @Override
+                        public void doOnUIThread() {
+                            int interest = SpUserConstants.getInterest();
+                            int whatFragment = interest <= 0 ? 0 : (interest - 1);
+                            ARouter.getInstance().build(RouterPathConfig.app_FirstActivity).withInt("whatFragment",whatFragment).navigation();
+                            getActivity().finish();
+                        }
+                    });
                 }
             });
             return false;
@@ -103,36 +122,5 @@ public class LeadFragment1 extends BaseFragment {
         return true;
     }
 
-    /**
-     * 将主配置保存在本地sp中
-     */
-    private void saveLocalMainConfig(final MainConfig mainConfigApiBean){
-        RxSchedulers.doTask(this, new RxSchedulers.Task() {
-            @Override
-            public void doOnIOThread() {
-                if (null!=mainConfigApiBean && !ListUtils.isEmpty(mainConfigApiBean.urlConfig)){
-                    saveMainBean(mainConfigApiBean);
-                }
-            }
-
-            @Override
-            public void doOnUIThread() {
-                int interest = SpUserConstants.getInterest();
-                int whatFragment = interest <= 0 ? 0 : (interest - 1);
-                ARouter.getInstance().build(RouterPathConfig.app_FirstActivity).withInt("whatFragment",whatFragment).navigation();
-                getActivity().finish();
-            }
-        });
-    }
-
-    private void saveMainBean(MainConfig mainConfig){
-        for (int i = 0; i < mainConfig.urlConfig.size(); i++) {
-            UrlConfigBean urlConfigBean = mainConfig.urlConfig.get(i);
-            SharedPreferencesUtil.saveData(Utils.getApp(),
-                    SpMainConfigConstants.spFileName,
-                    urlConfigBean.urlCode,
-                    urlConfigBean.urlHead+urlConfigBean.urlTail);
-        }
-    }
 
 }
