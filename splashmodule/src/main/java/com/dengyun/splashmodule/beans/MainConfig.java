@@ -7,5 +7,8 @@ import java.util.List;
  */
 
 public class MainConfig {
+    //Url集合
     public List<UrlConfigBean> urlConfig;
+    //协议集合
+    public List<ProtocolConfigs> protocolConfigs;
 }
