@@ -13,6 +13,8 @@ import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.my.setting.AccountFragment;
 import com.idengyun.heartretail.my.setting.PersonalFragment;
+import com.idengyun.heartretail.my.setting.UserAgreeFragment;
+import com.idengyun.heartretail.my.setting.VersionFragment;
 
 /**
  * 设置界面
@@ -24,6 +26,7 @@ public final class SettingFragment extends BaseFragment implements View.OnClickL
     private View layout_personal;
     private View layout_account;
     private View layout_version;
+    private View iv_setting_new;
     private TextView tv_setting_version;
     private View layout_agreement;
     private View layout_logout;
@@ -62,17 +65,15 @@ public final class SettingFragment extends BaseFragment implements View.OnClickL
 
     private void logout() {
         // TODO: 2020/3/6
-        ToastUtils.showShort("待做...");
+        ToastUtils.showShort("TODO...");
     }
 
     private void startAgreementActivity() {
-        // TODO: 2020/3/6
-        ToastUtils.showShort("待做...");
+        HRActivity.showFragment(getActivity(), UserAgreeFragment.class.getName());
     }
 
     private void startVersionActivity() {
-        // TODO: 2020/3/6
-        ToastUtils.showShort("待做...");
+        HRActivity.showFragment(getActivity(), VersionFragment.class.getName());
     }
 
     private void startAccountActivity() {
@@ -87,6 +88,7 @@ public final class SettingFragment extends BaseFragment implements View.OnClickL
         layout_personal = view.findViewById(R.id.layout_personal);
         layout_account = view.findViewById(R.id.layout_account);
         layout_version = view.findViewById(R.id.layout_version);
+        iv_setting_new = view.findViewById(R.id.iv_setting_new);
         tv_setting_version = view.findViewById(R.id.tv_setting_version);
         layout_agreement = view.findViewById(R.id.layout_agreement);
         layout_logout = view.findViewById(R.id.layout_logout);

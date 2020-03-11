@@ -1,10 +1,12 @@
 package com.idengyun.heartretail.goods;
 
+import android.arch.lifecycle.Observer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +33,7 @@ import java.util.List;
 public final class GoodsServiceFragment extends BaseFragment implements View.OnClickListener {
 
     private RecyclerView recycler_view;
-    private final ArrayList<ProtocolsBean.Data> serviceItems = new ArrayList<>();
+
     private ServiceAdapter serviceAdapter;
 
     @Override
@@ -49,10 +51,29 @@ public final class GoodsServiceFragment extends BaseFragment implements View.OnC
         super.onActivityCreated(savedInstanceState);
         serviceAdapter = new ServiceAdapter();
         recycler_view.setAdapter(serviceAdapter);
-        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.goodsDetail())
+
+        GDViewModel.observe(getActivity(), this, new Observer<GoodsDetailBean.Data>() {
+            @Override
+            public void onChanged(@Nullable GoodsDetailBean.Data data) {
+                if (data == null) return;
+                List<GoodsDetailBean.Data.Protocol> protocolList = data.protocolList;
+                if (protocolList != null) {
+                    int[] protocolIds = new int[protocolList.size()];
+                    for (int i = 0; i < protocolList.size(); i++) {
+                        GoodsDetailBean.Data.Protocol protocol = protocolList.get(i);
+                        protocolIds[i] = protocol.protocolId;
+                    }
+                    if (protocolIds.length > 0) requestAPI(protocolIds);
+                }
+            }
+        });
+    }
+
+    private void requestAPI(int[] protocolIds) {
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.protocolDetail())
                 .fragment(this)
                 .clazz(ProtocolsBean.class)
-                .params("protocolIds", new int[]{1, 2})
+                .params("protocolIds", protocolIds)
                 .build();
         NetApi.<ProtocolsBean>getData(netOption, new JsonCallback<ProtocolsBean>(netOption) {
             @Override
@@ -70,7 +91,7 @@ public final class GoodsServiceFragment extends BaseFragment implements View.OnC
     }
 
     private void updateUI(List<ProtocolsBean.Data> data) {
-        serviceItems.addAll(data);
+        serviceAdapter.serviceItems.addAll(data);
         serviceAdapter.notifyDataSetChanged();
     }
 
@@ -79,8 +100,9 @@ public final class GoodsServiceFragment extends BaseFragment implements View.OnC
         view.setOnClickListener(this);
     }
 
-    private class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ServiceHolder> {
+    private static class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ServiceHolder> {
         private LayoutInflater inflater;
+        final ArrayList<ProtocolsBean.Data> serviceItems = new ArrayList<>();
 
         @NonNull
         @Override
@@ -100,7 +122,7 @@ public final class GoodsServiceFragment extends BaseFragment implements View.OnC
             return serviceItems.size();
         }
 
-        private class ServiceHolder extends RecyclerView.ViewHolder {
+        private static class ServiceHolder extends RecyclerView.ViewHolder {
 
             private TextView tv_goods_service_title;
             private TextView tv_goods_service_content;
@@ -114,7 +136,7 @@ public final class GoodsServiceFragment extends BaseFragment implements View.OnC
                 String protocolName = data.protocolName;
                 String protocolContent = data.protocolContent;
                 tv_goods_service_title.setText(protocolName);
-                tv_goods_service_content.setText(protocolContent);
+                tv_goods_service_content.setText(Html.fromHtml(protocolContent));
             }
 
             private void findViewById(@NonNull View itemView) {

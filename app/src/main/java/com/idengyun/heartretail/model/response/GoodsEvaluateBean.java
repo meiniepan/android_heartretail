@@ -14,8 +14,10 @@ public final class GoodsEvaluateBean {
 
     public static class Data {
         public List<Evaluation> evaluationList;
-        public int evaluationCounts;
         public String praiseRate;
+        public int current;
+        public int pages;
+        public int total;
 
         public static class Evaluation {
             public int commentId;

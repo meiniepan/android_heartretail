@@ -73,7 +73,7 @@ public final class GoodsEvaluateFragment extends BaseFragment {
 
     @MainThread
     private void updateUI(GoodsEvaluateBean.Data data) {
-        int evaluationCounts = data.evaluationCounts;
+        int evaluationCounts = data.total;
         String praiseRate = data.praiseRate;
         List<GoodsEvaluateBean.Data.Evaluation> evaluationList = data.evaluationList;
 

@@ -87,8 +87,8 @@ public class FirstActivity extends BaseActivity {
                             @Override
                             public void onPoiSearched(PoiResult poiResult, int i) {
                                 ArrayList<PoiItem> pois = poiResult.getPois();
-                                Collections.sort(pois,new PoiListComparator());
-                                if (!ListUtils.isEmpty(pois) && null!=tvFirstLocation){
+                                Collections.sort(pois, new PoiListComparator());
+                                if (!ListUtils.isEmpty(pois) && null != tvFirstLocation) {
                                     cityName = pois.get(0).getCityName();
                                     nearShop = pois.get(0).getTitle();
                                     poiId = pois.get(0).getPoiId();
@@ -127,7 +127,7 @@ public class FirstActivity extends BaseActivity {
 
     /* 跳到地图页面 */
     public void skipToMap(View view) {
-        if (TextUtils.isEmpty(cityName)){
+        if (TextUtils.isEmpty(cityName)) {
             ToastUtils.showShort("还没有定位成功");
         }else {
             MyMapActivity.start(this,cityName,nearShop,poiId);

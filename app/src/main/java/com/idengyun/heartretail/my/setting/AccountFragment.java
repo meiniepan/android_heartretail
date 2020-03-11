@@ -13,7 +13,7 @@ import com.idengyun.heartretail.my.setting.account.PhoneFragment;
 import com.idengyun.heartretail.my.setting.account.RealFragment;
 
 /**
- * 账号管理界面
+ * 账号管理
  *
  * @author aLang
  */

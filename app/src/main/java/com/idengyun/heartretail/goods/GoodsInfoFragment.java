@@ -2,13 +2,13 @@ package com.idengyun.heartretail.goods;
 
 import android.arch.lifecycle.Observer;
 import android.content.Context;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.NestedScrollView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,6 +60,7 @@ public final class GoodsInfoFragment extends BaseFragment implements View.OnClic
     private TextView tv_goods_service;
 
     /* 用户评价 */
+    private View layout_goods_info_evaluate_header;
     private TextView tv_user_favorable_rate;
     private ImageView iv_user_avatar;
     private TextView tv_user_name;
@@ -106,7 +107,9 @@ public final class GoodsInfoFragment extends BaseFragment implements View.OnClic
         GEViewModel.observe(activity, this, new Observer<GoodsEvaluateBean.Data>() {
             @Override
             public void onChanged(@Nullable GoodsEvaluateBean.Data data) {
-                if (data != null) updateUI(data);
+                if (data != null && data.current == 1 && !data.evaluationList.isEmpty()) {
+                    updateUI(data);
+                }
             }
         });
     }
@@ -117,12 +120,15 @@ public final class GoodsInfoFragment extends BaseFragment implements View.OnClic
             HRActivity.showFragment(getActivity(), GoodsSpecFragment.class.getName());
         } else if (layout_goods_service == v) {
             HRActivity.showFragment(getActivity(), GoodsServiceFragment.class.getName());
+        } else if (layout_goods_info_evaluate_header == v) {
+            GoodsDetailFragment goodsDetailFragment = (GoodsDetailFragment) HRActivity.findFragmentByTag(getActivity(), GoodsDetailFragment.class.getName());
+            if (goodsDetailFragment != null) goodsDetailFragment.checkGoodsEvaluation();
         }
     }
 
     @MainThread
     private void updateUI(GoodsEvaluateBean.Data data) {
-        int evaluationCounts = data.evaluationCounts;
+        int evaluationCounts = data.total;
         String praiseRate = data.praiseRate;
         tv_user_favorable_rate.setText(evaluationCounts + "+条评论，" + praiseRate + "%好评率");
 
@@ -173,8 +179,10 @@ public final class GoodsInfoFragment extends BaseFragment implements View.OnClic
         layout_goods_disqualification.setVisibility(wholesaleFlag == 1 ? View.VISIBLE : View.GONE);
 
         /* 商品价格 */
-        tv_goods_price.setText(goodsType == 0 ? retailPrice : wholesalePrice);
-        tv_goods_price_small.setText(goodsType == 0 ? retailPrice : wholesalePrice);
+        String price = goodsType == 0 ? retailPrice : wholesalePrice;
+        tv_goods_price.setText(price);
+        tv_goods_price_small.setText("¥" + price);
+        tv_goods_price_small.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
         tv_goods_sold.setText("已售" + soldCounts + "件");
         tv_goods_info.setText(goodsTitle);
 
@@ -202,7 +210,7 @@ public final class GoodsInfoFragment extends BaseFragment implements View.OnClic
         }
 
         /* 服务说明 */
-        if (!protocolList.isEmpty()) {
+        if (protocolList != null && !protocolList.isEmpty()) {
             StringBuilder sb = new StringBuilder();
             for (GoodsDetailBean.Data.Protocol protocol : protocolList) {
                 sb.append(protocol.protocolName).append("&");
@@ -258,6 +266,7 @@ public final class GoodsInfoFragment extends BaseFragment implements View.OnClic
         layout_goods_spec = view.findViewById(R.id.layout_goods_spec);
         tv_goods_spec = view.findViewById(R.id.tv_goods_spec);
 
+        layout_goods_info_evaluate_header = view.findViewById(R.id.layout_goods_info_evaluate_header);
         tv_user_favorable_rate = view.findViewById(R.id.tv_user_favorable_rate);
         iv_user_avatar = view.findViewById(R.id.iv_user_avatar);
         tv_user_name = view.findViewById(R.id.tv_user_name);
@@ -271,6 +280,7 @@ public final class GoodsInfoFragment extends BaseFragment implements View.OnClic
 
         layout_goods_spec.setOnClickListener(this);
         layout_goods_service.setOnClickListener(this);
+        layout_goods_info_evaluate_header.setOnClickListener(this);
     }
 
     private static class GoodsBanner implements CBViewHolderCreator, OnItemClickListener {

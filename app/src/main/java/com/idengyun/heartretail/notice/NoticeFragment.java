@@ -1,4 +1,4 @@
-package com.idengyun.heartretail.message;
+package com.idengyun.heartretail.notice;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,7 +14,7 @@ import com.idengyun.heartretail.bases.PagerChildFragment;
 import com.idengyun.heartretail.bases.PagerParentFragment;
 
 /**
- * 消息模块
+ * 消息模块-主页
  *
  * @author aLang
  */

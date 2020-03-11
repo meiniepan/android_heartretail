@@ -6,19 +6,33 @@
     android:layout_height="match_parent"
     android:background="#80000000">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="427dp"
         android:layout_gravity="bottom"
         android:background="@drawable/shape_goods_spec_bg"
-        android:orientation="vertical"
-        android:overScrollMode="never"
-        android:paddingBottom="49dp"
-        android:scrollbars="none"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-        tools:itemCount="6"
-        tools:listitem="@layout/fragment_goods_service_item" />
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/ic_goods_detail_service_title" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:overScrollMode="never"
+            android:paddingBottom="49dp"
+            android:scrollbars="none"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            tools:itemCount="6"
+            tools:listitem="@layout/fragment_goods_service_item" />
+    </LinearLayout>
 </FrameLayout>
 
 

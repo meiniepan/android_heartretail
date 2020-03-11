@@ -6,7 +6,6 @@ import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +15,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
+import com.dengyun.baselibrary.net.ImageApi;
 import com.google.android.flexbox.FlexboxLayout;
+import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.GoodsDetailBean;
 
@@ -35,6 +36,7 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
     private TextView tv_goods_spec_price;
     private TextView tv_goods_spec_stock;
     private RecyclerView recycler_view;
+    private TextView tv_purchase_quantity;
 
     private GoodsSpecAdapter mGoodsSpecAdapter;
     private final List<Section> mSectionList = new ArrayList<>();
@@ -78,17 +80,14 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
 
     @Override
     public void onClick(View v) {
-        FragmentManager fragmentManager = getFragmentManager();
-        if (fragmentManager != null) fragmentManager.beginTransaction().hide(this).commit();
+        if (getView() == v) {
+            HRActivity.hideFragment(getActivity(), getClass().getName());
+        }
     }
 
     @MainThread
     private void updateUI(GoodsDetailBean.Data data) {
         this.data = data;
-
-        iv_goods_spec_logo.setImageDrawable(null);
-        tv_goods_spec_price.setText("110");
-        tv_goods_spec_stock.setText("1024");
 
         List<GoodsDetailBean.Data.GoodsSpec> goodsSpecList = data.goodsSpecList;
         List<GoodsDetailBean.Data.GoodsSku> goodsSkuList = data.goodsSkuList;
@@ -119,9 +118,11 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
         switchEnabledStatus(sectionList, goodsSkuList);
 
         /* 搜索默认规格 */
-        String skuCombinationCode = searchDefaultSkuCombinationCode(goodsSkuList);
+        GoodsDetailBean.Data.GoodsSku goodsSku = searchDefaultSku(goodsSkuList);
+        String skuCombinationCode = null;
+        if (goodsSku != null) skuCombinationCode = goodsSku.skuCombinationCode;
 
-        /* 遍历所有Checkbox，设置每个Checkbox是否被默认选中 */
+        /* 遍历所有Checkbox，设置默认值 */
         if (skuCombinationCode != null) {
             for (int i = 0; i < sectionList.size(); i++) {
                 Section section = sectionList.get(i);
@@ -141,12 +142,29 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
         executeSpecMutex();
 
         mGoodsSpecAdapter.notifyDataSetChanged();
+
+        /* 更新其他UI元素 */
+        if (goodsSku != null) updateBySku(goodsSku);
+    }
+
+    private void updateBySku(@NonNull GoodsDetailBean.Data.GoodsSku goodsSku) {
+        if (goodsSku != null) {
+            String skuImgUrl = goodsSku.skuImgUrl;
+            String goodsPrice = goodsSku.goodsPrice;
+            int goodsCount = goodsSku.goodsCount;
+            int canBuyCount = goodsSku.canBuyCount;
+
+            ImageApi.displayImage(iv_goods_spec_logo.getContext(), iv_goods_spec_logo, skuImgUrl);
+            tv_goods_spec_price.setText(goodsPrice);
+            tv_goods_spec_stock.setText("" + goodsCount);
+            tv_purchase_quantity.setText("" + canBuyCount);
+        }
     }
 
     /* 搜索默认规格 */
-    private String searchDefaultSkuCombinationCode(List<GoodsDetailBean.Data.GoodsSku> goodsSkuList) {
+    private GoodsDetailBean.Data.GoodsSku searchDefaultSku(List<GoodsDetailBean.Data.GoodsSku> goodsSkuList) {
         for (GoodsDetailBean.Data.GoodsSku goodsSku : goodsSkuList) {
-            if (goodsSku.isDefault == 1) return goodsSku.skuCombinationCode;
+            if (goodsSku.isDefault == 1) return goodsSku;
         }
         return null;
     }
@@ -165,6 +183,11 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
         }
 
         return checkedSpecItemIdList;
+    }
+
+    /* 是否可以立即购买 */
+    public boolean isCanBuy() {
+        return searchCheckedIdList().size() == mSectionList.size();
     }
 
     /* 筛选有效的规格 */
@@ -220,6 +243,7 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
         tv_goods_spec_price = view.findViewById(R.id.tv_goods_spec_price);
         tv_goods_spec_stock = view.findViewById(R.id.tv_goods_spec_stock);
         recycler_view = view.findViewById(R.id.recycler_view);
+        tv_purchase_quantity = view.findViewById(R.id.tv_purchase_quantity);
 
         view.setOnClickListener(this);
     }
@@ -258,9 +282,6 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
 
             @Override
             public void onClick(View v) {
-                /*Section clickedSection = (Section) flexbox_layout.getTag();
-                Section.Cell clickedCell = (Section.Cell) v.getTag();*/
-
                 /* 一个选区遵守单选规则 */
                 for (int i = 0; i < flexbox_layout.getChildCount(); i++) {
                     CheckBox child = flexbox_layout.getChildAt(i).findViewById(R.id.cb_goods_spec_value);
@@ -276,8 +297,8 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
                 executeSpecMutex();
 
                 /* 解决单个规格被选中时的bug */
-                List<String> checkedSpecItemIdList = searchCheckedIdList();
-                if (checkedSpecItemIdList.size() == 1) {
+                List<String> checkedIdList = searchCheckedIdList();
+                if (checkedIdList.size() == 1) {
                     Section tmp = null;
                     for (Section section : mSectionList) {
                         for (Section.Cell cell : section.cellList) {
@@ -303,6 +324,17 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
 
                 /* 更新数据 */
                 notifyDataSetChanged();
+
+                /* 更新其他UI元素 */
+                if (checkedIdList.size() == getItemCount()) {
+                    for (GoodsDetailBean.Data.GoodsSku goodsSku : data.goodsSkuList) {
+                        List<String> tmpList = Arrays.asList(goodsSku.skuCombinationCode.split("_"));
+                        if (tmpList.containsAll(checkedIdList) && checkedIdList.containsAll(tmpList)) {
+                            updateBySku(goodsSku);
+                            break;
+                        }
+                    }
+                }
             }
 
             @MainThread
