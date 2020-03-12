@@ -23,9 +23,7 @@ import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.baselibrary.utils.RegexUtils;
-import com.dengyun.baselibrary.utils.SharedPreferencesUtil;
 import com.dengyun.baselibrary.utils.ToastUtils;
-import com.dengyun.baselibrary.utils.Utils;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.usermodule.beans.LoginBean;
 import com.idengyun.usermodule.beans.RegisterBean;
@@ -246,7 +244,7 @@ public final class LoginActivity extends BaseActivity
             public void onSuccess(Response<LoginBean> response) {
                 /* 保存用户信息 */
                 LoginBean body = response.body();
-                SharedPreferencesUtil.saveDataBean(Utils.getApp(), HRConst.XML_FILE_NAME_USER_INFO, body);
+                HRUser.saveLoginBean(body);
                 if (body.data.isnewPhoneImei == 1) {
                     startVerifyActivity();
                 } else {

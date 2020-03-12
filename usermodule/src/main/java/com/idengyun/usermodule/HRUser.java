@@ -1,9 +1,11 @@
 package com.idengyun.usermodule;
 
+import android.app.Application;
 import android.text.TextUtils;
 
 import com.dengyun.baselibrary.utils.SharedPreferencesUtil;
 import com.dengyun.baselibrary.utils.Utils;
+import com.idengyun.usermodule.beans.LoginBean;
 
 /**
  * 用户信息查询
@@ -50,6 +52,20 @@ public final class HRUser {
     /* 不要使用这个 */
     private static String getValueFromUserInfo(String key) {
         return SharedPreferencesUtil.getData(Utils.getApp(), HRConst.XML_FILE_NAME_USER_INFO, key, "");
+    }
+
+    static void saveLoginBean(LoginBean loginBean) {
+        Application context = Utils.getApp();
+        String fileName = HRConst.XML_FILE_NAME_USER_INFO;
+        LoginBean.Data data = loginBean.data;
+        LoginBean.Data.User user = data.user;
+        SharedPreferencesUtil.saveData(context, fileName, "token", data.token);
+        SharedPreferencesUtil.saveData(context, fileName, "isnewPhoneImei", data.isnewPhoneImei);
+        SharedPreferencesUtil.saveData(context, fileName, "id", user.id);
+        SharedPreferencesUtil.saveData(context, fileName, "mobile", user.mobile);
+        SharedPreferencesUtil.saveData(context, fileName, "invitationCode", user.invitationCode);
+        SharedPreferencesUtil.saveData(context, fileName, "headUrl", user.headUrl);
+        SharedPreferencesUtil.saveData(context, fileName, "nickName", user.nickName);
     }
 
     private HRUser() {
