@@ -6,6 +6,7 @@ import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.baselibrary.net.constants.ProjectType;
+import com.dengyun.baselibrary.utils.ToastUtils;
 import com.lzy.okgo.model.Response;
 
 import java.io.File;
@@ -27,7 +28,7 @@ public class OCRUtils {
      *
      * @param localImagePath 本地图片路径
      */
-    public static void recognitionIdCardFace(String localImagePath, OnIdCardFaceResult onIdCardFaceResult) {
+    public static void recoIdCardFace(String localImagePath, OnIdCardFaceResult onIdCardFaceResult) {
         String url = "http://dm-51.data.aliyun.com/rest/160601/ocr/ocr_idcard.json";
         NetOption netOption = NetOption.newBuilder(url)
                 .headers("Authorization", "APPCODE " + appcode) //你自己的AppCode
@@ -39,7 +40,12 @@ public class OCRUtils {
         NetApi.<IdCardFaceBean>getData(netOption, new JsonCallback<IdCardFaceBean>(netOption) {
             @Override
             public void onSuccess(Response<IdCardFaceBean> response) {
-                onIdCardFaceResult.onResult(response.body());
+                IdCardFaceBean idCardFaceBean = response.body();
+                if (idCardFaceBean.isSuccess()){
+                    onIdCardFaceResult.onResult(idCardFaceBean);
+                }else {
+                    ToastUtils.showShort("识别失败");
+                }
             }
         });
     }
@@ -49,7 +55,7 @@ public class OCRUtils {
      *
      * @param localImagePath 本地图片路径
      */
-    public static void recognitionIdCardBack(String localImagePath, OnIdCardBackResult onIdCardBackResult) {
+    public static void recoIdCardBack(String localImagePath, OnIdCardBackResult onIdCardBackResult) {
         String url = "http://dm-51.data.aliyun.com/rest/160601/ocr/ocr_idcard.json";
         NetOption netOption = NetOption.newBuilder(url)
                 .headers("Authorization", "APPCODE " + appcode) //你自己的AppCode
@@ -61,70 +67,41 @@ public class OCRUtils {
         NetApi.<IdCardBackBean>getData(netOption, new JsonCallback<IdCardBackBean>(netOption) {
             @Override
             public void onSuccess(Response<IdCardBackBean> response) {
-                onIdCardBackResult.onResult(response.body());
+                IdCardBackBean idCardBackBean = response.body();
+                if (idCardBackBean.isSuccess()){
+                    onIdCardBackResult.onResult(idCardBackBean);
+                }else {
+                    ToastUtils.showShort("识别失败");
+                }
             }
         });
     }
 
-
     /**
-     * 正面返回结果：
-     * {
-     * "address"    : "浙江省杭州市余杭区文一西路969号",   #地址信息
-     * "config_str" : "{\\\"side\\\":\\\"face\\\"}",    #配置信息，同输入configure
-     * "face_rect":{       #人脸位置
-     * "angle": -90,   #angle表示矩形顺时针旋转的度数
-     * "center":{      #center表示人脸矩形中心坐标
-     * "x" : 952,
-     * "y" : 325.5
-     * },
-     * "size":{        #size表示人脸矩形长宽
-     * "height":181.99,
-     * "width":164.99
-     * }
-     * },
-     * "card_region":[  #身份证区域位置，四个顶点表示，顺序是逆时针(左上、左下、右下、右上)
-     * {"x":165,"y":657},
-     * {"x":534,"y":658},
-     * {"x":535,"y":31},
-     * {"x":165,"y":30}
-     * ],
-     * "face_rect_vertices":[  #人脸位置，四个顶点表示
-     * {
-     * "x":1024.6600341796875,
-     * "y":336.629638671875
-     * },
-     * {
-     * "x":906.66107177734375,
-     * "y":336.14801025390625
-     * },
-     * {
-     * "x":907.1590576171875,
-     * "y":214.1490478515625
-     * },
-     * {
-     * "x":1025.157958984375,
-     * "y":214.63067626953125
-     * }
-     * ],
-     * "name" : "张三",                 #姓名
-     * "nationality": "汉"，            #民族
-     * "num" : "1234567890",            #身份证号
-     * "sex" : "男",                    #性别
-     * "birth" : "20000101",            #出生日期
-     * "success" : true                 #识别结果，true表示成功，false表示失败
-     * }
-     * <p>
-     * <p>
-     * 反面返回结果:
-     * {
-     * "config_str" : "{\\\"side\\\":\\\"back\\\"}",  #配置信息，同输入configure
-     * "start_date" : "19700101",       #有效期起始时间
-     * "end_date" : "19800101",         #有效期结束时间
-     * "issue" : "杭州市公安局",         #签发机关
-     * "success" : true                 #识别结果，true表示成功，false表示失败
-     * }
+     * 识别银行卡
+     *
+     * @param localImagePath 本地图片路径
      */
+    public static void recoBankCard(String localImagePath,OnBankCardResult onBankCardResult){
+        String url = "http://yhk.market.alicloudapi.com/rest/160601/ocr/ocr_bank_card.json";
+        NetOption netOption = NetOption.newBuilder(url)
+                .headers("Authorization", "APPCODE " + appcode) //你自己的AppCode
+                .params("image", conventImageBase64(localImagePath)) // 图片二进制数据的base64编码/图片url
+                .clazz(BankCardBean.class)
+                .projectType(ProjectType.NONE)
+                .build();
+        NetApi.<BankCardBean>getData(netOption, new JsonCallback<BankCardBean>(netOption) {
+            @Override
+            public void onSuccess(Response<BankCardBean> response) {
+                BankCardBean bankCardBean = response.body();
+                if (bankCardBean.isSuccess()){
+                    onBankCardResult.onResult(bankCardBean);
+                }else {
+                    ToastUtils.showShort("识别失败");
+                }
+            }
+        });
+    }
 
 
     // 对图像进行base64编码
@@ -154,6 +131,10 @@ public class OCRUtils {
 
     interface OnIdCardBackResult {
         void onResult(IdCardBackBean idCardBackBean);
+    }
+
+    interface OnBankCardResult {
+        void onResult(BankCardBean bankCardBean);
     }
 
 
