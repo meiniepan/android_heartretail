@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.activity.BaseActivity;
+import com.idengyun.heartretail.Constants;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.adapters.EvaluateDetailListAdapter;
 import com.idengyun.heartretail.adapters.EvaluateListAdapter;
@@ -38,8 +39,9 @@ public class EvaluateDetailActivity extends BaseActivity {
     List<OrderStatusBean> mData = new ArrayList<>();
 
 
-    public static void start(Context context) {
+    public static void start(Context context, String orderId) {
         Intent starter = new Intent(context, EvaluateDetailActivity.class);
+        starter.putExtra(Constants.ORDER_ID, orderId);
         context.startActivity(starter);
     }
 
