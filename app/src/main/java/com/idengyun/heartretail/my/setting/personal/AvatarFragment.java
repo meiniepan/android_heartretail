@@ -40,7 +40,7 @@ public final class AvatarFragment extends BaseFragment implements View.OnClickLi
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        uploadImage();
+//        uploadImage();
     }
 
     private void uploadImage() {
