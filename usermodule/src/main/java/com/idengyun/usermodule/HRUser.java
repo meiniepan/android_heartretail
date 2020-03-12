@@ -16,8 +16,7 @@ public final class HRUser {
 
     /* 用户是否实名认证 */
     public static boolean isAuthenticated() {
-        // TODO: 2020/3/12
-        return !TextUtils.isEmpty(getValueFromUserInfo("id"));
+        return !TextUtils.isEmpty(getValueFromUserInfo("authIdentity"));
     }
 
     /* 用户是否登录 */

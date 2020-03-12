@@ -4,11 +4,11 @@ import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.net.ImageApi;
 import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
@@ -17,7 +17,8 @@ import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
-import com.idengyun.heartretail.bases.PagerChildFragment;
+import com.idengyun.heartretail.activitys.MyEvaluateActivity;
+import com.idengyun.heartretail.activitys.OrderListActivity;
 import com.idengyun.heartretail.model.response.BalanceBean;
 import com.idengyun.heartretail.my.SettingFragment;
 import com.idengyun.usermodule.HRUser;
@@ -28,7 +29,7 @@ import com.lzy.okgo.model.Response;
  *
  * @author aLang
  */
-public final class MyFragment extends PagerChildFragment implements View.OnClickListener {
+public final class MyFragment extends BaseFragment implements View.OnClickListener {
     /* 头部背景色 */
     private View iv_my_not_login_bg;
     private View iv_my_login_bg;
@@ -86,9 +87,12 @@ public final class MyFragment extends PagerChildFragment implements View.OnClick
     }
 
     @Override
-    public void onTabSelected(TabLayout.Tab tab) {
-        updateUI(HRUser.isLogin(), HRUser.isAuthenticated());
-        requestAPI();
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            updateUI(HRUser.isLogin(), HRUser.isAuthenticated());
+            requestAPI();
+        }
     }
 
     @Override
@@ -129,31 +133,31 @@ public final class MyFragment extends PagerChildFragment implements View.OnClick
     }
 
     private void startMyEvaluationActivity() {
-        // TODO: 2020/3/12
+        MyEvaluateActivity.start(getActivity());
     }
 
     private void startMyOrder5Activity() {
-        // TODO: 2020/3/12
+        OrderListActivity.start(getActivity(),5);
     }
 
     private void startMyOrder4Activity() {
-        // TODO: 2020/3/12
+        OrderListActivity.start(getActivity(),4);
     }
 
     private void startMyOrder3Activity() {
-        // TODO: 2020/3/12
+        OrderListActivity.start(getActivity(),3);
     }
 
     private void startMyOrder2Activity() {
-        // TODO: 2020/3/12
+        OrderListActivity.start(getActivity(),2);
     }
 
     private void startMyOrder1Activity() {
-        // TODO: 2020/3/12
+        OrderListActivity.start(getActivity(),1);
     }
 
     private void startMyAllOrdersActivity() {
-        // TODO: 2020/3/12
+        OrderListActivity.start(getActivity(),0);
     }
 
     private void startMyAccountActivity() {
@@ -170,6 +174,13 @@ public final class MyFragment extends PagerChildFragment implements View.OnClick
 
     private void init() {
         iv_my_setting.setOnClickListener(this);
+        iv_my_user_avatar.setOnClickListener(this);
+        tv_my_account.setOnClickListener(this);
+
+        tv_my_all_orders.setOnClickListener(this);
+        tv_my_order_1.setOnClickListener(this);
+        tv_my_order_2.setOnClickListener(this);
+        tv_my_order_3.setOnClickListener(this);
         tv_my_order_3.setOnClickListener(this);
         tv_my_order_4.setOnClickListener(this);
         tv_my_order_5.setOnClickListener(this);

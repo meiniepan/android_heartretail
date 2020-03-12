@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,13 +12,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
-import com.idengyun.heartretail.bases.PagerChildFragment;
 import com.idengyun.heartretail.goods.GoodsDetailFragment;
 import com.idengyun.heartretail.goods.GoodsEvaluateFragment;
 import com.idengyun.heartretail.goods.GoodsInfoFragment;
@@ -37,7 +36,7 @@ import java.util.ArrayList;
  *
  * @author aLang
  */
-public final class HomeFragment extends PagerChildFragment implements View.OnClickListener {
+public final class HomeFragment extends BaseFragment implements View.OnClickListener {
 
     private View tv_home_share;
     private View tv_home_notice;
@@ -58,21 +57,6 @@ public final class HomeFragment extends PagerChildFragment implements View.OnCli
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         updateUI();
-    }
-
-    @Override
-    public void onTabSelected(TabLayout.Tab tab) {
-        int position = tab.getPosition();
-    }
-
-    @Override
-    public void onTabUnselected(TabLayout.Tab tab) {
-
-    }
-
-    @Override
-    public void onTabReselected(TabLayout.Tab tab) {
-
     }
 
     @Override
