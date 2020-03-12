@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.view.View;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
+import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
 
 /**
@@ -14,6 +15,8 @@ import com.idengyun.heartretail.R;
  * @author aLang
  */
 public final class Step2Fragment extends BaseFragment {
+
+    private View tv_real_next_step_2;
 
     @Override
     public int getLayoutId() {
@@ -31,5 +34,12 @@ public final class Step2Fragment extends BaseFragment {
     }
 
     private void findViewById(View view) {
+        tv_real_next_step_2 = view.findViewById(R.id.tv_real_next_step_2);
+        tv_real_next_step_2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HRActivity.start(getContext(), Step3Fragment.class);
+            }
+        });
     }
 }
