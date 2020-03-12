@@ -2,12 +2,15 @@ package com.idengyun.heartretail.activitys;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -88,6 +91,20 @@ public class ConfirmOrderActivity extends BaseActivity {
     TextView tvCommit;
     @BindView(R.id.sr_order_confirm)
     StatusRecyclerView recyclerView;
+    @BindView(R.id.ll_proxy_tab)
+    LinearLayout llProxyTab;
+    @BindView(R.id.tv_self_get)
+    TextView tvSelfGet;
+    @BindView(R.id.tv_proxy_sale)
+    TextView tvProxySale;
+    @BindView(R.id.iv_next)
+    ImageView ivNext;
+    @BindView(R.id.ll_proxy_sale_protocol)
+    LinearLayout llProxySaleProtocol;
+    @BindView(R.id.cb_protocol_proxy_sale)
+    CheckBox cbProtocolProxySale;
+
+    int orderType;
 
     public static void start(Context context, GoodsDetailBean data) {
         Intent starter = new Intent(context, ConfirmOrderActivity.class);
@@ -101,9 +118,33 @@ public class ConfirmOrderActivity extends BaseActivity {
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
+        initData();
+        initUI();
+    }
+
+    private void initUI() {
+        if (orderType == 1) {
+            initRetail();
+        } else {
+            initWholeSale();
+        }
         rlShop.setVisibility(View.GONE);
         llNoShop.setVisibility(View.VISIBLE);
         initRecycler();
+    }
+
+    private void initWholeSale() {
+        llProxyTab.setVisibility(View.VISIBLE);
+        initSelfGet();
+    }
+
+    private void initRetail() {
+        llProxyTab.setVisibility(View.GONE);
+        initSelfGet();
+    }
+
+    private void initData() {
+        orderType = 2;
     }
 
     private void initRecycler() {
@@ -117,9 +158,10 @@ public class ConfirmOrderActivity extends BaseActivity {
         recyclerView.setAdapter(adapter);
     }
 
-    @OnClick({R.id.ll_shop_choose, R.id.tv_commit})
+    @OnClick({R.id.ll_shop_choose, R.id.tv_commit, R.id.tv_self_get, R.id.tv_proxy_sale})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            //选择商家
             case R.id.ll_shop_choose:
 //                ShopListActivity.start(this);
                 Intent intent = new Intent(this, ShopListActivity.class);
@@ -129,7 +171,66 @@ public class ConfirmOrderActivity extends BaseActivity {
             case R.id.tv_commit:
                 doCommit();
                 break;
+            //自提tab
+            case R.id.tv_self_get:
+                tvSelfGet.setBackgroundResource(R.drawable.shape_white_tab_corner_rec);
+                tvProxySale.setBackground(new BitmapDrawable());
+                initSelfGet();
+                break;
+            //代销tab
+            case R.id.tv_proxy_sale:
+                queryProxyQualification();
+                tvProxySale.setBackgroundResource(R.drawable.shape_white_tab_corner_rec);
+                tvSelfGet.setBackground(new BitmapDrawable());
+                initProxySale();
+                break;
         }
+    }
+
+    private void queryProxyQualification() {
+        HashMap map = new HashMap();
+        map.put("version", AppUtils.getAppVersionName());
+        map.put("userId", TextUtils.isEmpty(HRUser.getId())?"1":HRUser.getId());
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.checkProxyState())
+                .activity(this)
+                .params(map)
+                .isShowDialog(true)
+                .clazz(ApiBean.class)
+                .build();
+
+        NetApi.getData(netOption, new JsonCallback<ApiBean>(netOption) {
+            @Override
+            public void onSuccess(Response<ApiBean> response) {
+                ApiBean<ConfirmOrderRspBean> body = response.body();
+                ToastUtils.showShort("有代销资格");
+            }
+
+            @Override
+            public void onError(Response<ApiBean> response) {
+                super.onError(response);
+            }
+        });
+    }
+
+    private void initProxySale() {
+        hideAllFrames();
+        llProxySaleProtocol.setVisibility(View.VISIBLE);
+        ivNext.setVisibility(View.GONE);
+        llShopChoose.setEnabled(false);
+    }
+
+    private void initSelfGet() {
+        hideAllFrames();
+        ivNext.setVisibility(View.VISIBLE);
+        llNoShop.setVisibility(View.VISIBLE);
+        llShopChoose.setEnabled(true);
+    }
+
+    private void hideAllFrames() {
+        llNoShop.setVisibility(View.GONE);
+        rlShop.setVisibility(View.GONE);
+        llProxySaleProtocol.setVisibility(View.GONE);
+
     }
 
     private void doCommit() {
@@ -177,8 +278,8 @@ public class ConfirmOrderActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == 3) {
             String result = data.getStringExtra("result");
+            hideAllFrames();
             rlShop.setVisibility(View.VISIBLE);
-            llNoShop.setVisibility(View.GONE);
             tvTag3.setText(result);
         }
     }

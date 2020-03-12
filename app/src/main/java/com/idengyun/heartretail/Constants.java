@@ -7,5 +7,6 @@ package com.idengyun.heartretail;
  */
 public class Constants {
     public static final String ORDER_STATUS_BEAN = "order_status_bean";
+    public static final String ORDER_ID = "order_id";
 
 }

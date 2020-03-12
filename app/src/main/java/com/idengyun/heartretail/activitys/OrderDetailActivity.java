@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -75,10 +76,11 @@ public class OrderDetailActivity extends BaseActivity {
     LinearLayout llBottom;
     OrderStatusBean dataSource;
     OrderStatusBean data;
+    private String orderId;
 
     public static void start(Context context, OrderStatusBean data) {
         Intent starter = new Intent(context, OrderDetailActivity.class);
-        starter.putExtra(Constants.ORDER_STATUS_BEAN, data);
+        starter.putExtra(Constants.ORDER_ID, data.orderId);
         context.startActivity(starter);
     }
 
@@ -89,7 +91,7 @@ public class OrderDetailActivity extends BaseActivity {
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
-        dataSource = getIntent().getParcelableExtra(Constants.ORDER_STATUS_BEAN);
+        orderId = getIntent().getStringExtra(Constants.ORDER_ID);
         getData();
     }
 
@@ -100,7 +102,7 @@ public class OrderDetailActivity extends BaseActivity {
                 .activity(this)
                 .params("version", AppUtils.getAppVersionName())
                 .params("userId", HRUser.getId())
-                .params("orderId", dataSource==null?"":dataSource.orderId)
+                .params("orderId", TextUtils.isEmpty(orderId)?"":orderId)
                 .isShowDialog(true)
                 .type(type)
                 .build();
