@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.text.method.TransformationMethod;
@@ -27,11 +25,11 @@ import com.dengyun.baselibrary.utils.ToastUtils;
 import com.dengyun.baselibrary.utils.Utils;
 import com.dengyun.baselibrary.utils.phoneapp.AppUtils;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
+import com.idengyun.usermodule.beans.KVLogin;
+import com.idengyun.usermodule.beans.KVRegister;
 import com.idengyun.usermodule.beans.LoginBean;
 import com.idengyun.usermodule.beans.RegisterBean;
 import com.idengyun.usermodule.beans.VerifyCodeBean;
-import com.idengyun.usermodule.beans.KVLogin;
-import com.idengyun.usermodule.beans.KVRegister;
 import com.idengyun.usermodule.utils.SecondsTimer;
 import com.lzy.okgo.model.Response;
 
@@ -153,45 +151,6 @@ public final class LoginActivity extends BaseActivity
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
-//        int id = v.getId();
-//        switch (id) {
-//            case R.id.et_login_mobile:
-//                if (!hasFocus && !RegexUtils.isMobileSimple(et_login_mobile.getEditableText())) {
-//                    et_login_mobile.requestFocus();
-//                    ToastUtils.showShort("请输入正确的手机号");
-//                }
-//                break;
-//            case R.id.et_login_pwd:
-//                if (!hasFocus && et_login_pwd.length() < 1) {
-//                    et_login_pwd.requestFocus();
-//                    ToastUtils.showShort("请输入密码");
-//                }
-//                break;
-//            case R.id.et_register_mobile:
-//                if (!hasFocus && !RegexUtils.isMobileSimple(et_register_mobile.getEditableText())) {
-//                    et_register_mobile.requestFocus();
-//                    ToastUtils.showShort("请输入正确的手机号");
-//                }
-//                break;
-//            case R.id.et_register_verify_code:
-//                if (!hasFocus && et_register_verify_code.length() < 1) {
-//                    et_register_verify_code.requestFocus();
-//                    ToastUtils.showShort("请输入验证码");
-//                }
-//                break;
-//            case R.id.et_register_pwd:
-//                if (!hasFocus && et_register_pwd.length() < 1) {
-//                    et_register_pwd.requestFocus();
-//                    ToastUtils.showShort("请输入密码");
-//                }
-//                break;
-//            case R.id.et_register_invite_code:
-//                // do nothing
-//                break;
-//            default:
-//                // do nothing
-//                break;
-//        }
     }
 
     /* 请求注册API */
@@ -263,7 +222,7 @@ public final class LoginActivity extends BaseActivity
             return;
         }
 
-        startTimer();
+        startTimer(tv_verify_code);
 
         NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.getIdentifyCode())
                 .activity(this)
@@ -366,23 +325,23 @@ public final class LoginActivity extends BaseActivity
     }
 
     private void startMainActivity() {
-        //VerifyDeviceActivity.start(getContext());
+        //MainActiviy.start(getContext());
     }
 
-    private void startTimer() {
-        tv_verify_code.setEnabled(false);
+    private void startTimer(TextView textView) {
+        textView.setEnabled(false);
 
         if (timer == null) {
             timer = new SecondsTimer(60L, new SecondsTimer.Callback() {
                 @Override
                 public void onTick(long secondsUntilFinished) {
-                    tv_verify_code.setText(secondsUntilFinished + "s后重发");
+                    textView.setText(secondsUntilFinished + "s后重发");
                 }
 
                 @Override
                 public void onFinish() {
-                    tv_verify_code.setText("获取验证码");
-                    tv_verify_code.setEnabled(true);
+                    textView.setText("获取验证码");
+                    textView.setEnabled(true);
                 }
             });
         }
@@ -422,8 +381,8 @@ public final class LoginActivity extends BaseActivity
 
         et_login_mobile.setOnFocusChangeListener(this);
         et_login_pwd.setOnFocusChangeListener(this);
-        et_login_mobile.addTextChangedListener(new OnTextChangedListener(et_login_mobile));
-        et_login_pwd.addTextChangedListener(new OnTextChangedListener(et_login_pwd));
+        /*et_login_mobile.addTextChangedListener(new OnTextChangedListener(et_login_mobile));
+        et_login_pwd.addTextChangedListener(new OnTextChangedListener(et_login_pwd));*/
         cb_login_eye.setOnCheckedChangeListener(this);
         tv_forget_pwd.setOnClickListener(this);
         tv_login.setOnClickListener(this);
@@ -433,57 +392,57 @@ public final class LoginActivity extends BaseActivity
         et_register_verify_code.setOnFocusChangeListener(this);
         et_register_pwd.setOnFocusChangeListener(this);
         et_register_invite_code.setOnFocusChangeListener(this);
-        et_register_mobile.addTextChangedListener(new OnTextChangedListener(et_register_mobile));
-        et_register_verify_code.addTextChangedListener(new OnTextChangedListener(et_register_verify_code));
         tv_verify_code.setOnClickListener(this);
-        et_register_pwd.addTextChangedListener(new OnTextChangedListener(et_register_pwd));
         cb_register_eye.setOnCheckedChangeListener(this);
-        et_register_invite_code.addTextChangedListener(new OnTextChangedListener(et_register_invite_code));
+       /* et_register_mobile.addTextChangedListener(new OnTextChangedListener(et_register_mobile));
+        et_register_verify_code.addTextChangedListener(new OnTextChangedListener(et_register_verify_code));
+        et_register_pwd.addTextChangedListener(new OnTextChangedListener(et_register_pwd));
+        et_register_invite_code.addTextChangedListener(new OnTextChangedListener(et_register_invite_code));*/
         tv_register.setOnClickListener(this);
         cb_register_eye.setChecked(true);
     }
 
-    class OnTextChangedListener implements TextWatcher {
-        private EditText editText;
-
-        private CharSequence loginMobile;
-        private CharSequence loginPwd;
-        private CharSequence registerMobile;
-        private CharSequence registerVerifyCode;
-        private CharSequence registerPwd;
-        private CharSequence registerInviteCode;
-
-        public OnTextChangedListener(EditText editText) {
-            this.editText = editText;
-        }
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            int id = editText.getId();
-            if (id == R.id.et_login_mobile) {
-                loginMobile = s;
-            } else if (id == R.id.et_login_pwd) {
-                loginPwd = s;
-            } else if (id == R.id.et_register_mobile) {
-                registerMobile = s;
-            } else if (id == R.id.et_register_verify_code) {
-                registerVerifyCode = s;
-            } else if (id == R.id.et_register_pwd) {
-                registerPwd = s;
-            } else if (id == R.id.et_register_invite_code) {
-                registerInviteCode = s;
-            }
-        }
-
-    }
+//    class OnTextChangedListener implements TextWatcher {
+//        private EditText editText;
+//
+//        private CharSequence loginMobile;
+//        private CharSequence loginPwd;
+//        private CharSequence registerMobile;
+//        private CharSequence registerVerifyCode;
+//        private CharSequence registerPwd;
+//        private CharSequence registerInviteCode;
+//
+//        public OnTextChangedListener(EditText editText) {
+//            this.editText = editText;
+//        }
+//
+//        @Override
+//        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//        }
+//
+//        @Override
+//        public void onTextChanged(CharSequence s, int start, int before, int count) {
+//
+//        }
+//
+//        @Override
+//        public void afterTextChanged(Editable s) {
+//            int id = editText.getId();
+//            if (id == R.id.et_login_mobile) {
+//                loginMobile = s;
+//            } else if (id == R.id.et_login_pwd) {
+//                loginPwd = s;
+//            } else if (id == R.id.et_register_mobile) {
+//                registerMobile = s;
+//            } else if (id == R.id.et_register_verify_code) {
+//                registerVerifyCode = s;
+//            } else if (id == R.id.et_register_pwd) {
+//                registerPwd = s;
+//            } else if (id == R.id.et_register_invite_code) {
+//                registerInviteCode = s;
+//            }
+//        }
+//
+//    }
 }

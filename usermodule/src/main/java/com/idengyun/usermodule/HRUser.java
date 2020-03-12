@@ -1,5 +1,7 @@
 package com.idengyun.usermodule;
 
+import android.text.TextUtils;
+
 import com.dengyun.baselibrary.utils.SharedPreferencesUtil;
 import com.dengyun.baselibrary.utils.Utils;
 
@@ -9,6 +11,11 @@ import com.dengyun.baselibrary.utils.Utils;
  * @author aLang
  */
 public final class HRUser {
+
+    /* 用户是否登录 */
+    public static boolean isLogin() {
+        return TextUtils.isEmpty(getId());
+    }
 
     /* 获取用户ID */
     public static String getId() {
