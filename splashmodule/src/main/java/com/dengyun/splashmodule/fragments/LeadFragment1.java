@@ -33,6 +33,7 @@ import com.dengyun.splashmodule.beans.UrlConfigBean;
 import com.dengyun.splashmodule.config.GuidePicData;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.dengyun.splashmodule.config.SpProtocol;
+import com.dengyun.splashmodule.utils.ArouterToFirstUtil;
 import com.dengyun.splashmodule.utils.SaveMainConfigUtil;
 import com.google.gson.reflect.TypeToken;
 import com.lzy.okgo.model.Response;
@@ -76,9 +77,7 @@ public class LeadFragment1 extends BaseFragment {
                 @Override
                 public void onClick(View v) {
                     if(isSaveMainConfigUrls()){
-                        int interest = SpUserConstants.getInterest();
-                        int whatFragment = interest <= 0 ? 0 : (interest - 1);
-                        ARouter.getInstance().build(RouterPathConfig.app_FirstActivity).withInt("whatFragment",whatFragment).navigation();
+                        ArouterToFirstUtil.skipToFirst();
                         getActivity().finish();
                     }
                 }
@@ -109,9 +108,7 @@ public class LeadFragment1 extends BaseFragment {
 
                         @Override
                         public void doOnUIThread() {
-                            int interest = SpUserConstants.getInterest();
-                            int whatFragment = interest <= 0 ? 0 : (interest - 1);
-                            ARouter.getInstance().build(RouterPathConfig.app_FirstActivity).withInt("whatFragment",whatFragment).navigation();
+                            ArouterToFirstUtil.skipToFirst();
                             getActivity().finish();
                         }
                     });

@@ -8,6 +8,16 @@ android {
         targetSdkVersion rootProject.ext.android.targetSdkVersion
         versionCode 1
         versionName "1.0"
+
+        javaCompileOptions {
+            // 显式声明支持注解
+            annotationProcessorOptions {
+                includeCompileClasspath true
+                //arouter配置
+                arguments = [AROUTER_MODULE_NAME: project.getName()]
+            }
+        }
+
     }
     buildTypes {
         debug {
@@ -36,4 +46,6 @@ dependencies {
     implementation project(':splashmodule')
     //butterknife插件
     annotationProcessor rootProject.ext.dependencies.butterknife_compiler
+    //路由插件
+    annotationProcessor rootProject.ext.dependencies.arouter_compiler
 }

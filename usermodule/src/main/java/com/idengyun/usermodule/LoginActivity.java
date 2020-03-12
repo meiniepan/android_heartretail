@@ -14,7 +14,9 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.dengyun.baselibrary.base.activity.BaseActivity;
+import com.dengyun.baselibrary.config.RouterPathConfig;
 import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
@@ -41,6 +43,7 @@ import java.util.Map;
  *
  * @author aLang
  */
+@Route(path = (RouterPathConfig.user_LoginActivity))
 public final class LoginActivity extends BaseActivity
         implements RadioGroup.OnCheckedChangeListener, View.OnClickListener, CompoundButton.OnCheckedChangeListener, View.OnFocusChangeListener {
 

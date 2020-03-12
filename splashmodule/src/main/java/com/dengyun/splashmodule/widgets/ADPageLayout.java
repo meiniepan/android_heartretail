@@ -24,6 +24,7 @@ import com.dengyun.baselibrary.spconstants.SpUserConstants;
 import com.dengyun.baselibrary.widgets.imageview.RatioImageView;
 import com.dengyun.sadatalib.SAGetData;
 import com.dengyun.splashmodule.R;
+import com.dengyun.splashmodule.utils.ArouterToFirstUtil;
 import com.dengyun.splashmodule.utils.LocalAdInfoUtils;
 
 /**
@@ -143,9 +144,7 @@ public class ADPageLayout extends FrameLayout {
      * 跳转到首页
      */
     private void skipToFirst(Activity activity){
-        int interest = SpUserConstants.getInterest();
-        int whatFragment = interest <= 0 ? 0 : (interest - 1);
-        ARouter.getInstance().build(RouterPathConfig.app_FirstActivity).withInt("whatFragment",whatFragment).navigation();
+        ArouterToFirstUtil.skipToFirst();
         activity.finish();
     }
 
@@ -156,7 +155,7 @@ public class ADPageLayout extends FrameLayout {
         SAGetData.saPopupClick("",url);
         int interest = SpUserConstants.getInterest();
         int whatFragment = interest <= 0 ? 0 : (interest - 1);
-        ARouter.getInstance().build(RouterPathConfig.app_FirstActivity).withInt("whatFragment",whatFragment).navigation();
+        ArouterToFirstUtil.skipToFirst();
         ARouter.getInstance().build(RouterPathConfig.app_SomewebActivity).withString("url",url).navigation();
 
         /*Intent intent1 = new Intent(activity, FirstActivity2.class);

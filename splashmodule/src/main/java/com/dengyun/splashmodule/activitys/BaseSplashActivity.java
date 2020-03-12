@@ -30,6 +30,7 @@ import com.dengyun.baselibrary.widgets.CountDownTimerUtil;
 import com.dengyun.splashmodule.R;
 import com.dengyun.splashmodule.config.SpStartConstants;
 import com.dengyun.splashmodule.listeners.OnLoadMainUrlsListener;
+import com.dengyun.splashmodule.utils.ArouterToFirstUtil;
 import com.dengyun.splashmodule.utils.LocalAdInfoUtils;
 import com.dengyun.splashmodule.widgets.ADPageLayout;
 import com.dengyun.splashmodule.widgets.GuidePageLayout;
@@ -256,9 +257,7 @@ public abstract class BaseSplashActivity extends BaseActivity {
             return;
         }
         pageState = PAGE_FINISH;
-        int interest = SpUserConstants.getInterest();
-        int whatFragment = interest <= 0 ? 0 : (interest - 1);
-        ARouter.getInstance().build(RouterPathConfig.app_FirstActivity).withInt("whatFragment",whatFragment).navigation();
+        ArouterToFirstUtil.skipToFirst();
         finish();
     }
 

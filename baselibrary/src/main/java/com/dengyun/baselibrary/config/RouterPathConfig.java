@@ -7,5 +7,6 @@ package com.dengyun.baselibrary.config;
 
 public class RouterPathConfig {
     public static final String app_FirstActivity = "/app/FirstActivity";
+    public static final String user_LoginActivity = "/user/LoginActivity";
     public static final String app_SomewebActivity = "/app/SomewebActivity";
 }

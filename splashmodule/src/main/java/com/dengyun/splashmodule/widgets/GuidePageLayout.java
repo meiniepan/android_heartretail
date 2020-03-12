@@ -29,6 +29,7 @@ import com.dengyun.baselibrary.widgets.VPSimpleAdapter;
 import com.dengyun.splashmodule.R;
 import com.dengyun.splashmodule.config.GuidePicData;
 import com.dengyun.splashmodule.fragments.LeadFragment1;
+import com.dengyun.splashmodule.utils.ArouterToFirstUtil;
 
 import java.util.ArrayList;
 
@@ -103,7 +104,7 @@ public class GuidePageLayout extends FrameLayout {
      * 跳转到首页
      */
     private void skipToFirst(Activity activity){
-        ARouter.getInstance().build(RouterPathConfig.app_FirstActivity).navigation();
+        ArouterToFirstUtil.skipToFirst();
     }
 
     /**

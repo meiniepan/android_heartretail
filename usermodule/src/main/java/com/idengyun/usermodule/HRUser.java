@@ -14,7 +14,7 @@ public final class HRUser {
 
     /* 用户是否登录 */
     public static boolean isLogin() {
-        return TextUtils.isEmpty(getId());
+        return !TextUtils.isEmpty(getId());
     }
 
     /* 获取用户ID */
