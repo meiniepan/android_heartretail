@@ -180,9 +180,7 @@ public class ConfirmOrderActivity extends BaseActivity {
             //代销tab
             case R.id.tv_proxy_sale:
                 queryProxyQualification();
-                tvProxySale.setBackgroundResource(R.drawable.shape_white_tab_corner_rec);
-                tvSelfGet.setBackground(new BitmapDrawable());
-                initProxySale();
+
                 break;
         }
     }
@@ -203,6 +201,9 @@ public class ConfirmOrderActivity extends BaseActivity {
             public void onSuccess(Response<ApiBean> response) {
                 ApiBean<ConfirmOrderRspBean> body = response.body();
                 ToastUtils.showShort("有代销资格");
+                tvProxySale.setBackgroundResource(R.drawable.shape_white_tab_corner_rec);
+                tvSelfGet.setBackground(new BitmapDrawable());
+                initProxySale();
             }
 
             @Override
