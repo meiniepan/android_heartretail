@@ -101,7 +101,6 @@ public class OrderDetailActivity extends BaseActivity {
                 .params("version", AppUtils.getAppVersionName())
                 .params("userId", HRUser.getId())
                 .params("orderId", dataSource==null?"":dataSource.orderId)
-                .params("platform", HRConst.PLATFORM)
                 .isShowDialog(true)
                 .type(type)
                 .build();

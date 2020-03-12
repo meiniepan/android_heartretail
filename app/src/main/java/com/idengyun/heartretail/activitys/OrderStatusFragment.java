@@ -100,7 +100,6 @@ public class OrderStatusFragment extends BaseFragment {
                 .params("userId", HRUser.getId())
                 .params("flag", status)
                 .params("pageSize", 10)
-                .params("platform", HRConst.PLATFORM)
                 .isShowDialog(true)
                 .type(type)
                 .build();

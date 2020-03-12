@@ -17,8 +17,8 @@ public final class HRConst {
     /* 主配置.xml 登录API.xml */
     public static final String XML_FILE_NAME_USER_INFO = "hr_user_info";
 
-    public static final String PLATFORM = "Android";
-    public static final String APP_NAME = "app";
+//    public static final String PLATFORM = "Android";
+//    public static final String APP_NAME = "app";
     //验证码类型0注册1换新设备2修改密码3忘记密码4绑定新手机号
     public static final String IDENTIFY_TYPE_0 = "0";
     public static final String IDENTIFY_TYPE_1 = "1";

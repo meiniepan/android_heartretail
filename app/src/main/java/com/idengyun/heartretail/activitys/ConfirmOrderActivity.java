@@ -150,7 +150,6 @@ public class ConfirmOrderActivity extends BaseActivity {
         map.put("orderType", 0);
         map.put("goodsType", 0);
         map.put("goodsSkuEntityList", new ConfirmOrderReqBean());
-        map.put("platform", HRConst.PLATFORM);
         NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.commitOrder())
                 .activity(this)
                 .params(map)

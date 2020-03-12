@@ -178,7 +178,7 @@ public final class LoginActivity extends BaseActivity
                 .params("invitationCode", et_register_invite_code.getText().toString())
                 .params("phoneImei", HRConst.PHONE_IMEI)
                 .params("phoneType", HRConst.PHONE_TYPE)
-                .params("appName", HRConst.APP_NAME)
+                .params("appName", "app")
                 .clazz(RegisterBean.class)
                 .build();
 
