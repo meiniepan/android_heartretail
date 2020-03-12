@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,7 +14,6 @@ import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.baselibrary.net.constants.RequestMethod;
-import com.dengyun.baselibrary.utils.SizeUtils;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
@@ -84,7 +82,93 @@ public final class MyFragment extends PagerChildFragment implements View.OnClick
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        updateUI(true, false);
+        init();
+    }
+
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        updateUI(HRUser.isLogin(), HRUser.isAuthenticated());
+        requestAPI();
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (iv_my_setting == v) {
+            startMySettingActivity();
+        } else if (iv_my_user_avatar == v) {
+            startMyAvatarActivity();
+        } else if (tv_my_account == v) {
+            startMyAccountActivity();
+        } else if (tv_my_all_orders == v) {
+            startMyAllOrdersActivity();
+        } else if (tv_my_order_1 == v) {
+            startMyOrder1Activity();
+        } else if (tv_my_order_2 == v) {
+            startMyOrder2Activity();
+        } else if (tv_my_order_3 == v) {
+            startMyOrder3Activity();
+        } else if (tv_my_order_4 == v) {
+            startMyOrder4Activity();
+        } else if (tv_my_order_5 == v) {
+            startMyOrder5Activity();
+        } else if (layout_my_evaluation == v) {
+            startMyEvaluationActivity();
+        } else if (layout_my_help == v) {
+            startMyHelpActivity();
+        } else if (layout_my_customer_service == v) {
+            startMyCustomerServiceActivity();
+        }
+    }
+
+    private void startMyCustomerServiceActivity() {
+        // TODO: 2020/3/12
+    }
+
+    private void startMyHelpActivity() {
+        // TODO: 2020/3/12
+    }
+
+    private void startMyEvaluationActivity() {
+        // TODO: 2020/3/12
+    }
+
+    private void startMyOrder5Activity() {
+        // TODO: 2020/3/12
+    }
+
+    private void startMyOrder4Activity() {
+        // TODO: 2020/3/12
+    }
+
+    private void startMyOrder3Activity() {
+        // TODO: 2020/3/12
+    }
+
+    private void startMyOrder2Activity() {
+        // TODO: 2020/3/12
+    }
+
+    private void startMyOrder1Activity() {
+        // TODO: 2020/3/12
+    }
+
+    private void startMyAllOrdersActivity() {
+        // TODO: 2020/3/12
+    }
+
+    private void startMyAccountActivity() {
+        // TODO: 2020/3/12
+    }
+
+    private void startMyAvatarActivity() {
+        // TODO: 2020/3/12
+    }
+
+    private void startMySettingActivity() {
+        HRActivity.start(getContext(), SettingFragment.class);
+    }
+
+    private void init() {
         iv_my_setting.setOnClickListener(this);
         tv_my_order_3.setOnClickListener(this);
         tv_my_order_4.setOnClickListener(this);
@@ -93,49 +177,6 @@ public final class MyFragment extends PagerChildFragment implements View.OnClick
         layout_my_evaluation.setOnClickListener(this);
         layout_my_help.setOnClickListener(this);
         layout_my_customer_service.setOnClickListener(this);
-
-        requestAPI();
-    }
-
-    @Override
-    public void onTabSelected(TabLayout.Tab tab) {
-        int position = tab.getPosition();
-    }
-
-    @Override
-    public void onTabUnselected(TabLayout.Tab tab) {
-
-    }
-
-    @Override
-    public void onTabReselected(TabLayout.Tab tab) {
-
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (iv_my_setting == v) {
-            HRActivity.start(getContext(), SettingFragment.class);
-        } else if (iv_my_user_avatar == v) {
-
-        } else if (tv_my_account == v) {
-
-        } else if (tv_my_all_orders == v) {
-
-        } else if (tv_my_order_1 == v) {
-
-        } else if (tv_my_order_2 == v) {
-
-        } else if (tv_my_order_3 == v) {
-            updateUI(false, false);
-        } else if (tv_my_order_4 == v) {
-            updateUI(true, false);
-        } else if (tv_my_order_5 == v) {
-            updateUI(true, true);
-        } else if (layout_my_evaluation == v) {
-        } else if (layout_my_help == v) {
-        } else if (layout_my_customer_service == v) {
-        }
     }
 
     private void requestAPI() {
@@ -198,15 +239,6 @@ public final class MyFragment extends PagerChildFragment implements View.OnClick
             layout_my_not_login.setVisibility(View.VISIBLE);
             layout_my_unauthorized.setVisibility(View.GONE);
             layout_my_authorized.setVisibility(View.GONE);
-        }
-    }
-
-    /* unit is dp */
-    private void setTopMargin(View v, float dpValue) {
-        ViewGroup.LayoutParams params = v.getLayoutParams();
-        if (params instanceof ViewGroup.MarginLayoutParams) {
-            ((ViewGroup.MarginLayoutParams) params).topMargin = SizeUtils.dp2px(dpValue);
-            v.setLayoutParams(params);
         }
     }
 

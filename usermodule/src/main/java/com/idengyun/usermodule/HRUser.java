@@ -14,6 +14,12 @@ import com.idengyun.usermodule.beans.LoginBean;
  */
 public final class HRUser {
 
+    /* 用户是否实名认证 */
+    public static boolean isAuthenticated() {
+        // TODO: 2020/3/12
+        return !TextUtils.isEmpty(getValueFromUserInfo("id"));
+    }
+
     /* 用户是否登录 */
     public static boolean isLogin() {
         return !TextUtils.isEmpty(getId()) && !TextUtils.isEmpty(getToken());
