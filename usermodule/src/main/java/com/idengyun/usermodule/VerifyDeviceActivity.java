@@ -117,6 +117,7 @@ public class VerifyDeviceActivity extends BaseActivity {
 
     private void startMainActivity() {
         ARouter.getInstance().build(RouterPathConfig.app_FirstActivity).navigation();
+        finish();
     }
 
     private void startTimer() {

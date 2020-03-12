@@ -264,11 +264,13 @@ public final class LoginActivity extends BaseActivity
     /* 开启设备认证界面 */
     private void startVerifyActivity() {
         VerifyDeviceActivity.start(getContext());
+        finish();
     }
 
     /* 开启主界面 */
     private void startMainActivity() {
         ARouter.getInstance().build(RouterPathConfig.app_FirstActivity).navigation();
+        finish();
     }
 
     private void startTimer(TextView textView) {

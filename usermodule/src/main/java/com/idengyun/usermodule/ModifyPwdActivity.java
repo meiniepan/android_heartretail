@@ -129,7 +129,7 @@ public class ModifyPwdActivity extends BaseActivity implements CompoundButton.On
             @Override
             public void onSuccess(Response<ApiSimpleBean> response) {
                 ToastUtils.showShort("修改密码成功");
-
+                finish();
             }
         });
     }
