@@ -202,7 +202,7 @@ public class MyApplication extends LitePalApplication {
      */
     private void initShareModule() {
         ShareUtil.initShare(this,
-                R.mipmap.ic_launcher,// TODO: 2020-03-04 分享的默认图片(直角logo)
+                R.drawable.ic_alipay,// TODO: 2020-03-04 分享的默认图片(直角logo)
                 WX_APPID,
                 WX_APPSECRET,
                 QQ_APPID,
