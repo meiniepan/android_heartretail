@@ -161,6 +161,12 @@ public final class GoodsInfoFragment extends BaseFragment implements View.OnClic
         List<GoodsDetailBean.Data.GoodsSku> goodsSkuList = data.goodsSkuList;
         List<String> goodsDetailList = data.goodsDetailList;
 
+        if (imageList == null ||
+                protocolList == null ||
+                goodsSpecList == null ||
+                goodsSkuList == null ||
+                goodsDetailList == null) return;
+
         int wholesaleFlag = data.wholesaleFlag;
         String retailPrice = data.retailPrice;
         String wholesalePrice = data.wholesalePrice;
@@ -210,13 +216,11 @@ public final class GoodsInfoFragment extends BaseFragment implements View.OnClic
         }
 
         /* 服务说明 */
-        if (protocolList != null && !protocolList.isEmpty()) {
-            StringBuilder sb = new StringBuilder();
-            for (GoodsDetailBean.Data.Protocol protocol : protocolList) {
-                sb.append(protocol.protocolName).append("&");
-            }
-            tv_goods_service.setText(sb.subSequence(0, sb.length() - 1));
+        StringBuilder sb = new StringBuilder();
+        for (GoodsDetailBean.Data.Protocol protocol : protocolList) {
+            sb.append(protocol.protocolName).append("&");
         }
+        tv_goods_service.setText(sb.subSequence(0, sb.length() - 1));
 
         /* 商品详情 */
         layout_goods_detail.removeAllViews();
