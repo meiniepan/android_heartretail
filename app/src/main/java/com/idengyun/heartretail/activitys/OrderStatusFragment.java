@@ -79,7 +79,7 @@ public class OrderStatusFragment extends BaseFragment {
     }
 
     private void initUI() {
-         adapter = new OderStatusListAdapter(R.layout.item_order_status, mData);
+         adapter = new OderStatusListAdapter(getActivity(),R.layout.item_order_status, mData);
         rsrOrderStatus.setLayoutManager(new LinearLayoutManager(getActivity()));
         rsrOrderStatus.setAdapter(adapter);
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {

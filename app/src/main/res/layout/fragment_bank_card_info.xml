@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8F8F8"
+    android:background="#fff"
     android:orientation="vertical">
 
     <FrameLayout
@@ -15,54 +16,115 @@
         <com.dengyun.baselibrary.widgets.toolbar.BaseToolBar
             android:layout_width="match_parent"
             android:layout_height="@dimen/basetool_height"
-            app:toolbar_title="身份证信息" />
+            app:toolbar_title="银行卡信息" />
     </FrameLayout>
+
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="30dp"
+        app:cardBackgroundColor="#F8F8F8"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="2dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="27dp"
+                android:layout_marginEnd="24dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="借记卡"
+                    android:textColor="#ff333333"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="34dp"
+                android:layout_marginBottom="44dp"
+                android:text="6221 **** **** **** 1234"
+                android:textColor="#ff333333"
+                android:textSize="20sp" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="30dp"
+        android:gravity="center_vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:text="身份证正面"
-            android:textColor="#ff333333"
+            android:text="预留手机号"
+            android:textColor="#ff666666"
             android:textSize="16sp" />
 
-        <ImageView
-            android:layout_width="240dp"
-            android:layout_height="155dp"
-            android:layout_marginTop="20dp"
-            android:background="#000" />
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="身份证背面"
+            android:layout_marginStart="15dp"
             android:textColor="#ff333333"
-            android:textSize="16sp" />
-
-        <ImageView
-            android:layout_width="240dp"
-            android:layout_height="155dp"
-            android:layout_marginTop="20dp"
-            android:background="#000" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="56dp"
-            android:drawableStart="@drawable/shape_nick_dot_red"
-            android:drawablePadding="8dp"
-            android:gravity="center_vertical"
-            android:text="预留手机号：18012345678"
-            android:textColor="#333333"
-            android:textSize="14sp" />
+            android:textSize="16sp"
+            tools:text="18012345678" />
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="30dp"
+        android:background="#EEEEEE" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="121dp"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/shape_real_btn_bg"
+        android:gravity="center"
+        android:paddingTop="14dp"
+        android:paddingBottom="14dp"
+        android:text="更新银行卡信息"
+        android:textColor="#ffffffff"
+        android:textSize="16sp" />
+
+    <TextView
+        android:layout_width="168dp"
+        android:layout_height="36dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="22dp"
+        android:text="请准备好银行卡\n您的信息将仅用于实名认证"
+        android:textColor="#ff999999"
+        android:textSize="14sp" />
 </LinearLayout>
 
 
