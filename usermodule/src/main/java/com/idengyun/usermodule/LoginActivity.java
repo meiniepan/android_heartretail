@@ -15,6 +15,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.dengyun.baselibrary.base.activity.BaseActivity;
 import com.dengyun.baselibrary.config.RouterPathConfig;
 import com.dengyun.baselibrary.net.NetApi;
@@ -271,7 +272,6 @@ public final class LoginActivity extends BaseActivity
                 .activity(this)
                 .isShowDialog(true)
                 .params(map)
-                .isInterceptErrorCode(false)
                 .clazz(LoginBean.class)
                 .build();
 
@@ -301,7 +301,7 @@ public final class LoginActivity extends BaseActivity
     }
 
     private void startMainActivity() {
-        //MainActiviy.start(getContext());
+        ARouter.getInstance().build(RouterPathConfig.app_FirstActivity).navigation();
     }
 
     private void startTimer(TextView textView) {

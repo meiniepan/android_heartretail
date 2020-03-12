@@ -30,6 +30,10 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
+        <meta-data
+            android:name="com.sensorsdata.analytics.android.AndroidId"
+            android:value="true" />
     </application>
 
 </manifest>

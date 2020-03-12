@@ -4,6 +4,8 @@ import android.app.Application;
 
 import com.dengyun.baselibrary.utils.Utils;
 import com.dengyun.baselibrary.utils.phoneapp.AppUtils;
+import com.dengyun.baselibrary.utils.phoneapp.PhoneUtils;
+import com.sensorsdata.analytics.android.sdk.SensorsDataAPI;
 
 /**
  * 心零售 常量字段集合
@@ -23,7 +25,7 @@ public final class HRConst {
     public static final String IDENTIFY_TYPE_2 = "2";
     public static final String IDENTIFY_TYPE_3 = "3";
     public static final String IDENTIFY_TYPE_4 = "4";
-    public static final String PHONE_IMEI = "";
-    public static final String PHONE_TYPE = "";
+    public static final String PHONE_IMEI = SensorsDataAPI.sharedInstance().getAnonymousId();
+    public static final String PHONE_TYPE = PhoneUtils.getModel();
 
 }

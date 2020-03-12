@@ -7,8 +7,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.dengyun.baselibrary.base.ApiSimpleBean;
 import com.dengyun.baselibrary.base.activity.BaseActivity;
+import com.dengyun.baselibrary.config.RouterPathConfig;
 import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
@@ -141,7 +143,7 @@ public class VerifyDeviceActivity extends BaseActivity {
     }
 
     private void startMainActivity() {
-        //MainActivity.start(getContext());
+        ARouter.getInstance().build(RouterPathConfig.app_FirstActivity).navigation();
     }
 
     private void startTimer() {
