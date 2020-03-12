@@ -195,19 +195,6 @@ public final class LoginActivity extends BaseActivity
         NetApi.getData(netOption, new JsonCallback<RegisterBean>(netOption) {
             @Override
             public void onSuccess(Response<RegisterBean> response) {
-                if (response.code() != 200) {
-                    return;
-                }
-
-                RegisterBean body = response.body();
-                if (body == null) {
-                    return;
-                }
-
-                if (!"200".equals(body.code)) {
-                    return;
-                }
-
                 ToastUtils.showShort("注册成功");
                 radio_group.check(R.id.rb_login);
                 et_register_mobile.setText(null);
@@ -291,22 +278,8 @@ public final class LoginActivity extends BaseActivity
         NetApi.getData(netOption, new JsonCallback<LoginBean>(netOption) {
             @Override
             public void onSuccess(Response<LoginBean> response) {
-                if (response.code() != 200) {
-                    return;
-                }
-
-                LoginBean body = response.body();
-                if (body == null) {
-                    return;
-                }
-
-                if (!"200".equals(body.code)) {
-                    return;
-                }
-
-                // oastUtils.showShort("登录成功");
-
                 /* 保存用户信息 */
+                LoginBean body = response.body();
                 SharedPreferencesUtil.saveDataBean(Utils.getApp(), HRConst.XML_FILE_NAME_USER_INFO, body);
                 if (body.data.isnewPhoneImei == 1) {
                     startVerifyActivity();

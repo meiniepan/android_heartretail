@@ -14,7 +14,12 @@ public final class HRUser {
 
     /* 用户是否登录 */
     public static boolean isLogin() {
-        return !TextUtils.isEmpty(getId());
+        return !TextUtils.isEmpty(getId()) && !TextUtils.isEmpty(getToken());
+    }
+
+    /* 获取用户token */
+    public static String getToken() {
+        return getValueFromUserInfo("token");
     }
 
     /* 获取用户ID */
