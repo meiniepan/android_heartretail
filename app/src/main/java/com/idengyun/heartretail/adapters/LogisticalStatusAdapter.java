@@ -43,7 +43,7 @@ public class LogisticalStatusAdapter extends BaseQuickAdapter<LogisticalStatusBe
         if (item.isCurrentStatus == 1) {
             tv_status.setTextColor(Color.WHITE);
             //logistics_show
-            tv_status.setBackgroundResource(R.drawable.logistics_current);
+            tv_status.setBackgroundResource(R.drawable.logistics_show);
             iv_status.setImageResource(R.drawable.logistics_current);
         } else {
             tv_status.setTextColor(mContext.getResources().getColor(R.color.gray333));

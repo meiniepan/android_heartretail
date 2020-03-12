@@ -6,7 +6,7 @@
 
     <TextView
         android:id="@+id/tv_status"
-        android:layout_width="50dp"
+        android:layout_width="wrap_content"
         android:layout_height="28dp"
         android:layout_marginLeft="13.5dp"
         android:paddingLeft="3dp"

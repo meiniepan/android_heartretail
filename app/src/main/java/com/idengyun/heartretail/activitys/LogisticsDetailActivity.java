@@ -97,7 +97,7 @@ public class LogisticsDetailActivity extends BaseActivity {
     private void initLogisticalStatus() {
         logisticalStatusBeanList = new ArrayList<>();
         logisticalStatusBeanList.add(new LogisticalStatusBean("已发货", 0));
-        logisticalStatusBeanList.add(new LogisticalStatusBean("运输中", 0));
+        logisticalStatusBeanList.add(new LogisticalStatusBean("运输中", 1));
         logisticalStatusBeanList.add(new LogisticalStatusBean("派件中", 0));
         logisticalStatusBeanList.add(new LogisticalStatusBean("已签收", 0));
         logisticalStatusBeanList.add(new LogisticalStatusBean("已提货", 0));
