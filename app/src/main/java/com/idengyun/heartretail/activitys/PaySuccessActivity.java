@@ -45,6 +45,7 @@ public class PaySuccessActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_check_order:
+                OrderDetailActivity.start(this,null);
                 break;
             case R.id.tv_back_goods_detail:
 

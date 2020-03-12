@@ -42,4 +42,9 @@
         android:layout_height="wrap_content"
         android:onClick="skipOrderList"
         android:text="订单列表" />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="skipOrderCommit"
+        android:text="确认订单" />
 </LinearLayout>

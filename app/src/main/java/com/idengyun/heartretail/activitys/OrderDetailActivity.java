@@ -55,8 +55,8 @@ public class OrderDetailActivity extends BaseActivity {
     TextView tvOrderRedPacketDeduction;
     @BindView(R.id.tv_order_should_total_pay)
     TextView tvOrderShouldTotalPay;
-    @BindView(R.id.tv_order_id)
-    TextView tvOrderId;
+    @BindView(R.id.tv_order_id2)
+    TextView tvOrderId2;
     @BindView(R.id.tv_order_time)
     TextView tvOrderTime;
     @BindView(R.id.tv_order_protocol)
@@ -69,8 +69,8 @@ public class OrderDetailActivity extends BaseActivity {
     TextView tvBottomOperate1;
     @BindView(R.id.tv_bottom_operate2)
     TextView tvBottomOperate2;
-    @BindView(R.id.tv_order_status_shop_name)
-    TextView tvShopName;
+    @BindView(R.id.tv_order_status_order_id)
+    TextView tvOrderId;
     @BindView(R.id.ll_bottom)
     LinearLayout llBottom;
     OrderStatusBean dataSource;
@@ -100,7 +100,7 @@ public class OrderDetailActivity extends BaseActivity {
                 .activity(this)
                 .params("version", AppUtils.getAppVersionName())
                 .params("userId", HRUser.getId())
-                .params("orderId", dataSource.orderId)
+                .params("orderId", dataSource==null?"":dataSource.orderId)
                 .params("platform", HRConst.PLATFORM)
                 .isShowDialog(true)
                 .type(type)
@@ -119,7 +119,7 @@ public class OrderDetailActivity extends BaseActivity {
     }
 
     private void initUI() {
-        tvShopName.setText(data.shopName);
+        tvOrderId2.setText(data.orderId);
         initRecyclerView();
     }
 
