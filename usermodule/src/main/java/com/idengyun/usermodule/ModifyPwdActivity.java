@@ -20,14 +20,10 @@ import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.baselibrary.utils.RegexUtils;
 import com.dengyun.baselibrary.utils.ToastUtils;
-import com.dengyun.baselibrary.utils.phoneapp.AppUtils;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.usermodule.beans.VerifyCodeBean;
-import com.idengyun.usermodule.beans.KVModifyPwd;
 import com.idengyun.usermodule.utils.SecondsTimer;
 import com.lzy.okgo.model.Response;
-
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -91,8 +87,6 @@ public class ModifyPwdActivity extends BaseActivity implements CompoundButton.On
                 .activity(this)
                 .params("mobile", etPhoneNum.getText().toString())
                 .params("identifyType", HRConst.IDENTIFY_TYPE_2)
-                .params("version", AppUtils.getAppVersionName())
-                .params("platform", HRConst.PLATFORM)
                 .isShowDialog(true)
                 .clazz(VerifyCodeBean.class)
                 .build();
@@ -100,22 +94,6 @@ public class ModifyPwdActivity extends BaseActivity implements CompoundButton.On
         NetApi.getData(RequestMethod.GET, netOption, new JsonCallback<VerifyCodeBean>(netOption) {
             @Override
             public void onSuccess(Response<VerifyCodeBean> response) {
-                if (200 != response.code()) {
-                    ToastUtils.showLong("验证码发送失败");
-                    return;
-                }
-
-                VerifyCodeBean body = response.body();
-                if (null == body) {
-                    ToastUtils.showLong("验证码发送失败");
-                    return;
-                }
-
-                if (!"200".equals(body.code)) {
-                    ToastUtils.showLong(body.msg);
-                    return;
-                }
-
                 ToastUtils.showLong("验证码已发出");
             }
         });
@@ -138,18 +116,12 @@ public class ModifyPwdActivity extends BaseActivity implements CompoundButton.On
             return;
         }
 
-        Map<String, Object> map = new KVModifyPwd(
-                etPhoneNum.getEditableText().toString(),
-                etVCode1.getEditableText().toString(),
-                etNewPwd.getEditableText().toString(),
-                AppUtils.getAppVersionName(),
-                HRConst.PLATFORM
-        ).toMap();
-
         NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.changePwd())
                 .activity(this)
                 .isShowDialog(true)
-                .params(map)
+                .params("mobile", etPhoneNum.getEditableText().toString())
+                .params("identifyCode", etVCode1.getEditableText().toString())
+                .params("pwd", etNewPwd.getEditableText().toString())
                 .clazz(ApiSimpleBean.class)
                 .build();
 
@@ -191,6 +163,7 @@ public class ModifyPwdActivity extends BaseActivity implements CompoundButton.On
             etNewPwd.setTransformationMethod(method);
         }
     }
+
     private void cancelTimer() {
         if (timer != null) timer.cancel();
     }

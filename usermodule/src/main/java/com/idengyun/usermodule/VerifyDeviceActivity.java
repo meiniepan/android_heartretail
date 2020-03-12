@@ -16,15 +16,11 @@ import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.baselibrary.utils.ToastUtils;
-import com.dengyun.baselibrary.utils.phoneapp.AppUtils;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.usermodule.beans.VerifyCodeBean;
-import com.idengyun.usermodule.beans.KVVerifyDevice;
 import com.idengyun.usermodule.utils.SecondsTimer;
 import com.idengyun.usermodule.utils.TransformPhoneNumUtil;
 import com.lzy.okgo.model.Response;
-
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -49,6 +45,7 @@ public class VerifyDeviceActivity extends BaseActivity {
         Intent starter = new Intent(context, VerifyDeviceActivity.class);
         context.startActivity(starter);
     }
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_verify_device;
@@ -79,8 +76,6 @@ public class VerifyDeviceActivity extends BaseActivity {
                 .activity(this)
                 .params("mobile", HRUser.getMobile())
                 .params("identifyType", HRConst.IDENTIFY_TYPE_1)
-                .params("version", AppUtils.getAppVersionName())
-                .params("platform", HRConst.PLATFORM)
                 .isShowDialog(true)
                 .clazz(VerifyCodeBean.class)
                 .build();
@@ -88,22 +83,6 @@ public class VerifyDeviceActivity extends BaseActivity {
         NetApi.getData(RequestMethod.GET, netOption, new JsonCallback<VerifyCodeBean>(netOption) {
             @Override
             public void onSuccess(Response<VerifyCodeBean> response) {
-                if (200 != response.code()) {
-                    ToastUtils.showLong("验证码发送失败");
-                    return;
-                }
-
-                VerifyCodeBean body = response.body();
-                if (null == body) {
-                    ToastUtils.showLong("验证码发送失败");
-                    return;
-                }
-
-                if (!"200".equals(body.code)) {
-                    ToastUtils.showLong(body.msg);
-                    return;
-                }
-
                 ToastUtils.showLong("验证码已发出");
             }
         });
@@ -117,19 +96,13 @@ public class VerifyDeviceActivity extends BaseActivity {
             return;
         }
 
-        KVVerifyDevice mapV = new KVVerifyDevice(
-                HRConst.PHONE_IMEI,
-                etVCode.getEditableText().toString(),
-                AppUtils.getAppVersionName(),
-                HRUser.getId(),
-                HRConst.PHONE_TYPE,
-                HRConst.PLATFORM);
-        Map<String, Object> map = mapV.toMap();
-
-        NetOption netOption = NetOption.newBuilder("http://10.10.8.22:3000/mock/39/user/add/phone")
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.addPhone())
                 .activity(this)
                 .isShowDialog(true)
-                .params(map)
+                .params("phoneImei", HRConst.PHONE_IMEI)
+                .params("identifyCode", etVCode.getEditableText().toString())
+                .params("userId", HRUser.getId())
+                .params("phoneType", HRConst.PHONE_TYPE)
                 .clazz(ApiSimpleBean.class)
                 .build();
 
@@ -166,6 +139,7 @@ public class VerifyDeviceActivity extends BaseActivity {
 
         timer.start();
     }
+
     private void cancelTimer() {
         if (timer != null) timer.cancel();
     }

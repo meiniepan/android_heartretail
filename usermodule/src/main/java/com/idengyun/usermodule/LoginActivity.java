@@ -26,17 +26,12 @@ import com.dengyun.baselibrary.utils.RegexUtils;
 import com.dengyun.baselibrary.utils.SharedPreferencesUtil;
 import com.dengyun.baselibrary.utils.ToastUtils;
 import com.dengyun.baselibrary.utils.Utils;
-import com.dengyun.baselibrary.utils.phoneapp.AppUtils;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
-import com.idengyun.usermodule.beans.KVLogin;
-import com.idengyun.usermodule.beans.KVRegister;
 import com.idengyun.usermodule.beans.LoginBean;
 import com.idengyun.usermodule.beans.RegisterBean;
 import com.idengyun.usermodule.beans.VerifyCodeBean;
 import com.idengyun.usermodule.utils.SecondsTimer;
 import com.lzy.okgo.model.Response;
-
-import java.util.Map;
 
 /**
  * 登录页面
@@ -159,7 +154,7 @@ public final class LoginActivity extends BaseActivity
 
     /* 请求注册API */
     private void requestRegister() {
-        if (!RegexUtils.isMobileSimple(et_register_mobile.getEditableText())) {
+        if (!RegexUtils.isMobileSimple(et_register_mobile.getText())) {
             ToastUtils.showShort("请输入有效手机号码");
             return;
         }
@@ -174,22 +169,16 @@ public final class LoginActivity extends BaseActivity
             return;
         }
 
-        Map<String, Object> map = new KVRegister(
-                et_register_mobile.getEditableText().toString(),
-                AppUtils.getAppVersionName(),
-                et_register_verify_code.getEditableText().toString(),
-                et_register_pwd.getEditableText().toString(),
-                et_register_invite_code.getEditableText().toString(),
-                HRConst.PHONE_IMEI,
-                HRConst.PHONE_TYPE,
-                HRConst.PLATFORM,
-                HRConst.APP_NAME
-        ).toMap();
-
         NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.register())
                 .activity(this)
                 .isShowDialog(true)
-                .params(map)
+                .params("mobile", et_register_mobile.getText().toString())
+                .params("identifyCode", et_register_verify_code.getText().toString())
+                .params("pwd", et_register_pwd.getText().toString())
+                .params("invitationCode", et_register_invite_code.getText().toString())
+                .params("phoneImei", HRConst.PHONE_IMEI)
+                .params("phoneType", HRConst.PHONE_TYPE)
+                .params("appName", HRConst.APP_NAME)
                 .clazz(RegisterBean.class)
                 .build();
 
@@ -208,7 +197,7 @@ public final class LoginActivity extends BaseActivity
 
     /* 发送手机验证码API */
     private void sendVerifyCode() {
-        if (!RegexUtils.isMobileSimple(et_register_mobile.getEditableText())) {
+        if (!RegexUtils.isMobileSimple(et_register_mobile.getText())) {
             ToastUtils.showShort("请输入有效手机号码");
             return;
         }
@@ -217,10 +206,8 @@ public final class LoginActivity extends BaseActivity
 
         NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.getIdentifyCode())
                 .activity(this)
-                .params("mobile", et_register_mobile.getEditableText().toString())
+                .params("mobile", et_register_mobile.getText().toString())
                 .params("identifyType", HRConst.IDENTIFY_TYPE_0)
-                .params("version", AppUtils.getAppVersionName())
-                .params("platform", HRConst.PLATFORM)
                 .isShowDialog(true)
                 .clazz(VerifyCodeBean.class)
                 .build();
@@ -228,22 +215,6 @@ public final class LoginActivity extends BaseActivity
         NetApi.getData(RequestMethod.GET, netOption, new JsonCallback<VerifyCodeBean>(netOption) {
             @Override
             public void onSuccess(Response<VerifyCodeBean> response) {
-                if (200 != response.code()) {
-                    ToastUtils.showLong("验证码发送失败");
-                    return;
-                }
-
-                VerifyCodeBean body = response.body();
-                if (null == body) {
-                    ToastUtils.showLong("验证码发送失败");
-                    return;
-                }
-
-                if (!"200".equals(body.code)) {
-                    ToastUtils.showLong(body.msg);
-                    return;
-                }
-
                 ToastUtils.showLong("验证码已发出");
             }
         });
@@ -251,7 +222,7 @@ public final class LoginActivity extends BaseActivity
 
     /* 请求登录API */
     private void requestLogin() {
-        if (!RegexUtils.isMobileSimple(et_login_mobile.getEditableText())) {
+        if (!RegexUtils.isMobileSimple(et_login_mobile.getText())) {
             ToastUtils.showShort("请输入有效手机号码");
             return;
         }
@@ -261,17 +232,12 @@ public final class LoginActivity extends BaseActivity
             return;
         }
 
-        KVLogin login = new KVLogin(
-                et_login_mobile.getEditableText().toString(),
-                AppUtils.getAppVersionName(),
-                et_login_pwd.getEditableText().toString(),
-                HRConst.PHONE_IMEI,
-                HRConst.PLATFORM);
-        Map<String, Object> map = login.toMap();
         NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.login())
                 .activity(this)
                 .isShowDialog(true)
-                .params(map)
+                .params("mobile", et_login_mobile.getText().toString())
+                .params("pwd", et_login_pwd.getText().toString())
+                .params("phoneImei", HRConst.PHONE_IMEI)
                 .clazz(LoginBean.class)
                 .build();
 
@@ -295,11 +261,12 @@ public final class LoginActivity extends BaseActivity
         ModifyPwdActivity.start(getContext());
     }
 
-    /* 开启设备认证页面 */
+    /* 开启设备认证界面 */
     private void startVerifyActivity() {
         VerifyDeviceActivity.start(getContext());
     }
 
+    /* 开启主界面 */
     private void startMainActivity() {
         ARouter.getInstance().build(RouterPathConfig.app_FirstActivity).navigation();
     }
