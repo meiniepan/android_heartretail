@@ -35,7 +35,7 @@ public class OderStatusListAdapter extends BaseQuickAdapter<OrderStatusBean, Bas
     @Override
     protected void convert(BaseViewHolder helper, OrderStatusBean item) {
         initGoodsListRecyclerView(helper.getView(R.id.sr_goods), item.orderGoods);
-        helper.setText(R.id.tv_order_status_shop_name1, item.shopName);
+        helper.setText(R.id.tv_order_status_order_id, "订单号"+item.orderId);
         LinearLayout ll_surplus_pay_time = helper.getView(R.id.ll_surplus_pay_time);
         LinearLayout ll_advanced_operate = helper.getView(R.id.ll_advanced_operate);
         TextView tv_order_status_status = helper.getView(R.id.tv_order_status_status);

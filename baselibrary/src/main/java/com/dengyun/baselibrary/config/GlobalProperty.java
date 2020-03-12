@@ -13,14 +13,6 @@ public class GlobalProperty {
     private double longitude = 116.481270d;//定位的经度
     private double latitude = 39.912010d;//定位的纬度
 
-    //埋点数据参数
-    private String saProvince;
-    private String saCity;
-    private String saDistrict;
-    private String saStreet;
-
-    //业务全局参数
-    private int company_id;  //当前用户的企业id
 
     private static GlobalProperty globalProperty;
     private GlobalProperty(){
@@ -84,43 +76,4 @@ public class GlobalProperty {
         this.latitude = latitude;
     }
 
-    public String getSaProvince() {
-        return saProvince;
-    }
-
-    public void setSaProvince(String saProvince) {
-        this.saProvince = saProvince;
-    }
-
-    public String getSaCity() {
-        return saCity;
-    }
-
-    public void setSaCity(String saCity) {
-        this.saCity = saCity;
-    }
-
-    public String getSaDistrict() {
-        return saDistrict;
-    }
-
-    public void setSaDistrict(String saDistrict) {
-        this.saDistrict = saDistrict;
-    }
-
-    public String getSaStreet() {
-        return saStreet;
-    }
-
-    public void setSaStreet(String saStreet) {
-        this.saStreet = saStreet;
-    }
-
-    public int getCompany_id() {
-        return company_id;
-    }
-
-    public void setCompany_id(int company_id) {
-        this.company_id = company_id;
-    }
 }

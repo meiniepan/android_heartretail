@@ -132,12 +132,12 @@ public class CityListActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                //这里要利用adapter.getItem(position)来获取当前position所对应的对象
-                //Toast.makeText(getApplication(), ((SortModel) adapter.getItem(position)).getName() + ((SortModel) adapter.getItem(position)).getCityid(), Toast.LENGTH_SHORT).show();
-
                 /*CityBean cityBean = new CityBean();
                 cityBean.setId(sourceDateList.get(position).getCityid());
                 cityBean.setName(sourceDateList.get(position).getName());*/
+
+                SortModel sortModel = sourceDateList.get(position);
+
 
                 GlobalProperty.getInstance().setCity(sourceDateList.get(position).getName());
                 GlobalProperty.getInstance().setLocationId(sourceDateList.get(position).getCityid());

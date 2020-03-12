@@ -111,6 +111,7 @@
 
 #-keep class com..**{*;}  #过滤掉自己编写的实体类
 -keep class com.dengyun.baselibrary.base.**{*;}  #过滤掉自己编写的实体类
+-keep class com.dengyun.baselibrary.utils.ocr.**{*;}  #过滤掉自己编写的实体类
 -keep class com.dengyun.baselibrary.net.upload.**{*;}  #过滤掉自己编写的实体类
 
 

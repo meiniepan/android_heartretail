@@ -2,18 +2,13 @@ package com.dengyun.baselibrary.net.deal;
 
 import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.constants.ProjectType;
-import com.dengyun.baselibrary.config.GlobalProperty;
-import com.dengyun.baselibrary.spconstants.SpUserConstants;
 import com.dengyun.baselibrary.utils.GsonConvertUtil;
 import com.dengyun.baselibrary.utils.SharedPreferencesUtil;
 import com.dengyun.baselibrary.utils.Utils;
 import com.dengyun.baselibrary.utils.encode.EncryptUtils;
 import com.dengyun.baselibrary.utils.phoneapp.AppUtils;
-import com.lzy.okgo.model.HttpHeaders;
 import com.sensorsdata.analytics.android.sdk.SensorsDataAPI;
 import com.sensorsdata.analytics.android.sdk.util.SensorsDataUtils;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -185,7 +180,7 @@ public class DealParamsUtil {
             /* MD5加密参数 */
             String parameters = builder.substring(0, builder.length() - 1);
             String sign = EncryptUtils.stringToMD5(parameters + "xls");
-            netOption.addHeaders("sign",sign);
+            netOption.addHeaders("sign", sign);
         }
         return paramJson0;
 
@@ -275,28 +270,12 @@ public class DealParamsUtil {
      * @param map 加密之前的参数map
      */
     public static void setMtmyPublicParam(Map map) {
-        String token = SpUserConstants.getUserToken();
-        int user_id = SharedPreferencesUtil.getData(Utils.getApp(), "user", "user_id", 0);
-        if (!map.containsKey("user_id")) map.put("user_id", user_id);
         if (!map.containsKey("client")) map.put("client", "android");
-        if (!map.containsKey("user_token")) map.put("user_token", token);
         if (!map.containsKey("version")) map.put("version", AppUtils.getAppVersionName());
-        if (!map.containsKey("city_id"))
-            map.put("city_id", GlobalProperty.getInstance().getLocationId());
-        if (!map.containsKey("city_name"))
-            map.put("city_name", GlobalProperty.getInstance().getCity());
         if (SensorsDataAPI.sharedInstance(Utils.getApp()).getAnonymousId() != null) {
             if (!map.containsKey("distinct_id"))
                 map.put("distinct_id", SensorsDataAPI.sharedInstance(Utils.getApp()).getAnonymousId());
         }
-        if (!map.containsKey("sa_province"))
-            map.put("sa_province", GlobalProperty.getInstance().getSaProvince() == null ? "" : GlobalProperty.getInstance().getSaProvince());
-        if (!map.containsKey("sa_city"))
-            map.put("sa_city", GlobalProperty.getInstance().getSaCity() == null ? "" : GlobalProperty.getInstance().getSaCity());
-        if (!map.containsKey("sa_district"))
-            map.put("sa_district", GlobalProperty.getInstance().getSaDistrict() == null ? "" : GlobalProperty.getInstance().getSaDistrict());
-        if (!map.containsKey("sa_street"))
-            map.put("sa_street", GlobalProperty.getInstance().getSaStreet() == null ? "" : GlobalProperty.getInstance().getSaStreet());
         //不需要传device_id
         if (!map.containsKey("device_id"))
             map.put("device_id", SensorsDataUtils.getAndroidID(Utils.getApp()) == null
@@ -310,27 +289,12 @@ public class DealParamsUtil {
      * @param map 之前的参数map
      */
     public static void setFZXPublicParam(Map map) {
-        String token = SpUserConstants.getUserToken();
-        String user_id = SpUserConstants.getUserId();
-
-        if (!map.containsKey("nowu_id")) map.put("nowu_id", user_id);
         if (!map.containsKey("client")) map.put("client", "android");
-        if (!map.containsKey("user_token")) map.put("user_token", token);
         if (!map.containsKey("ver_num")) map.put("ver_num", AppUtils.getAppVersionName());
-        if (!map.containsKey("company_id"))
-            map.put("company_id", GlobalProperty.getInstance().getCompany_id());
         if (SensorsDataAPI.sharedInstance(Utils.getApp()).getAnonymousId() != null) {
             if (!map.containsKey("distinct_id"))
                 map.put("distinct_id", SensorsDataAPI.sharedInstance(Utils.getApp()).getAnonymousId());
         }
-        if (!map.containsKey("sa_province"))
-            map.put("sa_province", GlobalProperty.getInstance().getSaProvince() == null ? "" : GlobalProperty.getInstance().getSaProvince());
-        if (!map.containsKey("sa_city"))
-            map.put("sa_city", GlobalProperty.getInstance().getSaCity() == null ? "" : GlobalProperty.getInstance().getSaCity());
-        if (!map.containsKey("sa_district"))
-            map.put("sa_district", GlobalProperty.getInstance().getSaDistrict() == null ? "" : GlobalProperty.getInstance().getSaDistrict());
-        if (!map.containsKey("sa_street"))
-            map.put("sa_street", GlobalProperty.getInstance().getSaStreet() == null ? "" : GlobalProperty.getInstance().getSaStreet());
         //不需要传device_id
         if (!map.containsKey("device_id"))
             map.put("device_id", SensorsDataUtils.getAndroidID(Utils.getApp()) == null
@@ -367,8 +331,6 @@ public class DealParamsUtil {
     public static void setHRPublicParam(Map<String, Object> map) {
         if (null == map.get("platform")) map.put("platform", "Android");
         if (null == map.get("version")) map.put("version", AppUtils.getAppVersionName());
-        // if (!map.containsKey("client")) map.put("client", "android");
-        // if (!map.containsKey("version")) map.put("version", AppUtils.getAppVersionName());
     }
 
 }

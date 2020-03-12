@@ -15,20 +15,12 @@
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
-        <ImageView
-            android:layout_width="16dp"
-            android:layout_height="15dp"
-            android:visibility="gone"
-            android:layout_marginEnd="@dimen/dp_7"
-            android:src="@drawable/ic_shop" />
-
         <TextView
-            android:id="@+id/tv_order_status_shop_name1"
+            android:id="@+id/tv_order_status_order_id"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textStyle="bold"
-            tools:text="可诺丹婷大族广场店" />
+            tools:text="订单号123456789012345678" />
 
         <LinearLayout
             android:id="@+id/ll_surplus_pay_time"

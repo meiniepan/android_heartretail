@@ -264,7 +264,7 @@
                         android:textColor="@color/gray666" />
 
                     <TextView
-                        android:id="@+id/tv_order_id"
+                        android:id="@+id/tv_order_id2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/dp_5"
