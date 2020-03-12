@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
-import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
@@ -27,7 +26,6 @@ import com.idengyun.heartretail.goods.GoodsInfoFragment;
 import com.idengyun.heartretail.goods.GoodsServiceFragment;
 import com.idengyun.heartretail.goods.GoodsSpecFragment;
 import com.idengyun.heartretail.model.response.GoodsListBean;
-import com.idengyun.heartretail.model.response.PersonalDataBean;
 import com.idengyun.heartretail.notice.NoticeFragment;
 import com.idengyun.usermodule.HRUser;
 import com.lzy.okgo.model.Response;
@@ -155,14 +153,15 @@ public final class HomeFragment extends PagerChildFragment implements View.OnCli
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Class[] classes = new Class[]{
+                    HRActivity.start(
+                            getContext(),
+                            null,
                             GoodsInfoFragment.class,
                             GoodsEvaluateFragment.class,
                             GoodsSpecFragment.class,
                             GoodsServiceFragment.class,
                             GoodsDetailFragment.class
-                    };
-                    HRActivity.start(getContext(), classes, null);
+                    );
                 }
             });
             return new GoodsHolder(itemView);

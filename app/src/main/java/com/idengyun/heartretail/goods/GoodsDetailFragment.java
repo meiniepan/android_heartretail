@@ -129,9 +129,12 @@ public final class GoodsDetailFragment extends BaseFragment implements RadioGrou
         dimension = SizeUtils.dp2px(64f);
 
         HRActivity.showFragment(getActivity(), GoodsInfoFragment.class.getName());
-        HRActivity.hideFragment(getActivity(), GoodsEvaluateFragment.class.getName());
-        HRActivity.hideFragment(getActivity(), GoodsSpecFragment.class.getName());
-        HRActivity.hideFragment(getActivity(), GoodsServiceFragment.class.getName());
+        HRActivity.hideFragment(
+                getActivity(),
+                GoodsEvaluateFragment.class.getName(),
+                GoodsSpecFragment.class.getName(),
+                GoodsServiceFragment.class.getName()
+        );
     }
 
     private void findViewById(@NonNull View view) {

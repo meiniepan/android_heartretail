@@ -12,6 +12,13 @@ import com.idengyun.heartretail.my.setting.account.IdentityFragment;
 import com.idengyun.heartretail.my.setting.account.PasswordFragment;
 import com.idengyun.heartretail.my.setting.account.PhoneFragment;
 import com.idengyun.heartretail.my.setting.account.RealFragment;
+import com.idengyun.heartretail.my.setting.account.auth.AuthorizedFragment;
+import com.idengyun.heartretail.my.setting.account.auth.BankCardInfoFragment;
+import com.idengyun.heartretail.my.setting.account.auth.IDCardInfoFragment;
+import com.idengyun.heartretail.my.setting.account.auth.Step1Fragment;
+import com.idengyun.heartretail.my.setting.account.auth.Step2Fragment;
+import com.idengyun.heartretail.my.setting.account.auth.Step3Fragment;
+import com.idengyun.heartretail.my.setting.account.auth.UnauthorizedFragment;
 
 /**
  * 账号管理
@@ -51,7 +58,13 @@ public final class AccountFragment extends BaseFragment implements View.OnClickL
     }
 
     private void startRealVerifyActivity() {
-        HRActivity.start(getContext(), RealFragment.class);
+        HRActivity.start(getContext(), AuthorizedFragment.class);
+        HRActivity.start(getContext(), UnauthorizedFragment.class);
+        HRActivity.start(getContext(), Step1Fragment.class);
+        HRActivity.start(getContext(), Step2Fragment.class);
+        HRActivity.start(getContext(), Step3Fragment.class);
+        HRActivity.start(getContext(), IDCardInfoFragment.class);
+        HRActivity.start(getContext(), BankCardInfoFragment.class);
     }
 
     private void startPhoneBindActivity() {

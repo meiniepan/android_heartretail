@@ -20,6 +20,58 @@ import io.reactivex.annotations.Nullable;
  * @author aLang
  */
 public class HRActivity extends BaseActivity {
+
+    public static void start(@Nullable Context context, @NonNull Class<? extends Fragment> fragmentClass) {
+        start(context, fragmentClass, null);
+    }
+
+    public static void start(@Nullable Context context, @NonNull Class<? extends Fragment> fragmentClass, @Nullable Bundle extras) {
+        start(context, extras, new Class[]{fragmentClass});
+    }
+
+    public static void start(@Nullable Context context, @Nullable Bundle extras, @NonNull Class<? extends Fragment>... classes) {
+        if (context == null || classes.length == 0) return;
+
+        StringBuilder sb = new StringBuilder();
+        for (Class<? extends Fragment> clazz : classes)
+            sb.append(clazz.getName()).append(lineSeparator);
+
+        Intent starter = new Intent(context, HRActivity.class);
+        String action = sb.toString();
+        starter.setAction(action);
+        if (extras != null) starter.putExtras(extras);
+        context.startActivity(starter);
+    }
+
+    public static void showFragment(@Nullable FragmentActivity fActivity, String... tags) {
+        setUserVisible(fActivity, true, tags);
+    }
+
+    public static void hideFragment(@Nullable FragmentActivity fActivity, String... tags) {
+        setUserVisible(fActivity, false, tags);
+    }
+
+    private static void setUserVisible(@Nullable FragmentActivity fActivity, boolean isVisibleToUser, String... tags) {
+        if (fActivity == null) return;
+        FragmentManager fManager = fActivity.getSupportFragmentManager();
+        FragmentTransaction fTransaction = fManager.beginTransaction();
+        for (String tag : tags) {
+            Fragment fragment = fManager.findFragmentByTag(tag);
+            if (fragment != null) {
+                fragment.setUserVisibleHint(isVisibleToUser);
+                if (isVisibleToUser) fTransaction.show(fragment);
+                else fTransaction.hide(fragment);
+            }
+        }
+        fTransaction.commit();
+    }
+
+    @Nullable
+    public static Fragment findFragmentByTag(@Nullable FragmentActivity fActivity, String tag) {
+        if (fActivity == null) return null;
+        return fActivity.getSupportFragmentManager().findFragmentByTag(tag);
+    }
+
     private static String lineSeparator = System.lineSeparator();
 
     @Override
@@ -49,57 +101,19 @@ public class HRActivity extends BaseActivity {
 
             if (action == null) return;
 
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            FragmentManager fManager = getSupportFragmentManager();
+            FragmentTransaction fTransaction = fManager.beginTransaction();
             String[] fnameArray = action.split(lineSeparator);
             for (String fname : fnameArray) {
                 Fragment fragment = Fragment.instantiate(this, fname, extras);
-                transaction.add(android.R.id.content, fragment, fname);
+                fTransaction.add(android.R.id.content, fragment, fname);
+                boolean isVisibleToUser = fragment.getUserVisibleHint();
+                if (isVisibleToUser) fTransaction.show(fragment);
+                else fTransaction.hide(fragment);
             }
-            transaction.commit();
+            fTransaction.commit();
         } catch (Throwable e) {
             e.printStackTrace();
         }
-    }
-
-    public static void start(@Nullable Context context, @NonNull Class<? extends Fragment> fragmentClass) {
-        start(context, fragmentClass, null);
-    }
-
-    public static void start(@Nullable Context context, @NonNull Class<? extends Fragment> fragmentClass, @Nullable Bundle extras) {
-        start(context, new Class[]{fragmentClass}, extras);
-    }
-
-    public static void start(@Nullable Context context, @NonNull Class<? extends Fragment>[] clazzArray, @Nullable Bundle extras) {
-        if (context == null || clazzArray.length == 0) return;
-
-        StringBuilder sb = new StringBuilder();
-        for (Class<? extends Fragment> clazz : clazzArray)
-            sb.append(clazz.getName()).append(lineSeparator);
-
-        Intent starter = new Intent(context, HRActivity.class);
-        String action = sb.toString();
-        starter.setAction(action);
-        if (extras != null) starter.putExtras(extras);
-        context.startActivity(starter);
-    }
-
-    public static void hideFragment(@Nullable FragmentActivity activity, String tag) {
-        if (activity == null) return;
-        FragmentManager fm = activity.getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentByTag(tag);
-        if (fragment != null) fm.beginTransaction().hide(fragment).commit();
-    }
-
-    public static void showFragment(@Nullable FragmentActivity activity, String tag) {
-        if (activity == null) return;
-        FragmentManager fm = activity.getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentByTag(tag);
-        if (fragment != null) fm.beginTransaction().show(fragment).commit();
-    }
-
-    @Nullable
-    public static Fragment findFragmentByTag(@Nullable FragmentActivity activity, String tag) {
-        if (activity == null) return null;
-        return activity.getSupportFragmentManager().findFragmentByTag(tag);
     }
 }
