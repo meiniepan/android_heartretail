@@ -12,12 +12,13 @@ import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
-import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
+import com.dengyun.splashmodule.config.SpProtocol;
 import com.idengyun.heartretail.R;
-import com.idengyun.heartretail.model.response.PersonalDataBean;
-import com.idengyun.usermodule.HRUser;
+import com.idengyun.heartretail.model.response.ProtocolsBean;
 import com.lzy.okgo.model.Response;
+
+import java.util.List;
 
 /**
  * 用户协议
@@ -26,7 +27,8 @@ import com.lzy.okgo.model.Response;
  */
 public final class UserAgreeFragment extends BaseFragment {
 
-    private TextView tv_user_agree;
+    private TextView tv_user_agree_title;
+    private TextView tv_user_agree_content;
 
     @Override
     public int getLayoutId() {
@@ -45,25 +47,30 @@ public final class UserAgreeFragment extends BaseFragment {
     }
 
     private void requestAPI() {
-        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.queryUserId())
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.protocolDetail())
                 .fragment(this)
-                .clazz(PersonalDataBean.class)
-                .params("userId", HRUser.getId())
+                .clazz(ProtocolsBean.class)
+                .params("protocolIds", new int[]{SpProtocol.getUserProtocolId()})
                 .build();
-        NetApi.<PersonalDataBean>getData(RequestMethod.GET, netOption, new JsonCallback<PersonalDataBean>(netOption) {
+        NetApi.<ProtocolsBean>getData(netOption, new JsonCallback<ProtocolsBean>(netOption) {
             @Override
-            public void onSuccess(Response<PersonalDataBean> response) {
+            public void onSuccess(Response<ProtocolsBean> response) {
                 updateUI(response.body().data);
             }
         });
     }
 
     @MainThread
-    private void updateUI(PersonalDataBean.Data data) {
-        tv_user_agree.setText(Html.fromHtml(""));
+    private void updateUI(List<ProtocolsBean.Data> data) {
+        if (!data.isEmpty()) {
+            ProtocolsBean.Data data1 = data.get(0);
+            tv_user_agree_title.setText(Html.fromHtml(data1.protocolName));
+            tv_user_agree_content.setText(Html.fromHtml(data1.protocolContent));
+        }
     }
 
     private void findViewById(View view) {
-        tv_user_agree = view.findViewById(R.id.tv_user_agree);
+        tv_user_agree_title = view.findViewById(R.id.tv_user_agree_title);
+        tv_user_agree_content = view.findViewById(R.id.tv_user_agree_content);
     }
 }

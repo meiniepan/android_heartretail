@@ -4,11 +4,11 @@ import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.net.ImageApi;
 import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
@@ -17,7 +17,6 @@ import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
-import com.idengyun.heartretail.bases.PagerChildFragment;
 import com.idengyun.heartretail.model.response.BalanceBean;
 import com.idengyun.heartretail.my.SettingFragment;
 import com.idengyun.usermodule.HRUser;
@@ -28,7 +27,7 @@ import com.lzy.okgo.model.Response;
  *
  * @author aLang
  */
-public final class MyFragment extends PagerChildFragment implements View.OnClickListener {
+public final class MyFragment extends BaseFragment implements View.OnClickListener {
     /* 头部背景色 */
     private View iv_my_not_login_bg;
     private View iv_my_login_bg;
@@ -86,9 +85,12 @@ public final class MyFragment extends PagerChildFragment implements View.OnClick
     }
 
     @Override
-    public void onTabSelected(TabLayout.Tab tab) {
-        updateUI(HRUser.isLogin(), HRUser.isAuthenticated());
-        requestAPI();
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            updateUI(HRUser.isLogin(), HRUser.isAuthenticated());
+            requestAPI();
+        }
     }
 
     @Override
