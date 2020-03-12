@@ -173,6 +173,13 @@ public final class MyFragment extends BaseFragment implements View.OnClickListen
 
     private void init() {
         iv_my_setting.setOnClickListener(this);
+        iv_my_user_avatar.setOnClickListener(this);
+        tv_my_account.setOnClickListener(this);
+
+        tv_my_all_orders.setOnClickListener(this);
+        tv_my_order_1.setOnClickListener(this);
+        tv_my_order_2.setOnClickListener(this);
+        tv_my_order_3.setOnClickListener(this);
         tv_my_order_3.setOnClickListener(this);
         tv_my_order_4.setOnClickListener(this);
         tv_my_order_5.setOnClickListener(this);
