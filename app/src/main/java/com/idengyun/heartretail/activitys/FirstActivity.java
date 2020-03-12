@@ -38,7 +38,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.Collections;
 
-@Route(path = (RouterPathConfig.app_FirstActivity))
 public class FirstActivity extends BaseActivity {
 
     private AmapLocationUtil amapLocationUtil;

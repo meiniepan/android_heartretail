@@ -5,9 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.dengyun.baselibrary.base.activity.BaseActivity;
+import com.dengyun.baselibrary.config.RouterPathConfig;
 import com.idengyun.heartretail.main.MainFragment;
 
+@Route(path = (RouterPathConfig.app_FirstActivity))
 public class MainActivity extends BaseActivity {
 
     public static void start(Context context) {
