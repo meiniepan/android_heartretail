@@ -17,6 +17,7 @@ import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
+import com.idengyun.heartretail.activitys.MyEvaluateActivity;
 import com.idengyun.heartretail.activitys.OrderListActivity;
 import com.idengyun.heartretail.model.response.BalanceBean;
 import com.idengyun.heartretail.my.SettingFragment;
@@ -132,7 +133,7 @@ public final class MyFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void startMyEvaluationActivity() {
-        // TODO: 2020/3/12
+        MyEvaluateActivity.start(getActivity());
     }
 
     private void startMyOrder5Activity() {
