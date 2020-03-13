@@ -17,14 +17,9 @@ import com.yanzhenjie.permission.runtime.Permission;
  * @Author: zhoubo
  * @CreateDate: 2020-03-09 09:32
  */
-public class AmapLocationUtil {
+public class AmapLocationWapper {
 
-    public static AmapLocationUtil getInstance() {
-        return new AmapLocationUtil();
-    }
-
-    private AmapLocationUtil() {
-    }
+    private AMapLocationClient mLocationClient;
 
     public void startLocationWithMap(AMap aMap, AMap.OnMyLocationChangeListener onMyLocationChangeListener) {
         MyLocationStyle myLocationStyle = new MyLocationStyle();
@@ -51,7 +46,6 @@ public class AmapLocationUtil {
         aMap.setOnMyLocationChangeListener(onMyLocationChangeListener);
     }
 
-    private AMapLocationClient mLocationClient;
     public void startLocation(AMapLocationListener mLocationListener) {
         AndPermission.with(Utils.getApp())
                 .runtime()

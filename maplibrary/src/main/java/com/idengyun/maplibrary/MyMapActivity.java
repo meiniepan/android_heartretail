@@ -6,35 +6,17 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
-import android.view.animation.LinearInterpolator;
 import android.widget.TextView;
 
 import com.amap.api.maps.AMap;
-import com.amap.api.maps.CameraUpdate;
-import com.amap.api.maps.CameraUpdateFactory;
-import com.amap.api.maps.model.CameraPosition;
-import com.amap.api.maps.model.LatLng;
-import com.amap.api.maps.model.Marker;
-import com.amap.api.maps.model.MarkerOptions;
-import com.amap.api.maps.model.animation.Animation;
-import com.amap.api.maps.model.animation.EmergeAnimation;
-import com.amap.api.maps.model.animation.RotateAnimation;
-import com.amap.api.maps.model.animation.TranslateAnimation;
-import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.core.PoiItem;
-import com.amap.api.services.help.Tip;
-import com.amap.api.services.poisearch.PoiResult;
-import com.amap.api.services.poisearch.PoiSearch;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.dengyun.baselibrary.base.activity.BaseActivity;
-import com.dengyun.baselibrary.utils.ListUtils;
 import com.dengyun.baselibrary.utils.SizeUtils;
-import com.idengyun.maplibrary.beans.EventChooseAddrTip;
+import com.idengyun.maplibrary.beans.EventChoosePoiItem;
 import com.idengyun.maplibrary.citylist.ChooseAddrActivity;
 import com.idengyun.maplibrary.citylist.CityListActivity;
-import com.idengyun.maplibrary.utils.AmapLocationUtil;
-import com.idengyun.maplibrary.utils.AmapPointUtil;
-import com.idengyun.maplibrary.utils.PoiListComparator;
+import com.idengyun.maplibrary.utils.AmapLocationWapper;
 import com.idengyun.maplibrary.utils.PoiSearchUtil;
 import com.idengyun.maplibrary.view.DyMapView;
 import com.idengyun.maplibrary.view.PoiScrollLayout;
@@ -47,7 +29,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.List;
 
 public class MyMapActivity extends BaseActivity {
     //标题上的选择的城市控件
@@ -159,9 +141,9 @@ public class MyMapActivity extends BaseActivity {
 
     /*选择完地址*/
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(EventChooseAddrTip eventChooseAddrTip) {
+    public void onEventMainThread(EventChoosePoiItem eventChoosePoiItem) {
         this.finish();
-        /*Tip tip = eventChooseAddrTip.chooseTip;
+        /*Tip tip = eventChoosePoiItem.chooseTip;
         LatLonPoint point = tip.getPoint();
         LatLng latLng = new LatLng(point.getLatitude(),point.getLongitude());
         //绘制点
@@ -182,15 +164,15 @@ public class MyMapActivity extends BaseActivity {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 PoiItem poiItem = pois.get(position);
-                EventChooseAddrTip eventChooseAddrTip = new EventChooseAddrTip(cityName,poiItem.getPoiId(),pois.get(position).getTitle());
-                EventBus.getDefault().post(eventChooseAddrTip);
+                EventChoosePoiItem eventChoosePoiItem = new EventChoosePoiItem(poiItem);
+                EventBus.getDefault().post(eventChoosePoiItem);
                 MyMapActivity.this.finish();
             }
         });
     }
 
     private void startLocation() {
-        AmapLocationUtil.getInstance().startLocationWithMap(aMap, new AMap.OnMyLocationChangeListener() {
+        new AmapLocationWapper().startLocationWithMap(aMap, new AMap.OnMyLocationChangeListener() {
             @Override
             public void onMyLocationChange(Location location) {
                 //纬度
@@ -198,25 +180,15 @@ public class MyMapActivity extends BaseActivity {
                 //经度
                 double longitude= location.getLongitude();
                 Logger.d("经度："+longitude+"   ; 纬度："+latitude);
-                PoiSearchUtil.getInstance()
-                        .searchPOIWithBound(MyMapActivity.this, latitude, longitude, new PoiSearch.OnPoiSearchListener() {
-                            @Override
-                            public void onPoiSearched(PoiResult poiResult, int i) {
-                                ArrayList<PoiItem> resultPois = poiResult.getPois();
-                                if (!ListUtils.isEmpty(resultPois)){
-                                    Collections.sort(resultPois,new PoiListComparator());
-                                    pois.clear();
-                                    pois.addAll(resultPois);
-                                    poiListAdapter.setCurrentPoiId(poiId);
-                                    poiListAdapter.notifyDataSetChanged();
-                                }
-                            }
-
-                            @Override
-                            public void onPoiItemSearched(PoiItem poiItem, int i) {
-
-                            }
-                        });
+                PoiSearchUtil.searchPOIWithBound(MyMapActivity.this, latitude, longitude, new PoiSearchUtil.OnPoiBoundSearchListener() {
+                    @Override
+                    public void onSearchResult(List<PoiItem> pois) {
+                        pois.clear();
+                        pois.addAll(pois);
+                        poiListAdapter.setCurrentPoiId(poiId);
+                        poiListAdapter.notifyDataSetChanged();
+                    }
+                });
             }
         });
     }

@@ -11,15 +11,13 @@ import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.ApiBean;
 import com.dengyun.baselibrary.base.activity.BaseActivity;
-import com.dengyun.baselibrary.config.GlobalProperty;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.idengyun.maplibrary.R;
 import com.idengyun.maplibrary.beans.CityBean;
-import com.idengyun.maplibrary.beans.EventChooseAddrTip;
+import com.idengyun.maplibrary.beans.EventChoosePoiItem;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -102,7 +100,7 @@ public class CityListActivity extends BaseActivity {
 
     /*选择完地址*/
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(EventChooseAddrTip eventChooseAddrTip) {
+    public void onEventMainThread(EventChoosePoiItem eventChoosePoiItem) {
        this.finish();
     }
 
@@ -127,27 +125,14 @@ public class CityListActivity extends BaseActivity {
             }
         });
 
+        //城市点击
         sortListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                /*CityBean cityBean = new CityBean();
-                cityBean.setId(sourceDateList.get(position).getCityid());
-                cityBean.setName(sourceDateList.get(position).getName());*/
-
-                SortModel sortModel = sourceDateList.get(position);
-
-
-                GlobalProperty.getInstance().setCity(sourceDateList.get(position).getName());
-                GlobalProperty.getInstance().setLocationId(sourceDateList.get(position).getCityid());
-                GlobalProperty.getInstance().setProvince("");
-                GlobalProperty.getInstance().setDistrict("");
-
                 cityName = sourceDateList.get(position).getName();
                 tvMapSelectCity.setText(cityName);
-
-
             }
         });
         sourceDateList = filledData(listCity);

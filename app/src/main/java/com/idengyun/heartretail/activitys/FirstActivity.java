@@ -5,42 +5,29 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
-import com.alibaba.android.arouter.facade.annotation.Route;
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationListener;
-import com.amap.api.maps.model.LatLng;
-import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.core.PoiItem;
-import com.amap.api.services.help.Tip;
-import com.amap.api.services.poisearch.PoiResult;
-import com.amap.api.services.poisearch.PoiSearch;
 import com.dengyun.baselibrary.base.activity.BaseActivity;
-import com.dengyun.baselibrary.config.RouterPathConfig;
-import com.dengyun.baselibrary.utils.ListUtils;
 import com.dengyun.baselibrary.utils.ToastUtils;
-import com.idengyun.heartretail.HRActivity;
 
 import com.idengyun.heartretail.MainActivity;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.shop.ShopListActivity;
 import com.idengyun.maplibrary.MyMapActivity;
-import com.idengyun.maplibrary.beans.EventChooseAddrTip;
-import com.idengyun.maplibrary.utils.AmapLocationUtil;
-import com.idengyun.maplibrary.utils.AmapPointUtil;
-import com.idengyun.maplibrary.utils.PoiListComparator;
+import com.idengyun.maplibrary.beans.EventChoosePoiItem;
+import com.idengyun.maplibrary.utils.AmapLocationWapper;
 import com.idengyun.maplibrary.utils.PoiSearchUtil;
 import com.idengyun.usermodule.LoginActivity;
-import com.orhanobut.logger.Logger;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.List;
 
 public class FirstActivity extends BaseActivity {
 
-    private AmapLocationUtil amapLocationUtil;
+    private AmapLocationWapper amapLocationWapper;
     private TextView tvFirstLocation;
     private String cityName;
     private String nearShop;
@@ -61,43 +48,42 @@ public class FirstActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        amapLocationUtil.stopLocation();
-        amapLocationUtil.onDestroy();
+        amapLocationWapper.stopLocation();
+        amapLocationWapper.onDestroy();
     }
 
     /*选择完地址*/
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(EventChooseAddrTip eventChooseAddrTip) {
-        cityName = eventChooseAddrTip.cityName;
-        nearShop = eventChooseAddrTip.choosePoiName;
-        poiId = eventChooseAddrTip.poiId;
+    public void onEventMainThread(EventChoosePoiItem eventChoosePoiItem) {
+        cityName = eventChoosePoiItem.poiItem.getCityName();
+        nearShop = eventChoosePoiItem.poiItem.getTitle();
+        poiId = eventChoosePoiItem.poiItem.getPoiId();
         tvFirstLocation.setText(nearShop);
+        //设置全局的定位属性
+        PoiSearchUtil.setGlobalLocationByPoiItem(eventChoosePoiItem.poiItem);
     }
 
     private void startLocation() {
-        amapLocationUtil = AmapLocationUtil.getInstance();
-        amapLocationUtil.startLocation(new AMapLocationListener() {
+        amapLocationWapper = new AmapLocationWapper();
+        amapLocationWapper.startLocation(new AMapLocationListener() {
             @Override
             public void onLocationChanged(AMapLocation aMapLocation) {
                 double latitude = aMapLocation.getLatitude();
                 double longitude = aMapLocation.getLongitude();
-                PoiSearchUtil.getInstance().searchPOIWithBound(FirstActivity.this, latitude, longitude,
-                        new PoiSearch.OnPoiSearchListener() {
+                PoiSearchUtil.searchPOIWithBound(FirstActivity.this, latitude, longitude,
+                        new PoiSearchUtil.OnPoiBoundSearchListener() {
                             @Override
-                            public void onPoiSearched(PoiResult poiResult, int i) {
-                                ArrayList<PoiItem> pois = poiResult.getPois();
-                                Collections.sort(pois, new PoiListComparator());
-                                if (!ListUtils.isEmpty(pois) && null != tvFirstLocation) {
-                                    cityName = pois.get(0).getCityName();
-                                    nearShop = pois.get(0).getTitle();
-                                    poiId = pois.get(0).getPoiId();
-                                    tvFirstLocation.setText(pois.get(0).getTitle());
+                            public void onSearchResult(List<PoiItem> pois) {
+                                //pois已经在上层判过空了
+                                if (null != tvFirstLocation) {
+                                    PoiItem poiItem = pois.get(0);
+                                    cityName = poiItem.getCityName();
+                                    nearShop = poiItem.getTitle();
+                                    poiId = poiItem.getPoiId();
+                                    tvFirstLocation.setText(poiItem.getTitle());
+                                    //设置全局的定位属性
+                                    PoiSearchUtil.setGlobalLocationByPoiItem(poiItem);
                                 }
-                            }
-
-                            @Override
-                            public void onPoiItemSearched(PoiItem poiItem, int i) {
-
                             }
                         });
             }
