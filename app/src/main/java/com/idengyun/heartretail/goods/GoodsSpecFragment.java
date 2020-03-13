@@ -127,7 +127,8 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
             for (int i = 0; i < sectionList.size(); i++) {
                 Section section = sectionList.get(i);
                 for (Section.Cell cell : section.cellList) {
-                    if (skuCombinationCode.contains(cell.specItemId)) {
+                    // if (skuCombinationCode.contains(cell.specItemId)) {
+                    if (Arrays.asList(goodsSku.skuCombinationCode.split("_")).contains(cell.specItemId)) {
                         /* 选中默认规格 */
                         cell.checked = true;
                         break;
@@ -220,6 +221,10 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
                 }
             }
         }
+    }
+
+    private boolean contains(String skuCombinationCode, String specItemId) {
+        return Arrays.asList(skuCombinationCode.split("_")).contains(specItemId);
     }
 
     /* 执行规格间互斥性 高复杂度逻辑操作 修改请慎重 */

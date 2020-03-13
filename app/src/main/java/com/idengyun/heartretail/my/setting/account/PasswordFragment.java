@@ -19,11 +19,13 @@ import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.baselibrary.utils.ToastUtils;
+import com.dengyun.baselibrary.utils.activity.ActivityUtils;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.PwdModifyBean;
 import com.idengyun.usermodule.HRConst;
 import com.idengyun.usermodule.HRUser;
+import com.idengyun.usermodule.LoginActivity;
 import com.idengyun.usermodule.beans.VerifyCodeBean;
 import com.idengyun.usermodule.utils.SecondsTimer;
 import com.lzy.okgo.model.Response;
@@ -117,8 +119,12 @@ public final class PasswordFragment extends BaseFragment implements CompoundButt
     }
 
     private void logout() {
-        // TODO: 2020/3/9
         /* 退出登录清栈操作 */
+        String mobile = HRUser.getMobile();
+        HRUser.clear();
+        HRUser.saveMobile(mobile);
+        ActivityUtils.finishAllActivities();
+        LoginActivity.start(getContext());
     }
 
     /* 发送手机验证码API */
@@ -128,7 +134,7 @@ public final class PasswordFragment extends BaseFragment implements CompoundButt
         NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.getIdentifyCode())
                 .fragment(this)
                 .params("mobile", HRUser.getMobile())
-                .params("identifyType", HRConst.IDENTIFY_TYPE_0)
+                .params("identifyType", HRConst.IDENTIFY_TYPE_2)
                 .isShowDialog(true)
                 .clazz(VerifyCodeBean.class)
                 .build();

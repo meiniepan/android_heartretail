@@ -12,6 +12,7 @@ import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.baselibrary.net.constants.RequestMethod;
+import com.dengyun.baselibrary.utils.RegexUtils;
 import com.dengyun.baselibrary.utils.ToastUtils;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.heartretail.R;
@@ -26,12 +27,12 @@ import com.lzy.okgo.model.Response;
  *
  * @author aLang
  */
-public final class PhoneFragment extends BaseFragment implements View.OnClickListener {
+public final class MobileBindFragment extends BaseFragment implements View.OnClickListener {
 
     private EditText et_phone_mobile;
     private EditText et_phone_verify_code;
     private TextView tv_phone_verify_code;
-    private View tv_phone_next;
+    private View tv_phone_bind;
 
     private SecondsTimer timer;
 
@@ -58,7 +59,39 @@ public final class PhoneFragment extends BaseFragment implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
+        if (tv_phone_verify_code == v) {
+            sendVerifyCode();
+        } else if (tv_phone_bind == v) {
+            bindNewMobile();
+        }
+    }
 
+    private void bindNewMobile() {
+        if (!RegexUtils.isMobileSimple(et_phone_mobile.getText())) {
+            ToastUtils.showShort("请输入有效手机号码");
+            return;
+        }
+
+        if (et_phone_verify_code.length() < 1) {
+            ToastUtils.showShort("请输入有效验证码");
+            return;
+        }
+
+        // TODO: 2020/3/13
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.getIdentifyCode())
+                .fragment(this)
+                .params("mobile", HRUser.getMobile())
+                .params("identifyType", HRConst.IDENTIFY_TYPE_4)
+                .isShowDialog(true)
+                .clazz(VerifyCodeBean.class)
+                .build();
+
+        NetApi.getData(RequestMethod.GET, netOption, new JsonCallback<VerifyCodeBean>(netOption) {
+            @Override
+            public void onSuccess(Response<VerifyCodeBean> response) {
+                HRUser.saveMobile(et_phone_mobile.getText().toString());
+            }
+        });
     }
 
     /* 发送手机验证码API */
@@ -68,7 +101,7 @@ public final class PhoneFragment extends BaseFragment implements View.OnClickLis
         NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.getIdentifyCode())
                 .fragment(this)
                 .params("mobile", HRUser.getMobile())
-                .params("identifyType", HRConst.IDENTIFY_TYPE_0)
+                .params("identifyType", HRConst.IDENTIFY_TYPE_4)
                 .isShowDialog(true)
                 .clazz(VerifyCodeBean.class)
                 .build();
@@ -110,6 +143,6 @@ public final class PhoneFragment extends BaseFragment implements View.OnClickLis
         et_phone_mobile = view.findViewById(R.id.et_phone_mobile);
         et_phone_verify_code = view.findViewById(R.id.et_phone_verify_code);
         tv_phone_verify_code = view.findViewById(R.id.tv_phone_verify_code);
-        tv_phone_next = view.findViewById(R.id.tv_phone_next);
+        tv_phone_bind = view.findViewById(R.id.tv_phone_bind);
     }
 }

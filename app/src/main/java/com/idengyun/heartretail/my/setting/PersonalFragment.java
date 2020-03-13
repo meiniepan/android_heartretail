@@ -18,6 +18,8 @@ import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.PersonalDataBean;
+import com.idengyun.heartretail.model.response.UserAvatarBean;
+import com.idengyun.heartretail.model.response.UserNickBean;
 import com.idengyun.heartretail.my.setting.personal.AvatarFragment;
 import com.idengyun.heartretail.my.setting.personal.NicknameFragment;
 import com.idengyun.usermodule.HRUser;
@@ -51,7 +53,12 @@ public final class PersonalFragment extends BaseFragment implements View.OnClick
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        requestAPI();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUI();
     }
 
     @Override
@@ -66,7 +73,7 @@ public final class PersonalFragment extends BaseFragment implements View.OnClick
         }
     }
 
-    private void requestAPI() {
+    private void queryUserInfo() {
         NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.queryUserId())
                 .fragment(this)
                 .clazz(PersonalDataBean.class)
@@ -80,6 +87,36 @@ public final class PersonalFragment extends BaseFragment implements View.OnClick
         });
     }
 
+    private void modifyAvatar(final String avatarUrl) {
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.changeIcon())
+                .fragment(this)
+                .clazz(UserAvatarBean.class)
+                .params("url", avatarUrl)
+                .params("userId", HRUser.getId())
+                .build();
+        NetApi.<UserAvatarBean>getData(netOption, new JsonCallback<UserAvatarBean>(netOption) {
+            @Override
+            public void onSuccess(Response<UserAvatarBean> response) {
+                HRUser.saveAvatar(avatarUrl);
+            }
+        });
+    }
+
+    private void modifyNickname(final String nickname) {
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.changeNick())
+                .fragment(this)
+                .clazz(UserNickBean.class)
+                .params("userId", HRUser.getId())
+                .params("nickName", nickname)
+                .build();
+        NetApi.<UserNickBean>getData(netOption, new JsonCallback<UserNickBean>(netOption) {
+            @Override
+            public void onSuccess(Response<UserNickBean> response) {
+                HRUser.saveNickname(nickname);
+            }
+        });
+    }
+
     @MainThread
     private void updateUI(PersonalDataBean.Data data) {
         String headPic = data.headPic;
@@ -89,6 +126,14 @@ public final class PersonalFragment extends BaseFragment implements View.OnClick
         ImageApi.displayImage(iv_personal_avatar.getContext(), iv_personal_avatar, headPic);
         tv_personal_nickname.setText(nickName);
         tv_personal_invite_code.setText(invitationCode);
+    }
+
+    @MainThread
+    private void updateUI() {
+        ImageApi.displayImage(iv_personal_avatar.getContext(), iv_personal_avatar, HRUser.getAvatar());
+        tv_personal_nickname.setText(HRUser.getNickname());
+        tv_personal_invite_code.setText(HRUser.getInviteCode());
+        tv_personal_invite_code.setCompoundDrawables(null, null, null, null);
     }
 
     private void startInvitationActivity() {

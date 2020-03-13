@@ -54,7 +54,7 @@ public final class IdentityFragment extends BaseFragment implements View.OnClick
         String mobile = HRUser.getMobile();
         tv_identity_mobile.setText(mobile);
         if (mobile.length() == 11) {
-            mobile = mobile.substring(0, 4) + "****" + mobile.substring(8, 11);
+            mobile = mobile.substring(0, 3) + "****" + mobile.substring(7, 11);
             tv_identity_mobile.setText(mobile);
         }
     }
@@ -72,8 +72,17 @@ public final class IdentityFragment extends BaseFragment implements View.OnClick
         } else if (tv_identity_contact_service == v) {
             // TODO: 2020/3/9
         } else if (tv_identity_next == v) {
-            HRActivity.start(getActivity(), PhoneFragment.class);
+            startPhoneActivity();
         }
+    }
+
+    private void startPhoneActivity() {
+        if (et_identity_verify_code.length() < 1) {
+            ToastUtils.showShort("请输入有效验证码");
+            return;
+        }
+        HRActivity.start(getContext(), MobileBindFragment.class);
+        if (getActivity() != null) getActivity().finish();
     }
 
     /* 发送手机验证码API */
@@ -83,7 +92,7 @@ public final class IdentityFragment extends BaseFragment implements View.OnClick
         NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.getIdentifyCode())
                 .fragment(this)
                 .params("mobile", HRUser.getMobile())
-                .params("identifyType", HRConst.IDENTIFY_TYPE_0)
+                .params("identifyType", HRConst.IDENTIFY_TYPE_4)
                 .isShowDialog(true)
                 .clazz(VerifyCodeBean.class)
                 .build();
@@ -94,11 +103,6 @@ public final class IdentityFragment extends BaseFragment implements View.OnClick
                 ToastUtils.showLong("验证码已发出");
             }
         });
-    }
-
-    @MainThread
-    private void updateUI(VerifyCodeBean.Data data) {
-
     }
 
     private void startTimer(TextView textView) {
