@@ -80,18 +80,18 @@
                 android:textColor="@color/heart_orange" />
         </LinearLayout>
 
-        <Space
+        <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="17dp"
-            android:background="@color/gray999" />
+            android:background="@color/grayeee" />
 
         <TextView
             android:id="@+id/confirm_verify_device"
             android:layout_width="match_parent"
             android:layout_height="44dp"
             android:layout_marginTop="155dp"
-            android:background="@drawable/shape_button_orange"
+            android:background="@drawable/user_selector_orange_btn"
             android:gravity="center"
             android:text="下一步"
             android:textColor="@color/white"

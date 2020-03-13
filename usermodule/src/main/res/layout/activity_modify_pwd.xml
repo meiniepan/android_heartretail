@@ -114,7 +114,7 @@
             android:layout_width="match_parent"
             android:layout_height="44dp"
             android:layout_marginTop="65dp"
-            android:background="@drawable/shape_button_orange"
+            android:background="@drawable/user_shape_button_orange"
             android:gravity="center"
             android:text="确认"
             android:textColor="@color/white"
