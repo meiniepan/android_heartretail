@@ -100,7 +100,8 @@ public class ConfirmOrderActivity extends BaseActivity {
     @BindView(R.id.iv_next)
     ImageView ivNext;
     @BindView(R.id.ll_proxy_sale_protocol)
-    LinearLayout llProxySaleProtocol;
+    LinearLayout llProxySaleProtocol;@BindView(R.id.ll_protocol)
+    LinearLayout llProtocol;
     @BindView(R.id.cb_protocol_proxy_sale)
     CheckBox cbProtocolProxySale;
 
@@ -135,11 +136,13 @@ public class ConfirmOrderActivity extends BaseActivity {
 
     private void initWholeSale() {
         llProxyTab.setVisibility(View.VISIBLE);
+        llProtocol.setVisibility(View.GONE);
         initSelfGet();
     }
 
     private void initRetail() {
         llProxyTab.setVisibility(View.GONE);
+        llProtocol.setVisibility(View.VISIBLE);
         initSelfGet();
     }
 
@@ -175,6 +178,7 @@ public class ConfirmOrderActivity extends BaseActivity {
             case R.id.tv_self_get:
                 tvSelfGet.setBackgroundResource(R.drawable.shape_white_tab_corner_rec);
                 tvProxySale.setBackground(new BitmapDrawable());
+                llProtocol.setVisibility(View.VISIBLE);
                 initSelfGet();
                 break;
             //代销tab
@@ -203,6 +207,7 @@ public class ConfirmOrderActivity extends BaseActivity {
                 ToastUtils.showShort("有代销资格");
                 tvProxySale.setBackgroundResource(R.drawable.shape_white_tab_corner_rec);
                 tvSelfGet.setBackground(new BitmapDrawable());
+                llProtocol.setVisibility(View.GONE);
                 initProxySale();
             }
 
