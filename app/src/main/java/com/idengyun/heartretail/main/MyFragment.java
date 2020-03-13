@@ -23,6 +23,7 @@ import com.idengyun.heartretail.activitys.OrderListActivity;
 import com.idengyun.heartretail.model.response.BalanceBean;
 import com.idengyun.heartretail.my.SettingFragment;
 import com.idengyun.usermodule.HRUser;
+import com.idengyun.usermodule.VerifyDeviceActivity;
 import com.lzy.okgo.model.Response;
 
 /**
@@ -130,7 +131,8 @@ public final class MyFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void startMyHelpActivity() {
-        HelpCenterActivity.start(getActivity());
+//        HelpCenterActivity.start(getActivity());
+        VerifyDeviceActivity.start(getActivity());
     }
 
     private void startMyEvaluationActivity() {
