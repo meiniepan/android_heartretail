@@ -69,7 +69,7 @@ public final class NicknameFragment extends BaseFragment implements View.OnClick
                 .fragment(this)
                 .clazz(UserNickBean.class)
                 .params("userId", HRUser.getId())
-                .params("nickName", HRUser.getNickName())
+                .params("nickName", et_nick_name.getText().toString())
                 .build();
         NetApi.<UserNickBean>getData(netOption, new JsonCallback<UserNickBean>(netOption) {
             @Override
@@ -81,7 +81,7 @@ public final class NicknameFragment extends BaseFragment implements View.OnClick
 
     @MainThread
     private void updateUI(UserNickBean.Data data) {
-
+        if (getActivity() != null) getActivity().onBackPressed();
     }
 
     private void findViewById(View view) {

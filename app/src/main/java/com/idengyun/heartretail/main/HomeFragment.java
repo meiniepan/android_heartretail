@@ -142,9 +142,9 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
                             null,
                             GoodsInfoFragment.class,
                             GoodsEvaluateFragment.class,
+                            GoodsDetailFragment.class,
                             GoodsSpecFragment.class,
-                            GoodsServiceFragment.class,
-                            GoodsDetailFragment.class
+                            GoodsServiceFragment.class
                     );
                 }
             });
