@@ -248,7 +248,8 @@ public class ConfirmOrderActivity extends BaseActivity {
         HashMap map = new HashMap();
         map.put("version", AppUtils.getAppVersionName());
         map.put("userId", HRUser.getId());
-        map.put("mobile", "");
+        map.put("userName", HRUser.getNickName());
+        map.put("mobile", HRUser.getMobile());
         map.put("consignee", "");
         map.put("shopId", 0);
         map.put("userRemark", "");

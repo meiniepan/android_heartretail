@@ -31,8 +31,8 @@
 
         <ImageView
             android:id="@+id/iv_status"
-            android:layout_width="9dp"
-            android:layout_height="9dp"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/line_left"
             android:src="@drawable/logistics_past" />
