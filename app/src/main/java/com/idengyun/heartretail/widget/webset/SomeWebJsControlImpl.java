@@ -4,7 +4,7 @@ import com.dengyun.baselibrary.base.activity.BaseCustomSomewebActivity;
 import com.dengyun.baselibrary.utils.HandleUtil;
 import com.dengyun.baselibrary.utils.StringUtils;
 import com.dengyun.baselibrary.widgets.toolbar.BaseOneRightToolBar;
-import com.dengyun.sharelibrary.callback.ShareCallBack;
+import com.dengyun.sharelibrary.callback.OnShareResult;
 import com.dengyun.sharelibrary.utils.ShareCallbackType;
 import com.dengyun.sharelibrary.utils.ShareOptions;
 import com.dengyun.sharelibrary.utils.ShareUtil;
@@ -97,10 +97,9 @@ public class SomeWebJsControlImpl implements JsControlPageInterface {
                     .shareChannel(shareChannel)
                     .shareCallbackType(shareCallbackType)
                     .build();
-            ShareUtil.shareWithPermission(shareOptions, new ShareCallBack() {
+            ShareUtil.shareWithPermission(shareOptions, new OnShareResult() {
                 @Override
-                public void onShareSuccessCallBack(ShareOptions shareOptions, String shareChannel) {
-                    super.onShareSuccessCallBack(shareOptions, shareChannel);
+                public void onShareSuccess(ShareOptions shareOptions, String shareChannel) {
                     final String js = "javascript:viewShareButtonCallback(\"" + shareChannel + "\",true)";
                     if (null != somewebActivity && null != somewebActivity.getWebView()) {
                         somewebActivity.getWebView().loadUrl(js);

@@ -11,4 +11,6 @@
     <color name="lineColorEEE">#EEEEEE</color>
     <color name="heart_orange">#FF6633</color>
     <color name="tint">#fff8f8f8</color>
+    <color name="goodsdetailline">#e5e5e5</color>
+
 </resources>

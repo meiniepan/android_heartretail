@@ -47,7 +47,7 @@ public class MyEvaluateActivity extends BaseActivity {
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                EvaluateDetailActivity.start(getContext());
+                EvaluateDetailActivity.start(getContext(),"");
             }
         });
     }

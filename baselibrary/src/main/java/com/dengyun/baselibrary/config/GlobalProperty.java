@@ -6,10 +6,15 @@ package com.dengyun.baselibrary.config;
  * @CreateDate: 2019-05-14 13:56
  */
 public class GlobalProperty {
-    private String province = "北京市";//定位的省（定位未成功时为“北京市”）
-    private String city = "北京市";//定位的市（定位未成功时为“北京市”）
-    private String district = "朝阳区";//定位的区（定位未成功时为“朝阳区”）
-    private String locationId = "";//定位的城市id（定位成功没有）
+    private String provinceName = "北京市";//定位的省（定位未成功时为“北京市”）
+    private String provinceId = "北京市";//定位的省（定位未成功时为“北京市”）
+
+    private String cityName = "北京市";//定位的市（定位未成功时为“北京市”）
+    private String cityId = "北京市";//定位的市（定位未成功时为“北京市”）
+
+    private String districtName = "朝阳区";//定位的区（定位未成功时为“朝阳区”）
+    private String districtId = "朝阳区";//定位的区（定位未成功时为“朝阳区”）
+
     private double longitude = 116.481270d;//定位的经度
     private double latitude = 39.912010d;//定位的纬度
 
@@ -28,36 +33,52 @@ public class GlobalProperty {
         return globalProperty;
     }
 
-    public String getProvince() {
-        return province;
+    public String getProvinceName() {
+        return provinceName;
     }
 
-    public void setProvince(String province) {
-        this.province = province;
+    public void setProvinceName(String provinceName) {
+        this.provinceName = provinceName;
     }
 
-    public String getCity() {
-        return city;
+    public String getProvinceId() {
+        return provinceId;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setProvinceId(String provinceId) {
+        this.provinceId = provinceId;
     }
 
-    public String getDistrict() {
-        return district;
+    public String getCityName() {
+        return cityName;
     }
 
-    public void setDistrict(String district) {
-        this.district = district;
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
     }
 
-    public String getLocationId() {
-        return locationId;
+    public String getCityId() {
+        return cityId;
     }
 
-    public void setLocationId(String locationId) {
-        this.locationId = locationId;
+    public void setCityId(String cityId) {
+        this.cityId = cityId;
+    }
+
+    public String getDistrictName() {
+        return districtName;
+    }
+
+    public void setDistrictName(String districtName) {
+        this.districtName = districtName;
+    }
+
+    public String getDistrictId() {
+        return districtId;
+    }
+
+    public void setDistrictId(String districtId) {
+        this.districtId = districtId;
     }
 
     public double getLongitude() {

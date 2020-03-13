@@ -80,7 +80,7 @@ public class OrderDetailActivity extends BaseActivity {
 
     public static void start(Context context, OrderStatusBean data) {
         Intent starter = new Intent(context, OrderDetailActivity.class);
-        starter.putExtra(Constants.ORDER_ID, data.orderId);
+        starter.putExtra(Constants.ORDER_ID, "");
         context.startActivity(starter);
     }
 

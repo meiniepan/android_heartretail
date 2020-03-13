@@ -13,13 +13,12 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.amap.api.services.help.Inputtips;
+import com.amap.api.services.core.PoiItem;
 import com.amap.api.services.help.Tip;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.dengyun.baselibrary.base.activity.BaseActivity;
-import com.dengyun.baselibrary.utils.ListUtils;
 import com.idengyun.maplibrary.R;
-import com.idengyun.maplibrary.beans.EventChooseAddrTip;
+import com.idengyun.maplibrary.beans.EventChoosePoiItem;
 import com.idengyun.maplibrary.utils.PoiSearchUtil;
 import com.idengyun.statusrecyclerviewlib.RecycleViewDivider;
 
@@ -63,7 +62,6 @@ public class ChooseAddrActivity extends BaseActivity {
         tvMapSelectCity.setText(cityName);
         addEditTextChangedListener();
         initAddrRV();
-
     }
 
     private void initAddrRV() {
@@ -75,9 +73,14 @@ public class ChooseAddrActivity extends BaseActivity {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Tip tip = tips.get(position);
-                EventChooseAddrTip eventChooseAddrTip = new EventChooseAddrTip(cityName,tip.getPoiID(),tip.getName());
-                EventBus.getDefault().post(eventChooseAddrTip);
-                ChooseAddrActivity.this.finish();
+                PoiSearchUtil.searchPoiDetailById(ChooseAddrActivity.this, tip.getPoiID(), new PoiSearchUtil.OnPoiDetailSearchListener() {
+                    @Override
+                    public void onSearchResult(PoiItem poiItem) {
+                        EventChoosePoiItem eventChoosePoiItem = new EventChoosePoiItem(poiItem);
+                        EventBus.getDefault().post(eventChoosePoiItem);
+                        ChooseAddrActivity.this.finish();
+                    }
+                });
             }
         });
     }
@@ -110,19 +113,13 @@ public class ChooseAddrActivity extends BaseActivity {
     }
 
     private void searchPoiTips(String newStr){
-        PoiSearchUtil.getInstance().searchPoiTips(this, cityName, newStr, new Inputtips.InputtipsListener() {
+        PoiSearchUtil.searchPoiTips(this, cityName, newStr, new PoiSearchUtil.OnTipsSearchListener() {
             @Override
-            public void onGetInputtips(List<Tip> list, int i) {
-                if (!ListUtils.isEmpty(list)){
-                    tips.clear();
-                    for (int j = 0; j < list.size(); j++) {
-                        if (null!=list.get(j).getPoint()){
-                            tips.add(list.get(j));
-                        }
-                    }
-                    chooseAddrAdapter.setSearchStr(newStr);
-                    chooseAddrAdapter.notifyDataSetChanged();
-                }
+            public void onSearchResult(List<Tip> list) {
+                tips.clear();
+                tips.addAll(list);
+                chooseAddrAdapter.setSearchStr(newStr);
+                chooseAddrAdapter.notifyDataSetChanged();
             }
         });
     }
