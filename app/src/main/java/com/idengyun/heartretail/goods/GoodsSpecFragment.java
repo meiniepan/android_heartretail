@@ -128,7 +128,7 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
                 Section section = sectionList.get(i);
                 for (Section.Cell cell : section.cellList) {
                     // if (skuCombinationCode.contains(cell.specItemId)) {
-                    if (Arrays.asList(goodsSku.skuCombinationCode.split("_")).contains(cell.specItemId)) {
+                    if (goodsSkuToSpecIdList(goodsSku).contains(cell.specItemId)) {
                         /* 选中默认规格 */
                         cell.checked = true;
                         break;
@@ -197,7 +197,7 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
 
         List<String> checkedIdList = searchCheckedIdList();
         for (GoodsDetailBean.Data.GoodsSku goodsSku : data.goodsSkuList) {
-            if (Arrays.asList(goodsSku.skuCombinationCode.split("_")).containsAll(checkedIdList)) {
+            if (goodsSkuToSpecIdList(goodsSku).containsAll(checkedIdList)) {
                 validSkuList.add(goodsSku);
             }
         }
@@ -214,7 +214,7 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
             for (Section.Cell cell : section.cellList) {
                 cell.enabled = false;
                 for (GoodsDetailBean.Data.GoodsSku goodsSku : goodsSkuList) {
-                    if (Arrays.asList(goodsSku.skuCombinationCode.split("_")).contains(cell.specItemId)) {
+                    if (goodsSkuToSpecIdList(goodsSku).contains(cell.specItemId)) {
                         cell.enabled = true;
                         break;
                     }
@@ -223,8 +223,8 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
         }
     }
 
-    private boolean contains(String skuCombinationCode, String specItemId) {
-        return Arrays.asList(skuCombinationCode.split("_")).contains(specItemId);
+    private List<String> goodsSkuToSpecIdList(@NonNull GoodsDetailBean.Data.GoodsSku goodsSku) {
+        return Arrays.asList(goodsSku.skuCombinationCode.split("_"));
     }
 
     /* 执行规格间互斥性 高复杂度逻辑操作 修改请慎重 */
@@ -318,7 +318,7 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
                         for (Section.Cell cell : tmp.cellList) {
                             cell.enabled = false;
                             for (GoodsDetailBean.Data.GoodsSku goodsSku : data.goodsSkuList) {
-                                if (Arrays.asList(goodsSku.skuCombinationCode.split("_")).contains(cell.specItemId)) {
+                                if (goodsSkuToSpecIdList(goodsSku).contains(cell.specItemId)) {
                                     cell.enabled = true;
                                     break;
                                 }
@@ -333,7 +333,7 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
                 /* 更新其他UI元素 */
                 if (checkedIdList.size() == getItemCount()) {
                     for (GoodsDetailBean.Data.GoodsSku goodsSku : data.goodsSkuList) {
-                        List<String> tmpList = Arrays.asList(goodsSku.skuCombinationCode.split("_"));
+                        List<String> tmpList = goodsSkuToSpecIdList(goodsSku);
                         if (tmpList.containsAll(checkedIdList) && checkedIdList.containsAll(tmpList)) {
                             updateBySku(goodsSku);
                             break;
