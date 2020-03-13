@@ -44,7 +44,7 @@ public class LogisticalmsgAdapter extends BaseQuickAdapter<LogisticalMessageBean
         }
 
         if (helper.getAdapterPosition() == 0) {
-            iv_state.setImageResource(R.drawable.logistics_current);
+            iv_state.setImageResource(R.drawable.logistic_msg_now);
             v_up_line.setVisibility(View.GONE);
             tv_trace_info.setTextColor(mContext.getResources().getColor(R.color.orange));
             v_bottom_line.setVisibility(View.VISIBLE);
