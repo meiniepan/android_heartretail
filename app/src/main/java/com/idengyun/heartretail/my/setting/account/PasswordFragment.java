@@ -61,7 +61,7 @@ public final class PasswordFragment extends BaseFragment implements CompoundButt
         String mobile = HRUser.getMobile();
         tv_pwd_mobile.setText(mobile);
         if (mobile.length() == 11) {
-            mobile = mobile.substring(0, 4) + "****" + mobile.substring(8, 11);
+            mobile = mobile.substring(0, 3) + "****" + mobile.substring(7, 11);
             tv_pwd_mobile.setText(mobile);
         }
     }

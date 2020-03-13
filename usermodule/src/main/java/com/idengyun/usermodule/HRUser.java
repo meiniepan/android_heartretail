@@ -16,7 +16,14 @@ public final class HRUser {
 
     /* 用户是否实名认证 */
     public static boolean isAuthenticated() {
-        return !TextUtils.isEmpty(getValueFromUserInfo("authIdentity"));
+        int authIdentity = SharedPreferencesUtil.getData(Utils.getApp(), HRConst.XML_FILE_NAME_USER_INFO, "authIdentity", 0);
+        return authIdentity == 1;
+    }
+
+    /* 是否是新手机登录 */
+    public static boolean isNewDevice() {
+        int isnewPhoneImei = SharedPreferencesUtil.getData(Utils.getApp(), HRConst.XML_FILE_NAME_USER_INFO, "isnewPhoneImei", 0);
+        return isnewPhoneImei == 1;
     }
 
     /* 用户是否登录 */
@@ -71,6 +78,7 @@ public final class HRUser {
         SharedPreferencesUtil.saveData(context, fileName, "invitationCode", user.invitationCode);
         SharedPreferencesUtil.saveData(context, fileName, "headUrl", user.headUrl);
         SharedPreferencesUtil.saveData(context, fileName, "nickName", user.nickName);
+        SharedPreferencesUtil.saveData(context, fileName, "authIdentity", user.authIdentity);
     }
 
     private HRUser() {
