@@ -136,7 +136,6 @@ public class ConfirmOrderActivity extends BaseActivity {
 
     private void initWholeSale() {
         llProxyTab.setVisibility(View.VISIBLE);
-        llProtocol.setVisibility(View.GONE);
         initSelfGet();
     }
 

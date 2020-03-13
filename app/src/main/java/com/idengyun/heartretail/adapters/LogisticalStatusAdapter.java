@@ -36,7 +36,7 @@ public class LogisticalStatusAdapter extends BaseQuickAdapter<LogisticalStatusBe
         if (helper.getAdapterPosition() == 0) {
             line_left.setVisibility(View.INVISIBLE);
         }
-        if (helper.getAdapterPosition() == 3) {
+        if (helper.getAdapterPosition() == 4) {
             line_right.setVisibility(View.INVISIBLE);
         }
 

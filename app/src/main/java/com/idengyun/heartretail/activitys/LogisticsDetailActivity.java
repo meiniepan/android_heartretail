@@ -90,6 +90,14 @@ public class LogisticsDetailActivity extends BaseActivity {
 
     private void initAdapter() {
         lvLogistical.setLayoutManager(new LinearLayoutManager(this));
+        LogisticalMessageBean bean = new LogisticalMessageBean();
+        bean.processinfo = "快件已在【亦庄开发区】签收，签收人：前台，如\n" +
+                "有疑问请电联：13112345678";
+        bean.upload_time="2019-12-07 14:31:44";
+        list.add(bean);
+        list.add(bean);
+        list.add(bean);
+        list.add(bean);
         adapter = new LogisticalmsgAdapter(this, list, R.layout.item_lv_logisticalmessage_layout);
         lvLogistical.setAdapter(adapter);
     }
