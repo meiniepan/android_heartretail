@@ -23,6 +23,7 @@ public final class AccountFragment extends BaseFragment implements View.OnClickL
     private View layout_account_pwd;
     private View layout_account_phone;
     private View layout_account_real;
+    private TextView tv_account_mobile;
     private TextView tv_account_auth_state;
 
     @Override
@@ -68,12 +69,14 @@ public final class AccountFragment extends BaseFragment implements View.OnClickL
         layout_account_pwd = view.findViewById(R.id.layout_account_pwd);
         layout_account_phone = view.findViewById(R.id.layout_account_phone);
         layout_account_real = view.findViewById(R.id.layout_account_real);
+        tv_account_mobile = view.findViewById(R.id.tv_account_mobile);
         tv_account_auth_state = view.findViewById(R.id.tv_account_auth_state);
 
 
         layout_account_pwd.setOnClickListener(this);
         layout_account_phone.setOnClickListener(this);
         layout_account_real.setOnClickListener(this);
+        tv_account_mobile.setText(HRUser.getMobile());
         tv_account_auth_state.setText(HRUser.isAuthenticated() ? "已认证" : "未认证");
     }
 }

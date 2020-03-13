@@ -21,7 +21,7 @@ public final class LoginBean {
             public String invitationCode;
             public String headUrl;
             public String nickName;
-            public String authIdentity;
+            public int authIdentity;
         }
     }
 }

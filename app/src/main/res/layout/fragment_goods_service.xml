@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="49dp"
     android:background="#80000000">
 
     <LinearLayout
@@ -27,7 +28,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:overScrollMode="never"
-            android:paddingBottom="49dp"
             android:scrollbars="none"
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"
             tools:itemCount="6"

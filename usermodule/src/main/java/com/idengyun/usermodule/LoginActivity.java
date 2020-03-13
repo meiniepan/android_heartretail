@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.text.method.TransformationMethod;
@@ -343,6 +344,9 @@ public final class LoginActivity extends BaseActivity
         et_register_invite_code.addTextChangedListener(new OnTextChangedListener(et_register_invite_code));*/
         tv_register.setOnClickListener(this);
         cb_register_eye.setChecked(true);
+
+        String mobile = HRUser.getMobile();
+        if (!TextUtils.isEmpty(mobile)) et_login_mobile.setText(mobile);
     }
 
 //    class OnTextChangedListener implements TextWatcher {

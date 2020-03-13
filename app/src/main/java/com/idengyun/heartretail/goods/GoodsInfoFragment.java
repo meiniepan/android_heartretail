@@ -167,7 +167,7 @@ public final class GoodsInfoFragment extends BaseFragment implements View.OnClic
                 goodsSkuList == null ||
                 goodsDetailList == null) return;
 
-        int wholesaleFlag = data.wholesaleFlag;
+//        int wholesaleFlag = data.wholesaleFlag;
         String retailPrice = data.retailPrice;
         String wholesalePrice = data.wholesalePrice;
         int goodsType = data.goodsType;
@@ -182,7 +182,7 @@ public final class GoodsInfoFragment extends BaseFragment implements View.OnClic
         GoodsBanner.setupBanner(layout_goods_banner_container, urls);
 
         /* 批发资格 */
-        layout_goods_disqualification.setVisibility(wholesaleFlag == 1 ? View.VISIBLE : View.GONE);
+//        layout_goods_disqualification.setVisibility(wholesaleFlag == 1 ? View.VISIBLE : View.GONE);
 
         /* 商品价格 */
         String price = goodsType == 0 ? retailPrice : wholesalePrice;

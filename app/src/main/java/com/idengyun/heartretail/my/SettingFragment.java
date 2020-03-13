@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
-import com.dengyun.baselibrary.utils.ToastUtils;
+import com.dengyun.baselibrary.utils.activity.ActivityUtils;
 import com.dengyun.baselibrary.utils.phoneapp.AppUtils;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
@@ -16,6 +16,8 @@ import com.idengyun.heartretail.my.setting.PaySettingFragment;
 import com.idengyun.heartretail.my.setting.PersonalFragment;
 import com.idengyun.heartretail.my.setting.UserAgreeFragment;
 import com.idengyun.heartretail.my.setting.VersionFragment;
+import com.idengyun.usermodule.HRUser;
+import com.idengyun.usermodule.LoginActivity;
 
 /**
  * 设置界面
@@ -68,8 +70,9 @@ public final class SettingFragment extends BaseFragment implements View.OnClickL
     }
 
     private void logout() {
-        // TODO: 2020/3/6
-        ToastUtils.showShort("TODO...");
+        HRUser.clear();
+        ActivityUtils.finishAllActivities();
+        LoginActivity.start(getContext());
     }
 
     private void startAgreementActivity() {

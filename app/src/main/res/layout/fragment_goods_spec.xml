@@ -4,14 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="49dp"
     android:background="#80000000">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="418dp"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="49dp"
-        android:clickable="true">
+        android:clickable="true"
+        android:focusable="true">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"

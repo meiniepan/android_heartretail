@@ -3,7 +3,6 @@ package com.idengyun.heartretail.goods;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
 import android.view.View;
 import android.widget.RadioGroup;
@@ -13,6 +12,7 @@ import com.dengyun.baselibrary.utils.SizeUtils;
 import com.dengyun.baselibrary.utils.ToastUtils;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
+import com.idengyun.heartretail.activitys.ConfirmOrderActivity;
 
 /**
  * 商品详情-控制器
@@ -76,6 +76,7 @@ public final class GoodsDetailFragment extends BaseFragment implements RadioGrou
                 ToastUtils.showShort("去选择规格");
                 return;
             }
+            ConfirmOrderActivity.start(getContext(), null);
         }
     }
 
@@ -135,6 +136,7 @@ public final class GoodsDetailFragment extends BaseFragment implements RadioGrou
                 GoodsSpecFragment.class.getName(),
                 GoodsServiceFragment.class.getName()
         );
+
     }
 
     private void findViewById(@NonNull View view) {

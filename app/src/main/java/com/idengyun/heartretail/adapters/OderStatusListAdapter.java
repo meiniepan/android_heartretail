@@ -1,7 +1,5 @@
 package com.idengyun.heartretail.adapters;
 
-import android.app.Activity;
-import android.graphics.drawable.BitmapDrawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
@@ -33,7 +31,6 @@ import com.idengyun.statusrecyclerviewlib.StatusRecyclerView;
 import com.idengyun.usermodule.HRUser;
 import com.idengyun.usermodule.utils.SecondsTimer;
 import com.lzy.okgo.model.Response;
-import com.orhanobut.logger.Logger;
 
 import java.util.HashMap;
 import java.util.List;
@@ -169,7 +166,7 @@ public class OderStatusListAdapter extends BaseQuickAdapter<OrderStatusBean, Bas
         map.put("orderId", orderId);
         map.put("state", state);
         map.put("userId", TextUtils.isEmpty(HRUser.getId())?"1":HRUser.getId());
-        map.put("userName", TextUtils.isEmpty(HRUser.getId())?"1":HRUser.getNickName());
+        map.put("userName", TextUtils.isEmpty(HRUser.getId())?"1":HRUser.getNickname());
         NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.changeOrderState())
                 .activity(mActivity)
                 .params(map)

@@ -24,7 +24,6 @@ public final class GoodsDetailBean {
         public int goodsType;
         public int shopId;
         public String shopName;
-        public int wholesaleFlag;
         public List<Banner> imageList;
         public List<Protocol> protocolList;
         public List<GoodsSpec> goodsSpecList;
@@ -54,6 +53,7 @@ public final class GoodsDetailBean {
             public String goodsPrice;
             public int canBuyCount;
             public String skuImgUrl;
+            public int wholesaleFlag;
         }
 
         public static class Protocol {
