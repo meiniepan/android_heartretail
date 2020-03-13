@@ -43,6 +43,14 @@ public class HRActivity extends BaseActivity {
         context.startActivity(starter);
     }
 
+    public static void finish(@Nullable FragmentActivity fActivity) {
+        if (fActivity != null) fActivity.finish();
+    }
+
+    public static void onBackPressed(@Nullable FragmentActivity fActivity) {
+        if (fActivity != null) fActivity.onBackPressed();
+    }
+
     public static void showFragment(@Nullable FragmentActivity fActivity, String... tags) {
         setUserVisible(fActivity, true, tags);
     }

@@ -17,7 +17,6 @@ import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
-import com.idengyun.heartretail.activitys.HelpCenterActivity;
 import com.idengyun.heartretail.activitys.MyEvaluateActivity;
 import com.idengyun.heartretail.activitys.OrderListActivity;
 import com.idengyun.heartretail.model.response.BalanceBean;
@@ -221,8 +220,8 @@ public final class MyFragment extends BaseFragment implements View.OnClickListen
 
     @MainThread
     private void updateUI(boolean isLogin, boolean isAuthorized) {
-        ImageApi.displayImage(iv_my_user_avatar.getContext(), iv_my_user_avatar, HRUser.getHeadUrl());
-        tv_my_user_name.setText(HRUser.getNickName());
+        ImageApi.displayImage(iv_my_user_avatar.getContext(), iv_my_user_avatar, HRUser.getAvatar());
+        tv_my_user_name.setText(HRUser.getNickname());
         tv_my_user_mobile.setText(HRUser.getMobile());
         if (isLogin) {
             iv_my_not_login_bg.setVisibility(View.GONE);
