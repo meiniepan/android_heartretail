@@ -159,14 +159,14 @@ public class PoiSearchUtil {
     }
 
     public interface OnPoiBoundSearchListener {
-        void onSearchResult(List<PoiItem> pois);
+        void onSearchResult(List<PoiItem> resultPois);
     }
 
     public interface OnTipsSearchListener {
-        void onSearchResult(List<Tip> list);
+        void onSearchResult(List<Tip> resultTips);
     }
 
     public interface OnPoiDetailSearchListener {
-        void onSearchResult(PoiItem poiItem);
+        void onSearchResult(PoiItem resultPoiItem);
     }
 }

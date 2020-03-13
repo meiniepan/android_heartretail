@@ -6,19 +6,25 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationListener;
+import com.amap.api.services.core.PoiItem;
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
+import com.dengyun.baselibrary.utils.ToastUtils;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
+import com.idengyun.heartretail.activitys.FirstActivity;
 import com.idengyun.heartretail.goods.GoodsDetailFragment;
 import com.idengyun.heartretail.goods.GoodsEvaluateFragment;
 import com.idengyun.heartretail.goods.GoodsInfoFragment;
@@ -26,10 +32,18 @@ import com.idengyun.heartretail.goods.GoodsServiceFragment;
 import com.idengyun.heartretail.goods.GoodsSpecFragment;
 import com.idengyun.heartretail.model.response.GoodsListBean;
 import com.idengyun.heartretail.notice.NoticeFragment;
+import com.idengyun.maplibrary.MyMapActivity;
+import com.idengyun.maplibrary.beans.EventChoosePoiItem;
+import com.idengyun.maplibrary.utils.AmapLocationWapper;
+import com.idengyun.maplibrary.utils.PoiSearchUtil;
 import com.idengyun.usermodule.HRUser;
 import com.lzy.okgo.model.Response;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 首页
@@ -40,8 +54,15 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
 
     private View tv_home_share;
     private View tv_home_notice;
+    //首页左上角定位的tv
+    private TextView tvHomeLocation;
     private NestedScrollView nested_scroll_view;
     private RecyclerView recycler_view;
+
+    //定位功能的包装类
+    private AmapLocationWapper amapLocationWapper;
+    //定位（选择poi点）的城市名称、poi名称、poiId
+    private String cityName,poiName,poiId;
 
     @Override
     public int getLayoutId() {
@@ -50,7 +71,9 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
 
     @Override
     public void initViews(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        registBus();
         findViewById(view);
+        startLocation();
     }
 
     @Override
@@ -65,7 +88,58 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
 
         } else if (tv_home_notice == v) {
             HRActivity.start(getContext(), NoticeFragment.class);
+        }else if (tvHomeLocation == v) {
+            if (TextUtils.isEmpty(cityName)) {
+                ToastUtils.showShort("还没有定位成功");
+            }else {
+                MyMapActivity.start(getContext(),cityName,poiName,poiId);
+            }
         }
+    }
+
+    /*选择完地址*/
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(EventChoosePoiItem eventChoosePoiItem) {
+        cityName = eventChoosePoiItem.poiItem.getCityName();
+        poiName = eventChoosePoiItem.poiItem.getTitle();
+        poiId = eventChoosePoiItem.poiItem.getPoiId();
+        tvHomeLocation.setText(poiName);
+        //设置全局的定位属性
+        PoiSearchUtil.setGlobalLocationByPoiItem(eventChoosePoiItem.poiItem);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        amapLocationWapper.stopLocation();
+        amapLocationWapper.onDestroy();
+    }
+
+    private void startLocation() {
+        amapLocationWapper = new AmapLocationWapper();
+        amapLocationWapper.startLocation(new AMapLocationListener() {
+            @Override
+            public void onLocationChanged(AMapLocation aMapLocation) {
+                double latitude = aMapLocation.getLatitude();
+                double longitude = aMapLocation.getLongitude();
+                PoiSearchUtil.searchPOIWithBound(getContext(), latitude, longitude,
+                        new PoiSearchUtil.OnPoiBoundSearchListener() {
+                            @Override
+                            public void onSearchResult(List<PoiItem> pois) {
+                                //pois已经在上层判过空了
+                                if (null != tvHomeLocation) {
+                                    PoiItem poiItem = pois.get(0);
+                                    cityName = poiItem.getCityName();
+                                    poiName = poiItem.getTitle();
+                                    poiId = poiItem.getPoiId();
+                                    tvHomeLocation.setText(poiItem.getTitle());
+                                    //设置全局的定位属性
+                                    PoiSearchUtil.setGlobalLocationByPoiItem(poiItem);
+                                }
+                            }
+                        });
+            }
+        });
     }
 
     private void requestAPI() {
@@ -93,7 +167,6 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
 
     @MainThread
     private void updateUI() {
-        tv_home_notice.setOnClickListener(this);
 
         recycler_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -121,8 +194,12 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
     private void findViewById(@NonNull View view) {
         tv_home_share = view.findViewById(R.id.tv_home_share);
         tv_home_notice = view.findViewById(R.id.tv_home_notice);
+        tvHomeLocation = view.findViewById(R.id.tv_home_location);
         nested_scroll_view = view.findViewById(R.id.nested_scroll_view);
         recycler_view = view.findViewById(R.id.recycler_view);
+        tvHomeLocation.setOnClickListener(this);
+        tv_home_share.setOnClickListener(this);
+        tv_home_notice.setOnClickListener(this);
     }
 
     private class GoodsAdapter extends RecyclerView.Adapter<GoodsAdapter.GoodsHolder> {

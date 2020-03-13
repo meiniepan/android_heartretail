@@ -182,9 +182,9 @@ public class MyMapActivity extends BaseActivity {
                 Logger.d("经度："+longitude+"   ; 纬度："+latitude);
                 PoiSearchUtil.searchPOIWithBound(MyMapActivity.this, latitude, longitude, new PoiSearchUtil.OnPoiBoundSearchListener() {
                     @Override
-                    public void onSearchResult(List<PoiItem> pois) {
+                    public void onSearchResult(List<PoiItem> resultPois) {
                         pois.clear();
-                        pois.addAll(pois);
+                        pois.addAll(resultPois);
                         poiListAdapter.setCurrentPoiId(poiId);
                         poiListAdapter.notifyDataSetChanged();
                     }
