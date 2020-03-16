@@ -46,6 +46,8 @@ public final class GoodsServiceFragment extends BaseFragment implements View.OnC
         findViewById(view);
     }
 
+    int[] protocolIds;
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -58,15 +60,22 @@ public final class GoodsServiceFragment extends BaseFragment implements View.OnC
                 if (data == null) return;
                 List<GoodsDetailBean.Data.Protocol> protocolList = data.protocolList;
                 if (protocolList != null) {
-                    int[] protocolIds = new int[protocolList.size()];
+                    protocolIds = new int[protocolList.size()];
                     for (int i = 0; i < protocolList.size(); i++) {
                         GoodsDetailBean.Data.Protocol protocol = protocolList.get(i);
                         protocolIds[i] = protocol.protocolId;
                     }
-                    if (protocolIds.length > 0) requestAPI(protocolIds);
                 }
             }
         });
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            if (protocolIds != null && protocolIds.length > 0) requestAPI(protocolIds);
+        }
     }
 
     private void requestAPI(int[] protocolIds) {

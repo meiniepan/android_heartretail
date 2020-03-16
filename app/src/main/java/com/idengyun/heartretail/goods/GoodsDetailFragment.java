@@ -71,7 +71,7 @@ public final class GoodsDetailFragment extends BaseFragment implements RadioGrou
         } else if (layout_goods_detail_customer_service == v) {
 
         } else if (layout_goods_detail_buy_now == v) {
-            GoodsSpecFragment goodsSpecFragment = (GoodsSpecFragment) HRActivity.findFragmentByTag(getActivity(), GoodsSpecFragment.class.getName());
+            GoodsSPUFragment goodsSpecFragment = (GoodsSPUFragment) HRActivity.findFragmentByTag(getActivity(), GoodsSPUFragment.class.getName());
             if (goodsSpecFragment == null || !goodsSpecFragment.isCanBuy()) {
                 ToastUtils.showShort("去选择规格");
                 return;
@@ -133,7 +133,7 @@ public final class GoodsDetailFragment extends BaseFragment implements RadioGrou
         HRActivity.hideFragment(
                 getActivity(),
                 GoodsEvaluateFragment.class.getName(),
-                GoodsSpecFragment.class.getName(),
+                GoodsSPUFragment.class.getName(),
                 GoodsServiceFragment.class.getName()
         );
 

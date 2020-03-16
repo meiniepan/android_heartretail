@@ -24,12 +24,11 @@ import com.dengyun.baselibrary.utils.ToastUtils;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
-import com.idengyun.heartretail.activitys.FirstActivity;
 import com.idengyun.heartretail.goods.GoodsDetailFragment;
 import com.idengyun.heartretail.goods.GoodsEvaluateFragment;
 import com.idengyun.heartretail.goods.GoodsInfoFragment;
+import com.idengyun.heartretail.goods.GoodsSPUFragment;
 import com.idengyun.heartretail.goods.GoodsServiceFragment;
-import com.idengyun.heartretail.goods.GoodsSpecFragment;
 import com.idengyun.heartretail.model.response.GoodsListBean;
 import com.idengyun.heartretail.notice.NoticeFragment;
 import com.idengyun.maplibrary.MyMapActivity;
@@ -62,7 +61,7 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
     //定位功能的包装类
     private AmapLocationWapper amapLocationWapper;
     //定位（选择poi点）的城市名称、poi名称、poiId
-    private String cityName,poiName,poiId;
+    private String cityName, poiName, poiId;
 
     @Override
     public int getLayoutId() {
@@ -88,11 +87,11 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
 
         } else if (tv_home_notice == v) {
             HRActivity.start(getContext(), NoticeFragment.class);
-        }else if (tvHomeLocation == v) {
+        } else if (tvHomeLocation == v) {
             if (TextUtils.isEmpty(cityName)) {
                 ToastUtils.showShort("还没有定位成功");
-            }else {
-                MyMapActivity.start(getContext(),cityName,poiName,poiId);
+            } else {
+                MyMapActivity.start(getContext(), cityName, poiName, poiId);
             }
         }
     }
@@ -220,7 +219,7 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
                             GoodsInfoFragment.class,
                             GoodsEvaluateFragment.class,
                             GoodsDetailFragment.class,
-                            GoodsSpecFragment.class,
+                            GoodsSPUFragment.class,
                             GoodsServiceFragment.class
                     );
                 }

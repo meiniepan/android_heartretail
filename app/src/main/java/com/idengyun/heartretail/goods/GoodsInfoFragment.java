@@ -117,7 +117,7 @@ public final class GoodsInfoFragment extends BaseFragment implements View.OnClic
     @Override
     public void onClick(View v) {
         if (layout_goods_spec == v) {
-            HRActivity.showFragment(getActivity(), GoodsSpecFragment.class.getName());
+            HRActivity.showFragment(getActivity(), GoodsSPUFragment.class.getName());
         } else if (layout_goods_service == v) {
             HRActivity.showFragment(getActivity(), GoodsServiceFragment.class.getName());
         } else if (layout_goods_info_evaluate_header == v) {
@@ -183,6 +183,7 @@ public final class GoodsInfoFragment extends BaseFragment implements View.OnClic
 
         /* 批发资格 */
 //        layout_goods_disqualification.setVisibility(wholesaleFlag == 1 ? View.VISIBLE : View.GONE);
+        layout_goods_disqualification.setVisibility(View.GONE);
 
         /* 商品价格 */
         String price = goodsType == 0 ? retailPrice : wholesalePrice;
@@ -236,7 +237,12 @@ public final class GoodsInfoFragment extends BaseFragment implements View.OnClic
         }
     }
 
-    private String getGoodsSpecText(@Nullable GoodsDetailBean.Data.GoodsSku goodsSku, List<GoodsDetailBean.Data.GoodsSpec> goodsSpecList) {
+    public void setGoodsSpecText(CharSequence text) {
+        tv_goods_spec.setText(text);
+    }
+
+    private String getGoodsSpecText(@Nullable GoodsDetailBean.Data.GoodsSku
+                                            goodsSku, List<GoodsDetailBean.Data.GoodsSpec> goodsSpecList) {
         if (goodsSku == null) return "";
 
         StringBuilder sb = new StringBuilder();
