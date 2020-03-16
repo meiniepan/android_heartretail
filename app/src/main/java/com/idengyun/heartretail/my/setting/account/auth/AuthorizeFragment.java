@@ -11,11 +11,11 @@ import com.idengyun.heartretail.R;
 import com.idengyun.usermodule.HRUser;
 
 /**
- * 已认证
+ * 是否认证
  *
  * @author aLang
  */
-public final class AuthorizedFragment extends BaseFragment implements View.OnClickListener {
+public final class AuthorizeFragment extends BaseFragment implements View.OnClickListener {
 
     private View layout_auth_id_card_info;
     private View layout_auth_bank_card_info;

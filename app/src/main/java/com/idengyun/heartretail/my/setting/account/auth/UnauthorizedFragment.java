@@ -14,6 +14,7 @@ import com.idengyun.usermodule.utils.SecondsTimer;
  *
  * @author aLang
  */
+@Deprecated
 public final class UnauthorizedFragment extends BaseFragment {
 
 

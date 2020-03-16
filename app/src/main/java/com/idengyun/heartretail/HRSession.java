@@ -9,10 +9,13 @@ import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.heartretail.model.response.BalanceBean;
+import com.idengyun.heartretail.model.response.GoodsListBean;
 import com.idengyun.heartretail.model.response.MobileBindBean;
 import com.idengyun.heartretail.model.response.PersonalDataBean;
 import com.idengyun.heartretail.model.response.ProtocolsBean;
 import com.idengyun.heartretail.model.response.PwdModifyBean;
+import com.idengyun.heartretail.model.response.RealVerifyBean;
+import com.idengyun.heartretail.model.response.RedPacketBean;
 import com.idengyun.heartretail.model.response.UserAvatarBean;
 import com.idengyun.heartretail.model.response.UserNickBean;
 import com.idengyun.usermodule.HRUser;
@@ -169,6 +172,79 @@ public final class HRSession {
         NetApi.<ProtocolsBean>getData(netOption, new JsonCallback<ProtocolsBean>(netOption) {
             @Override
             public void onSuccess(Response<ProtocolsBean> response) {
+                callback.onChanged(response.body().data);
+            }
+        });
+    }
+
+    /* 查询红包详情 */
+    public static void session_09(Fragment fragment, int page, int pageSize, Observer<RedPacketBean.Data> callback) {
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.packetDetail())
+                .fragment(fragment)
+                .isShowDialog(true)
+                .clazz(RedPacketBean.class)
+                .params("userId", HRUser.getId())
+                .params("page", page)
+                .params("pageSize", pageSize)
+                .build();
+        NetApi.<RedPacketBean>getData(RequestMethod.GET, netOption, new JsonCallback<RedPacketBean>(netOption) {
+            @Override
+            public void onSuccess(Response<RedPacketBean> response) {
+                callback.onChanged(response.body().data);
+            }
+        });
+    }
+
+    /* 商品列表 */
+    public static void session_10(Fragment fragment,
+                                  int goodsType,
+                                  int page,
+                                  int pageSize,
+                                  int sortType,
+                                  int sortStyle,
+                                  Observer<GoodsListBean.Data> callback) {
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.goodsList())
+                .fragment(fragment)
+                .isShowDialog(true)
+                .clazz(GoodsListBean.class)
+                .params("userId", HRUser.getId())
+                .params("goodsType", goodsType)
+                .params("page", page)
+                .params("pageSize", pageSize)
+                .params("sortType", sortType)
+                .params("sortStyle", sortStyle)
+                .build();
+        NetApi.<GoodsListBean>getData(netOption, new JsonCallback<GoodsListBean>(netOption) {
+            @Override
+            public void onSuccess(Response<GoodsListBean> response) {
+                callback.onChanged(response.body().data);
+            }
+        });
+    }
+
+    /* 实名认证 */
+    public static void session_11(Fragment fragment,
+                                  String mobile,
+                                  String nationality,
+                                  String certificateType,
+                                  String certificateCode,
+                                  String bankCode,
+                                  String verifyCode,
+                                  Observer<RealVerifyBean.Data> callback) {
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.authIdentity())
+                .fragment(fragment)
+                .clazz(RealVerifyBean.class)
+                .params("mobile", mobile)
+                .params("nationality", nationality)
+                .params("certificateType", certificateType)
+                .params("certificateCode", certificateCode)
+                .params("bankCode", bankCode)
+                .params("identifyCode", verifyCode)
+                .params("userId", HRUser.getId())
+                .build();
+        NetApi.<RealVerifyBean>getData(netOption, new JsonCallback<RealVerifyBean>(netOption) {
+            @Override
+            public void onSuccess(Response<RealVerifyBean> response) {
                 callback.onChanged(response.body().data);
             }
         });

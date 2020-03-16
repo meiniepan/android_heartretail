@@ -1,5 +1,6 @@
 package com.idengyun.heartretail.main;
 
+import android.arch.lifecycle.Observer;
 import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
@@ -18,6 +19,7 @@ import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.baselibrary.utils.ToastUtils;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
+import com.idengyun.heartretail.HRSession;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.RedPacketBean;
 import com.idengyun.usermodule.HRUser;
@@ -74,17 +76,10 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
     }
 
     private void requestAPI() {
-        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.packetDetail())
-                .fragment(this)
-                .clazz(RedPacketBean.class)
-                .params("userId", HRUser.getId())
-                .params("page", 1)
-                .params("pageSize", Integer.MAX_VALUE)
-                .build();
-        NetApi.<RedPacketBean>getData(RequestMethod.GET, netOption, new JsonCallback<RedPacketBean>(netOption) {
+        HRSession.session_09(this, 1, Integer.MAX_VALUE, new Observer<RedPacketBean.Data>() {
             @Override
-            public void onSuccess(Response<RedPacketBean> response) {
-                updateUI(response.body().data);
+            public void onChanged(@Nullable RedPacketBean.Data data) {
+                updateUI(data);
             }
         });
     }

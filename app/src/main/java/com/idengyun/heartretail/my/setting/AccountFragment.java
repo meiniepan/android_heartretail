@@ -11,7 +11,7 @@ import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.my.setting.account.IdentityFragment;
 import com.idengyun.heartretail.my.setting.account.PasswordFragment;
-import com.idengyun.heartretail.my.setting.account.auth.AuthorizedFragment;
+import com.idengyun.heartretail.my.setting.account.auth.AuthorizeFragment;
 import com.idengyun.usermodule.HRUser;
 
 /**
@@ -54,7 +54,7 @@ public final class AccountFragment extends BaseFragment implements View.OnClickL
     }
 
     private void startRealVerifyActivity() {
-        HRActivity.start(getContext(), AuthorizedFragment.class);
+        HRActivity.start(getContext(), AuthorizeFragment.class);
     }
 
     private void startPhoneBindActivity() {

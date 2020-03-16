@@ -1,5 +1,6 @@
 package com.idengyun.heartretail.my.setting.account;
 
+import android.arch.lifecycle.Observer;
 import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
@@ -9,25 +10,20 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
-import com.dengyun.baselibrary.net.NetApi;
-import com.dengyun.baselibrary.net.NetOption;
-import com.dengyun.baselibrary.net.callback.JsonCallback;
-import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.baselibrary.utils.ToastUtils;
-import com.dengyun.splashmodule.config.SpMainConfigConstants;
+import com.idengyun.heartretail.HRSession;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.RealVerifyBean;
 import com.idengyun.usermodule.HRConst;
-import com.idengyun.usermodule.HRUser;
 import com.idengyun.usermodule.beans.VerifyCodeBean;
 import com.idengyun.usermodule.utils.SecondsTimer;
-import com.lzy.okgo.model.Response;
 
 /**
  * 实名认证界面
  *
  * @author aLang
  */
+@Deprecated
 public final class RealFragment extends BaseFragment implements View.OnClickListener {
 
     private EditText et_real_name;
@@ -73,23 +69,19 @@ public final class RealFragment extends BaseFragment implements View.OnClickList
     }
 
     private void toAuth() {
-        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.authIdentity())
-                .fragment(this)
-                .clazz(RealVerifyBean.class)
-                .params("mobile", et_real_reserved_mobile.getText().toString())
-                .params("nationality", et_real_nationality.getText().toString())
-                .params("certificateType", et_real_id_type.getText().toString())
-                .params("certificateCode", et_real_id_num.getText().toString())
-                .params("bankCode", et_real_bank_card_num.getText().toString())
-                .params("identifyCode", et_real_verify_code.getText().toString())
-                .params("userId", HRUser.getId())
-                .build();
-        NetApi.<RealVerifyBean>getData(netOption, new JsonCallback<RealVerifyBean>(netOption) {
-            @Override
-            public void onSuccess(Response<RealVerifyBean> response) {
-                updateUI(response.body().data);
-            }
-        });
+        HRSession.session_11(this,
+                et_real_reserved_mobile.getText().toString(),
+                et_real_nationality.getText().toString(),
+                et_real_id_type.getText().toString(),
+                et_real_id_num.getText().toString(),
+                et_real_bank_card_num.getText().toString(),
+                et_real_verify_code.getText().toString(),
+                new Observer<RealVerifyBean.Data>() {
+                    @Override
+                    public void onChanged(@Nullable RealVerifyBean.Data data) {
+                        updateUI(data);
+                    }
+                });
     }
 
     @MainThread
@@ -101,17 +93,9 @@ public final class RealFragment extends BaseFragment implements View.OnClickList
     private void sendVerifyCode() {
         startTimer(tv_real_verify_code);
 
-        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.getIdentifyCode())
-                .fragment(this)
-                .params("mobile", HRUser.getMobile())
-                .params("identifyType", HRConst.IDENTIFY_TYPE_0)
-                .isShowDialog(true)
-                .clazz(VerifyCodeBean.class)
-                .build();
-
-        NetApi.getData(RequestMethod.GET, netOption, new JsonCallback<VerifyCodeBean>(netOption) {
+        HRSession.session_06(this, HRConst.IDENTIFY_TYPE_0, new Observer<VerifyCodeBean.Data>() {
             @Override
-            public void onSuccess(Response<VerifyCodeBean> response) {
+            public void onChanged(@Nullable VerifyCodeBean.Data data) {
                 ToastUtils.showLong("验证码已发出");
             }
         });

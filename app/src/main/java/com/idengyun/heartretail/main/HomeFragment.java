@@ -1,5 +1,6 @@
 package com.idengyun.heartretail.main;
 
+import android.arch.lifecycle.Observer;
 import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
@@ -17,12 +18,9 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.services.core.PoiItem;
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
-import com.dengyun.baselibrary.net.NetApi;
-import com.dengyun.baselibrary.net.NetOption;
-import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.baselibrary.utils.ToastUtils;
-import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.heartretail.HRActivity;
+import com.idengyun.heartretail.HRSession;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.activitys.ShareQRCodeActivity;
 import com.idengyun.heartretail.goods.GoodsDetailFragment;
@@ -36,8 +34,6 @@ import com.idengyun.maplibrary.MyMapActivity;
 import com.idengyun.maplibrary.beans.EventChoosePoiItem;
 import com.idengyun.maplibrary.utils.AmapLocationWapper;
 import com.idengyun.maplibrary.utils.PoiSearchUtil;
-import com.idengyun.usermodule.HRUser;
-import com.lzy.okgo.model.Response;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -143,20 +139,10 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
     }
 
     private void requestAPI() {
-        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.goodsList())
-                .fragment(this)
-                .clazz(GoodsListBean.class)
-                .params("userId", HRUser.getId())
-                .params("goodsType", 0)
-                .params("page", 1)
-                .params("pageSize", 10)
-                .params("sortType", 0)
-                .params("sortStyle", 0)
-                .build();
-        NetApi.<GoodsListBean>getData(netOption, new JsonCallback<GoodsListBean>(netOption) {
+        HRSession.session_10(this, 0, 1, 10, 0, 0, new Observer<GoodsListBean.Data>() {
             @Override
-            public void onSuccess(Response<GoodsListBean> response) {
-                updateUI(response.body().data);
+            public void onChanged(@Nullable GoodsListBean.Data data) {
+                updateUI(data);
             }
         });
     }
