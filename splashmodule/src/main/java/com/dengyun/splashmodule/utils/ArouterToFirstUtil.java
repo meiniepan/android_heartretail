@@ -14,12 +14,6 @@ import com.dengyun.baselibrary.utils.Utils;
  */
 public class ArouterToFirstUtil {
     public static void  skipToFirst(){
-        // TODO: 2020-03-12
-        String userId = SharedPreferencesUtil.getData(Utils.getApp(),"hr_user_info","id","");
-        if (!TextUtils.isEmpty(userId)){
-            ARouter.getInstance().build(RouterPathConfig.app_FirstActivity).navigation();
-        }else {
-            ARouter.getInstance().build(RouterPathConfig.user_LoginActivity).navigation();
-        }
+        ARouter.getInstance().build(RouterPathConfig.app_FirstActivity).navigation();
     }
 }
