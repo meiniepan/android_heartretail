@@ -13,19 +13,15 @@ import com.idengyun.usermodule.beans.LoginBean;
  * @author aLang
  */
 public final class HRUser {
-    private static Application context = Utils.getApp();
-    private static String fileName = HRConst.XML_FILE_NAME_USER_INFO;
 
     /* 用户是否实名认证 */
     public static boolean isAuthenticated() {
-        int authIdentity = SharedPreferencesUtil.getData(context, HRConst.XML_FILE_NAME_USER_INFO, "authIdentity", 0);
-        return authIdentity == 1;
+        return getInt("authIdentity") == 1;
     }
 
     /* 是否是新手机登录 */
     public static boolean isNewDevice() {
-        int isnewPhoneImei = SharedPreferencesUtil.getData(context, HRConst.XML_FILE_NAME_USER_INFO, "isnewPhoneImei", 0);
-        return isnewPhoneImei == 1;
+        return getInt("isnewPhoneImei") == 1;
     }
 
     /* 用户是否登录 */
@@ -35,72 +31,91 @@ public final class HRUser {
 
     /* 获取用户token */
     public static String getToken() {
-        return getValueFromUserInfo("token");
+        return getString("token");
     }
 
     /* 获取用户ID */
     public static String getId() {
-        return getValueFromUserInfo("id");
+        return getString("id");
     }
 
     /* 获取用户手机号码 */
     public static String getMobile() {
-        return getValueFromUserInfo("mobile");
+        return getString("mobile");
     }
 
     /* 获取用户好友邀请码 */
     public static String getInviteCode() {
-        return getValueFromUserInfo("invitationCode");
+        return getString("invitationCode");
     }
 
     /* 获取用户头像地址 */
     public static String getAvatar() {
-        return getValueFromUserInfo("headUrl");
+        return getString("headUrl");
     }
 
     /* 获取用户昵称 */
     public static String getNickname() {
-        return getValueFromUserInfo("nickName");
+        return getString("nickName");
     }
 
-    /* 不要使用这个 */
-    private static String getValueFromUserInfo(String key) {
-        return SharedPreferencesUtil.getData(Utils.getApp(), HRConst.XML_FILE_NAME_USER_INFO, key, "");
+    /* 保存用户好友邀请码 */
+    public static void saveInviteCode(String inviteCode) {
+        putValue("invitationCode", inviteCode);
     }
 
     /* 保存用户手机号 */
     public static void saveMobile(String mobile) {
-        SharedPreferencesUtil.saveData(context, fileName, "mobile", mobile);
+        putValue("mobile", mobile);
     }
 
     /* 保存用户昵称 */
     public static void saveNickname(String nickname) {
-        SharedPreferencesUtil.saveData(context, fileName, "nickName", nickname);
+        putValue("nickName", nickname);
     }
 
     /* 保存用户头像地址 */
     public static void saveAvatar(String avatar) {
-        SharedPreferencesUtil.saveData(context, fileName, "headUrl", avatar);
+        putValue("headUrl", avatar);
     }
 
     /**
      * 清空用户登录信息
      */
     public static void clear() {
-        SharedPreferencesUtil.removeAll(context, HRConst.XML_FILE_NAME_USER_INFO);
+        SharedPreferencesUtil.removeAll(context, fileName);
     }
 
     static void saveLoginBean(LoginBean loginBean) {
         LoginBean.Data data = loginBean.data;
         LoginBean.Data.User user = data.user;
-        SharedPreferencesUtil.saveData(context, fileName, "token", data.token);
-        SharedPreferencesUtil.saveData(context, fileName, "isnewPhoneImei", data.isnewPhoneImei);
-        SharedPreferencesUtil.saveData(context, fileName, "id", user.id);
-        SharedPreferencesUtil.saveData(context, fileName, "mobile", user.mobile);
-        SharedPreferencesUtil.saveData(context, fileName, "invitationCode", user.invitationCode);
-        SharedPreferencesUtil.saveData(context, fileName, "headUrl", user.headUrl);
-        SharedPreferencesUtil.saveData(context, fileName, "nickName", user.nickName);
-        SharedPreferencesUtil.saveData(context, fileName, "authIdentity", user.authIdentity);
+        putValue("token", data.token);
+        putValue("isnewPhoneImei", data.isnewPhoneImei);
+        putValue("id", user.id);
+        putValue("mobile", user.mobile);
+        putValue("invitationCode", user.invitationCode);
+        putValue("ownerInvitationCode", user.ownerInvitationCode);
+        putValue("headUrl", user.headUrl);
+        putValue("nickName", user.nickName);
+        putValue("authIdentity", user.authIdentity);
+    }
+
+    private static Application context = Utils.getApp();
+    private static String fileName = HRConst.XML_FILE_NAME_USER_INFO;
+
+    /* 不要使用这个 */
+    private static String getString(String key) {
+        return SharedPreferencesUtil.getData(context, fileName, key, "");
+    }
+
+    /* 不要使用这个 */
+    private static int getInt(String key) {
+        return SharedPreferencesUtil.getData(context, fileName, key, 0);
+    }
+
+    /* 不要使用这个 */
+    private static void putValue(String key, Object value) {
+        SharedPreferencesUtil.saveData(context, fileName, key, value);
     }
 
     private HRUser() {

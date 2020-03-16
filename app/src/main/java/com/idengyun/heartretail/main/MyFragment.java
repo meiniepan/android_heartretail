@@ -14,6 +14,7 @@ import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.baselibrary.net.constants.RequestMethod;
+import com.dengyun.baselibrary.utils.ToastUtils;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
@@ -98,6 +99,10 @@ public final class MyFragment extends BaseFragment implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
+        if (!HRUser.isLogin()) {
+            ToastUtils.showShort("请先登录");
+            return;
+        }
         if (iv_my_setting == v) {
             startMySettingActivity();
         } else if (iv_my_user_avatar == v) {
@@ -139,27 +144,27 @@ public final class MyFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void startMyOrder5Activity() {
-        OrderListActivity.start(getActivity(),5);
+        OrderListActivity.start(getActivity(), 5);
     }
 
     private void startMyOrder4Activity() {
-        OrderListActivity.start(getActivity(),4);
+        OrderListActivity.start(getActivity(), 4);
     }
 
     private void startMyOrder3Activity() {
-        OrderListActivity.start(getActivity(),3);
+        OrderListActivity.start(getActivity(), 3);
     }
 
     private void startMyOrder2Activity() {
-        OrderListActivity.start(getActivity(),2);
+        OrderListActivity.start(getActivity(), 2);
     }
 
     private void startMyOrder1Activity() {
-        OrderListActivity.start(getActivity(),1);
+        OrderListActivity.start(getActivity(), 1);
     }
 
     private void startMyAllOrdersActivity() {
-        OrderListActivity.start(getActivity(),0);
+        OrderListActivity.start(getActivity(), 0);
     }
 
     private void startMyAccountActivity() {

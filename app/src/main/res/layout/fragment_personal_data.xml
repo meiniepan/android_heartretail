@@ -83,7 +83,9 @@
                 android:id="@+id/tv_personal_nickname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:hint="去填写"
                 android:textColor="#ff333333"
+                android:textColorHint="#ff999999"
                 android:textSize="14sp"
                 tools:text="施永哲2020" />
 

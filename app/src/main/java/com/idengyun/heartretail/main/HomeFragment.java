@@ -185,7 +185,7 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
         });
 
         GoodsAdapter goodsAdapter = new GoodsAdapter();
-        for (int i = 0; i < 2; i++) goodsAdapter.items.add("");
+        for (int i = 0; i < 2; i++) goodsAdapter.goodsList.add("");
         recycler_view.setAdapter(goodsAdapter);
     }
 
@@ -202,8 +202,8 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
     }
 
     private class GoodsAdapter extends RecyclerView.Adapter<GoodsAdapter.GoodsHolder> {
-        ArrayList<String> items = new ArrayList<>();
         private LayoutInflater inflater;
+        final List<String> goodsList = new ArrayList<>();
 
         @NonNull
         @Override
@@ -234,7 +234,7 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
 
         @Override
         public int getItemCount() {
-            return items.size();
+            return goodsList.size();
         }
 
         private class GoodsHolder extends RecyclerView.ViewHolder {

@@ -19,6 +19,7 @@ public final class LoginBean {
             public String id;
             public String mobile;
             public String invitationCode;
+            public String ownerInvitationCode;
             public String headUrl;
             public String nickName;
             public int authIdentity;

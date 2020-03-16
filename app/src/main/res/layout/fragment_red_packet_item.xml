@@ -30,6 +30,7 @@
         tools:text="刘易阳" />
 
     <TextView
+        android:id="@+id/tv_red_packet_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#ff666666"
@@ -39,7 +40,7 @@
         tools:text="2020-03-03 09:00" />
 
     <TextView
-        android:id="@+id/tv_red_packet_out_money"
+        android:id="@+id/tv_red_packet_out_money_key"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -50,12 +51,13 @@
         app:layout_constraintLeft_toRightOf="@+id/iv_red_packet_user_avatar" />
 
     <TextView
+        android:id="@+id/tv_red_packet_out_money"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#ff333333"
         android:textSize="14sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/tv_red_packet_out_money"
-        app:layout_constraintLeft_toRightOf="@+id/tv_red_packet_out_money"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tv_red_packet_out_money_key"
+        app:layout_constraintLeft_toRightOf="@+id/tv_red_packet_out_money_key"
         tools:text="1234.56元" />
 
     <View

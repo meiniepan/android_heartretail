@@ -39,6 +39,7 @@
 
             <!-- 邀请流程 -->
             <FrameLayout
+                android:id="@+id/layout_red_packet_rule"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
@@ -376,10 +377,12 @@
                         tools:listitem="@layout/fragment_red_packet_item" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:id="@+id/tv_red_packet_more"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginBottom="16dp"
+                        android:gravity="center"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="16dp"
                         android:text="查看更多"
                         android:textColor="#ffff6633"
                         android:textSize="16sp" />

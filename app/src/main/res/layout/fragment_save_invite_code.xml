@@ -15,7 +15,7 @@
         <com.dengyun.baselibrary.widgets.toolbar.BaseToolBar
             android:layout_width="match_parent"
             android:layout_height="@dimen/basetool_height"
-            app:toolbar_title="修改昵称" />
+            app:toolbar_title="填写邀请码" />
     </FrameLayout>
 
     <LinearLayout
@@ -31,18 +31,18 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="新昵称"
+            android:text="邀请码"
             android:textColor="#ff333333"
             android:textSize="16sp" />
 
         <EditText
-            android:id="@+id/et_nick_name"
+            android:id="@+id/et_invite_code"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:background="@null"
             android:gravity="center_vertical"
-            android:hint="请输入10字符以内昵称"
+            android:hint="请输入收到的邀请码"
             android:imeOptions="actionDone"
             android:inputType="text"
             android:lines="1"
@@ -65,7 +65,7 @@
             android:drawableStart="@drawable/shape_nick_dot_red"
             android:drawablePadding="8dp"
             android:gravity="center_vertical"
-            android:text="仅支持汉字、数字和字母"
+            android:text="填写邀请码，尊享零售批发钜惠"
             android:textColor="#ff999999"
             android:textSize="14sp" />
 
@@ -78,11 +78,12 @@
             android:gravity="center_vertical"
             android:text="不支持特殊字符、表情符号等特殊字符"
             android:textColor="#ff999999"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:visibility="gone" />
     </LinearLayout>
 
     <TextView
-        android:id="@+id/tv_nickname_modify"
+        android:id="@+id/tv_invite_code_modify"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
