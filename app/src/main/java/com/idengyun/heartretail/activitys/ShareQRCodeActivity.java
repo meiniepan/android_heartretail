@@ -19,10 +19,19 @@ import com.dengyun.baselibrary.utils.ToastUtils;
 import com.dengyun.baselibrary.utils.bar.StatusBarUtil;
 import com.dengyun.baselibrary.utils.phoneapp.PhoneUtils;
 import com.dengyun.downloadlibrary.download.DownloadUtil;
+import com.dengyun.sharelibrary.callback.OnShareResult;
+import com.dengyun.sharelibrary.config.ShareChannelConstants;
+import com.dengyun.sharelibrary.utils.ShareOptions;
 import com.dengyun.sharelibrary.utils.ShareUtil;
 import com.idengyun.heartretail.R;
 import com.umeng.socialize.UMShareAPI;
+import com.yanzhenjie.permission.Action;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.runtime.Permission;
 import com.yzq.zxinglibrary.encode.CodeCreator;
+
+import java.io.File;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,6 +67,27 @@ public class ShareQRCodeActivity extends BaseActivity {
         createQRCode();
     }
 
+    @OnClick({R.id.tv_copy, R.id.tv_save_share})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.tv_copy:
+                ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                // 将文本内容放到系统剪贴板里。
+                cm.setText(invitationCode);
+                ToastUtils.showShort("复制成功");
+                break;
+            case R.id.tv_save_share:
+                saveAndShare();
+                break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        ShareUtil.onActivityResult(this,requestCode,resultCode,data);
+    }
+
     private void createQRCode() {
         String qrUrl = "" + "?appType=0&recommendType=1&recommendCode=" + invitationCode;
 
@@ -81,26 +111,37 @@ public class ShareQRCodeActivity extends BaseActivity {
         return shareBitmap;
     }
 
-    @OnClick({R.id.tv_copy, R.id.tv_save_share})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.tv_copy:
-                ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                // 将文本内容放到系统剪贴板里。
-                cm.setText(invitationCode);
-                ToastUtils.showShort("复制成功");
-                break;
-            case R.id.tv_save_share:
-                // TODO: 2020-03-13 二维码保存和分享
-//                Bitmap shareBitmap = getShareBitmap();
-//                ImageUtils.save(shareBitmap, getFilesDir().getAbsolutePath() + "/download", Bitmap.CompressFormat.JPEG,false);
-                break;
-        }
-    }
+    private void saveAndShare(){
+        Bitmap shareBitmap = getShareBitmap();
+        AndPermission.with(this)
+                .runtime()
+                .permission(Permission.Group.STORAGE)
+                .onDenied(new Action<List<String>>() {
+                    @Override
+                    public void onAction(List<String> data) {
+                        ToastUtils.showShort("拒绝了读写权限");
+                    }
+                }).onGranted(new Action<List<String>>() {
+            @Override
+            public void onAction(List<String> data) {
+                String shareImgPath = getFilesDir().getAbsolutePath() + "/download/xls_share_qr_img.png";
+                boolean isSaveSuccess = ImageUtils.save(shareBitmap, shareImgPath, Bitmap.CompressFormat.JPEG,false);
+                if (isSaveSuccess){
+                    ShareOptions shareOptions = ShareOptions.newBuilder(ShareQRCodeActivity.this)
+                            .shareChannel("1_4_0")
+                            .shareTitle("图片")
+                            .shareImgBitmap(shareBitmap)
+                            .build();
+                    ShareUtil.shareWithPermission(shareOptions, new OnShareResult() {
+                        @Override
+                        public void onShareSuccess(ShareOptions shareOptions, String shareChannel) {
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        ShareUtil.onActivityResult(this,requestCode,resultCode,data);
+                        }
+                    });
+                }else {
+                    ToastUtils.showShort("保存失败");
+                }
+            }
+        }).start();
     }
 }
