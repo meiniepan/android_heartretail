@@ -127,7 +127,6 @@ public class ShareQRCodeActivity extends BaseActivity {
                 String shareImgPath = getFilesDir().getAbsolutePath() + "/download/xls_share_qr_img.png";
                 boolean isSaveSuccess = ImageUtils.save(shareBitmap, shareImgPath, Bitmap.CompressFormat.JPEG,false);
                 if (isSaveSuccess){
-                    ShareChannelConstants
                     ShareOptions shareOptions = ShareOptions.newBuilder(ShareQRCodeActivity.this)
                             .shareChannel("1_4_0")
                             .shareTitle("图片")
