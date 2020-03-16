@@ -1,20 +1,29 @@
 package com.idengyun.heartretail.activitys;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.activity.BaseActivity;
+import com.dengyun.baselibrary.base.dialog.BaseDialog;
+import com.dengyun.baselibrary.base.dialog.BaseDialogFragment;
+import com.dengyun.baselibrary.base.dialog.ViewConvertListener;
+import com.dengyun.baselibrary.base.dialog.listener.DialogViewHolder;
+import com.dengyun.baselibrary.utils.ToastUtils;
 import com.idengyun.heartretail.R;
+import com.idengyun.heartretail.widget.WithdrawPopupWindow;
+import com.luck.picture.lib.dialog.CustomDialog;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -49,6 +58,7 @@ public class WithdrawActivity extends BaseActivity {
     LinearLayout llProtoco3;
     @BindView(R.id.tv_fast_withdraw)
     TextView tvFastWithdraw;
+    private PopupWindow popupWindow;
 
     public static void start(Context context) {
         Intent starter = new Intent(context, WithdrawActivity.class);
@@ -62,10 +72,14 @@ public class WithdrawActivity extends BaseActivity {
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
-
+        initPopupWindow();
     }
 
-
+    private void initPopupWindow() {
+        if (popupWindow == null) {
+            popupWindow = new WithdrawPopupWindow(this);
+        }
+    }
     @OnClick({R.id.tv_bank_add, R.id.tv_bank_refresh, R.id.tv_fast_withdraw})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -74,6 +88,21 @@ public class WithdrawActivity extends BaseActivity {
             case R.id.tv_bank_refresh:
                 break;
             case R.id.tv_fast_withdraw:
+                BaseDialog.init().setLayoutId(R.layout.pop_window_withdraw)
+                        .setConvertListener(new ViewConvertListener() {
+                            @Override
+                            protected void convertView(DialogViewHolder holder, BaseDialogFragment dialog) {
+                                holder.getView(R.id.tv_withdraw_now).setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        ToastUtils.showShort("立即");
+                                    }
+                                });
+                            }
+                        })
+                        .setWidthMarginDp(30)
+                        .show(getSupportFragmentManager());
+
                 break;
         }
     }

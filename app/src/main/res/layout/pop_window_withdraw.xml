@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bac_withdraw_window"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="@dimen/dp_40"
+        android:src="@drawable/def" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_16"
+        android:text="施永哲2020"
+        android:textSize="@dimen/sp_16" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:text="123.45元即将提现至您的微信账号"
+        android:textSize="@dimen/sp_16"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_withdraw_now"
+        android:layout_width="180dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/shape_orange_bac_rec_4"
+        android:gravity="center"
+        android:text="立即提现"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/tv_withdraw_cancel"
+        android:layout_width="180dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/shape_orange_line_rec"
+        android:gravity="center"
+        android:text="取消提现"
+        android:textColor="@color/orange" />
+
+</LinearLayout>
