@@ -1,6 +1,5 @@
 package com.idengyun.heartretail.my.setting;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.MainThread;
@@ -19,21 +18,18 @@ import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.baselibrary.net.upload.UploadBean;
 import com.dengyun.baselibrary.utils.ListUtils;
 import com.dengyun.baselibrary.utils.TakePhotoUtil;
-import com.dengyun.baselibrary.utils.ToastUtils;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.PersonalDataBean;
 import com.idengyun.heartretail.model.response.UserAvatarBean;
 import com.idengyun.heartretail.model.response.UserNickBean;
-import com.idengyun.heartretail.my.setting.personal.AvatarFragment;
 import com.idengyun.heartretail.my.setting.personal.InviteCodeFragment;
 import com.idengyun.heartretail.my.setting.personal.NicknameFragment;
 import com.idengyun.usermodule.HRUser;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.lzy.okgo.model.Response;
-import com.lzy.okgo.request.base.Request;
 
 import java.io.File;
 import java.util.List;
@@ -81,7 +77,7 @@ public final class PersonalFragment extends BaseFragment implements View.OnClick
     public void onClick(View v) {
         /* 头像 昵称 邀请码 */
         if (layout_personal_avatar == v) {
-            TakePhotoUtil.takePhotoWithItem(this,true,REQUEST_CODE_PERSONAL);
+            TakePhotoUtil.takePhotoWithItem(this, true, REQUEST_CODE_PERSONAL);
         } else if (layout_personal_nickname == v) {
             startNicknameActivity();
         } else if (layout_personal_invite_code == v) {
@@ -92,19 +88,17 @@ public final class PersonalFragment extends BaseFragment implements View.OnClick
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_PERSONAL && resultCode==RESULT_OK){
+        if (requestCode == REQUEST_CODE_PERSONAL && resultCode == RESULT_OK) {
             List<LocalMedia> localMediaList = PictureSelector.obtainMultipleResult(data);
-            if (!ListUtils.isEmpty(localMediaList)){
+            if (!ListUtils.isEmpty(localMediaList)) {
                 String imgPath = TakePhotoUtil.getResultPath(localMediaList.get(0));
-//                uploadFilePath(imgPath);
+                uploadFilePath(imgPath);
             }
         }
     }
 
-    private void uploadFilePath(String imgPath){
-        // TODO: 2020-03-16 上传图片文件到资源服务器
-        String uploadFile = "";
-        NetOption netOption = NetOption.newBuilder(uploadFile)
+    private void uploadFilePath(String imgPath) {
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.upload())
                 .fragment(this)
                 .clazz(UploadBean.class)
                 .isShowDialog(false)
@@ -113,13 +107,9 @@ public final class PersonalFragment extends BaseFragment implements View.OnClick
             @Override
             public void onSuccess(Response<UploadBean> response) {
                 String photoUrl = response.body().getFile_url();
-                updateUserPhoto(photoUrl);
+                modifyAvatar(photoUrl);
             }
         });
-    }
-
-    private void updateUserPhoto(String userPhotoUrl){
-        // TODO: 2020-03-16 更新用户头像
     }
 
     private void queryUserInfo() {
@@ -151,12 +141,13 @@ public final class PersonalFragment extends BaseFragment implements View.OnClick
         });
     }
 
-    private void modifyNickname(final String nickname) {
+    private void modifyNicknameAndInviteCode(final String nickname, final String inviteCode) {
         NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.changeNick())
                 .fragment(this)
                 .clazz(UserNickBean.class)
                 .params("userId", HRUser.getId())
                 .params("nickName", nickname)
+                .params("invitationCode", inviteCode)
                 .build();
         NetApi.<UserNickBean>getData(netOption, new JsonCallback<UserNickBean>(netOption) {
             @Override

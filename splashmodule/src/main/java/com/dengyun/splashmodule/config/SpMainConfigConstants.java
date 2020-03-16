@@ -297,4 +297,26 @@ public class SpMainConfigConstants {
         return getMainConfigUrl("exchange");
     }
 
+    /* ================================= 流上传 ================================= */
+
+    /* 单文件上传 */
+    public static String upload() {
+        return getMainConfigUrl("upload");
+    }
+
+    /* 多文件上传 */
+    public static String upload_files() {
+        return getMainConfigUrl("upload-files");
+    }
+
+    /* 单图片base64上传 */
+    public static String upload_img_base64() {
+        return getMainConfigUrl("upload-img-base64");
+    }
+
+    /* 多文件上传uploads */
+    public static String uploads() {
+        return getMainConfigUrl("uploads");
+    }
+
 }
