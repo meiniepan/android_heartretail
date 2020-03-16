@@ -45,9 +45,14 @@ public class BaseToolBar extends Toolbar {
         super(context, attrs, defStyleAttr);
         setPopupTheme(R.style.Theme_BaseToolBar_Menu);
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.BaseToolBar);
-        String title = ta.getString(R.styleable.BaseToolBar_toolbar_title);
-        int left_icon = ta.getResourceId(R.styleable.BaseToolBar_left_icon, R.drawable.base_back_toolbar);
+
         boolean is_hide_left = ta.getBoolean(R.styleable.BaseToolBar_is_hide_left, false);
+        int left_icon = ta.getResourceId(R.styleable.BaseToolBar_left_icon, R.drawable.base_back_toolbar);
+        String leftText =  ta.getString(R.styleable.BaseToolBar_left_text);
+        int leftTextColor = ta.getColor(R.styleable.BaseToolBar_left_text_color,getResources().getColor(R.color.basetoobar_textcolor));
+        int leftTextSizePx = ta.getDimensionPixelSize(R.styleable.BaseToolBar_left_text_size, SizeUtils.sp2px(16));
+
+        String title = ta.getString(R.styleable.BaseToolBar_toolbar_title);
         int title_text_sizePx = ta.getDimensionPixelSize(R.styleable.BaseToolBar_title_text_size, (int)getResources().getDimension(R.dimen.basetool_textsize));
         int title_text_color = ta.getColor(R.styleable.BaseToolBar_title_text_color,getResources().getColor(R.color.basetoobar_textcolor));
         ta.recycle();
@@ -62,8 +67,7 @@ public class BaseToolBar extends Toolbar {
 
         /*左侧按钮没有隐藏*/
         if (!is_hide_left) {
-//            setNavigationIcon(left_icon);
-            addBackView(title_text_color,left_icon);
+            addBackView(leftText,leftTextColor,left_icon,SizeUtils.px2sp(leftTextSizePx));
         }
 
         /*设置标题*/
@@ -75,20 +79,22 @@ public class BaseToolBar extends Toolbar {
 
     /**
      * 添加左侧返回view
-     * @param title_text_color 文字颜色
-     * @param left_icon 左侧返回按钮图片id
+     * @param leftText     左侧返回文案
+     * @param leftTextColor 文字颜色
+     * @param leftIcon 左侧返回按钮图片id
      */
-    private void addBackView(int title_text_color,int left_icon) {
+    private void addBackView(String leftText,int leftTextColor,int leftIcon,int leftTextSize) {
         mToolbarBack = new TextView(getContext());
-        mToolbarBack.setTextColor(title_text_color);
-        mToolbarBack.setTextSize(16);
+        setLeftTextColor(leftTextColor);
+        setLeftTextSize(leftTextSize);
         LayoutParams layoutParams1 =
                 new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT,
                         Gravity.START);
         mToolbarBack.setLayoutParams(layoutParams1);
-        mToolbarBack.setText("返回");
-        ImageUtils.drawableLeft(mToolbarBack,left_icon,SizeUtils.dp2px(8));
+        setLeftText(leftText);
+        setLeftButtonIcon(leftIcon);
+
         ViewUtil.setMargins(mToolbarBack,SizeUtils.dp2px(15),0,0,0);
         addView(mToolbarBack);
         //设置左侧按钮的点击事件
@@ -123,10 +129,43 @@ public class BaseToolBar extends Toolbar {
 
     /**
      * 设置左侧按钮icon
-     * @param icon
+     * @param leftIcon 左侧图片
      */
-    public void setLeftButtonIcon(int icon) {
-        setNavigationIcon(icon);
+    public void setLeftButtonIcon(int leftIcon) {
+        if (null!=mToolbarBack){
+            ImageUtils.drawableLeft(mToolbarBack,leftIcon,SizeUtils.dp2px(8));
+        }
+    }
+
+    /**
+     * 设置左侧返回文字
+     */
+    public void setLeftText(String leftText){
+        if (null!=mToolbarBack){
+            if (null==leftText){
+                mToolbarBack.setText("返回");
+            } else {
+                mToolbarBack.setText(leftText);
+            }
+        }
+    }
+
+    /**
+     * 设置左侧返回文字的颜色
+     */
+    public void setLeftTextColor(int leftTextColor){
+        if (null!=mToolbarBack){
+            mToolbarBack.setTextColor(leftTextColor);
+        }
+    }
+
+    /**
+     * 设置左侧返回文字的大小
+     */
+    public void setLeftTextSize(int leftTextSize){
+        if (null!=mToolbarBack){
+            mToolbarBack.setTextSize(leftTextSize);
+        }
     }
 
     //设置左侧按钮监听事件
@@ -150,6 +189,10 @@ public class BaseToolBar extends Toolbar {
 
     public TextView getTitleTextView(){
         return mToolbarTitle;
+    }
+
+    public TextView getLeftTextView(){
+        return mToolbarBack;
     }
 
     /**

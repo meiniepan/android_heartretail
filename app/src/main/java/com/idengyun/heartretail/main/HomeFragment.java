@@ -25,6 +25,7 @@ import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.activitys.FirstActivity;
+import com.idengyun.heartretail.activitys.ShareQRCodeActivity;
 import com.idengyun.heartretail.goods.GoodsDetailFragment;
 import com.idengyun.heartretail.goods.GoodsEvaluateFragment;
 import com.idengyun.heartretail.goods.GoodsInfoFragment;
@@ -85,7 +86,7 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
     @Override
     public void onClick(View v) {
         if (tv_home_share == v) {
-
+            ShareQRCodeActivity.start(getContext());
         } else if (tv_home_notice == v) {
             HRActivity.start(getContext(), NoticeFragment.class);
         }else if (tvHomeLocation == v) {
