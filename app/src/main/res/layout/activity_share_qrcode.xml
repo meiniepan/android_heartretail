@@ -5,12 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/orange"
+    android:background="@drawable/bg_share_qr"
+    android:id="@+id/ll_share_parent"
     tools:context=".activitys.ShareQRCodeActivity">
     <com.dengyun.baselibrary.widgets.toolbar.BaseToolBar
+        android:id="@+id/toolbar_share_qr"
         android:layout_width="match_parent"
         android:layout_height="@dimen/basetool_height"
         android:background="@color/transparent"
+        app:title_text_color="@color/white"
+        app:left_text_color="@color/white"
+        app:left_icon="@drawable/icon_arrow_back_white"
+        android:layout_marginTop="26dp"
         app:toolbar_title="分享二维码"/>
     <TextView
         android:layout_width="wrap_content"
