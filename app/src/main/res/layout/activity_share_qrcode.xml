@@ -57,12 +57,12 @@
         android:layout_marginStart="38dp"
         android:layout_marginEnd="38dp"
         android:layout_marginTop="32dp"
+        android:gravity="center_horizontal"
         android:background="@drawable/shape_white_share_box">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="44dp"
-            android:layout_marginStart="40dp"
             android:textSize="20sp"
             android:textColor="@color/gray333"
             android:textStyle="bold"
@@ -71,7 +71,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:layout_marginStart="40dp"
             android:textSize="14sp"
             android:textColor="@color/gray333"
             android:text="批发零售·钜惠享不停"/>
@@ -79,19 +78,16 @@
             android:layout_width="100dp"
             android:layout_height="3dp"
             android:layout_marginTop="12dp"
-            android:layout_marginStart="40dp"
             android:background="#FF5555"/>
         <ImageView
             android:id="@+id/iv_qr_code"
             android:layout_width="220dp"
             android:layout_height="220dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginStart="40dp"/>
+            android:layout_marginTop="20dp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:layout_marginStart="40dp"
             android:textSize="14sp"
             android:textColor="@color/gray333"
             android:text="长按识别二维码，下载APP享福利"
