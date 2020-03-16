@@ -27,6 +27,7 @@ import com.idengyun.heartretail.model.response.PersonalDataBean;
 import com.idengyun.heartretail.model.response.UserAvatarBean;
 import com.idengyun.heartretail.model.response.UserNickBean;
 import com.idengyun.heartretail.my.setting.personal.AvatarFragment;
+import com.idengyun.heartretail.my.setting.personal.InviteCodeFragment;
 import com.idengyun.heartretail.my.setting.personal.NicknameFragment;
 import com.idengyun.usermodule.HRUser;
 import com.luck.picture.lib.PictureSelector;
@@ -84,7 +85,7 @@ public final class PersonalFragment extends BaseFragment implements View.OnClick
         } else if (layout_personal_nickname == v) {
             startNicknameActivity();
         } else if (layout_personal_invite_code == v) {
-            startInvitationActivity();
+            startInviteCodeActivity();
         }
     }
 
@@ -184,8 +185,8 @@ public final class PersonalFragment extends BaseFragment implements View.OnClick
         tv_personal_invite_code.setCompoundDrawables(null, null, null, null);
     }
 
-    private void startInvitationActivity() {
-        // TODO: 2020/3/9
+    private void startInviteCodeActivity() {
+        HRActivity.start(getContext(), InviteCodeFragment.class);
     }
 
     private void startNicknameActivity() {

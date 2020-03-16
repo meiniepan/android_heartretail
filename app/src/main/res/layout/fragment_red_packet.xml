@@ -20,15 +20,17 @@
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
-<!--            <ImageView-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:background="@drawable/ic_red_packet_bg"-->
-<!--                android:visibility="gone" />-->
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="432dp"
+                android:background="@drawable/ic_red_packet_bg"
+                android:src="@drawable/ic_red_packet_src"
+                android:visibility="visible" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="-60dp"
                 android:background="@drawable/ic_red_packet_cad_bg"
                 android:gravity="center"
                 android:text="好友在零售区下单金额的3%-5%\n将作为您的专属红包奖励"
@@ -37,6 +39,7 @@
 
             <!-- 邀请流程 -->
             <FrameLayout
+                android:id="@+id/layout_red_packet_rule"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
@@ -344,6 +347,7 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="15dp"
+                android:layout_marginBottom="24dp"
                 android:visibility="visible"
                 app:cardBackgroundColor="#FFFFFF"
                 app:cardCornerRadius="8dp"
@@ -373,10 +377,12 @@
                         tools:listitem="@layout/fragment_red_packet_item" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:id="@+id/tv_red_packet_more"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginBottom="16dp"
+                        android:gravity="center"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="16dp"
                         android:text="查看更多"
                         android:textColor="#ffff6633"
                         android:textSize="16sp" />

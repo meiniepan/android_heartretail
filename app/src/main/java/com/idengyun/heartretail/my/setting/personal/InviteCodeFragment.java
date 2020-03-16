@@ -19,18 +19,18 @@ import com.idengyun.usermodule.HRUser;
 import com.lzy.okgo.model.Response;
 
 /**
- * 修改昵称
+ * 填写邀请码
  *
  * @author aLang
  */
-public final class NicknameFragment extends BaseFragment implements View.OnClickListener {
+public final class InviteCodeFragment extends BaseFragment implements View.OnClickListener {
 
-    private EditText et_nick_name;
-    private View tv_nickname_modify;
+    private EditText et_invite_code;
+    private View tv_invite_code_modify;
 
     @Override
     public int getLayoutId() {
-        return R.layout.fragment_nick_modify;
+        return R.layout.fragment_save_invite_code;
     }
 
     @Override
@@ -45,26 +45,26 @@ public final class NicknameFragment extends BaseFragment implements View.OnClick
 
     @Override
     public void onClick(View v) {
-        if (et_nick_name.length() < 1) {
-            ToastUtils.showShort("请输入昵称");
+        if (et_invite_code.length() < 1) {
+            ToastUtils.showShort("请填写邀请码");
             return;
         }
-        modifyNickname(et_nick_name.getText().toString());
+        modifyInviteCode(et_invite_code.getText().toString());
     }
 
-    private void modifyNickname(final String nickname) {
+    private void modifyInviteCode(final String inviteCode) {
         NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.changeNick())
                 .fragment(this)
                 .clazz(UserNickBean.class)
                 .params("userId", HRUser.getId())
-                .params("nickName", nickname)
-                .params("invitationCode", HRUser.getInviteCode())
+                .params("nickName", HRUser.getNickname())
+                .params("invitationCode", inviteCode)
                 .build();
         NetApi.<UserNickBean>getData(netOption, new JsonCallback<UserNickBean>(netOption) {
             @Override
             public void onSuccess(Response<UserNickBean> response) {
                 updateUI(response.body().data);
-                HRUser.saveNickname(nickname);
+                HRUser.saveInviteCode(inviteCode);
                 if (getActivity() != null) getActivity().onBackPressed();
             }
         });
@@ -76,9 +76,9 @@ public final class NicknameFragment extends BaseFragment implements View.OnClick
     }
 
     private void findViewById(View view) {
-        et_nick_name = view.findViewById(R.id.et_nick_name);
-        tv_nickname_modify = view.findViewById(R.id.tv_nickname_modify);
+        et_invite_code = view.findViewById(R.id.et_invite_code);
+        tv_invite_code_modify = view.findViewById(R.id.tv_invite_code_modify);
 
-        tv_nickname_modify.setOnClickListener(this);
+        tv_invite_code_modify.setOnClickListener(this);
     }
 }

@@ -30,6 +30,7 @@ import java.util.List;
  *
  * @author aLang
  */
+@Deprecated
 public final class GoodsSpecFragment extends BaseFragment implements View.OnClickListener {
 
     private ImageView iv_goods_spec_logo;
