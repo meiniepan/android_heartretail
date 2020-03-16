@@ -1,5 +1,6 @@
 package com.idengyun.heartretail.my.setting.account;
 
+import android.arch.lifecycle.Observer;
 import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
@@ -16,6 +17,7 @@ import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.baselibrary.utils.ToastUtils;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.heartretail.HRActivity;
+import com.idengyun.heartretail.HRSession;
 import com.idengyun.heartretail.R;
 import com.idengyun.usermodule.HRConst;
 import com.idengyun.usermodule.HRUser;
@@ -89,17 +91,9 @@ public final class IdentityFragment extends BaseFragment implements View.OnClick
     private void sendVerifyCode() {
         startTimer(tv_identity_verify_code);
 
-        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.getIdentifyCode())
-                .fragment(this)
-                .params("mobile", HRUser.getMobile())
-                .params("identifyType", HRConst.IDENTIFY_TYPE_4)
-                .isShowDialog(true)
-                .clazz(VerifyCodeBean.class)
-                .build();
-
-        NetApi.getData(RequestMethod.GET, netOption, new JsonCallback<VerifyCodeBean>(netOption) {
+        HRSession.session_06(this, HRConst.IDENTIFY_TYPE_4, new Observer<VerifyCodeBean.Data>() {
             @Override
-            public void onSuccess(Response<VerifyCodeBean> response) {
+            public void onChanged(@Nullable VerifyCodeBean.Data data) {
                 ToastUtils.showLong("验证码已发出");
             }
         });

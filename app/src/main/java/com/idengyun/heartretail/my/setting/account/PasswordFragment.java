@@ -1,7 +1,7 @@
 package com.idengyun.heartretail.my.setting.account;
 
+import android.arch.lifecycle.Observer;
 import android.os.Bundle;
-import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.method.HideReturnsTransformationMethod;
@@ -14,13 +14,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
-import com.dengyun.baselibrary.net.NetApi;
-import com.dengyun.baselibrary.net.NetOption;
-import com.dengyun.baselibrary.net.callback.JsonCallback;
-import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.baselibrary.utils.ToastUtils;
 import com.dengyun.baselibrary.utils.activity.ActivityUtils;
-import com.dengyun.splashmodule.config.SpMainConfigConstants;
+import com.idengyun.heartretail.HRSession;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.PwdModifyBean;
 import com.idengyun.usermodule.HRConst;
@@ -28,7 +24,6 @@ import com.idengyun.usermodule.HRUser;
 import com.idengyun.usermodule.LoginActivity;
 import com.idengyun.usermodule.beans.VerifyCodeBean;
 import com.idengyun.usermodule.utils.SecondsTimer;
-import com.lzy.okgo.model.Response;
 
 /**
  * 修改密码界面
@@ -102,16 +97,9 @@ public final class PasswordFragment extends BaseFragment implements CompoundButt
             return;
         }
 
-        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.changePwd())
-                .fragment(this)
-                .clazz(PwdModifyBean.class)
-                .params("mobile", HRUser.getMobile())
-                .params("identifyCode", et_pwd_verify_code.getText().toString())
-                .params("pwd", et_pwd_new_pwd.getText().toString())
-                .build();
-        NetApi.<PwdModifyBean>getData(netOption, new JsonCallback<PwdModifyBean>(netOption) {
+        HRSession.session_05(this, et_pwd_verify_code.getText().toString(), et_pwd_new_pwd.getText().toString(), new Observer<PwdModifyBean.Data>() {
             @Override
-            public void onSuccess(Response<PwdModifyBean> response) {
+            public void onChanged(@Nullable PwdModifyBean.Data data) {
                 ToastUtils.showLong("密码修改成功");
                 logout();
             }
@@ -131,17 +119,9 @@ public final class PasswordFragment extends BaseFragment implements CompoundButt
     private void sendVerifyCode() {
         startTimer(tv_pwd_verify_code);
 
-        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.getIdentifyCode())
-                .fragment(this)
-                .params("mobile", HRUser.getMobile())
-                .params("identifyType", HRConst.IDENTIFY_TYPE_2)
-                .isShowDialog(true)
-                .clazz(VerifyCodeBean.class)
-                .build();
-
-        NetApi.getData(RequestMethod.GET, netOption, new JsonCallback<VerifyCodeBean>(netOption) {
+        HRSession.session_06(this, HRConst.IDENTIFY_TYPE_2, new Observer<VerifyCodeBean.Data>() {
             @Override
-            public void onSuccess(Response<VerifyCodeBean> response) {
+            public void onChanged(@Nullable VerifyCodeBean.Data data) {
                 ToastUtils.showLong("验证码已发出");
             }
         });

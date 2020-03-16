@@ -1,5 +1,6 @@
 package com.idengyun.heartretail.my.setting.account;
 
+import android.arch.lifecycle.Observer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,7 +16,9 @@ import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.baselibrary.utils.RegexUtils;
 import com.dengyun.baselibrary.utils.ToastUtils;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
+import com.idengyun.heartretail.HRSession;
 import com.idengyun.heartretail.R;
+import com.idengyun.heartretail.model.response.MobileBindBean;
 import com.idengyun.usermodule.HRConst;
 import com.idengyun.usermodule.HRUser;
 import com.idengyun.usermodule.beans.VerifyCodeBean;
@@ -77,18 +80,9 @@ public final class MobileBindFragment extends BaseFragment implements View.OnCli
             return;
         }
 
-        // TODO: 2020/3/13
-        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.getIdentifyCode())
-                .fragment(this)
-                .params("mobile", HRUser.getMobile())
-                .params("identifyType", HRConst.IDENTIFY_TYPE_4)
-                .isShowDialog(true)
-                .clazz(VerifyCodeBean.class)
-                .build();
-
-        NetApi.getData(RequestMethod.GET, netOption, new JsonCallback<VerifyCodeBean>(netOption) {
+        HRSession.session_07(this, et_phone_mobile.getText().toString(), et_phone_verify_code.getText().toString(), new Observer<MobileBindBean.Data>() {
             @Override
-            public void onSuccess(Response<VerifyCodeBean> response) {
+            public void onChanged(@Nullable MobileBindBean.Data data) {
                 HRUser.saveMobile(et_phone_mobile.getText().toString());
             }
         });
@@ -98,17 +92,9 @@ public final class MobileBindFragment extends BaseFragment implements View.OnCli
     private void sendVerifyCode() {
         startTimer(tv_phone_verify_code);
 
-        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.getIdentifyCode())
-                .fragment(this)
-                .params("mobile", HRUser.getMobile())
-                .params("identifyType", HRConst.IDENTIFY_TYPE_4)
-                .isShowDialog(true)
-                .clazz(VerifyCodeBean.class)
-                .build();
-
-        NetApi.getData(RequestMethod.GET, netOption, new JsonCallback<VerifyCodeBean>(netOption) {
+        HRSession.session_06(this, HRConst.IDENTIFY_TYPE_4, new Observer<VerifyCodeBean.Data>() {
             @Override
-            public void onSuccess(Response<VerifyCodeBean> response) {
+            public void onChanged(@Nullable VerifyCodeBean.Data data) {
                 ToastUtils.showLong("验证码已发出");
             }
         });

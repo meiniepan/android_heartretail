@@ -1,5 +1,6 @@
 package com.idengyun.heartretail.main;
 
+import android.arch.lifecycle.Observer;
 import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
@@ -10,13 +11,9 @@ import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.net.ImageApi;
-import com.dengyun.baselibrary.net.NetApi;
-import com.dengyun.baselibrary.net.NetOption;
-import com.dengyun.baselibrary.net.callback.JsonCallback;
-import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.baselibrary.utils.ToastUtils;
-import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.heartretail.HRActivity;
+import com.idengyun.heartretail.HRSession;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.activitys.MyEvaluateActivity;
 import com.idengyun.heartretail.activitys.OrderListActivity;
@@ -24,8 +21,6 @@ import com.idengyun.heartretail.activitys.WithdrawActivity;
 import com.idengyun.heartretail.model.response.BalanceBean;
 import com.idengyun.heartretail.my.SettingFragment;
 import com.idengyun.usermodule.HRUser;
-import com.idengyun.usermodule.VerifyDeviceActivity;
-import com.lzy.okgo.model.Response;
 
 /**
  * 我的页面
@@ -90,13 +85,20 @@ public final class MyFragment extends BaseFragment implements View.OnClickListen
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        updateUI(HRUser.isLogin(), HRUser.isAuthenticated());
+        requestAPI();
+    }
+
+    /*@Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
             updateUI(HRUser.isLogin(), HRUser.isAuthenticated());
             requestAPI();
         }
-    }
+    }*/
 
     @Override
     public void onClick(View v) {
@@ -199,15 +201,10 @@ public final class MyFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void requestAPI() {
-        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.balanceInfo())
-                .fragment(this)
-                .clazz(BalanceBean.class)
-                .params("userId", HRUser.getId())
-                .build();
-        NetApi.<BalanceBean>getData(RequestMethod.GET, netOption, new JsonCallback<BalanceBean>(netOption) {
+        HRSession.session_02(this, new Observer<BalanceBean.Data>() {
             @Override
-            public void onSuccess(Response<BalanceBean> response) {
-                updateUI(response.body().data);
+            public void onChanged(@Nullable BalanceBean.Data data) {
+                updateUI(data);
             }
         });
     }

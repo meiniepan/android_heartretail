@@ -1,22 +1,18 @@
 package com.idengyun.heartretail.my.setting.personal;
 
+import android.arch.lifecycle.Observer;
 import android.os.Bundle;
-import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.EditText;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
-import com.dengyun.baselibrary.net.NetApi;
-import com.dengyun.baselibrary.net.NetOption;
-import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.baselibrary.utils.ToastUtils;
-import com.dengyun.splashmodule.config.SpMainConfigConstants;
+import com.idengyun.heartretail.HRSession;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.UserNickBean;
 import com.idengyun.usermodule.HRUser;
-import com.lzy.okgo.model.Response;
 
 /**
  * 修改昵称
@@ -53,26 +49,13 @@ public final class NicknameFragment extends BaseFragment implements View.OnClick
     }
 
     private void modifyNickname(final String nickname) {
-        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.changeNick())
-                .fragment(this)
-                .clazz(UserNickBean.class)
-                .params("userId", HRUser.getId())
-                .params("nickName", nickname)
-                .params("invitationCode", HRUser.getInviteCode())
-                .build();
-        NetApi.<UserNickBean>getData(netOption, new JsonCallback<UserNickBean>(netOption) {
+        HRSession.session_04(this, nickname, HRUser.getInviteCode(), new Observer<UserNickBean.Data>() {
             @Override
-            public void onSuccess(Response<UserNickBean> response) {
-                updateUI(response.body().data);
+            public void onChanged(@Nullable UserNickBean.Data data) {
                 HRUser.saveNickname(nickname);
                 if (getActivity() != null) getActivity().onBackPressed();
             }
         });
-    }
-
-    @MainThread
-    private void updateUI(UserNickBean.Data data) {
-
     }
 
     private void findViewById(View view) {

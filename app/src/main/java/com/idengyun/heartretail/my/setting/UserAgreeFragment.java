@@ -1,5 +1,6 @@
 package com.idengyun.heartretail.my.setting;
 
+import android.arch.lifecycle.Observer;
 import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
@@ -9,14 +10,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
-import com.dengyun.baselibrary.net.NetApi;
-import com.dengyun.baselibrary.net.NetOption;
-import com.dengyun.baselibrary.net.callback.JsonCallback;
-import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.dengyun.splashmodule.config.SpProtocol;
+import com.idengyun.heartretail.HRSession;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.ProtocolsBean;
-import com.lzy.okgo.model.Response;
 
 import java.util.List;
 
@@ -47,15 +44,10 @@ public final class UserAgreeFragment extends BaseFragment {
     }
 
     private void requestAPI() {
-        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.protocolDetail())
-                .fragment(this)
-                .clazz(ProtocolsBean.class)
-                .params("protocolIds", new int[]{SpProtocol.getUserProtocolId()})
-                .build();
-        NetApi.<ProtocolsBean>getData(netOption, new JsonCallback<ProtocolsBean>(netOption) {
+        HRSession.session_08(this, new int[]{SpProtocol.getUserProtocolId()}, new Observer<List<ProtocolsBean.Data>>() {
             @Override
-            public void onSuccess(Response<ProtocolsBean> response) {
-                updateUI(response.body().data);
+            public void onChanged(@Nullable List<ProtocolsBean.Data> data) {
+                updateUI(data);
             }
         });
     }

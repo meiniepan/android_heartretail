@@ -202,6 +202,11 @@ public class SpMainConfigConstants {
         return getMainConfigUrl("authIdentity");
     }
 
+    /* 绑定手机号修改 */
+    public static String changeMobile() {
+        return getMainConfigUrl("changeMobile");
+    }
+
     /* ================================= 登录注册 ================================= */
 
     /* 注册 */

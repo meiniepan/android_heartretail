@@ -1,5 +1,6 @@
 package com.idengyun.heartretail.my.setting;
 
+import android.arch.lifecycle.Observer;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.MainThread;
@@ -14,16 +15,15 @@ import com.dengyun.baselibrary.net.ImageApi;
 import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
-import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.baselibrary.net.upload.UploadBean;
 import com.dengyun.baselibrary.utils.ListUtils;
 import com.dengyun.baselibrary.utils.TakePhotoUtil;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.heartretail.HRActivity;
+import com.idengyun.heartretail.HRSession;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.PersonalDataBean;
 import com.idengyun.heartretail.model.response.UserAvatarBean;
-import com.idengyun.heartretail.model.response.UserNickBean;
 import com.idengyun.heartretail.my.setting.personal.InviteCodeFragment;
 import com.idengyun.heartretail.my.setting.personal.NicknameFragment;
 import com.idengyun.usermodule.HRUser;
@@ -112,60 +112,13 @@ public final class PersonalFragment extends BaseFragment implements View.OnClick
         });
     }
 
-    private void queryUserInfo() {
-        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.queryUserId())
-                .fragment(this)
-                .clazz(PersonalDataBean.class)
-                .params("userId", HRUser.getId())
-                .build();
-        NetApi.<PersonalDataBean>getData(RequestMethod.GET, netOption, new JsonCallback<PersonalDataBean>(netOption) {
-            @Override
-            public void onSuccess(Response<PersonalDataBean> response) {
-                updateUI(response.body().data);
-            }
-        });
-    }
-
     private void modifyAvatar(final String avatarUrl) {
-        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.changeIcon())
-                .fragment(this)
-                .clazz(UserAvatarBean.class)
-                .params("url", avatarUrl)
-                .params("userId", HRUser.getId())
-                .build();
-        NetApi.<UserAvatarBean>getData(netOption, new JsonCallback<UserAvatarBean>(netOption) {
+        HRSession.session_03(this, avatarUrl, new Observer<UserAvatarBean.Data>() {
             @Override
-            public void onSuccess(Response<UserAvatarBean> response) {
+            public void onChanged(@Nullable UserAvatarBean.Data data) {
                 HRUser.saveAvatar(avatarUrl);
             }
         });
-    }
-
-    private void modifyNicknameAndInviteCode(final String nickname, final String inviteCode) {
-        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.changeNick())
-                .fragment(this)
-                .clazz(UserNickBean.class)
-                .params("userId", HRUser.getId())
-                .params("nickName", nickname)
-                .params("invitationCode", inviteCode)
-                .build();
-        NetApi.<UserNickBean>getData(netOption, new JsonCallback<UserNickBean>(netOption) {
-            @Override
-            public void onSuccess(Response<UserNickBean> response) {
-                HRUser.saveNickname(nickname);
-            }
-        });
-    }
-
-    @MainThread
-    private void updateUI(PersonalDataBean.Data data) {
-        String headPic = data.headPic;
-        String nickName = data.nickName;
-        String invitationCode = data.invitationCode;
-
-        ImageApi.displayImage(iv_personal_avatar.getContext(), iv_personal_avatar, headPic);
-        tv_personal_nickname.setText(nickName);
-        tv_personal_invite_code.setText(invitationCode);
     }
 
     @MainThread
@@ -196,5 +149,16 @@ public final class PersonalFragment extends BaseFragment implements View.OnClick
         layout_personal_avatar.setOnClickListener(this);
         layout_personal_nickname.setOnClickListener(this);
         layout_personal_invite_code.setOnClickListener(this);
+    }
+
+    @MainThread
+    private void updateUI(PersonalDataBean.Data data) {
+        String headPic = data.headPic;
+        String nickName = data.nickName;
+        String invitationCode = data.invitationCode;
+
+        ImageApi.displayImage(iv_personal_avatar.getContext(), iv_personal_avatar, headPic);
+        tv_personal_nickname.setText(nickName);
+        tv_personal_invite_code.setText(invitationCode);
     }
 }
