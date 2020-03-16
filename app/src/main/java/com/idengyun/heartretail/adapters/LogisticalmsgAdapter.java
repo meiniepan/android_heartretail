@@ -32,6 +32,7 @@ public class LogisticalmsgAdapter extends BaseQuickAdapter<LogisticalMessageBean
         View v_down_line = helper.getView(R.id.v_down_line); //左侧竖线 下面一小段（最后一条没有）
         ImageView iv_state = helper.getView(R.id.iv_state); //圆球图片
 
+
         tv_trace_info.setText(item.processinfo);
         tv_trace_time.setText(item.upload_time);
 
