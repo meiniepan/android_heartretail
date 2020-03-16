@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
 
-import com.dengyun.baselibrary.base.dialog.BaseDialog;
 import com.idengyun.heartretail.R;
 
 
@@ -25,7 +24,7 @@ public class WithdrawPopupWindow extends PopupWindow implements View.OnClickList
     }
 
     private void init(Context context) {
-        mPopView = LayoutInflater.from(context).inflate(R.layout.pop_window_withdraw, null);
+        mPopView = LayoutInflater.from(context).inflate(R.layout.dialog_withdraw, null);
     }
 
     private void setPopupWindow() {

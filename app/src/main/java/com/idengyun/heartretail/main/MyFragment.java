@@ -15,6 +15,7 @@ import com.dengyun.baselibrary.utils.ToastUtils;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.HRSession;
 import com.idengyun.heartretail.R;
+import com.idengyun.heartretail.activitys.AwardDetailActivity;
 import com.idengyun.heartretail.activitys.MyEvaluateActivity;
 import com.idengyun.heartretail.activitys.OrderListActivity;
 import com.idengyun.heartretail.activitys.WithdrawActivity;
@@ -139,7 +140,7 @@ public final class MyFragment extends BaseFragment implements View.OnClickListen
 
     private void startMyHelpActivity() {
 //        HelpCenterActivity.start(getActivity());
-        WithdrawActivity.start(getActivity());
+        AwardDetailActivity.start(getActivity());
     }
 
     private void startMyEvaluationActivity() {

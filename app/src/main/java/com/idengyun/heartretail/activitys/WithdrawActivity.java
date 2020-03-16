@@ -1,10 +1,8 @@
 package com.idengyun.heartretail.activitys;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -21,7 +19,6 @@ import com.dengyun.baselibrary.base.dialog.listener.DialogViewHolder;
 import com.dengyun.baselibrary.utils.ToastUtils;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.widget.WithdrawPopupWindow;
-import com.luck.picture.lib.dialog.CustomDialog;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -88,7 +85,7 @@ public class WithdrawActivity extends BaseActivity {
             case R.id.tv_bank_refresh:
                 break;
             case R.id.tv_fast_withdraw:
-                BaseDialog.init().setLayoutId(R.layout.pop_window_withdraw)
+                BaseDialog.init().setLayoutId(R.layout.dialog_withdraw)
                         .setConvertListener(new ViewConvertListener() {
                             @Override
                             protected void convertView(DialogViewHolder holder, BaseDialogFragment dialog) {
