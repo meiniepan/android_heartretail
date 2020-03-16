@@ -97,7 +97,7 @@ public class UploadFileUtil {
                 Logger.d("------updata------上传成功," + response.body());
                 Gson gson = new Gson();
                 UploadBean upload = gson.fromJson(response.body(), UploadBean.class);
-                uploadUrlList.add(upload.getFile_url());
+                uploadUrlList.add(upload.data.filePath);
                 if (uploadNum < files.size()) {
                     uploadNum++;
                     uploadFile(files,i_uploadSuccess);

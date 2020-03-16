@@ -106,7 +106,7 @@ public final class PersonalFragment extends BaseFragment implements View.OnClick
         NetApi.upFileData(netOption, new File(imgPath), new JsonCallback<UploadBean>(netOption) {
             @Override
             public void onSuccess(Response<UploadBean> response) {
-                String photoUrl = response.body().getFile_url();
+                String photoUrl = response.body().data.filePath;
                 modifyAvatar(photoUrl);
             }
         });

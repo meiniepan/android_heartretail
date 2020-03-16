@@ -12,40 +12,13 @@ public class UploadBean {
      * file_url0 : null
      */
 
-    private String message;
-    private String result;
-    private String file_url;
-    private Object file_url0;
+    public int code;
+    public boolean success;
+    public String msg;
+    public Data data;
 
-    public String getMessage() {
-        return message;
+    public class Data{
+        public String filePath;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public String getResult() {
-        return result;
-    }
-
-    public void setResult(String result) {
-        this.result = result;
-    }
-
-    public String getFile_url() {
-        return file_url;
-    }
-
-    public void setFile_url(String file_url) {
-        this.file_url = file_url;
-    }
-
-    public Object getFile_url0() {
-        return file_url0;
-    }
-
-    public void setFile_url0(Object file_url0) {
-        this.file_url0 = file_url0;
-    }
 }
