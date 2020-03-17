@@ -131,11 +131,11 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
     /* 确认订单界面使用 */
     public Bundle createExtras() {
         Bundle extras = new Bundle();
-        extras.putString("goods_sku_img_url", iv_goods_spec_logo.getTag().toString());
-        extras.putString("goods_sku_title", converter.getData().goodsTitle);
-        extras.putString("goods_sku_spec_list", getGoodsSpecList());
-        extras.putString("goods_sku_price", tv_goods_spec_price.getText().toString());
-        extras.putString("goods_sku_count", tv_purchase_quantity.getText().toString());
+        extras.putString("order_confirm_goods_img_url", iv_goods_spec_logo.getTag().toString());
+        extras.putString("order_confirm_goods_title", converter.getData().goodsTitle);
+        extras.putString("order_confirm_goods_spec_list", getGoodsSpecList());
+        extras.putString("order_confirm_goods_price", tv_goods_spec_price.getText().toString());
+        extras.putString("order_confirm_goods_count", tv_purchase_quantity.getText().toString());
         return extras;
     }
 

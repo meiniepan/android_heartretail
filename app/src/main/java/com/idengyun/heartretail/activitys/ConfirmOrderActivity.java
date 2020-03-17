@@ -111,11 +111,11 @@ public class ConfirmOrderActivity extends BaseActivity {
     public static void start(Context context,@NonNull Bundle extras) {
         Intent starter = new Intent(context, ConfirmOrderActivity.class);
         starter.putExtras(extras);
-        /*extras.getString("goods_sku_img_url");
-        extras.getString("goods_sku_title");
-        extras.getString("goods_sku_spec_list");
-        extras.getString("goods_sku_price");
-        extras.getString("goods_sku_count");*/
+        /*extras.getString("order_confirm_goods_img_url");
+        extras.getString("order_confirm_goods_title");
+        extras.getString("order_confirm_goods_spec_list");
+        extras.getString("order_confirm_goods_price");
+        extras.getString("order_confirm_goods_count");*/
         context.startActivity(starter);
     }
 
