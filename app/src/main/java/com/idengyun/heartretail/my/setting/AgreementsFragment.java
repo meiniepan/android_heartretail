@@ -22,7 +22,7 @@ import java.util.List;
  *
  * @author aLang
  */
-public final class UserAgreeFragment extends BaseFragment {
+public final class AgreementsFragment extends BaseFragment {
 
     private TextView tv_user_agree_title;
     private TextView tv_user_agree_content;

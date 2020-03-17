@@ -14,7 +14,7 @@ import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.my.setting.AccountFragment;
 import com.idengyun.heartretail.my.setting.PaySettingFragment;
 import com.idengyun.heartretail.my.setting.PersonalFragment;
-import com.idengyun.heartretail.my.setting.UserAgreeFragment;
+import com.idengyun.heartretail.my.setting.AgreementsFragment;
 import com.idengyun.heartretail.my.setting.VersionFragment;
 import com.idengyun.usermodule.HRUser;
 import com.idengyun.usermodule.LoginActivity;
@@ -76,7 +76,7 @@ public final class SettingFragment extends BaseFragment implements View.OnClickL
     }
 
     private void startAgreementActivity() {
-        HRActivity.start(getActivity(), UserAgreeFragment.class);
+        HRActivity.start(getActivity(), AgreementsFragment.class);
     }
 
     private void startVersionActivity() {
