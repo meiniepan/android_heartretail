@@ -115,7 +115,7 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
         int goodsCount = sku.goodsCount;
         int canBuyCount = sku.canBuyCount;
 
-        iv_goods_spec_logo.setTag(skuImgUrl);
+        getView().setTag(skuImgUrl);
         ImageApi.displayImage(iv_goods_spec_logo.getContext(), iv_goods_spec_logo, skuImgUrl);
         tv_goods_spec_price.setText(goodsPrice);
         tv_goods_spec_stock.setText("" + goodsCount);
@@ -131,7 +131,7 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
     /* 确认订单界面使用 */
     public Bundle createExtras() {
         Bundle extras = new Bundle();
-        extras.putString("order_confirm_goods_img_url", iv_goods_spec_logo.getTag().toString());
+        extras.putString("order_confirm_goods_img_url", getView().getTag().toString());
         extras.putString("order_confirm_goods_title", converter.getData().goodsTitle);
         extras.putString("order_confirm_goods_spec_list", getGoodsSpecList());
         extras.putString("order_confirm_goods_price", tv_goods_spec_price.getText().toString());
