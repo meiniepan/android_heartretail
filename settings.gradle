@@ -1,1 +1,1 @@
-include ':app', ':baselibrary', ':routermodule', ':commonmodule', ':usermodule', ':msgmodule', ':splashmodule', ':maplibrary'
+include ':app', ':baselibrary', ':routermodule', ':commonmodule', ':usermodule', ':msgmodule', ':splashmodule', ':maplibrary', ':sobotsdk-mall'
