@@ -14,7 +14,8 @@
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
 
     <application>
-        <activity android:name=".citylist.ChooseAddrActivity"></activity>
+        <activity android:name=".SingleMapActivity"></activity>
+        <activity android:name=".citylist.ChooseAddrActivity" />
         <activity android:name=".MyMapActivity" /> <!-- 定位服务 -->
         <service android:name="com.amap.api.location.APSService" />
 
