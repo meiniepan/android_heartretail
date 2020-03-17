@@ -19,6 +19,7 @@ import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.utils.ToastUtils;
 import com.dengyun.baselibrary.utils.activity.ActivityUtils;
 import com.idengyun.heartretail.HRSession;
+import com.idengyun.heartretail.MainActivity;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.PwdModifyBean;
 import com.idengyun.usermodule.HRConst;
@@ -114,6 +115,7 @@ public final class PasswordFragment extends BaseFragment implements CompoundButt
         HRUser.clear();
         HRUser.saveMobile(mobile);
         ActivityUtils.finishAllActivities();
+        MainActivity.start(getContext());
         LoginActivity.start(getContext());
     }
 

@@ -101,6 +101,8 @@ public final class LoginActivity extends BaseActivity
             layout_register_content.setVisibility(View.GONE);
             tv_login.setVisibility(View.VISIBLE);
             tv_register.setVisibility(View.GONE);
+
+            et_login_mobile.setText(HRUser.getMobile());
         } else if (checkedId == R.id.rb_register) {
             tv_login_indicator.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
             tv_register_indicator.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
@@ -184,6 +186,7 @@ public final class LoginActivity extends BaseActivity
         NetApi.getData(netOption, new JsonCallback<RegisterBean>(netOption) {
             @Override
             public void onSuccess(Response<RegisterBean> response) {
+                HRUser.saveMobile(et_register_mobile.getText().toString());
                 ToastUtils.showShort("注册成功");
                 radio_group.check(R.id.rb_login);
                 et_register_mobile.setText(null);
@@ -249,7 +252,7 @@ public final class LoginActivity extends BaseActivity
                 if (body.data.isnewPhoneImei == 1) {
                     startVerifyActivity();
                 } else {
-                    startMainActivity();
+                    // startMainActivity();
                 }
             }
         });

@@ -162,7 +162,7 @@ public final class HRSession {
     }
 
     /* 查询协议 */
-    public static void session_08(Fragment fragment, int[] protocols, Observer<List<ProtocolsBean.Data>> callback) {
+    public static void session_08(Fragment fragment, List<Integer> protocols, Observer<List<ProtocolsBean.Data>> callback) {
         NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.protocolDetail())
                 .fragment(fragment)
                 .isShowDialog(true)

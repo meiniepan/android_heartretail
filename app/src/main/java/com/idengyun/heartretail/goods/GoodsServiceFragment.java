@@ -13,14 +13,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
-import com.dengyun.baselibrary.net.NetApi;
-import com.dengyun.baselibrary.net.NetOption;
-import com.dengyun.baselibrary.net.callback.JsonCallback;
-import com.dengyun.splashmodule.config.SpMainConfigConstants;
+import com.idengyun.heartretail.HRSession;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.GoodsDetailBean;
 import com.idengyun.heartretail.model.response.ProtocolsBean;
-import com.lzy.okgo.model.Response;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +42,7 @@ public final class GoodsServiceFragment extends BaseFragment implements View.OnC
         findViewById(view);
     }
 
-    int[] protocolIds;
+    List<Integer> protocolIds;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -60,10 +56,10 @@ public final class GoodsServiceFragment extends BaseFragment implements View.OnC
                 if (data == null) return;
                 List<GoodsDetailBean.Data.Protocol> protocolList = data.protocolList;
                 if (protocolList != null) {
-                    protocolIds = new int[protocolList.size()];
+                    protocolIds = new ArrayList<>();
                     for (int i = 0; i < protocolList.size(); i++) {
                         GoodsDetailBean.Data.Protocol protocol = protocolList.get(i);
-                        protocolIds[i] = protocol.protocolId;
+                        protocolIds.add(protocol.protocolId);
                     }
                 }
             }
@@ -74,20 +70,14 @@ public final class GoodsServiceFragment extends BaseFragment implements View.OnC
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
-            if (protocolIds != null && protocolIds.length > 0) requestAPI(protocolIds);
+            if (protocolIds != null && !protocolIds.isEmpty()) requestAPI(protocolIds);
         }
     }
 
-    private void requestAPI(int[] protocolIds) {
-        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.protocolDetail())
-                .fragment(this)
-                .clazz(ProtocolsBean.class)
-                .params("protocolIds", protocolIds)
-                .build();
-        NetApi.<ProtocolsBean>getData(netOption, new JsonCallback<ProtocolsBean>(netOption) {
+    private void requestAPI(List<Integer> protocolIds) {
+        HRSession.session_08(this, protocolIds, new Observer<List<ProtocolsBean.Data>>() {
             @Override
-            public void onSuccess(Response<ProtocolsBean> response) {
-                List<ProtocolsBean.Data> data = response.body().data;
+            public void onChanged(@Nullable List<ProtocolsBean.Data> data) {
                 updateUI(data);
             }
         });

@@ -61,7 +61,7 @@ public final class AuthorizeFragment extends BaseFragment implements View.OnClic
         layout_auth_id_card_info.setOnClickListener(this);
         layout_auth_bank_card_info.setOnClickListener(this);
         tv_to_auth_steps.setOnClickListener(this);
-        boolean authenticated = HRUser.isAuthenticated();
+        boolean authenticated = HRUser.isAuthentication();
         iv_auth_yes_or_no.setSelected(authenticated);
         layout_account_authorized.setVisibility(authenticated ? View.VISIBLE : View.GONE);
         layout_account_unauthorized.setVisibility(!authenticated ? View.VISIBLE : View.GONE);

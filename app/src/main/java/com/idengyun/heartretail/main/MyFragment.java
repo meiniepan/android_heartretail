@@ -11,17 +11,17 @@ import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.net.ImageApi;
-import com.dengyun.baselibrary.utils.ToastUtils;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.HRSession;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.activitys.AwardDetailActivity;
 import com.idengyun.heartretail.activitys.MyEvaluateActivity;
 import com.idengyun.heartretail.activitys.OrderListActivity;
-import com.idengyun.heartretail.activitys.WithdrawActivity;
 import com.idengyun.heartretail.model.response.BalanceBean;
 import com.idengyun.heartretail.my.SettingFragment;
 import com.idengyun.usermodule.HRUser;
+import com.idengyun.usermodule.LoginActivity;
+import com.idengyun.usermodule.VerifyDeviceActivity;
 
 /**
  * 我的页面
@@ -88,8 +88,8 @@ public final class MyFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onResume() {
         super.onResume();
-        updateUI(HRUser.isLogin(), HRUser.isAuthenticated());
-        requestAPI();
+        updateUI(HRUser.isLogin(), HRUser.isAuthentication());
+        if (HRUser.isLogin()) requestAPI();
     }
 
     /*@Override
@@ -104,13 +104,21 @@ public final class MyFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onClick(View v) {
         if (!HRUser.isLogin()) {
-            ToastUtils.showShort("请先登录");
+            startLoginActivity();
             return;
         }
+
+        if (!HRUser.isAuthentication()) {
+            startDeviceVerifyActivity();
+            return;
+        }
+
         if (iv_my_setting == v) {
             startMySettingActivity();
         } else if (iv_my_user_avatar == v) {
             startMyAvatarActivity();
+        } else if (tv_my_go_login == v) {
+            startLoginActivity();
         } else if (tv_my_account == v) {
             startMyAccountActivity();
         } else if (tv_my_all_orders == v) {
@@ -175,6 +183,14 @@ public final class MyFragment extends BaseFragment implements View.OnClickListen
         // TODO: 2020/3/12
     }
 
+    private void startDeviceVerifyActivity() {
+        VerifyDeviceActivity.start(getContext());
+    }
+
+    private void startLoginActivity() {
+        LoginActivity.start(getContext());
+    }
+
     private void startMyAvatarActivity() {
         // TODO: 2020/3/12
     }
@@ -186,6 +202,7 @@ public final class MyFragment extends BaseFragment implements View.OnClickListen
     private void init() {
         iv_my_setting.setOnClickListener(this);
         iv_my_user_avatar.setOnClickListener(this);
+        tv_my_go_login.setOnClickListener(this);
         tv_my_account.setOnClickListener(this);
 
         tv_my_all_orders.setOnClickListener(this);
@@ -224,10 +241,11 @@ public final class MyFragment extends BaseFragment implements View.OnClickListen
 
     @MainThread
     private void updateUI(boolean isLogin, boolean isAuthorized) {
-        ImageApi.displayImage(iv_my_user_avatar.getContext(), iv_my_user_avatar, HRUser.getAvatar());
-        tv_my_user_name.setText(HRUser.getNickname());
-        tv_my_user_mobile.setText(HRUser.getMobile());
         if (isLogin) {
+            ImageApi.displayImage(iv_my_user_avatar.getContext(), iv_my_user_avatar, HRUser.getAvatar());
+            tv_my_user_name.setText(HRUser.getNickname());
+            tv_my_user_mobile.setText(HRUser.getMobile());
+
             iv_my_not_login_bg.setVisibility(View.GONE);
             iv_my_login_bg.setVisibility(View.VISIBLE);
 

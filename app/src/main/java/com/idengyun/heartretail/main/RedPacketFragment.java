@@ -13,17 +13,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
-import com.dengyun.baselibrary.net.NetApi;
-import com.dengyun.baselibrary.net.NetOption;
-import com.dengyun.baselibrary.net.callback.JsonCallback;
-import com.dengyun.baselibrary.net.constants.RequestMethod;
-import com.dengyun.baselibrary.utils.ToastUtils;
-import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.heartretail.HRSession;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.RedPacketBean;
 import com.idengyun.usermodule.HRUser;
-import com.lzy.okgo.model.Response;
+import com.idengyun.usermodule.LoginActivity;
+import com.idengyun.usermodule.VerifyDeviceActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,9 +53,15 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
     @Override
     public void onClick(View v) {
         if (!HRUser.isLogin()) {
-            ToastUtils.showShort("请先登录");
+            startLoginActivity();
             return;
         }
+
+        if (!HRUser.isAuthentication()) {
+            startDeviceVerifyActivity();
+            return;
+        }
+
         if (layout_red_packet_rule == v) {
 
         } else if (tv_red_packet_more == v) {
@@ -72,7 +73,15 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (hidden) return;
-        requestAPI();
+        if (HRUser.isLogin()) requestAPI();
+    }
+
+    private void startDeviceVerifyActivity() {
+        VerifyDeviceActivity.start(getContext());
+    }
+
+    private void startLoginActivity() {
+        LoginActivity.start(getContext());
     }
 
     private void requestAPI() {

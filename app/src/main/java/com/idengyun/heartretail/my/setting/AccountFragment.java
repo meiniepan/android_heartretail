@@ -77,6 +77,6 @@ public final class AccountFragment extends BaseFragment implements View.OnClickL
         layout_account_phone.setOnClickListener(this);
         layout_account_real.setOnClickListener(this);
         tv_account_mobile.setText(HRUser.getMobile());
-        tv_account_auth_state.setText(HRUser.isAuthenticated() ? "已认证" : "未认证");
+        tv_account_auth_state.setText(HRUser.isAuthentication() ? "已认证" : "未认证");
     }
 }

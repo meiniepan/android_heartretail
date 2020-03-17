@@ -10,11 +10,12 @@ import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.utils.activity.ActivityUtils;
 import com.dengyun.baselibrary.utils.phoneapp.AppUtils;
 import com.idengyun.heartretail.HRActivity;
+import com.idengyun.heartretail.MainActivity;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.my.setting.AccountFragment;
+import com.idengyun.heartretail.my.setting.AgreeListFragment;
 import com.idengyun.heartretail.my.setting.PaySettingFragment;
 import com.idengyun.heartretail.my.setting.PersonalFragment;
-import com.idengyun.heartretail.my.setting.AgreementsFragment;
 import com.idengyun.heartretail.my.setting.VersionFragment;
 import com.idengyun.usermodule.HRUser;
 import com.idengyun.usermodule.LoginActivity;
@@ -72,11 +73,12 @@ public final class SettingFragment extends BaseFragment implements View.OnClickL
     private void logout() {
         HRUser.clear();
         ActivityUtils.finishAllActivities();
+        MainActivity.start(getContext());
         LoginActivity.start(getContext());
     }
 
     private void startAgreementActivity() {
-        HRActivity.start(getActivity(), AgreementsFragment.class);
+        HRActivity.start(getActivity(), AgreeListFragment.class);
     }
 
     private void startVersionActivity() {
