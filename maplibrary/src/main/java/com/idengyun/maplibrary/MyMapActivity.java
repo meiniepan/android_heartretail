@@ -31,6 +31,11 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @Title 首页跳转到的地图页面
+ * @Author: zhoubo
+ * @CreateDate: 2020-03-09 15:46
+ */
 public class MyMapActivity extends BaseActivity {
     //标题上的选择的城市控件
     private TextView tvMapSelectCity;

@@ -102,7 +102,7 @@ public class FirstActivity extends BaseActivity {
 
     /* 跳到店铺列表 */
     public void skipShopList(View view) {
-        ShopListActivity.start(this);
+        ShopListActivity.startWithLocation(this);
     }
 
     /* 跳到订单列表 */

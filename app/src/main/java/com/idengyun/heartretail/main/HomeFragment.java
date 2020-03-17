@@ -30,6 +30,8 @@ import com.idengyun.heartretail.goods.GoodsSPUFragment;
 import com.idengyun.heartretail.goods.GoodsServiceFragment;
 import com.idengyun.heartretail.model.response.GoodsListBean;
 import com.idengyun.heartretail.notice.NoticeFragment;
+import com.idengyun.heartretail.shop.ShopDetailActivity;
+import com.idengyun.heartretail.shop.ShopListActivity;
 import com.idengyun.maplibrary.MyMapActivity;
 import com.idengyun.maplibrary.beans.EventChoosePoiItem;
 import com.idengyun.maplibrary.utils.AmapLocationWapper;

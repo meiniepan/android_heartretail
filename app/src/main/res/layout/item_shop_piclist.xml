@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.dengyun.baselibrary.widgets.imageview.RoundImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/riv_shop_photo_list"
+    android:layout_width="120dp"
+    android:layout_height="80dp"
+    android:scaleType="centerCrop"
+    android:src="@mipmap/ic_launcher"
+    app:radius="8dp">
+</com.dengyun.baselibrary.widgets.imageview.RoundImageView>
