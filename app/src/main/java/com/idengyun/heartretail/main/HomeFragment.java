@@ -20,16 +20,16 @@ import com.amap.api.services.core.PoiItem;
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.utils.ToastUtils;
 import com.idengyun.heartretail.HRActivity;
-import com.idengyun.heartretail.HRSession;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.activitys.ShareQRCodeActivity;
 import com.idengyun.heartretail.goods.GoodsDetailFragment;
 import com.idengyun.heartretail.goods.GoodsEvaluateFragment;
 import com.idengyun.heartretail.goods.GoodsSPUFragment;
-import com.idengyun.heartretail.goods.GoodsSpecFragment;
 import com.idengyun.heartretail.goods.GoodsServiceFragment;
+import com.idengyun.heartretail.goods.GoodsSpecFragment;
 import com.idengyun.heartretail.model.response.GoodsListBean;
 import com.idengyun.heartretail.notice.NoticeFragment;
+import com.idengyun.heartretail.viewmodel.GoodsViewModel;
 import com.idengyun.maplibrary.MyMapActivity;
 import com.idengyun.maplibrary.beans.EventChoosePoiItem;
 import com.idengyun.maplibrary.utils.AmapLocationWapper;
@@ -55,6 +55,8 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
     private NestedScrollView nested_scroll_view;
     private RecyclerView recycler_view;
 
+    private GoodsViewModel goodsViewModel;
+
     //定位功能的包装类
     private AmapLocationWapper amapLocationWapper;
     //定位（选择poi点）的城市名称、poi名称、poiId
@@ -67,15 +69,30 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
 
     @Override
     public void initViews(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        registBus();
         findViewById(view);
+        registBus();
         startLocation();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        init();
         updateUI();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        amapLocationWapper.stopLocation();
+        amapLocationWapper.onDestroy();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (hidden) return;
+        requestAPI();
     }
 
     @Override
@@ -102,13 +119,6 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
         tvHomeLocation.setText(poiName);
         //设置全局的定位属性
         PoiSearchUtil.setGlobalLocationByPoiItem(eventChoosePoiItem.poiItem);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        amapLocationWapper.stopLocation();
-        amapLocationWapper.onDestroy();
     }
 
     private void startLocation() {
@@ -138,17 +148,31 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
         });
     }
 
+    private void init() {
+        if (getActivity() != null & goodsViewModel == null) {
+            goodsViewModel = GoodsViewModel.getInstance(getActivity());
+            goodsViewModel.getGoodsList().observe(this, new Observer<GoodsListBean>() {
+                @Override
+                public void onChanged(@Nullable GoodsListBean goodsListBean) {
+                    updateUI(goodsListBean);
+                }
+            });
+        }
+    }
+
+
     private void requestAPI() {
-        HRSession.session_10(this, 0, 1, 10, 0, 0, new Observer<GoodsListBean.Data>() {
-            @Override
-            public void onChanged(@Nullable GoodsListBean.Data data) {
-                updateUI(data);
-            }
-        });
+        if (goodsViewModel != null) goodsViewModel.requestGoodsList(this, 0, 1, 10, 0, 0);
     }
 
     @MainThread
-    private void updateUI(GoodsListBean.Data data) {
+    private void updateUI(@Nullable GoodsListBean goodsListBean) {
+        if (goodsListBean == null) return;
+        GoodsListBean.Data data = goodsListBean.data;
+        int current = data.current;
+        int pages = data.pages;
+        int total = data.total;
+        List<GoodsListBean.Data.Goods> goodsList = data.goods;
     }
 
     @MainThread

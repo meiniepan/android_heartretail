@@ -4,6 +4,7 @@ import android.arch.lifecycle.Observer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -13,9 +14,10 @@ import android.widget.TextView;
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.utils.RegexUtils;
 import com.dengyun.baselibrary.utils.ToastUtils;
-import com.idengyun.heartretail.HRSession;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.MobileBindBean;
+import com.idengyun.heartretail.viewmodel.UserViewModel;
+import com.idengyun.heartretail.viewmodel.VerifyCodeViewModel;
 import com.idengyun.usermodule.HRConst;
 import com.idengyun.usermodule.HRUser;
 import com.idengyun.usermodule.beans.VerifyCodeBean;
@@ -34,6 +36,8 @@ public final class MobileBindFragment extends BaseFragment implements View.OnCli
     private View tv_phone_bind;
 
     private SecondsTimer timer;
+    private UserViewModel userViewModel;
+    private VerifyCodeViewModel verifyCodeViewModel;
 
     @Override
     public int getLayoutId() {
@@ -48,6 +52,28 @@ public final class MobileBindFragment extends BaseFragment implements View.OnCli
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        FragmentActivity activity = getActivity();
+        if (activity == null) return;
+        if (userViewModel == null) {
+            userViewModel = UserViewModel.getInstance(activity);
+            userViewModel.getBindMobile().observe(this, new Observer<MobileBindBean>() {
+                @Override
+                public void onChanged(@Nullable MobileBindBean mobileBindBean) {
+                    HRUser.saveMobile(et_phone_mobile.getText().toString());
+                    ToastUtils.showShort("手机号绑定成功");
+                    if (getActivity() != null) getActivity().finish();
+                }
+            });
+        }
+        if (verifyCodeViewModel == null) {
+            verifyCodeViewModel = VerifyCodeViewModel.getInstance(activity);
+            verifyCodeViewModel.getVerifyCode().observe(this, new Observer<VerifyCodeBean>() {
+                @Override
+                public void onChanged(@Nullable VerifyCodeBean verifyCodeBean) {
+                    ToastUtils.showLong("验证码已发出");
+                }
+            });
+        }
     }
 
     @Override
@@ -76,26 +102,16 @@ public final class MobileBindFragment extends BaseFragment implements View.OnCli
             return;
         }
 
-        HRSession.session_07(this, et_phone_mobile.getText().toString(), et_phone_verify_code.getText().toString(), new Observer<MobileBindBean.Data>() {
-            @Override
-            public void onChanged(@Nullable MobileBindBean.Data data) {
-                HRUser.saveMobile(et_phone_mobile.getText().toString());
-                ToastUtils.showShort("手机号绑定成功");
-                if (getActivity() != null) getActivity().finish();
-            }
-        });
+        if (userViewModel == null) return;
+        userViewModel.requestBindMobile(this, et_phone_mobile.getText().toString(), et_phone_verify_code.getText().toString());
     }
 
     /* 发送手机验证码API */
     private void sendVerifyCode() {
         startTimer(tv_phone_verify_code);
 
-        HRSession.session_06(this, HRConst.IDENTIFY_TYPE_4, new Observer<VerifyCodeBean.Data>() {
-            @Override
-            public void onChanged(@Nullable VerifyCodeBean.Data data) {
-                ToastUtils.showLong("验证码已发出");
-            }
-        });
+        if (verifyCodeViewModel == null) return;
+        verifyCodeViewModel.requestVerifyCode(this, HRConst.IDENTIFY_TYPE_4);
     }
 
     private void startTimer(TextView textView) {

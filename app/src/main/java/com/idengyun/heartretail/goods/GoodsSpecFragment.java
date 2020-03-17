@@ -25,6 +25,7 @@ import com.idengyun.heartretail.goods.helper.Converter;
 import com.idengyun.heartretail.goods.helper.SKU;
 import com.idengyun.heartretail.goods.helper.Section;
 import com.idengyun.heartretail.model.response.GoodsDetailBean;
+import com.idengyun.heartretail.viewmodel.GoodsViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,10 +76,10 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
         FragmentActivity activity = getActivity();
         assert activity != null;
 
-        GDViewModel.observe(activity, this, new Observer<GoodsDetailBean.Data>() {
+        GoodsViewModel.getInstance(activity).getGoodsDetail().observe(this, new Observer<GoodsDetailBean>() {
             @Override
-            public void onChanged(@Nullable GoodsDetailBean.Data data) {
-                if (data != null) updateUI(data);
+            public void onChanged(@Nullable GoodsDetailBean goodsDetailBean) {
+                updateUI(goodsDetailBean);
             }
         });
     }
@@ -97,7 +98,10 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
     }
 
     @MainThread
-    private void updateUI(GoodsDetailBean.Data data) {
+    private void updateUI(@Nullable GoodsDetailBean goodsDetailBean) {
+        if (goodsDetailBean == null) return;
+        GoodsDetailBean.Data data = goodsDetailBean.data;
+
         converter = new Converter(data);
         List<Section> sectionList = converter.getSectionList();
         SKU defaultSKU = converter.getDefaultSKU();

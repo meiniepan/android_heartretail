@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,9 +14,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
-import com.idengyun.heartretail.HRSession;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.RedPacketBean;
+import com.idengyun.heartretail.viewmodel.RedPacketViewModel;
 import com.idengyun.usermodule.HRUser;
 import com.idengyun.usermodule.LoginActivity;
 import com.idengyun.usermodule.VerifyDeviceActivity;
@@ -39,6 +40,7 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
 
     private RecyclerView recycler_view;
     private TextView tv_red_packet_more;
+    private RedPacketViewModel redPacketViewModel;
 
     @Override
     public int getLayoutId() {
@@ -48,6 +50,22 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
     @Override
     public void initViews(@NonNull View view, @Nullable Bundle savedInstanceState) {
         findViewById(view);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        FragmentActivity activity = getActivity();
+        if (activity == null) return;
+        if (redPacketViewModel == null) {
+            redPacketViewModel = RedPacketViewModel.getInstance(activity);
+            redPacketViewModel.getRedPacketDetail().observe(this, new Observer<RedPacketBean>() {
+                @Override
+                public void onChanged(@Nullable RedPacketBean redPacketBean) {
+                    updateUI(redPacketBean);
+                }
+            });
+        }
     }
 
     @Override
@@ -85,16 +103,14 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
     }
 
     private void requestAPI() {
-        HRSession.session_09(this, 1, Integer.MAX_VALUE, new Observer<RedPacketBean.Data>() {
-            @Override
-            public void onChanged(@Nullable RedPacketBean.Data data) {
-                updateUI(data);
-            }
-        });
+        if (redPacketViewModel == null) return;
+        redPacketViewModel.requestRedPacketDetail(this, 1, Integer.MAX_VALUE);
     }
 
     @MainThread
-    private void updateUI(RedPacketBean.Data data) {
+    private void updateUI(@Nullable RedPacketBean redPacketBean) {
+        if (redPacketBean == null) return;
+        RedPacketBean.Data data = redPacketBean.data;
         int friendsCount = data.friendsCount;
         RedPacketBean.Data.Packet packet = data.packet;
         List<RedPacketBean.Data.Friend> friends = data.friends;

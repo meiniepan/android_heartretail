@@ -1,6 +1,5 @@
 package com.idengyun.heartretail.my.setting;
 
-import android.arch.lifecycle.Observer;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.MainThread;
@@ -12,12 +11,8 @@ import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.widgets.toolbar.BaseToolBar;
-import com.idengyun.heartretail.HRSession;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.ProtocolsBean;
-
-import java.util.Collections;
-import java.util.List;
 
 /**
  * 用户协议
@@ -51,16 +46,6 @@ public final class AgreeDetailFragment extends BaseFragment {
         data.protocolName = protocolName;
         data.protocolContent = protocolContent;
         updateUI(data);
-        // requestAPI(protocolId);
-    }
-
-    private void requestAPI(int protocolId) {
-        HRSession.session_08(this, Collections.singletonList(protocolId), new Observer<List<ProtocolsBean.Data>>() {
-            @Override
-            public void onChanged(@Nullable List<ProtocolsBean.Data> data) {
-                if (!data.isEmpty()) updateUI(data.get(0));
-            }
-        });
     }
 
     @MainThread

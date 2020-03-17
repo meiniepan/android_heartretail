@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -12,13 +13,13 @@ import android.widget.TextView;
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.net.ImageApi;
 import com.idengyun.heartretail.HRActivity;
-import com.idengyun.heartretail.HRSession;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.activitys.AwardDetailActivity;
 import com.idengyun.heartretail.activitys.MyEvaluateActivity;
 import com.idengyun.heartretail.activitys.OrderListActivity;
 import com.idengyun.heartretail.model.response.BalanceBean;
 import com.idengyun.heartretail.my.SettingFragment;
+import com.idengyun.heartretail.viewmodel.PayViewModel;
 import com.idengyun.usermodule.HRUser;
 import com.idengyun.usermodule.LoginActivity;
 import com.idengyun.usermodule.VerifyDeviceActivity;
@@ -68,6 +69,7 @@ public final class MyFragment extends BaseFragment implements View.OnClickListen
     private View layout_my_evaluation;
     private View layout_my_help;
     private View layout_my_customer_service;
+    private PayViewModel payViewModel;
 
     @Override
     public int getLayoutId() {
@@ -82,6 +84,17 @@ public final class MyFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        FragmentActivity activity = getActivity();
+        if (activity == null) return;
+        if (payViewModel == null) {
+            payViewModel = PayViewModel.getInstance(activity);
+            payViewModel.getBalance().observe(this, new Observer<BalanceBean>() {
+                @Override
+                public void onChanged(@Nullable BalanceBean balanceBean) {
+                    updateUI(balanceBean);
+                }
+            });
+        }
         init();
     }
 
@@ -219,16 +232,14 @@ public final class MyFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void requestAPI() {
-        HRSession.session_02(this, new Observer<BalanceBean.Data>() {
-            @Override
-            public void onChanged(@Nullable BalanceBean.Data data) {
-                updateUI(data);
-            }
-        });
+        if (payViewModel == null) return;
+        payViewModel.requestBalance(this);
     }
 
     @MainThread
-    private void updateUI(BalanceBean.Data data) {
+    private void updateUI(@Nullable BalanceBean balanceBean) {
+        if (balanceBean == null) return;
+        BalanceBean.Data data = balanceBean.data;
         BalanceBean.Data.Balance balance = data.balance;
         String canExchange = balance.canExchange;
         String total = balance.total;

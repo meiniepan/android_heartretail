@@ -5,15 +5,17 @@ import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.utils.ToastUtils;
-import com.idengyun.heartretail.HRSession;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.RealVerifyBean;
+import com.idengyun.heartretail.viewmodel.UserViewModel;
+import com.idengyun.heartretail.viewmodel.VerifyCodeViewModel;
 import com.idengyun.usermodule.HRConst;
 import com.idengyun.usermodule.beans.VerifyCodeBean;
 import com.idengyun.usermodule.utils.SecondsTimer;
@@ -37,6 +39,8 @@ public final class RealFragment extends BaseFragment implements View.OnClickList
     private TextView tv_real_go_auth;
 
     private SecondsTimer timer;
+    private UserViewModel userViewModel;
+    private VerifyCodeViewModel verifyCodeViewModel;
 
     @Override
     public int getLayoutId() {
@@ -51,6 +55,27 @@ public final class RealFragment extends BaseFragment implements View.OnClickList
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        FragmentActivity activity = getActivity();
+        if (activity == null) return;
+        if (userViewModel == null) {
+            userViewModel = UserViewModel.getInstance(activity);
+            userViewModel.getRealVerify().observe(this, new Observer<RealVerifyBean>() {
+                @Override
+                public void onChanged(@Nullable RealVerifyBean realVerifyBean) {
+                    updateUI(realVerifyBean);
+                }
+            });
+        }
+
+        if (verifyCodeViewModel == null) {
+            verifyCodeViewModel = VerifyCodeViewModel.getInstance(activity);
+            verifyCodeViewModel.getVerifyCode().observe(this, new Observer<VerifyCodeBean>() {
+                @Override
+                public void onChanged(@Nullable VerifyCodeBean verifyCodeBean) {
+                    ToastUtils.showLong("验证码已发出");
+                }
+            });
+        }
     }
 
     @Override
@@ -69,36 +94,28 @@ public final class RealFragment extends BaseFragment implements View.OnClickList
     }
 
     private void toAuth() {
-        HRSession.session_11(this,
+        if (userViewModel == null) return;
+        userViewModel.requestRealVerify(this,
                 et_real_reserved_mobile.getText().toString(),
                 et_real_nationality.getText().toString(),
                 et_real_id_type.getText().toString(),
                 et_real_id_num.getText().toString(),
                 et_real_bank_card_num.getText().toString(),
-                et_real_verify_code.getText().toString(),
-                new Observer<RealVerifyBean.Data>() {
-                    @Override
-                    public void onChanged(@Nullable RealVerifyBean.Data data) {
-                        updateUI(data);
-                    }
-                });
+                et_real_verify_code.getText().toString());
     }
 
     @MainThread
-    private void updateUI(RealVerifyBean.Data data) {
-
+    private void updateUI(@Nullable RealVerifyBean realVerifyBean) {
+        if (realVerifyBean == null) return;
+        RealVerifyBean.Data data = realVerifyBean.data;
     }
 
     /* 发送手机验证码API */
     private void sendVerifyCode() {
         startTimer(tv_real_verify_code);
 
-        HRSession.session_06(this, HRConst.IDENTIFY_TYPE_0, new Observer<VerifyCodeBean.Data>() {
-            @Override
-            public void onChanged(@Nullable VerifyCodeBean.Data data) {
-                ToastUtils.showLong("验证码已发出");
-            }
-        });
+        if (verifyCodeViewModel == null) return;
+        verifyCodeViewModel.requestVerifyCode(this, HRConst.IDENTIFY_TYPE_0);
     }
 
     private void startTimer(final TextView textView) {

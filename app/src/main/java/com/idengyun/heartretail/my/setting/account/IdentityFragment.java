@@ -2,9 +2,9 @@ package com.idengyun.heartretail.my.setting.account;
 
 import android.arch.lifecycle.Observer;
 import android.os.Bundle;
-import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -12,20 +12,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
-import com.dengyun.baselibrary.net.NetApi;
-import com.dengyun.baselibrary.net.NetOption;
-import com.dengyun.baselibrary.net.callback.JsonCallback;
-import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.baselibrary.utils.ToastUtils;
-import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.heartretail.HRActivity;
-import com.idengyun.heartretail.HRSession;
 import com.idengyun.heartretail.R;
+import com.idengyun.heartretail.viewmodel.VerifyCodeViewModel;
 import com.idengyun.usermodule.HRConst;
 import com.idengyun.usermodule.HRUser;
 import com.idengyun.usermodule.beans.VerifyCodeBean;
 import com.idengyun.usermodule.utils.SecondsTimer;
-import com.lzy.okgo.model.Response;
 
 /**
  * 身份验证界面
@@ -41,6 +35,7 @@ public final class IdentityFragment extends BaseFragment implements View.OnClick
     private View tv_identity_next;
 
     private SecondsTimer timer;
+    private VerifyCodeViewModel verifyCodeViewModel;
 
     @Override
     public int getLayoutId() {
@@ -55,6 +50,17 @@ public final class IdentityFragment extends BaseFragment implements View.OnClick
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        FragmentActivity activity = getActivity();
+        if (activity == null) return;
+        if (verifyCodeViewModel == null) {
+            verifyCodeViewModel = VerifyCodeViewModel.getInstance(activity);
+            verifyCodeViewModel.getVerifyCode().observe(this, new Observer<VerifyCodeBean>() {
+                @Override
+                public void onChanged(@Nullable VerifyCodeBean verifyCodeBean) {
+                    ToastUtils.showLong("验证码已发出");
+                }
+            });
+        }
         String mobile = HRUser.getMobile();
         tv_identity_mobile.setText(mobile);
         if (mobile.length() == 11) {
@@ -93,12 +99,8 @@ public final class IdentityFragment extends BaseFragment implements View.OnClick
     private void sendVerifyCode() {
         startTimer(tv_identity_verify_code);
 
-        HRSession.session_06(this, HRConst.IDENTIFY_TYPE_4, new Observer<VerifyCodeBean.Data>() {
-            @Override
-            public void onChanged(@Nullable VerifyCodeBean.Data data) {
-                ToastUtils.showLong("验证码已发出");
-            }
-        });
+        if (verifyCodeViewModel == null) return;
+        verifyCodeViewModel.requestVerifyCode(this, HRConst.IDENTIFY_TYPE_4);
     }
 
     private void startTimer(TextView textView) {
@@ -134,6 +136,7 @@ public final class IdentityFragment extends BaseFragment implements View.OnClick
         tv_identity_next = view.findViewById(R.id.tv_identity_next);
 
         tv_identity_mobile.setOnClickListener(this);
+        tv_identity_verify_code.setOnClickListener(this);
         tv_identity_contact_service.setOnClickListener(this);
         tv_identity_next.setOnClickListener(this);
         et_identity_verify_code.addTextChangedListener(new TextWatcher() {

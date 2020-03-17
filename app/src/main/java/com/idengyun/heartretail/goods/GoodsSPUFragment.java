@@ -24,6 +24,7 @@ import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.GoodsDetailBean;
 import com.idengyun.heartretail.model.response.GoodsEvaluateBean;
+import com.idengyun.heartretail.viewmodel.GoodsViewModel;
 import com.zhoubo07.bannerlib.ConvenientBanner;
 import com.zhoubo07.bannerlib.banner.SimpleImageBannerBean;
 import com.zhoubo07.bannerlib.banner.SimpleImageHolder;
@@ -72,6 +73,7 @@ public final class GoodsSPUFragment extends BaseFragment implements View.OnClick
 
     /* 商品详情 */
     private LinearLayout layout_goods_detail;
+    private GoodsViewModel goodsViewModel;
 
     @Override
     public int getLayoutId() {
@@ -94,24 +96,22 @@ public final class GoodsSPUFragment extends BaseFragment implements View.OnClick
             nested_scroll_view.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) fragment);
         }
 
-
-        GDViewModel.getInstance(activity).requestGoodsDetailAPI(this, "123", 0);
-
-        GDViewModel.observe(activity, this, new Observer<GoodsDetailBean.Data>() {
-            @Override
-            public void onChanged(@Nullable GoodsDetailBean.Data data) {
-                if (data != null) updateUI(data);
-            }
-        });
-
-        GEViewModel.observe(activity, this, new Observer<GoodsEvaluateBean.Data>() {
-            @Override
-            public void onChanged(@Nullable GoodsEvaluateBean.Data data) {
-                if (data != null && data.current == 1 && !data.evaluationList.isEmpty()) {
-                    updateUI(data);
+        if (goodsViewModel == null) {
+            goodsViewModel = GoodsViewModel.getInstance(activity);
+            goodsViewModel.getGoodsDetail().observe(this, new Observer<GoodsDetailBean>() {
+                @Override
+                public void onChanged(@Nullable GoodsDetailBean goodsDetailBean) {
+                    updateUI(goodsDetailBean);
                 }
-            }
-        });
+            });
+            goodsViewModel.getGoodsEvaluate().observe(this, new Observer<GoodsEvaluateBean>() {
+                @Override
+                public void onChanged(@Nullable GoodsEvaluateBean goodsEvaluateBean) {
+                    updateUI(goodsEvaluateBean);
+                }
+            });
+        }
+        goodsViewModel.requestGoodsDetail(this, "123", 0);
     }
 
     @Override
@@ -127,7 +127,11 @@ public final class GoodsSPUFragment extends BaseFragment implements View.OnClick
     }
 
     @MainThread
-    private void updateUI(GoodsEvaluateBean.Data data) {
+    private void updateUI(@Nullable GoodsEvaluateBean goodsEvaluateBean) {
+        if (goodsEvaluateBean == null) return;
+        GoodsEvaluateBean.Data data = goodsEvaluateBean.data;
+        if (data == null || data.current != 1 || !data.evaluationList.isEmpty()) return;
+
         int evaluationCounts = data.total;
         String praiseRate = data.praiseRate;
         tv_user_favorable_rate.setText(evaluationCounts + "+条评论，" + praiseRate + "%好评率");
@@ -154,7 +158,9 @@ public final class GoodsSPUFragment extends BaseFragment implements View.OnClick
     }
 
     @MainThread
-    private void updateUI(GoodsDetailBean.Data data) {
+    private void updateUI(@Nullable GoodsDetailBean goodsDetailBean) {
+        if (goodsDetailBean == null) return;
+        GoodsDetailBean.Data data = goodsDetailBean.data;
         List<GoodsDetailBean.Data.Banner> imageList = data.imageList;
         List<GoodsDetailBean.Data.Protocol> protocolList = data.protocolList;
         List<GoodsDetailBean.Data.GoodsSpec> goodsSpecList = data.goodsSpecList;

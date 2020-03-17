@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,9 +15,9 @@ import android.widget.TextView;
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.splashmodule.config.SpProtocol;
 import com.idengyun.heartretail.HRActivity;
-import com.idengyun.heartretail.HRSession;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.ProtocolsBean;
+import com.idengyun.heartretail.viewmodel.AgreeViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,7 @@ import java.util.List;
 public final class AgreeListFragment extends BaseFragment {
 
     private RecyclerView recycler_view;
+    private AgreeViewModel agreeViewModel;
 
     @Override
     public int getLayoutId() {
@@ -43,22 +45,32 @@ public final class AgreeListFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        FragmentActivity activity = getActivity();
+        if (activity == null) return;
+        if (agreeViewModel == null) {
+            agreeViewModel = AgreeViewModel.getInstance(activity);
+            agreeViewModel.getAgreeList().observe(this, new Observer<ProtocolsBean>() {
+                @Override
+                public void onChanged(@Nullable ProtocolsBean protocolsBean) {
+                    updateUI(protocolsBean);
+                }
+            });
+        }
         requestAPI();
     }
 
     private void requestAPI() {
-        HRSession.session_08(this, SpProtocol.getAllProtocolIDs(), new Observer<List<ProtocolsBean.Data>>() {
-            @Override
-            public void onChanged(@Nullable List<ProtocolsBean.Data> data) {
-                updateUI(data);
-            }
-        });
+        FragmentActivity activity = getActivity();
+        if (activity == null) return;
+        agreeViewModel.requestAgreeList(this, SpProtocol.getAllProtocolIDs());
     }
 
     @MainThread
-    private void updateUI(List<ProtocolsBean.Data> dataList) {
+    private void updateUI(@Nullable ProtocolsBean protocolsBean) {
+        if (protocolsBean == null) return;
+        List<ProtocolsBean.Data> data = protocolsBean.data;
         AgreeAdapter adapter = new AgreeAdapter();
-        adapter.agreeList.addAll(dataList);
+        adapter.agreeList.addAll(data);
         recycler_view.setAdapter(adapter);
     }
 
