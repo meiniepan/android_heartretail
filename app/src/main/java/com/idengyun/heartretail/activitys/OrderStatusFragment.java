@@ -22,14 +22,15 @@ import com.idengyun.heartretail.adapters.OderStatusListAdapter;
 import com.idengyun.heartretail.beans.OrderListBean;
 import com.idengyun.heartretail.beans.OrderStatusBean;
 import com.idengyun.statusrecyclerviewlib.RefreshStatusRecyclerView;
-import com.idengyun.usermodule.HRConst;
 import com.idengyun.usermodule.HRUser;
+import com.idengyun.usermodule.utils.SecondsTimer;
 import com.lzy.okgo.model.Response;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -46,6 +47,7 @@ public class OrderStatusFragment extends BaseFragment {
     int status;
     private int page = 1;
     private OderStatusListAdapter adapter;
+    private HashMap<String, SecondsTimer> timerMap = new HashMap();
 
     @Override
     public int getLayoutId() {
@@ -111,6 +113,7 @@ public class OrderStatusFragment extends BaseFragment {
                 ApiBean<OrderListBean> body = response.body();
                 if (body.data.orders != null && body.data.orders.size() > 0) {
                     mData.addAll(body.data.orders);
+                    setTimerList(body.data.orders);
                 } else {
                     if (page != 1) {
                         ToastUtils.showShort(R.string.load_more_end);
@@ -127,9 +130,27 @@ public class OrderStatusFragment extends BaseFragment {
         });
     }
 
+    private void setTimerList(List<OrderStatusBean> orders) {
+        for (OrderStatusBean bean : orders
+        ) {
+            SecondsTimer timer = null;
+            if (!timerMap.containsKey(bean.orderId)) {
+                timer = new SecondsTimer(bean.leftTime, null);
+                timer.start();
+                timerMap.put(bean.orderId, timer);
+            }
+        }
+        adapter.setTimerMap(timerMap);
+    }
+
     @Override
     public void onDestroyView() {
-        adapter.onDetachedFromRecyclerView(rsrOrderStatus.getRecyclerView());
+        if (timerMap.size() > 0) {
+            for (String orderId : timerMap.keySet()
+            ) {
+                timerMap.get(orderId).cancel();
+            }
+        }
         super.onDestroyView();
     }
 
