@@ -16,13 +16,16 @@ import io.reactivex.annotations.Nullable;
  */
 public final class Converter {
 
+    private final GoodsDetailBean.Data mData;
     private final List<SKU> mSKUList;
     private final List<Section> mSectionList;
     private SKU mDefaultSKU;
     @Nullable
     private List<String> selectedSpecIDList;
 
-    public Converter(GoodsDetailBean.Data data) {
+    public Converter(@NonNull GoodsDetailBean.Data data) {
+        mData = data;
+
         List<GoodsDetailBean.Data.GoodsSpec> goodsSpecList = data.goodsSpecList;
         List<GoodsDetailBean.Data.GoodsSku> goodsSkuList = data.goodsSkuList;
 
@@ -63,6 +66,11 @@ public final class Converter {
     }
 
     @NonNull
+    public GoodsDetailBean.Data getData() {
+        return mData;
+    }
+
+    @NonNull
     public List<SKU> getSKUList() {
         return mSKUList;
     }
@@ -90,7 +98,6 @@ public final class Converter {
             if (!section.checked) unSelectedSectionList.add(section);
             else selectedSectionList.add(section);
         }
-
 
         if (selectedSectionList.size() == mSectionList.size()) {
             selectedSpecIDList = new ArrayList<>();

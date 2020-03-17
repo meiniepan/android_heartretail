@@ -149,6 +149,7 @@ public final class HRSession {
                 .fragment(fragment)
                 .isShowDialog(true)
                 .clazz(MobileBindBean.class)
+                .params("userId", HRUser.getId())
                 .params("mobile", mobile)
                 .params("identifyCode", verifyCode)
                 .build();

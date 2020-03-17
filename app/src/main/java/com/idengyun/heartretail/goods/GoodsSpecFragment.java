@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,10 +20,13 @@ import com.dengyun.baselibrary.net.ImageApi;
 import com.google.android.flexbox.FlexboxLayout;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
+import com.idengyun.heartretail.goods.helper.Cell;
+import com.idengyun.heartretail.goods.helper.Converter;
+import com.idengyun.heartretail.goods.helper.SKU;
+import com.idengyun.heartretail.goods.helper.Section;
 import com.idengyun.heartretail.model.response.GoodsDetailBean;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -30,7 +34,6 @@ import java.util.List;
  *
  * @author aLang
  */
-@Deprecated
 public final class GoodsSpecFragment extends BaseFragment implements View.OnClickListener {
 
     private ImageView iv_goods_spec_logo;
@@ -41,7 +44,8 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
 
     private GoodsSpecAdapter mGoodsSpecAdapter;
     private final List<Section> mSectionList = new ArrayList<>();
-    private GoodsDetailBean.Data data;
+
+    private Converter converter;
 
     @Override
     public int getLayoutId() {
@@ -83,165 +87,74 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
     public void onClick(View v) {
         if (getView() == v) {
             HRActivity.hideFragment(getActivity(), getClass().getName());
+            String specList = getGoodsSpecList();
+            Fragment fragment = HRActivity.findFragmentByTag(getActivity(), GoodsSPUFragment.class.getName());
+            if (fragment instanceof GoodsSPUFragment) {
+                ((GoodsSPUFragment) fragment).setGoodsSpecList(specList);
+
+            }
         }
     }
 
     @MainThread
     private void updateUI(GoodsDetailBean.Data data) {
-        this.data = data;
+        converter = new Converter(data);
+        List<Section> sectionList = converter.getSectionList();
+        SKU defaultSKU = converter.getDefaultSKU();
 
-        List<GoodsDetailBean.Data.GoodsSpec> goodsSpecList = data.goodsSpecList;
-        List<GoodsDetailBean.Data.GoodsSku> goodsSkuList = data.goodsSkuList;
-
-        /* DataModel to ViewModel */
-        List<Section> sectionList = new ArrayList<>();
-        for (int i = 0; i < goodsSpecList.size(); i++) {
-            GoodsDetailBean.Data.GoodsSpec goodsSpec = goodsSpecList.get(i);
-            Section section = new Section();
-            section.skuName = goodsSpec.skuName;
-            List<Section.Cell> cellList = new ArrayList<>();
-            for (GoodsDetailBean.Data.GoodsSpec.SkuValue skuValue : goodsSpec.skuValueList) {
-                Section.Cell cell = new Section.Cell();
-                cell.position = i;
-                cell.specItemId = String.valueOf(skuValue.specItemId);
-                cell.specItemName = skuValue.specItemName;
-                cell.enabled = false;
-                cell.checked = false;
-                cellList.add(cell);
-            }
-            section.cellList = cellList;
-            sectionList.add(section);
-        }
-
-        // boolean nonNull = goodsSkuList != null && !goodsSkuList.isEmpty();
-
-        /* 遍历所有Checkbox，设置每个Checkbox是否被默认启用 */
-        switchEnabledStatus(sectionList, goodsSkuList);
-
-        /* 搜索默认规格 */
-        GoodsDetailBean.Data.GoodsSku goodsSku = searchDefaultSku(goodsSkuList);
-        String skuCombinationCode = null;
-        if (goodsSku != null) skuCombinationCode = goodsSku.skuCombinationCode;
-
-        /* 遍历所有Checkbox，设置默认值 */
-        if (skuCombinationCode != null) {
-            for (int i = 0; i < sectionList.size(); i++) {
-                Section section = sectionList.get(i);
-                for (Section.Cell cell : section.cellList) {
-                    // if (skuCombinationCode.contains(cell.specItemId)) {
-                    if (goodsSkuToSpecIdList(goodsSku).contains(cell.specItemId)) {
-                        /* 选中默认规格 */
-                        cell.checked = true;
-                        break;
-                    }
-                }
-            }
-        }
-
-        /* 数据相关操作 */
         mSectionList.clear();
         mSectionList.addAll(sectionList);
-        executeSpecMutex();
-
-        mGoodsSpecAdapter.notifyDataSetChanged();
 
         /* 更新其他UI元素 */
-        if (goodsSku != null) updateBySku(goodsSku);
+        if (defaultSKU != null) updateUIBySku(defaultSKU);
     }
 
-    private void updateBySku(@NonNull GoodsDetailBean.Data.GoodsSku goodsSku) {
-        if (goodsSku != null) {
-            String skuImgUrl = goodsSku.skuImgUrl;
-            String goodsPrice = goodsSku.goodsPrice;
-            int goodsCount = goodsSku.goodsCount;
-            int canBuyCount = goodsSku.canBuyCount;
+    private void updateUIBySku(@NonNull SKU sku) {
+        String skuImgUrl = sku.skuImgUrl;
+        String goodsPrice = sku.goodsPrice;
+        int goodsCount = sku.goodsCount;
+        int canBuyCount = sku.canBuyCount;
 
-            ImageApi.displayImage(iv_goods_spec_logo.getContext(), iv_goods_spec_logo, skuImgUrl);
-            tv_goods_spec_price.setText(goodsPrice);
-            tv_goods_spec_stock.setText("" + goodsCount);
-            tv_purchase_quantity.setText("" + canBuyCount);
-        }
-    }
-
-    /* 搜索默认规格 */
-    private GoodsDetailBean.Data.GoodsSku searchDefaultSku(List<GoodsDetailBean.Data.GoodsSku> goodsSkuList) {
-        for (GoodsDetailBean.Data.GoodsSku goodsSku : goodsSkuList) {
-            if (goodsSku.isDefault == 1) return goodsSku;
-        }
-        return null;
-    }
-
-    /* 搜索被选中选框 */
-    private List<String> searchCheckedIdList() {
-        ArrayList<String> checkedSpecItemIdList = new ArrayList<>();
-
-        for (Section section : mSectionList) {
-            for (Section.Cell cell : section.cellList) {
-                if (cell.checked) {
-                    checkedSpecItemIdList.add(cell.specItemId);
-                    break;
-                }
-            }
-        }
-
-        return checkedSpecItemIdList;
+        iv_goods_spec_logo.setTag(skuImgUrl);
+        ImageApi.displayImage(iv_goods_spec_logo.getContext(), iv_goods_spec_logo, skuImgUrl);
+        tv_goods_spec_price.setText(goodsPrice);
+        tv_goods_spec_stock.setText("" + goodsCount);
+        tv_purchase_quantity.setText("" + canBuyCount);
     }
 
     /* 是否可以立即购买 */
     public boolean isCanBuy() {
-        return searchCheckedIdList().size() == mSectionList.size();
+        List<String> selectedSpecIDList = converter.getSelectedSpecIDList();
+        return selectedSpecIDList != null && selectedSpecIDList.size() == mSectionList.size();
     }
 
-    /* 筛选有效的规格 */
-    private List<GoodsDetailBean.Data.GoodsSku> searchValidSkuList() {
-        ArrayList<GoodsDetailBean.Data.GoodsSku> validSkuList = new ArrayList<>();
-
-        List<String> checkedIdList = searchCheckedIdList();
-        for (GoodsDetailBean.Data.GoodsSku goodsSku : data.goodsSkuList) {
-            if (goodsSkuToSpecIdList(goodsSku).containsAll(checkedIdList)) {
-                validSkuList.add(goodsSku);
-            }
-        }
-
-        /* 打印日志 */
-        System.out.println(checkedIdList.toString());
-
-        return validSkuList;
+    /* 确认订单界面使用 */
+    public Bundle createExtras() {
+        Bundle extras = new Bundle();
+        extras.putString("goods_sku_img_url", iv_goods_spec_logo.getTag().toString());
+        extras.putString("goods_sku_title", converter.getData().goodsTitle);
+        extras.putString("goods_sku_spec_list", getGoodsSpecList());
+        extras.putString("goods_sku_price", tv_goods_spec_price.getText().toString());
+        extras.putString("goods_sku_count", tv_purchase_quantity.getText().toString());
+        return extras;
     }
 
-    /* 切换启用状态 */
-    private void switchEnabledStatus(List<Section> sectionList, List<GoodsDetailBean.Data.GoodsSku> goodsSkuList) {
-        for (Section section : sectionList) {
-            for (Section.Cell cell : section.cellList) {
-                cell.enabled = false;
-                for (GoodsDetailBean.Data.GoodsSku goodsSku : goodsSkuList) {
-                    if (goodsSkuToSpecIdList(goodsSku).contains(cell.specItemId)) {
-                        cell.enabled = true;
-                        break;
-                    }
+    private String getGoodsSpecList() {
+        String specList = null;
+        int count = 0;
+        StringBuilder sb = new StringBuilder();
+        for (Section section : mSectionList) {
+            for (Cell cell : section.cellList) {
+                if (cell.checked) {
+                    ++count;
+                    sb.append(cell.specItemName).append("/");
                 }
             }
         }
-    }
-
-    private List<String> goodsSkuToSpecIdList(@NonNull GoodsDetailBean.Data.GoodsSku goodsSku) {
-        return Arrays.asList(goodsSku.skuCombinationCode.split("_"));
-    }
-
-    /* 执行规格间互斥性 高复杂度逻辑操作 修改请慎重 */
-    private void executeSpecMutex() {
-        /* 筛选有效的规格 */
-        List<GoodsDetailBean.Data.GoodsSku> validSkuList = searchValidSkuList();
-
-        /* 打印日志 */
-        StringBuilder sb = new StringBuilder();
-        for (GoodsDetailBean.Data.GoodsSku gs : validSkuList) {
-            sb.append(gs.skuCombinationCode).append(", ");
+        if (count == mSectionList.size() && sb.length() > 0) {
+            specList = sb.substring(0, sb.length() - 1);
         }
-        System.out.println(sb.toString());
-
-        /* 更新启用状态 */
-        switchEnabledStatus(mSectionList, validSkuList);
+        return specList;
     }
 
     private void findViewById(@NonNull View view) {
@@ -288,55 +201,29 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
 
             @Override
             public void onClick(View v) {
+                Section tag = (Section) flexbox_layout.getTag();
+
                 /* 一个选区遵守单选规则 */
                 for (int i = 0; i < flexbox_layout.getChildCount(); i++) {
                     CheckBox child = flexbox_layout.getChildAt(i).findViewById(R.id.cb_goods_spec_value);
-                    Section.Cell cell = (Section.Cell) child.getTag();
-                    if (child == v) {
-                        cell.checked = !cell.checked;
-                    } else {
-                        cell.checked = false;
-                    }
+                    Cell c = (Cell) child.getTag();
+                    if (!c.enabled) continue;
+                    if (v == child) {
+                        c.checked = !c.checked;
+                        tag.checked = c.checked;
+                    } else if (c.checked) c.checked = false;
                 }
 
-                /* 执行规格间互斥性 */
-                executeSpecMutex();
-
-                /* 解决单个规格被选中时的bug */
-                List<String> checkedIdList = searchCheckedIdList();
-                if (checkedIdList.size() == 1) {
-                    Section tmp = null;
-                    for (Section section : mSectionList) {
-                        for (Section.Cell cell : section.cellList) {
-                            if (cell.checked) {
-                                tmp = section;
-                                break;
-                            }
-                        }
-                    }
-
-                    if (tmp != null) {
-                        for (Section.Cell cell : tmp.cellList) {
-                            cell.enabled = false;
-                            for (GoodsDetailBean.Data.GoodsSku goodsSku : data.goodsSkuList) {
-                                if (goodsSkuToSpecIdList(goodsSku).contains(cell.specItemId)) {
-                                    cell.enabled = true;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                /* 更新数据 */
+                converter.executeSpecMutex();
                 notifyDataSetChanged();
 
                 /* 更新其他UI元素 */
-                if (checkedIdList.size() == getItemCount()) {
-                    for (GoodsDetailBean.Data.GoodsSku goodsSku : data.goodsSkuList) {
-                        List<String> tmpList = goodsSkuToSpecIdList(goodsSku);
-                        if (tmpList.containsAll(checkedIdList) && checkedIdList.containsAll(tmpList)) {
-                            updateBySku(goodsSku);
+                List<String> selectedSpecIDList = converter.getSelectedSpecIDList();
+                if (selectedSpecIDList != null && selectedSpecIDList.size() == getItemCount()) {
+                    List<SKU> skuList = converter.getSKUList();
+                    for (SKU sku : skuList) {
+                        if (!selectedSpecIDList.retainAll(sku.specIDList)) {
+                            updateUIBySku(sku);
                             break;
                         }
                     }
@@ -348,11 +235,11 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
                 flexbox_layout.removeAllViews();
 
                 Section section = mSectionList.get(position);
-                List<Section.Cell> cellList = section.cellList;
+                List<Cell> cellList = section.cellList;
                 flexbox_layout.setTag(section);
                 tv_goods_spec_name.setText(section.skuName);
                 for (int i = 0; i < cellList.size(); i++) {
-                    Section.Cell cell = cellList.get(i);
+                    Cell cell = cellList.get(i);
                     boolean enabled = cell.enabled;
                     boolean checked = cell.checked;
                     String specItemId = cell.specItemId;
@@ -373,20 +260,6 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
                 tv_goods_spec_name = itemView.findViewById(R.id.tv_goods_spec_name);
                 flexbox_layout = itemView.findViewById(R.id.flexbox_layout);
             }
-        }
-    }
-
-    /* 商品规格视图模型 */
-    private static class Section {
-        String skuName;
-        List<Cell> cellList;
-
-        static class Cell {
-            int position;
-            boolean enabled;
-            boolean checked;
-            String specItemId;
-            String specItemName;
         }
     }
 }

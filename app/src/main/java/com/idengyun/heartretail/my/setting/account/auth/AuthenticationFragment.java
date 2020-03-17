@@ -15,7 +15,7 @@ import com.idengyun.usermodule.HRUser;
  *
  * @author aLang
  */
-public final class AuthorizeFragment extends BaseFragment implements View.OnClickListener {
+public final class AuthenticationFragment extends BaseFragment implements View.OnClickListener {
 
     private View layout_auth_id_card_info;
     private View layout_auth_bank_card_info;
