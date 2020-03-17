@@ -1,10 +1,10 @@
 package com.dengyun.baselibrary.utils;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
- * @Title 标题
- * @Desc: 描述
+ * @Title List相关的工具方法
  * @Author: zhoubo
  * @CreateDate: 2019/1/24 4:14 PM
  */
@@ -35,5 +35,15 @@ public class ListUtils {
             }
         }
         return sbd.toString();
+    }
+
+    public static List intArrayToList(int[] protocols){
+        int size = protocols.length;
+        Integer[] array = new Integer[size];
+        for (int i = 0; i < protocols.length; i++) {
+            Integer integer = protocols[i];
+            array[i] = integer;
+        }
+        return Arrays.asList(array);
     }
 }
