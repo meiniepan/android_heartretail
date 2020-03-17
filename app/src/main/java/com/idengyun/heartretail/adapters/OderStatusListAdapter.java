@@ -194,29 +194,4 @@ public class OderStatusListAdapter extends BaseQuickAdapter<OrderStatusBean, Bas
         });
     }
 
-    private void cancelTimer(BaseViewHolder holder) {
-
-        SecondsTimer timer = timerMap.get(mData.get(holder.getLayoutPosition()).orderId);
-        if (timer != null) {
-            timer.cancel();
-            timerMap.remove(mData.get(holder.getLayoutPosition()).orderId);
-        }
-    }
-
-    @Override
-    public void onViewRecycled(@NonNull BaseViewHolder holder) {
-        super.onViewRecycled(holder);
-//        cancelTimer(holder);
-    }
-
-    @Override
-    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
-        super.onDetachedFromRecyclerView(recyclerView);
-//        if (timerMap.size() > 0) {
-//            for (String orderId : timerMap.keySet()
-//            ) {
-//                timerMap.get(orderId).cancel();
-//            }
-//        }
-    }
 }
