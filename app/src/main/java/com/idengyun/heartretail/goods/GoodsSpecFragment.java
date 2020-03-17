@@ -115,11 +115,14 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
         int goodsCount = sku.goodsCount;
         int canBuyCount = sku.canBuyCount;
 
-        getView().setTag(skuImgUrl);
         ImageApi.displayImage(iv_goods_spec_logo.getContext(), iv_goods_spec_logo, skuImgUrl);
         tv_goods_spec_price.setText(goodsPrice);
         tv_goods_spec_stock.setText("" + goodsCount);
         tv_purchase_quantity.setText("" + canBuyCount);
+
+        getView().setTag(skuImgUrl);
+        tv_goods_spec_price.setTag(goodsPrice);
+        tv_purchase_quantity.setTag(canBuyCount);
     }
 
     /* 是否可以立即购买 */
@@ -131,11 +134,13 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
     /* 确认订单界面使用 */
     public Bundle createExtras() {
         Bundle extras = new Bundle();
-        extras.putString("order_confirm_goods_img_url", getView().getTag().toString());
-        extras.putString("order_confirm_goods_title", converter.getData().goodsTitle);
+        GoodsDetailBean.Data data = converter.getData();
+        extras.putString("order_confirm_goods_img_url", (String) getView().getTag());
+        extras.putString("order_confirm_goods_title", data.goodsTitle);
         extras.putString("order_confirm_goods_spec_list", getGoodsSpecList());
-        extras.putString("order_confirm_goods_price", tv_goods_spec_price.getText().toString());
-        extras.putString("order_confirm_goods_count", tv_purchase_quantity.getText().toString());
+        extras.putString("order_confirm_goods_price", (String) tv_goods_spec_price.getTag());
+        extras.putInt("order_confirm_goods_count", (int) tv_purchase_quantity.getTag());
+        extras.putInt("order_confirm_goods_type", data.goodsType);
         return extras;
     }
 

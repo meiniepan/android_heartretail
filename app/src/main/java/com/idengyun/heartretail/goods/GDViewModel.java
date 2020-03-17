@@ -6,6 +6,7 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProviders;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 
@@ -13,6 +14,7 @@ import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
+import com.idengyun.heartretail.HRSession;
 import com.idengyun.heartretail.model.response.GoodsDetailBean;
 import com.idengyun.usermodule.HRUser;
 import com.lzy.okgo.model.Response;
@@ -38,8 +40,15 @@ public final class GDViewModel extends ViewModel {
 
     /* 请求商品详情 */
     public void requestGoodsDetailAPI(Fragment fragment, String goodsId, int goodsType) {
-        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.goodsDetail())
+        HRSession.session_12(fragment, goodsId, goodsType, new Observer<GoodsDetailBean.Data>() {
+            @Override
+            public void onChanged(@Nullable GoodsDetailBean.Data data) {
+                liveData.postValue(data);
+            }
+        });
+        /*NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.goodsDetail())
                 .fragment(fragment)
+                .isShowDialog(true)
                 .clazz(GoodsDetailBean.class)
                 .params("goodsId", goodsId)
                 .params("userId", HRUser.getId())
@@ -51,7 +60,7 @@ public final class GDViewModel extends ViewModel {
                 GoodsDetailBean.Data data = response.body().data;
                 liveData.postValue(data);
             }
-        });
+        });*/
     }
 
     private LiveData<GoodsDetailBean.Data> getGoodsDetailData() {

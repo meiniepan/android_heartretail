@@ -9,6 +9,8 @@ import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.heartretail.model.response.BalanceBean;
+import com.idengyun.heartretail.model.response.GoodsDetailBean;
+import com.idengyun.heartretail.model.response.GoodsEvaluateBean;
 import com.idengyun.heartretail.model.response.GoodsListBean;
 import com.idengyun.heartretail.model.response.MobileBindBean;
 import com.idengyun.heartretail.model.response.PersonalDataBean;
@@ -234,6 +236,7 @@ public final class HRSession {
                                   Observer<RealVerifyBean.Data> callback) {
         NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.authIdentity())
                 .fragment(fragment)
+                .isShowDialog(true)
                 .clazz(RealVerifyBean.class)
                 .params("mobile", mobile)
                 .params("nationality", nationality)
@@ -246,6 +249,50 @@ public final class HRSession {
         NetApi.<RealVerifyBean>getData(netOption, new JsonCallback<RealVerifyBean>(netOption) {
             @Override
             public void onSuccess(Response<RealVerifyBean> response) {
+                callback.onChanged(response.body().data);
+            }
+        });
+    }
+
+    /* 商品详情 */
+    public static void session_12(Fragment fragment,
+                                  String goodsId,
+                                  int goodsType,
+                                  Observer<GoodsDetailBean.Data> callback) {
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.goodsDetail())
+                .fragment(fragment)
+                .isShowDialog(true)
+                .clazz(GoodsDetailBean.class)
+                .params("goodsId", goodsId)
+                .params("userId", HRUser.getId())
+                .params("goodsType", goodsType)// 0零售1批发
+                .build();
+        NetApi.<GoodsDetailBean>getData(netOption, new JsonCallback<GoodsDetailBean>(netOption) {
+            @Override
+            public void onSuccess(Response<GoodsDetailBean> response) {
+                GoodsDetailBean.Data data = response.body().data;
+                callback.onChanged(response.body().data);
+            }
+        });
+    }
+
+    /* 商品评价 */
+    public static void session_13(Fragment fragment,
+                                  String goodsId,
+                                  int page,
+                                  int pageSize,
+                                  Observer<GoodsEvaluateBean.Data> callback) {
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.evaluationList())
+                .fragment(fragment)
+                .isShowDialog(true)
+                .clazz(GoodsEvaluateBean.class)
+                .params("goodsId", goodsId)
+                .params("page", page + 1)
+                .params("pageSize", pageSize)
+                .build();
+        NetApi.<GoodsEvaluateBean>getData(netOption, new JsonCallback<GoodsEvaluateBean>(netOption) {
+            @Override
+            public void onSuccess(Response<GoodsEvaluateBean> response) {
                 callback.onChanged(response.body().data);
             }
         });

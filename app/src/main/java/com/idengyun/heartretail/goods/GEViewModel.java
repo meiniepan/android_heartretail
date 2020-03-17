@@ -6,6 +6,7 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProviders;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 
@@ -13,6 +14,7 @@ import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
+import com.idengyun.heartretail.HRSession;
 import com.idengyun.heartretail.model.response.GoodsEvaluateBean;
 import com.lzy.okgo.model.Response;
 
@@ -45,8 +47,19 @@ public final class GEViewModel extends ViewModel {
     public void requestEvaluationAPI(Fragment fragment, String goodsId) {
         if (!loadMore) return;
 
-        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.evaluationList())
+        HRSession.session_13(fragment, goodsId, page + 1, pageSize, new Observer<GoodsEvaluateBean.Data>() {
+            @Override
+            public void onChanged(@Nullable GoodsEvaluateBean.Data data) {
+                totalPageSize = data.total;
+                totalPage = (int) Math.ceil(1D * totalPageSize / pageSize);
+                loadMore = ++page < totalPage;
+
+                liveData.postValue(data);
+            }
+        });
+        /*NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.evaluationList())
                 .fragment(fragment)
+                .isShowDialog(true)
                 .clazz(GoodsEvaluateBean.class)
                 .params("goodsId", goodsId)
                 .params("page", page + 1)
@@ -63,7 +76,7 @@ public final class GEViewModel extends ViewModel {
 
                 liveData.postValue(data);
             }
-        });
+        });*/
     }
 
     private void refresh(Fragment fragment, String goodsId) {
