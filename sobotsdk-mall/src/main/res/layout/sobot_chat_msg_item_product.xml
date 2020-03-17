@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/sobot_reminde_time_Text"
+        style="@style/sobot_center_remind_time"/>
+
+    <RelativeLayout
+        android:id="@+id/product_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="15dp"
+        android:background="@drawable/shape_5px_blln"
+        android:orientation="horizontal">
+
+        <com.sobot.chat.widget.BorderImageView
+            android:id="@+id/sobot_goods_pic"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_margin="15dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/sobot_icon_consulting_default_pic"
+            android:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/sobot_goods_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/sobot_goods_pic"
+            android:layout_marginRight="@dimen/sobot_DIMEN_26PX"
+            android:layout_toRightOf="@+id/sobot_goods_pic"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/c333333"
+            android:textSize="15sp"/>
+
+        <TextView
+            android:id="@+id/sobot_goods_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/sobot_goods_pic"
+            android:layout_toRightOf="@+id/sobot_goods_pic"
+            android:textColor="@color/ef508d"
+            android:textSize="@dimen/sobot_text_font_small_16sp"/>
+        <View
+            android:id="@+id/e6line"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_below="@+id/sobot_goods_pic"
+            android:background="@color/e6e6e6"/>
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/send_product"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@+id/e6line"
+            android:gravity="center"
+            android:text="发送"
+            android:textColor="@color/ef508d"
+            android:textSize="15sp"/>
+    </RelativeLayout>
+
+</LinearLayout>

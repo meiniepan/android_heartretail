@@ -81,7 +81,9 @@ public class ShopListActivity extends BaseActivity {
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
 
                 Intent i = new Intent();
-                i.putExtra("result", shopListBeans.get(position).getShopName());
+                i.putExtra("name", shopListBeans.get(position).getShopName());
+                i.putExtra("address", shopListBeans.get(position).getShopAddress());
+                i.putExtra("dis", shopListBeans.get(position).getGatheringDistance());
                 setResult(3, i);
                 finish();
             }

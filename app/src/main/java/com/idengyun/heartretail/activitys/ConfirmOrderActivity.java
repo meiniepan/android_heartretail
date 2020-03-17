@@ -31,11 +31,10 @@ import com.idengyun.heartretail.adapters.OderStatusGoodsListAdapter;
 import com.idengyun.heartretail.beans.ConfirmOrderReqBean;
 import com.idengyun.heartretail.beans.ConfirmOrderRspBean;
 import com.idengyun.heartretail.beans.OrderStatusBean;
-import com.idengyun.heartretail.model.response.GoodsDetailBean;
 import com.idengyun.heartretail.shop.ShopListActivity;
+import com.idengyun.heartretail.utils.DecimalFormatUtil;
 import com.idengyun.heartretail.widget.RecycleViewDivider;
 import com.idengyun.statusrecyclerviewlib.StatusRecyclerView;
-import com.idengyun.usermodule.HRConst;
 import com.idengyun.usermodule.HRUser;
 import com.lzy.okgo.model.Response;
 
@@ -101,21 +100,26 @@ public class ConfirmOrderActivity extends BaseActivity {
     @BindView(R.id.iv_next)
     ImageView ivNext;
     @BindView(R.id.ll_proxy_sale_protocol)
-    LinearLayout llProxySaleProtocol;@BindView(R.id.ll_protocol)
+    LinearLayout llProxySaleProtocol;
+    @BindView(R.id.ll_protocol)
     LinearLayout llProtocol;
     @BindView(R.id.cb_protocol_proxy_sale)
     CheckBox cbProtocolProxySale;
 
     int orderType;
+    String order_confirm_goods_img_url;
+    String order_confirm_goods_title;
+    String order_confirm_goods_spec_list;
+    String order_confirm_goods_price;
+    int order_confirm_goods_count;
+    String order_confirm_goods_type;
+    private OrderStatusBean.GoodsBean goodsBean;
+    private String orderId;
 
     public static void start(Context context,@NonNull Bundle extras) {
         Intent starter = new Intent(context, ConfirmOrderActivity.class);
         starter.putExtras(extras);
-        /*extras.getString("order_confirm_goods_img_url");
-        extras.getString("order_confirm_goods_title");
-        extras.getString("order_confirm_goods_spec_list");
-        extras.getString("order_confirm_goods_price");
-        extras.getString("order_confirm_goods_count");*/
+
         context.startActivity(starter);
     }
 
@@ -131,7 +135,7 @@ public class ConfirmOrderActivity extends BaseActivity {
     }
 
     private void initUI() {
-        if (orderType == 1) {
+        if (orderType==1) {
             initRetail();
         } else {
             initWholeSale();
@@ -139,6 +143,11 @@ public class ConfirmOrderActivity extends BaseActivity {
         rlShop.setVisibility(View.GONE);
         llNoShop.setVisibility(View.VISIBLE);
         initRecycler();
+        float totalPay = Float.parseFloat(goodsBean.goodsPrice)*goodsBean.goodsNum;
+        String sPay = "¥"+DecimalFormatUtil.getFormatDecimal("0.00",totalPay);
+        tvTotalPay1.setText(sPay);
+        tvShouldPay1.setText(sPay);
+        tvShouldPayBottom.setText(sPay);
     }
 
     private void initWholeSale() {
@@ -153,12 +162,24 @@ public class ConfirmOrderActivity extends BaseActivity {
     }
 
     private void initData() {
-        orderType = 2;
+
+        order_confirm_goods_img_url=getIntent().getStringExtra("order_confirm_goods_img_url");
+        order_confirm_goods_title=getIntent().getStringExtra("order_confirm_goods_title");
+        order_confirm_goods_spec_list=getIntent().getStringExtra("order_confirm_goods_spec_list");
+        order_confirm_goods_price=getIntent().getStringExtra("order_confirm_goods_price");
+        order_confirm_goods_count=getIntent().getIntExtra("order_confirm_goods_count",1);
+        orderType=getIntent().getIntExtra("order_confirm_goods_type",1);
+//        orderType = "2";
     }
 
     private void initRecycler() {
         List<OrderStatusBean.GoodsBean> goodsBeanList = new ArrayList<>();
-        OrderStatusBean.GoodsBean goodsBean = new OrderStatusBean.GoodsBean();
+         goodsBean = new OrderStatusBean.GoodsBean();
+        goodsBean.goodsName = order_confirm_goods_title;
+        goodsBean.skuItemvalue = order_confirm_goods_spec_list;
+        goodsBean.originalImg = order_confirm_goods_img_url;
+        goodsBean.goodsPrice = order_confirm_goods_price;
+        goodsBean.goodsNum = order_confirm_goods_count;
         goodsBeanList.add(goodsBean);
         OderStatusGoodsListAdapter adapter = new OderStatusGoodsListAdapter(R.layout.item_order_status_goods, goodsBeanList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -198,7 +219,7 @@ public class ConfirmOrderActivity extends BaseActivity {
     private void queryProxyQualification() {
         HashMap map = new HashMap();
         map.put("version", AppUtils.getAppVersionName());
-        map.put("userId", TextUtils.isEmpty(HRUser.getId())?"1":HRUser.getId());
+        map.put("userId", TextUtils.isEmpty(HRUser.getId()) ? "1" : HRUser.getId());
         NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.checkProxyState())
                 .activity(this)
                 .params(map)
@@ -276,7 +297,7 @@ public class ConfirmOrderActivity extends BaseActivity {
             public void onSuccess(Response<ApiBean<ConfirmOrderRspBean>> response) {
                 ApiBean<ConfirmOrderRspBean> body = response.body();
                 ToastUtils.showShort("提交成功");
-                ChoosePayModeActivity.start(getContext());
+                ChoosePayModeActivity.start(getContext(), orderId);
             }
 
             @Override
@@ -290,10 +311,22 @@ public class ConfirmOrderActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == 3) {
-            String result = data.getStringExtra("result");
+            String name = data.getStringExtra("name");
+            String address = data.getStringExtra("address");
+            float distance = data.getFloatExtra("dis",0);
             hideAllFrames();
             rlShop.setVisibility(View.VISIBLE);
-            tvTag3.setText(result);
+            tvTag3.setText(name);
+            tvAddress.setText(address);
+            String distanceStr = "";
+            if (distance>=1000){
+                distanceStr = "距离"+ DecimalFormatUtil.getFormatDecimal("0.0",distance/1000d)+"km";
+            }else if (distance>1){
+                distanceStr = "距离"+distance+"m";
+            }else {
+                distanceStr = "距离1m";
+            }
+            tvDistance.setText(distanceStr);
         }
     }
 }

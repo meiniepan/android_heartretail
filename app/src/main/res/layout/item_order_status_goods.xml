@@ -3,16 +3,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="112dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center_vertical"
     android:paddingTop="16dp"
     android:paddingBottom="16dp">
 
 
-        <ImageView
-            android:id="@+id/iv_goods_icon"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:src="@drawable/def" />
+
+    <com.dengyun.baselibrary.widgets.imageview.RoundImageView
+        android:id="@+id/iv_goods_icon"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/ic_launcher"
+        app:radius="8dp" />
 
         <LinearLayout
             android:layout_width="match_parent"

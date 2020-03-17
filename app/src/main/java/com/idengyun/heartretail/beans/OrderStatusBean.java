@@ -14,6 +14,7 @@ public class OrderStatusBean {
     public int userId;
     public int orderStatus;
     public int shopId;
+    public int leftTime;//剩余支付时间秒（50表示剩余50秒）
     public String shopName;
     public String shippingPrice;
     public String couponPrice;

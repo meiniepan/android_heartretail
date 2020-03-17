@@ -1,0 +1,92 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/sobot_color_bottom_bg">
+
+    <LinearLayout
+        android:id="@+id/sobot_custom_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/sobot_btn_order"
+            style="@style/sobot_chatting_panel_upload"
+            android:layout_gravity="center"
+            android:drawableTop="@drawable/sobot_icon_order"
+            android:visibility="gone"
+            android:text="@string/order"/>
+        <TextView
+            android:id="@+id/sobot_btn_picture"
+            style="@style/sobot_chatting_panel_upload"
+            android:layout_gravity="center"
+            android:drawableTop="@drawable/sobot_icon_picture"
+            android:text="@string/sobot_upload"/>
+
+        <!--<TextView-->
+        <!--android:layout_gravity="center"-->
+        <!--android:id="@+id/sobot_btn_take_picture"-->
+        <!--style="@style/sobot_chatting_panel_upload"-->
+        <!--android:drawableTop="@drawable/sobot_icon_picture"-->
+        <!--android:text="@string/sobot_attach_take_pic"/>-->
+
+        <TextView
+            android:id="@+id/sobot_btn_satisfaction"
+            style="@style/sobot_chatting_panel_upload"
+            android:layout_gravity="center"
+            android:drawableTop="@drawable/sobot_icon_message"
+            android:text="@string/sobot_str_bottom_satisfaction"/>
+
+
+        <TextView
+            android:id="@+id/after_sale_order"
+            style="@style/sobot_chatting_panel_upload"
+            android:layout_gravity="center"
+            android:drawableTop="@drawable/icon_after_sale_order"
+            android:visibility="gone"
+            android:text="@string/after_order"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/sobot_robot_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/sobot_robot_btn_satisfaction"
+            style="@style/sobot_chatting_panel_upload"
+            android:layout_gravity="center"
+            android:drawableTop="@drawable/sobot_icon_evaluate"
+            android:text="@string/sobot_str_bottom_satisfaction"/>
+
+        <TextView
+            android:id="@+id/sobot_robot_btn_leavemsg"
+            style="@style/sobot_chatting_panel_upload"
+            android:layout_gravity="center"
+            android:drawableTop="@drawable/sobot_icon_message"
+            android:text="@string/sobot_str_bottom_message"/>
+
+        <TextView
+            style="@style/sobot_chatting_panel_upload"
+            android:layout_gravity="center"
+            android:drawableTop="@drawable/sobot_icon_message"
+            android:text="@string/sobot_str_bottom_satisfaction"
+            android:visibility="invisible"/>
+
+        <TextView
+            style="@style/sobot_chatting_panel_upload"
+            android:layout_gravity="center"
+            android:drawableTop="@drawable/sobot_icon_message"
+            android:text="@string/sobot_str_bottom_satisfaction"
+            android:visibility="invisible"/>
+    </LinearLayout>
+
+</RelativeLayout>
