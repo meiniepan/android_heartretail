@@ -16,6 +16,7 @@ import com.dengyun.baselibrary.net.ImageApi;
 import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
+import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.baselibrary.utils.ListUtils;
 import com.dengyun.baselibrary.utils.SizeUtils;
 import com.dengyun.baselibrary.utils.ToastUtils;
@@ -37,6 +38,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * @Title 店铺详情页面
+ * @Author: zhoubo
+ * @CreateDate: 2020-03-17 09:43
+ */
 public class ShopDetailActivity extends BaseActivity {
 
     @BindView(R.id.iv_shop_cover)
@@ -92,23 +98,23 @@ public class ShopDetailActivity extends BaseActivity {
                 }.getType())
                 .params("shopId", shopId)
                 .build();
-        NetApi.<ApiBean<ShopDetailBean>>getData(netOption, new JsonCallback<ApiBean<ShopDetailBean>>(netOption) {
+        NetApi.<ApiBean<ShopDetailBean>>getData(RequestMethod.GET,netOption, new JsonCallback<ApiBean<ShopDetailBean>>(netOption) {
             @Override
             public void onSuccess(Response<ApiBean<ShopDetailBean>> response) {
                 shopDetailBean = response.body().data;
                 setViewData();
             }
         });
-
-
     }
 
     @OnClick(R.id.rl_shop_address)
     public void onViewClicked() {
         try {
-            double latitude = Double.parseDouble(shopDetailBean.latitude);
-            double longitude = Double.parseDouble(shopDetailBean.longitude);
-            SingleMapActivity.start(this, latitude, longitude,shopDetailBean.shopName,shopDetailBean.shopDetailAddress );
+            if (!TextUtils.isEmpty(shopDetailBean.latitude) && !TextUtils.isEmpty(shopDetailBean.longitude)){
+                double latitude = Double.parseDouble(shopDetailBean.latitude);
+                double longitude = Double.parseDouble(shopDetailBean.longitude);
+                SingleMapActivity.start(this, latitude, longitude,shopDetailBean.shopName,shopDetailBean.shopDetailAddress );
+            }
         }catch (NumberFormatException e){
             ToastUtils.showShort("经纬度解析错误");
             e.printStackTrace();
