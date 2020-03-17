@@ -1,10 +1,7 @@
 package com.idengyun.heartretail.adapters;
 
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -24,8 +21,10 @@ import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.activitys.ChoosePayModeActivity;
 import com.idengyun.heartretail.activitys.EvaluateDetailActivity;
 import com.idengyun.heartretail.activitys.LogisticsDetailActivity;
+import com.idengyun.heartretail.activitys.OrderStatusFragment;
 import com.idengyun.heartretail.beans.ConfirmOrderRspBean;
 import com.idengyun.heartretail.beans.OrderStatusBean;
+import com.idengyun.heartretail.interfaces.ITimer;
 import com.idengyun.heartretail.widget.RecycleViewDivider;
 import com.idengyun.statusrecyclerviewlib.StatusRecyclerView;
 import com.idengyun.usermodule.HRUser;
@@ -41,12 +40,14 @@ import java.util.List;
  * @date :2020/3/4 0004 16:43
  */
 public class OderStatusListAdapter extends BaseQuickAdapter<OrderStatusBean, BaseViewHolder> {
-    private final FragmentActivity mActivity;
+    private final OrderStatusFragment fragment;
     private HashMap<String, SecondsTimer> timerMap = new HashMap();
+    ITimer iTimer;
 
-    public OderStatusListAdapter(FragmentActivity activity, int layoutResId, @Nullable List<OrderStatusBean> data) {
+    public OderStatusListAdapter(OrderStatusFragment activity, int layoutResId, @Nullable List<OrderStatusBean> data) {
         super(layoutResId, data);
-        mActivity = activity;
+        fragment = activity;
+        iTimer = activity;
     }
 
     @Override
@@ -173,7 +174,7 @@ public class OderStatusListAdapter extends BaseQuickAdapter<OrderStatusBean, Bas
         map.put("userId", TextUtils.isEmpty(HRUser.getId()) ? "1" : HRUser.getId());
         map.put("userName", TextUtils.isEmpty(HRUser.getId()) ? "1" : HRUser.getNickname());
         NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.changeOrderState())
-                .activity(mActivity)
+                .fragment(fragment)
                 .params(map)
                 .isShowDialog(true)
                 .clazz(ApiBean.class)
@@ -184,7 +185,7 @@ public class OderStatusListAdapter extends BaseQuickAdapter<OrderStatusBean, Bas
             public void onSuccess(Response<ApiBean> response) {
                 ApiBean<ConfirmOrderRspBean> body = response.body();
                 ToastUtils.showShort("取消订单成功");
-                notifyDataSetChanged();
+                iTimer.workOnFinish();
             }
 
             @Override
