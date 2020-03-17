@@ -5,14 +5,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.activity.BaseActivity;
 import com.idengyun.heartretail.R;
+import com.idengyun.usermodule.utils.SecondsTimer;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -35,9 +34,16 @@ public class ChoosePayModeActivity extends BaseActivity {
     CheckBox cbPay3;
     @BindView(R.id.tv_confirm1)
     TextView tvConfirm1;
+    @BindView(R.id.tv_h)
+    TextView tvH;
+    @BindView(R.id.tv_m)
+    TextView tvM;
+    @BindView(R.id.tv_s)
+    TextView tvS;
+    private SecondsTimer timer;
 
 
-    public static void start(Context context) {
+    public static void start(Context context, String orderId) {
         Intent starter = new Intent(context, ChoosePayModeActivity.class);
         context.startActivity(starter);
     }
@@ -49,8 +55,31 @@ public class ChoosePayModeActivity extends BaseActivity {
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
+        startTimer();
     }
 
+    private void startTimer() {
+        if (timer == null) {
+            timer = new SecondsTimer(24 * 60 * 60, new SecondsTimer.Callback() {
+                @Override
+                public void onTick(long secondsUntilFinished) {
+                    int h = (int) (secondsUntilFinished / 3600);
+                    int m = (int) (secondsUntilFinished % 3600 / 60);
+                    int s = (int) (secondsUntilFinished % 60);
+                    tvH.setText(h + "");
+                    tvM.setText(m + "");
+                    tvS.setText(s + "");
+                }
+
+                @Override
+                public void onFinish() {
+                    finish();
+                }
+            });
+
+            timer.start();
+        }
+    }
     @OnClick({R.id.cb_pay, R.id.cb_pay2, R.id.cb_pay3, R.id.tv_confirm1})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -76,4 +105,9 @@ public class ChoosePayModeActivity extends BaseActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        timer.cancel();
+    }
 }
