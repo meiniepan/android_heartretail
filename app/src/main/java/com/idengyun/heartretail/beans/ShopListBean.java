@@ -1,19 +1,18 @@
 package com.idengyun.heartretail.beans;
 
 /**
- * @Title 标题
- * @Desc: 描述
+ * @Title 店铺列表实体类
  * @Author: zhoubo
  * @CreateDate: 2020-02-28 16:10
  */
 public class ShopListBean {
     private int shopId;
-    private String shopName;
-    private String shopPhoto;
-    private String shopAddress;
-    private float distance;
-    private int isUsed;//上次使用：1：是；0：否
-    private int isNear;//距离最近：1：是；0：否
+    private String shopName; //门店名称
+    private String shopHeadImg;//门店图片
+    private String shopAddress; //门店地址
+    private float gatheringDistance; //相距距离
+    private int isRecommend;//是否推荐1是  0否
+    private int isNearest;//是否距离最近1是  0否
 
     public int getShopId() {
         return shopId;
@@ -31,12 +30,12 @@ public class ShopListBean {
         this.shopName = shopName;
     }
 
-    public String getShopPhoto() {
-        return shopPhoto;
+    public String getShopHeadImg() {
+        return shopHeadImg;
     }
 
-    public void setShopPhoto(String shopPhoto) {
-        this.shopPhoto = shopPhoto;
+    public void setShopHeadImg(String shopHeadImg) {
+        this.shopHeadImg = shopHeadImg;
     }
 
     public String getShopAddress() {
@@ -47,27 +46,27 @@ public class ShopListBean {
         this.shopAddress = shopAddress;
     }
 
-    public float getDistance() {
-        return distance;
+    public float getGatheringDistance() {
+        return gatheringDistance;
     }
 
-    public void setDistance(float distance) {
-        this.distance = distance;
+    public void setGatheringDistance(float gatheringDistance) {
+        this.gatheringDistance = gatheringDistance;
     }
 
-    public int getIsUsed() {
-        return isUsed;
+    public int getIsRecommend() {
+        return isRecommend;
     }
 
-    public void setIsUsed(int isUsed) {
-        this.isUsed = isUsed;
+    public void setIsRecommend(int isRecommend) {
+        this.isRecommend = isRecommend;
     }
 
-    public int getIsNear() {
-        return isNear;
+    public int getIsNearest() {
+        return isNearest;
     }
 
-    public void setIsNear(int isNear) {
-        this.isNear = isNear;
+    public void setIsNearest(int isNearest) {
+        this.isNearest = isNearest;
     }
 }

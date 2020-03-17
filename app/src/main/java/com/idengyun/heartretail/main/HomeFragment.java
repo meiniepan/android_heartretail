@@ -31,6 +31,7 @@ import com.idengyun.heartretail.goods.GoodsServiceFragment;
 import com.idengyun.heartretail.model.response.GoodsListBean;
 import com.idengyun.heartretail.notice.NoticeFragment;
 import com.idengyun.heartretail.shop.ShopDetailActivity;
+import com.idengyun.heartretail.shop.ShopListActivity;
 import com.idengyun.maplibrary.MyMapActivity;
 import com.idengyun.maplibrary.beans.EventChoosePoiItem;
 import com.idengyun.maplibrary.utils.AmapLocationWapper;
@@ -82,8 +83,7 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
     @Override
     public void onClick(View v) {
         if (tv_home_share == v) {
-//            ShareQRCodeActivity.start(getContext());
-            ShopDetailActivity.start(getContext(),0);
+            ShareQRCodeActivity.start(getContext());
         } else if (tv_home_notice == v) {
             HRActivity.start(getContext(), NoticeFragment.class);
         } else if (tvHomeLocation == v) {

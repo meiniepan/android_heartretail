@@ -38,22 +38,24 @@ public class ShopListAdapter extends BaseQuickAdapter<ShopListBean, BaseViewHold
         TextView tvShopDetai = helper.getView(R.id.tv_shop_detai);
 
         //店铺照片
-        ImageApi.displayImage(mContext,rivShopPhoto,item.getShopPhoto());
+        ImageApi.displayImage(mContext,rivShopPhoto,item.getShopHeadImg());
         //店铺名称
         tvShopName.setText(item.getShopName());
         //是否是上次使用
-        tvShopUsed.setVisibility(item.getIsUsed()==1? View.VISIBLE:View.GONE);
+        tvShopUsed.setVisibility(item.getIsRecommend()==1? View.VISIBLE:View.GONE);
         //是否是距离最近
-        tvShopNear.setVisibility(item.getIsNear()==1? View.VISIBLE:View.GONE);
+        tvShopNear.setVisibility(item.getIsNearest()==1? View.VISIBLE:View.GONE);
         //店铺地址
         tvShopAddress.setText(item.getShopAddress());
         //距离
-        float distance = item.getDistance();
+        float distance = item.getGatheringDistance();
         String distanceStr = "";
         if (distance>=1000){
             distanceStr = "距离"+DecimalFormatUtil.getFormatDecimal("0.0",distance/1000d)+"km";
-        }else {
+        }else if (distance>1){
             distanceStr = "距离"+distance+"m";
+        }else {
+            distanceStr = "距离1m";
         }
         tvShopDistance.setText(distanceStr);
         //店铺详情按钮监听
