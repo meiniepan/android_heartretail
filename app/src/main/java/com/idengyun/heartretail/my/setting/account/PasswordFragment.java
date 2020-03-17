@@ -4,6 +4,8 @@ import android.arch.lifecycle.Observer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.text.method.TransformationMethod;
@@ -165,5 +167,37 @@ public final class PasswordFragment extends BaseFragment implements CompoundButt
         cb_pwd_eye.setOnCheckedChangeListener(this);
         tv_pwd_contact_service.setOnClickListener(this);
         tv_pwd_confirm.setOnClickListener(this);
+        et_pwd_verify_code.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                tv_pwd_confirm.setEnabled(s.length() > 0);
+            }
+        });
+        et_pwd_new_pwd.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                tv_pwd_confirm.setEnabled(s.length() > 0);
+            }
+        });
     }
 }

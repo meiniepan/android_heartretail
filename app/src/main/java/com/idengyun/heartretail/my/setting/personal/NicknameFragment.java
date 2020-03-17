@@ -4,6 +4,8 @@ import android.arch.lifecycle.Observer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 
@@ -63,5 +65,21 @@ public final class NicknameFragment extends BaseFragment implements View.OnClick
         tv_nickname_modify = view.findViewById(R.id.tv_nickname_modify);
 
         tv_nickname_modify.setOnClickListener(this);
+        et_nick_name.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                tv_nickname_modify.setEnabled(s.length() > 0);
+            }
+        });
     }
 }

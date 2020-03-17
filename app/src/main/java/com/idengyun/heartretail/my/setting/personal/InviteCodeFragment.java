@@ -4,6 +4,8 @@ import android.arch.lifecycle.Observer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 
@@ -63,5 +65,21 @@ public final class InviteCodeFragment extends BaseFragment implements View.OnCli
         tv_invite_code_modify = view.findViewById(R.id.tv_invite_code_modify);
 
         tv_invite_code_modify.setOnClickListener(this);
+        et_invite_code.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                tv_invite_code_modify.setEnabled(s.length() > 0);
+            }
+        });
     }
 }

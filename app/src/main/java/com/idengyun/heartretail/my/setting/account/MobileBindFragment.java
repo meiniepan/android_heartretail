@@ -4,18 +4,15 @@ import android.arch.lifecycle.Observer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
-import com.dengyun.baselibrary.net.NetApi;
-import com.dengyun.baselibrary.net.NetOption;
-import com.dengyun.baselibrary.net.callback.JsonCallback;
-import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.baselibrary.utils.RegexUtils;
 import com.dengyun.baselibrary.utils.ToastUtils;
-import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.heartretail.HRSession;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.MobileBindBean;
@@ -23,7 +20,6 @@ import com.idengyun.usermodule.HRConst;
 import com.idengyun.usermodule.HRUser;
 import com.idengyun.usermodule.beans.VerifyCodeBean;
 import com.idengyun.usermodule.utils.SecondsTimer;
-import com.lzy.okgo.model.Response;
 
 /**
  * 绑定新手机界面
@@ -130,5 +126,40 @@ public final class MobileBindFragment extends BaseFragment implements View.OnCli
         et_phone_verify_code = view.findViewById(R.id.et_phone_verify_code);
         tv_phone_verify_code = view.findViewById(R.id.tv_phone_verify_code);
         tv_phone_bind = view.findViewById(R.id.tv_phone_bind);
+        tv_phone_verify_code.setOnClickListener(this);
+        tv_phone_bind.setOnClickListener(this);
+        et_phone_mobile.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                tv_phone_bind.setEnabled(s.length() > 0);
+            }
+        });
+        et_phone_verify_code.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                tv_phone_bind.setEnabled(s.length() > 0);
+            }
+        });
+
     }
 }

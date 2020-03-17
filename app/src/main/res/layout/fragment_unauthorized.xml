@@ -159,7 +159,7 @@
         android:layout_marginStart="30dp"
         android:layout_marginTop="75dp"
         android:layout_marginEnd="30dp"
-        android:background="@drawable/shape_real_btn_bg_enabled"
+        android:background="@drawable/shape_setting_btn"
         android:gravity="center_horizontal"
         android:paddingTop="14dp"
         android:paddingBottom="14dp"
