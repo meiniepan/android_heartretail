@@ -6,9 +6,9 @@
     <application
         android:name=".bases.MyApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_logo_app"
         android:label="心零售"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_logo_app"
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/HRAppTheme"
