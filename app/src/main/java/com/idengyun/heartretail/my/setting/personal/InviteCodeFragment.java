@@ -4,6 +4,7 @@ import android.arch.lifecycle.Observer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -11,9 +12,9 @@ import android.widget.EditText;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.utils.ToastUtils;
-import com.idengyun.heartretail.HRSession;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.UserNickBean;
+import com.idengyun.heartretail.viewmodel.UserViewModel;
 import com.idengyun.usermodule.HRUser;
 
 /**
@@ -25,6 +26,7 @@ public final class InviteCodeFragment extends BaseFragment implements View.OnCli
 
     private EditText et_invite_code;
     private View tv_invite_code_modify;
+    private UserViewModel userViewModel;
 
     @Override
     public int getLayoutId() {
@@ -39,6 +41,18 @@ public final class InviteCodeFragment extends BaseFragment implements View.OnCli
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        FragmentActivity activity = getActivity();
+        if (activity == null) return;
+        if (userViewModel == null) {
+            userViewModel = UserViewModel.getInstance(activity);
+            userViewModel.getModifyNickname().observe(this, new Observer<UserNickBean>() {
+                @Override
+                public void onChanged(@Nullable UserNickBean userNickBean) {
+                    HRUser.saveInviteCode(et_invite_code.getText().toString());
+                    if (getActivity() != null) getActivity().onBackPressed();
+                }
+            });
+        }
     }
 
     @Override
@@ -51,13 +65,8 @@ public final class InviteCodeFragment extends BaseFragment implements View.OnCli
     }
 
     private void modifyInviteCode(final String inviteCode) {
-        HRSession.session_04(this, HRUser.getNickname(), inviteCode, new Observer<UserNickBean.Data>() {
-            @Override
-            public void onChanged(@Nullable UserNickBean.Data data) {
-                HRUser.saveInviteCode(inviteCode);
-                if (getActivity() != null) getActivity().onBackPressed();
-            }
-        });
+        if (userViewModel == null) return;
+        userViewModel.requestModifyNickname(this, HRUser.getNickname(), inviteCode);
     }
 
     private void findViewById(View view) {

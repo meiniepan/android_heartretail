@@ -1,5 +1,6 @@
 package com.idengyun.heartretail.goods;
 
+import android.arch.lifecycle.Observer;
 import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
@@ -17,6 +18,7 @@ import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.net.ImageApi;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.GoodsEvaluateBean;
+import com.idengyun.heartretail.viewmodel.GoodsViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,11 +29,19 @@ import java.util.List;
  * @author aLang
  */
 public final class GoodsEvaluateFragment extends BaseFragment {
+
     private TextView tv_favorable_rate;
     private RecyclerView recycler_view;
     private EvaluationAdapter evaluationAdapter;
 
-    private GEViewModel geViewModel;
+    private GoodsViewModel goodsViewModel;
+
+    /* 分页 */
+    private int totalPageSize = -1;
+    private int totalPage = -1;
+    private int pageSize = 10;
+    private int page = 0;
+    private boolean loadMore = true;
 
     @Override
     public int getLayoutId() {
@@ -47,9 +57,7 @@ public final class GoodsEvaluateFragment extends BaseFragment {
         recycler_view.addOnScrollListener(new LoadMore() {
             @Override
             public void onLoadMore(RecyclerView recyclerView) {
-                if (geViewModel.isLoadMore()) {
-                    geViewModel.requestEvaluationAPI(GoodsEvaluateFragment.this, "123");
-                }
+                requestAPI();
             }
         });
     }
@@ -59,20 +67,33 @@ public final class GoodsEvaluateFragment extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
         FragmentActivity activity = getActivity();
         assert activity != null;
+        if (goodsViewModel == null) {
+            goodsViewModel = GoodsViewModel.getInstance(activity);
+            goodsViewModel.getGoodsEvaluate().observe(this, new Observer<GoodsEvaluateBean>() {
+                @Override
+                public void onChanged(@Nullable GoodsEvaluateBean goodsEvaluateBean) {
+                    updateUI(goodsEvaluateBean);
+                }
+            });
+        }
 
-        GEViewModel.observe(activity, this, new android.arch.lifecycle.Observer<GoodsEvaluateBean.Data>() {
-            @Override
-            public void onChanged(@Nullable GoodsEvaluateBean.Data data) {
-                if (data != null) updateUI(data);
-            }
-        });
+        requestAPI();
+    }
 
-        geViewModel = GEViewModel.getInstance(activity);
-        geViewModel.requestEvaluationAPI(this, "123");
+    private void requestAPI() {
+        if (!loadMore) return;
+        goodsViewModel.requestGoodsEvaluate(this, "123", page + 1, pageSize);
     }
 
     @MainThread
-    private void updateUI(GoodsEvaluateBean.Data data) {
+    private void updateUI(@Nullable GoodsEvaluateBean goodsEvaluateBean) {
+        if (goodsEvaluateBean == null) return;
+        GoodsEvaluateBean.Data data = goodsEvaluateBean.data;
+
+        totalPageSize = data.total;
+        totalPage = (int) Math.ceil(1D * totalPageSize / pageSize);
+        loadMore = ++page < totalPage;
+
         int evaluationCounts = data.total;
         String praiseRate = data.praiseRate;
         List<GoodsEvaluateBean.Data.Evaluation> evaluationList = data.evaluationList;
@@ -141,7 +162,7 @@ public final class GoodsEvaluateFragment extends BaseFragment {
                 tv_user_evaluation_content.setText(contents);
 
 
-                if (getAdapterPosition() + 1 == geViewModel.getTotalPageSize()) {
+                if (getAdapterPosition() + 1 == totalPageSize) {
                     tv_no_more.setVisibility(View.VISIBLE);
                 } else {
                     tv_no_more.setVisibility(View.GONE);

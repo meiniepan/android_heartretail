@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,12 +21,12 @@ import com.dengyun.baselibrary.utils.ListUtils;
 import com.dengyun.baselibrary.utils.TakePhotoUtil;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.heartretail.HRActivity;
-import com.idengyun.heartretail.HRSession;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.PersonalDataBean;
 import com.idengyun.heartretail.model.response.UserAvatarBean;
 import com.idengyun.heartretail.my.setting.personal.InviteCodeFragment;
 import com.idengyun.heartretail.my.setting.personal.NicknameFragment;
+import com.idengyun.heartretail.viewmodel.UserViewModel;
 import com.idengyun.usermodule.HRUser;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.entity.LocalMedia;
@@ -52,6 +53,8 @@ public final class PersonalFragment extends BaseFragment implements View.OnClick
     private TextView tv_personal_nickname;
     private TextView tv_personal_invite_code;
 
+    private UserViewModel userViewModel;
+
     @Override
     public int getLayoutId() {
         return R.layout.fragment_personal_data;
@@ -65,6 +68,18 @@ public final class PersonalFragment extends BaseFragment implements View.OnClick
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        FragmentActivity activity = getActivity();
+        if (activity == null) return;
+        if (userViewModel == null) {
+            userViewModel = UserViewModel.getInstance(activity);
+            userViewModel.getModifyAvatar().observe(this, new Observer<UserAvatarBean>() {
+                @Override
+                public void onChanged(@Nullable UserAvatarBean userAvatarBean) {
+                    HRUser.saveAvatar(avatarUrl);
+                    ImageApi.displayImage(iv_personal_avatar.getContext(), iv_personal_avatar, avatarUrl);
+                }
+            });
+        }
     }
 
     @Override
@@ -106,20 +121,17 @@ public final class PersonalFragment extends BaseFragment implements View.OnClick
         NetApi.upFileData(netOption, new File(imgPath), new JsonCallback<UploadBean>(netOption) {
             @Override
             public void onSuccess(Response<UploadBean> response) {
-                String photoUrl = response.body().data.filePath;
-                modifyAvatar(photoUrl);
+                avatarUrl = response.body().data.filePath;
+                modifyAvatar();
             }
         });
     }
 
-    private void modifyAvatar(final String avatarUrl) {
-        HRSession.session_03(this, avatarUrl, new Observer<UserAvatarBean.Data>() {
-            @Override
-            public void onChanged(@Nullable UserAvatarBean.Data data) {
-                HRUser.saveAvatar(avatarUrl);
-                ImageApi.displayImage(iv_personal_avatar.getContext(), iv_personal_avatar, avatarUrl);
-            }
-        });
+    private String avatarUrl;
+
+    private void modifyAvatar() {
+        if (userViewModel == null) return;
+        userViewModel.requestModifyAvatar(this, avatarUrl);
     }
 
     @MainThread

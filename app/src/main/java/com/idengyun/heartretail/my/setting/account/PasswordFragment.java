@@ -4,6 +4,7 @@ import android.arch.lifecycle.Observer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
@@ -18,10 +19,11 @@ import android.widget.TextView;
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.utils.ToastUtils;
 import com.dengyun.baselibrary.utils.activity.ActivityUtils;
-import com.idengyun.heartretail.HRSession;
 import com.idengyun.heartretail.MainActivity;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.PwdModifyBean;
+import com.idengyun.heartretail.viewmodel.UserViewModel;
+import com.idengyun.heartretail.viewmodel.VerifyCodeViewModel;
 import com.idengyun.usermodule.HRConst;
 import com.idengyun.usermodule.HRUser;
 import com.idengyun.usermodule.LoginActivity;
@@ -45,6 +47,9 @@ public final class PasswordFragment extends BaseFragment implements CompoundButt
 
     private SecondsTimer timer;
 
+    private UserViewModel userViewModel;
+    private VerifyCodeViewModel verifyCodeViewModel;
+
     @Override
     public int getLayoutId() {
         return R.layout.fragment_pwd_modify;
@@ -58,6 +63,27 @@ public final class PasswordFragment extends BaseFragment implements CompoundButt
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        FragmentActivity activity = getActivity();
+        if (activity == null) return;
+        if (userViewModel == null) {
+            userViewModel = UserViewModel.getInstance(activity);
+            userViewModel.getModifyPwd().observe(this, new Observer<PwdModifyBean>() {
+                @Override
+                public void onChanged(@Nullable PwdModifyBean pwdModifyBean) {
+                    ToastUtils.showLong("密码修改成功");
+                    logout();
+                }
+            });
+        }
+        if (verifyCodeViewModel == null) {
+            verifyCodeViewModel = VerifyCodeViewModel.getInstance(activity);
+            verifyCodeViewModel.getVerifyCode().observe(this, new Observer<VerifyCodeBean>() {
+                @Override
+                public void onChanged(@Nullable VerifyCodeBean verifyCodeBean) {
+                    ToastUtils.showLong("验证码已发出");
+                }
+            });
+        }
         String mobile = HRUser.getMobile();
         tv_pwd_mobile.setText(mobile);
         if (mobile.length() == 11) {
@@ -100,13 +126,8 @@ public final class PasswordFragment extends BaseFragment implements CompoundButt
             return;
         }
 
-        HRSession.session_05(this, et_pwd_verify_code.getText().toString(), et_pwd_new_pwd.getText().toString(), new Observer<PwdModifyBean.Data>() {
-            @Override
-            public void onChanged(@Nullable PwdModifyBean.Data data) {
-                ToastUtils.showLong("密码修改成功");
-                logout();
-            }
-        });
+        if (userViewModel == null) return;
+        userViewModel.requestBindMobile(this, et_pwd_verify_code.getText().toString(), et_pwd_new_pwd.getText().toString());
     }
 
     private void logout() {
@@ -123,12 +144,8 @@ public final class PasswordFragment extends BaseFragment implements CompoundButt
     private void sendVerifyCode() {
         startTimer(tv_pwd_verify_code);
 
-        HRSession.session_06(this, HRConst.IDENTIFY_TYPE_2, new Observer<VerifyCodeBean.Data>() {
-            @Override
-            public void onChanged(@Nullable VerifyCodeBean.Data data) {
-                ToastUtils.showLong("验证码已发出");
-            }
-        });
+        if (verifyCodeViewModel == null) return;
+        verifyCodeViewModel.requestVerifyCode(this, HRConst.IDENTIFY_TYPE_2);
     }
 
     private void startTimer(final TextView textView) {

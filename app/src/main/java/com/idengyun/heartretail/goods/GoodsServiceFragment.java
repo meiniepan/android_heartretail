@@ -4,6 +4,7 @@ import android.arch.lifecycle.Observer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -13,10 +14,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
-import com.idengyun.heartretail.HRSession;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.GoodsDetailBean;
 import com.idengyun.heartretail.model.response.ProtocolsBean;
+import com.idengyun.heartretail.viewmodel.AgreeViewModel;
+import com.idengyun.heartretail.viewmodel.GoodsViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +33,8 @@ public final class GoodsServiceFragment extends BaseFragment implements View.OnC
     private RecyclerView recycler_view;
 
     private ServiceAdapter serviceAdapter;
+    private GoodsViewModel goodsViewModel;
+    private AgreeViewModel agreeViewModel;
 
     @Override
     public int getLayoutId() {
@@ -50,20 +54,36 @@ public final class GoodsServiceFragment extends BaseFragment implements View.OnC
         serviceAdapter = new ServiceAdapter();
         recycler_view.setAdapter(serviceAdapter);
 
-        GDViewModel.observe(getActivity(), this, new Observer<GoodsDetailBean.Data>() {
-            @Override
-            public void onChanged(@Nullable GoodsDetailBean.Data data) {
-                if (data == null) return;
-                List<GoodsDetailBean.Data.Protocol> protocolList = data.protocolList;
-                if (protocolList != null) {
-                    protocolIds = new ArrayList<>();
-                    for (int i = 0; i < protocolList.size(); i++) {
-                        GoodsDetailBean.Data.Protocol protocol = protocolList.get(i);
-                        protocolIds.add(protocol.protocolId);
+        FragmentActivity activity = getActivity();
+        if (activity == null) return;
+        if (goodsViewModel == null) {
+            goodsViewModel = GoodsViewModel.getInstance(activity);
+            goodsViewModel.getGoodsDetail().observe(this, new Observer<GoodsDetailBean>() {
+                @Override
+                public void onChanged(@Nullable GoodsDetailBean goodsDetailBean) {
+                    if (goodsDetailBean == null) return;
+                    GoodsDetailBean.Data data = goodsDetailBean.data;
+                    if (data == null) return;
+                    List<GoodsDetailBean.Data.Protocol> protocolList = data.protocolList;
+                    if (protocolList != null) {
+                        protocolIds = new ArrayList<>();
+                        for (int i = 0; i < protocolList.size(); i++) {
+                            GoodsDetailBean.Data.Protocol protocol = protocolList.get(i);
+                            protocolIds.add(protocol.protocolId);
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
+        if (agreeViewModel == null) {
+            agreeViewModel = AgreeViewModel.getInstance(activity);
+            agreeViewModel.getAgreeList().observe(this, new Observer<ProtocolsBean>() {
+                @Override
+                public void onChanged(@Nullable ProtocolsBean protocolsBean) {
+                    updateUI(protocolsBean);
+                }
+            });
+        }
     }
 
     @Override
@@ -75,12 +95,9 @@ public final class GoodsServiceFragment extends BaseFragment implements View.OnC
     }
 
     private void requestAPI(List<Integer> protocolIds) {
-        HRSession.session_08(this, protocolIds, new Observer<List<ProtocolsBean.Data>>() {
-            @Override
-            public void onChanged(@Nullable List<ProtocolsBean.Data> data) {
-                updateUI(data);
-            }
-        });
+        FragmentActivity activity = getActivity();
+        if (activity == null) return;
+        agreeViewModel.requestAgreeList(this, protocolIds);
     }
 
     @Override
@@ -89,7 +106,9 @@ public final class GoodsServiceFragment extends BaseFragment implements View.OnC
         if (fragmentManager != null) fragmentManager.beginTransaction().hide(this).commit();
     }
 
-    private void updateUI(List<ProtocolsBean.Data> data) {
+    private void updateUI(@Nullable ProtocolsBean protocolsBean) {
+        if (protocolsBean == null) return;
+        List<ProtocolsBean.Data> data = protocolsBean.data;
         serviceAdapter.serviceItems.addAll(data);
         serviceAdapter.notifyDataSetChanged();
     }
