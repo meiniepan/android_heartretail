@@ -15,7 +15,7 @@ import com.idengyun.usermodule.beans.LoginBean;
 public final class HRUser {
 
     /* 用户是否实名认证 */
-    public static boolean isAuthenticated() {
+    public static boolean isAuthentication() {
         return getInt("authIdentity") == 1;
     }
 
@@ -57,6 +57,11 @@ public final class HRUser {
     /* 获取用户昵称 */
     public static String getNickname() {
         return getString("nickName");
+    }
+
+    /* 保存实名认证 */
+    public static void saveAuthentication(int authentication) {
+        putValue("authIdentity", authentication);
     }
 
     /* 保存用户好友邀请码 */

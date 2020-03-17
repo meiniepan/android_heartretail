@@ -85,7 +85,7 @@ public class OrderStatusFragment extends BaseFragment {
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                OrderDetailActivity.start(getActivity(), mData.get(position));
+                OrderDetailActivity.start(getActivity(), mData.get(position).orderId);
             }
         });
     }

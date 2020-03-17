@@ -24,6 +24,7 @@ public class PaySuccessActivity extends BaseActivity {
     TextView tvCheckOrder;
     @BindView(R.id.tv_back_goods_detail)
     TextView tvBackGoodsDetail;
+    String orderId = "";
 
     public static void start(Context context) {
         Intent starter = new Intent(context, PaySuccessActivity.class);
@@ -45,7 +46,7 @@ public class PaySuccessActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_check_order:
-                OrderDetailActivity.start(this,null);
+                OrderDetailActivity.start(this,orderId);
                 break;
             case R.id.tv_back_goods_detail:
 

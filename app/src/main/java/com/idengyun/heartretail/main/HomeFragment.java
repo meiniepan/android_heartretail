@@ -25,13 +25,11 @@ import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.activitys.ShareQRCodeActivity;
 import com.idengyun.heartretail.goods.GoodsDetailFragment;
 import com.idengyun.heartretail.goods.GoodsEvaluateFragment;
-import com.idengyun.heartretail.goods.GoodsInfoFragment;
 import com.idengyun.heartretail.goods.GoodsSPUFragment;
+import com.idengyun.heartretail.goods.GoodsSpecFragment;
 import com.idengyun.heartretail.goods.GoodsServiceFragment;
 import com.idengyun.heartretail.model.response.GoodsListBean;
 import com.idengyun.heartretail.notice.NoticeFragment;
-import com.idengyun.heartretail.shop.ShopDetailActivity;
-import com.idengyun.heartretail.shop.ShopListActivity;
 import com.idengyun.maplibrary.MyMapActivity;
 import com.idengyun.maplibrary.beans.EventChoosePoiItem;
 import com.idengyun.maplibrary.utils.AmapLocationWapper;
@@ -205,10 +203,10 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
                     HRActivity.start(
                             getContext(),
                             null,
-                            GoodsInfoFragment.class,
+                            GoodsSPUFragment.class,
                             GoodsEvaluateFragment.class,
                             GoodsDetailFragment.class,
-                            GoodsSPUFragment.class,
+                            GoodsSpecFragment.class,
                             GoodsServiceFragment.class
                     );
                 }

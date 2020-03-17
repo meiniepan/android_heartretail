@@ -187,7 +187,7 @@ public class SpMainConfigConstants {
         return getMainConfigUrl("queryUserId");
     }
 
-    /* 修改昵称 */
+    /* 修改昵称/添加邀请码 */
     public static String changeNick() {
         return getMainConfigUrl("changeNick");
     }

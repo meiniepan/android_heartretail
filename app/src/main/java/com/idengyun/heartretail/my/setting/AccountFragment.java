@@ -1,6 +1,7 @@
 package com.idengyun.heartretail.my.setting;
 
 import android.os.Bundle;
+import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -11,7 +12,7 @@ import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.my.setting.account.IdentityFragment;
 import com.idengyun.heartretail.my.setting.account.PasswordFragment;
-import com.idengyun.heartretail.my.setting.account.auth.AuthorizeFragment;
+import com.idengyun.heartretail.my.setting.account.auth.AuthenticationFragment;
 import com.idengyun.usermodule.HRUser;
 
 /**
@@ -42,6 +43,12 @@ public final class AccountFragment extends BaseFragment implements View.OnClickL
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        updateUI();
+    }
+
+    @Override
     public void onClick(View v) {
         /* 修改密码 手机号码 实名认证 */
         if (layout_account_pwd == v) {
@@ -53,8 +60,14 @@ public final class AccountFragment extends BaseFragment implements View.OnClickL
         }
     }
 
+    @MainThread
+    private void updateUI() {
+        tv_account_mobile.setText(HRUser.getMobile());
+        tv_account_auth_state.setText(HRUser.isAuthentication() ? "已认证" : "未认证");
+    }
+
     private void startRealVerifyActivity() {
-        HRActivity.start(getContext(), AuthorizeFragment.class);
+        HRActivity.start(getContext(), AuthenticationFragment.class);
     }
 
     private void startPhoneBindActivity() {
@@ -72,11 +85,8 @@ public final class AccountFragment extends BaseFragment implements View.OnClickL
         tv_account_mobile = view.findViewById(R.id.tv_account_mobile);
         tv_account_auth_state = view.findViewById(R.id.tv_account_auth_state);
 
-
         layout_account_pwd.setOnClickListener(this);
         layout_account_phone.setOnClickListener(this);
         layout_account_real.setOnClickListener(this);
-        tv_account_mobile.setText(HRUser.getMobile());
-        tv_account_auth_state.setText(HRUser.isAuthenticated() ? "已认证" : "未认证");
     }
 }

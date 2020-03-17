@@ -6,6 +6,7 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProviders;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 
@@ -13,6 +14,7 @@ import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
+import com.idengyun.heartretail.HRSession;
 import com.idengyun.heartretail.model.response.GoodsEvaluateBean;
 import com.idengyun.heartretail.model.response.GoodsListBean;
 import com.idengyun.usermodule.HRUser;
@@ -47,8 +49,19 @@ public final class GLViewModel extends ViewModel {
     public void requestGoodsListAPI(Fragment fragment, int goodsType, int sortType, int sortStyle) {
         if (!loadMore) return;
 
-        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.evaluationList())
+        HRSession.session_10(fragment, goodsType, page + 1, pageSize, sortType, sortStyle, new Observer<GoodsListBean.Data>() {
+            @Override
+            public void onChanged(@Nullable GoodsListBean.Data data) {
+                totalPageSize = data.total;
+                totalPage = (int) Math.ceil(1D * totalPageSize / pageSize);
+                loadMore = ++page < totalPage;
+
+                liveData.postValue(data);
+            }
+        });
+        /*NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.evaluationList())
                 .fragment(fragment)
+                .isShowDialog(true)
                 .clazz(GoodsListBean.class)
                 .params("userId", HRUser.getId())
                 .params("goodsType", goodsType)
@@ -68,7 +81,7 @@ public final class GLViewModel extends ViewModel {
 
                 liveData.postValue(data);
             }
-        });
+        });*/
     }
 
     private void refresh(Fragment fragment, int goodsType, int sortType, int sortStyle) {

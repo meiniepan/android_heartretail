@@ -94,7 +94,7 @@ public class OderStatusListAdapter extends BaseQuickAdapter<OrderStatusBean, Bas
             tv_operate2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ChoosePayModeActivity.start(mContext);
+                    ChoosePayModeActivity.start(mContext, item.orderId);
                 }
             });
             TextView tv_order_status_time_h = helper.getView(R.id.tv_order_status_time_h);

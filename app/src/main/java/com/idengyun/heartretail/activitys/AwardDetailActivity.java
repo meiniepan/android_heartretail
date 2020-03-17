@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.dengyun.baselibrary.base.activity.BaseActivity;
 import com.idengyun.heartretail.R;
+import com.idengyun.heartretail.adapters.AwardIncomeListAdapter;
 import com.idengyun.heartretail.adapters.EvaluateListAdapter;
 import com.idengyun.heartretail.beans.OrderStatusBean;
 import com.idengyun.statusrecyclerviewlib.StatusRecyclerView;
@@ -32,7 +33,7 @@ public class AwardDetailActivity extends BaseActivity {
     @BindView(R.id.sr_award_detail)
     StatusRecyclerView recyclerView;
     List<OrderStatusBean> mData = new ArrayList<>();
-    private EvaluateListAdapter adapter;
+    private AwardIncomeListAdapter adapter;
 
     public static void start(Context context) {
         Intent starter = new Intent(context, AwardDetailActivity.class);
@@ -47,7 +48,7 @@ public class AwardDetailActivity extends BaseActivity {
     @Override
     protected void initViews(Bundle savedInstanceState) {
         initData();
-        adapter = new EvaluateListAdapter(R.layout.item_evaluate, mData);
+        adapter = new AwardIncomeListAdapter(R.layout.item_award_income, mData);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {

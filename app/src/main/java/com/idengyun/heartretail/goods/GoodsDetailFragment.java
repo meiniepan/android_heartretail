@@ -69,14 +69,16 @@ public final class GoodsDetailFragment extends BaseFragment implements RadioGrou
         if (iv_goods_detail_back == v || tv_goods_detail_back == v) {
             if (getActivity() != null) getActivity().onBackPressed();
         } else if (layout_goods_detail_customer_service == v) {
-
+            // TODO: 2020/3/17
         } else if (layout_goods_detail_buy_now == v) {
-            GoodsSPUFragment goodsSpecFragment = (GoodsSPUFragment) HRActivity.findFragmentByTag(getActivity(), GoodsSPUFragment.class.getName());
+            GoodsSpecFragment goodsSpecFragment = (GoodsSpecFragment) HRActivity.findFragmentByTag(getActivity(), GoodsSpecFragment.class.getName());
             if (goodsSpecFragment == null || !goodsSpecFragment.isCanBuy()) {
                 ToastUtils.showShort("去选择规格");
                 return;
             }
-            ConfirmOrderActivity.start(getContext(), null);
+
+            Bundle extras = goodsSpecFragment.createExtras();
+            ConfirmOrderActivity.start(getContext(), extras);
         }
     }
 
@@ -101,7 +103,7 @@ public final class GoodsDetailFragment extends BaseFragment implements RadioGrou
         iv_goods_2.setVisibility(View.VISIBLE);
         iv_evaluation_1.setVisibility(View.INVISIBLE);
         iv_evaluation_2.setVisibility(View.INVISIBLE);
-        HRActivity.showFragment(getActivity(), GoodsInfoFragment.class.getName());
+        HRActivity.showFragment(getActivity(), GoodsSPUFragment.class.getName());
         HRActivity.hideFragment(getActivity(), GoodsEvaluateFragment.class.getName());
     }
 
@@ -111,7 +113,7 @@ public final class GoodsDetailFragment extends BaseFragment implements RadioGrou
         iv_evaluation_1.setVisibility(View.VISIBLE);
         iv_evaluation_2.setVisibility(View.VISIBLE);
         HRActivity.showFragment(getActivity(), GoodsEvaluateFragment.class.getName());
-        HRActivity.hideFragment(getActivity(), GoodsInfoFragment.class.getName());
+        HRActivity.hideFragment(getActivity(), GoodsSPUFragment.class.getName());
     }
 
     private void init() {
@@ -129,11 +131,11 @@ public final class GoodsDetailFragment extends BaseFragment implements RadioGrou
         layout_main_title.setVisibility(View.GONE);
         dimension = SizeUtils.dp2px(64f);
 
-        HRActivity.showFragment(getActivity(), GoodsInfoFragment.class.getName());
+        HRActivity.showFragment(getActivity(), GoodsSPUFragment.class.getName());
         HRActivity.hideFragment(
                 getActivity(),
                 GoodsEvaluateFragment.class.getName(),
-                GoodsSPUFragment.class.getName(),
+                GoodsSpecFragment.class.getName(),
                 GoodsServiceFragment.class.getName()
         );
 

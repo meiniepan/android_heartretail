@@ -117,6 +117,7 @@ public final class PersonalFragment extends BaseFragment implements View.OnClick
             @Override
             public void onChanged(@Nullable UserAvatarBean.Data data) {
                 HRUser.saveAvatar(avatarUrl);
+                ImageApi.displayImage(iv_personal_avatar.getContext(), iv_personal_avatar, avatarUrl);
             }
         });
     }
@@ -126,7 +127,7 @@ public final class PersonalFragment extends BaseFragment implements View.OnClick
         ImageApi.displayImage(iv_personal_avatar.getContext(), iv_personal_avatar, HRUser.getAvatar());
         tv_personal_nickname.setText(HRUser.getNickname());
         tv_personal_invite_code.setText(HRUser.getInviteCode());
-        tv_personal_invite_code.setCompoundDrawables(null, null, null, null);
+        // tv_personal_invite_code.setCompoundDrawables(null, null, null, null);
     }
 
     private void startInviteCodeActivity() {

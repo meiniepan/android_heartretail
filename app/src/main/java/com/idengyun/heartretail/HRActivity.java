@@ -22,10 +22,10 @@ import io.reactivex.annotations.Nullable;
 public class HRActivity extends BaseActivity {
 
     public static void start(@Nullable Context context, @NonNull Class<? extends Fragment> fragmentClass) {
-        start(context, fragmentClass, null);
+        start(context, null, fragmentClass);
     }
 
-    public static void start(@Nullable Context context, @NonNull Class<? extends Fragment> fragmentClass, @Nullable Bundle extras) {
+    public static void start(@Nullable Context context, @Nullable Bundle extras, @NonNull Class<? extends Fragment> fragmentClass) {
         start(context, extras, new Class[]{fragmentClass});
     }
 

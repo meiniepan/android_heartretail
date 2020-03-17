@@ -80,6 +80,8 @@ public final class MobileBindFragment extends BaseFragment implements View.OnCli
             @Override
             public void onChanged(@Nullable MobileBindBean.Data data) {
                 HRUser.saveMobile(et_phone_mobile.getText().toString());
+                ToastUtils.showShort("手机号绑定成功");
+                if (getActivity() != null) getActivity().finish();
             }
         });
     }

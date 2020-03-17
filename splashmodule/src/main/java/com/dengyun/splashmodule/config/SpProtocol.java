@@ -3,6 +3,9 @@ package com.dengyun.splashmodule.config;
 import com.dengyun.baselibrary.utils.SharedPreferencesUtil;
 import com.dengyun.baselibrary.utils.Utils;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * @Title 主配置返回的协议本地存储
  * @Author: zhoubo
@@ -19,6 +22,15 @@ public class SpProtocol {
 
 
     /* ================================== 公共方法 获取协议id ================================== */
+
+    /* 获取App所有协议 */
+    public static List<Integer> getAllProtocolIDs() {
+        return Arrays.asList(
+                getUserProtocolId(),
+                getAllographProtocolId(),
+                getProxySalesProtocolId()
+        );
+    }
 
     /* 用户协议 */
     public static int getUserProtocolId() {

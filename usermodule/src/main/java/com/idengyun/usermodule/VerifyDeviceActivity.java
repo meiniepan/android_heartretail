@@ -66,7 +66,7 @@ public class VerifyDeviceActivity extends BaseActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() > 0) {
-                     confirmVerifyDevice.setEnabled(true);
+                    confirmVerifyDevice.setEnabled(true);
                 } else {
                     confirmVerifyDevice.setEnabled(false);
                 }
@@ -134,7 +134,9 @@ public class VerifyDeviceActivity extends BaseActivity {
             @Override
             public void onSuccess(Response<ApiSimpleBean> response) {
                 ToastUtils.showShort("验证新设备成功");
-                startMainActivity();
+                // startMainActivity();
+                HRUser.saveAuthentication(1);
+                finish();
             }
         });
     }
