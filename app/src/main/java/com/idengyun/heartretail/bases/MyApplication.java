@@ -202,7 +202,7 @@ public class MyApplication extends LitePalApplication {
      */
     private void initShareModule() {
         ShareUtil.initShare(this,
-                R.drawable.ic_alipay,// TODO: 2020-03-04 分享的默认图片(直角logo)
+                R.drawable.ic_logo_square,
                 WX_APPID,
                 WX_APPSECRET,
                 QQ_APPID,
@@ -220,8 +220,7 @@ public class MyApplication extends LitePalApplication {
      * 升级模块初始化
      */
     private void initUpdateModule() {
-        // TODO: 2020-03-04 导航栏的小图标
-        UpdateUtils.init(this, AppConfig.isDebug, R.mipmap.ic_launcher, new MyUpdateLoader());
+        UpdateUtils.init(this, AppConfig.isDebug, R.drawable.push_small, new MyUpdateLoader());
     }
 
     private void initSmartRefreshHeaderFooter() {
