@@ -4,6 +4,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.View;
@@ -23,6 +24,7 @@ import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.google.gson.reflect.TypeToken;
 import com.idengyun.heartretail.Constants;
 import com.idengyun.heartretail.R;
+import com.idengyun.heartretail.SystemUIHelper;
 import com.idengyun.heartretail.adapters.OderDetailGoodsListAdapter;
 import com.idengyun.heartretail.beans.ConfirmOrderRspBean;
 import com.idengyun.commonmodule.beans.OrderStatusBean;
@@ -39,6 +41,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+
+import static com.dengyun.baselibrary.base.dialog.BaseDialog.init;
 
 /**
  * @author Burning
@@ -96,6 +100,16 @@ public class OrderDetailActivity extends BaseActivity {
     @Override
     protected int getLayoutId() {
         return R.layout.activity_order_detail;
+    }
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initBase();
+    }
+
+    private void initBase() {
+        SystemUIHelper.applySystemUI(this);
     }
 
     @Override
