@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:drawable="@drawable/splash_bg_bg" />
-    <item android:top="120dp" >
+    <item android:top="148dp" >
         <bitmap android:gravity="top|center_horizontal" android:src="@drawable/splash_bg_top" />
     </item>
-    <item android:bottom="60dp" >
+    <item android:bottom="30dp" >
         <bitmap android:gravity="bottom|center_horizontal" android:src="@drawable/splash_bg_bottom" />
     </item>
 </layer-list>
