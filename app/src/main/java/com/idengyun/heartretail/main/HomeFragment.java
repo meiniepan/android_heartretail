@@ -5,19 +5,23 @@ import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.services.core.PoiItem;
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
+import com.dengyun.baselibrary.net.ImageApi;
 import com.dengyun.baselibrary.utils.ToastUtils;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
@@ -39,20 +43,30 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * 首页
  *
  * @author aLang
  */
-public final class HomeFragment extends BaseFragment implements View.OnClickListener {
+public final class HomeFragment extends BaseFragment implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
 
     private View tv_home_share;
     private View tv_home_notice;
     //首页左上角定位的tv
     private TextView tvHomeLocation;
+    private NestedScrollView nsv_home_bg;
     private NestedScrollView nested_scroll_view;
+
+    private View iv_home_goods_indicator_retail;
+    private View iv_home_goods_indicator_wholesale;
+    private View iv_home_goods_retail;
+    private View iv_home_goods_wholesale;
+    private RadioGroup rg_home_tab_bar;
+
     private RecyclerView recycler_view;
 
     private GoodsViewModel goodsViewModel;
@@ -61,6 +75,12 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
     private AmapLocationWapper amapLocationWapper;
     //定位（选择poi点）的城市名称、poi名称、poiId
     private String cityName, poiName, poiId;
+
+    private HomeAdapter homeAdapter;
+    private List<GoodsListBean.Data.Goods> retailGoodsList = new ArrayList<>();
+    private List<GoodsListBean.Data.Goods> wholesaleGoodsList = new ArrayList<>();
+
+    private int goodsType = 0;
 
     @Override
     public int getLayoutId() {
@@ -78,7 +98,6 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         init();
-        updateUI();
     }
 
     @Override
@@ -92,7 +111,9 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (hidden) return;
-        requestAPI();
+        if (rg_home_tab_bar.getCheckedRadioButtonId() == View.NO_ID)
+            rg_home_tab_bar.check(R.id.rb_home_retail);
+        // requestAPI();
     }
 
     @Override
@@ -107,6 +128,21 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
             } else {
                 MyMapActivity.start(getContext(), cityName, poiName, poiId);
             }
+        }
+    }
+
+    @Override
+    public void onCheckedChanged(RadioGroup group, int checkedId) {
+        if (R.id.rb_home_retail == checkedId) {
+            iv_home_goods_indicator_retail.setVisibility(View.VISIBLE);
+            iv_home_goods_indicator_wholesale.setVisibility(View.INVISIBLE);
+            goodsType = 0;
+            requestAPI();
+        } else if (R.id.rb_home_wholesale == checkedId) {
+            iv_home_goods_indicator_retail.setVisibility(View.INVISIBLE);
+            iv_home_goods_indicator_wholesale.setVisibility(View.VISIBLE);
+            goodsType = 1;
+            requestAPI();
         }
     }
 
@@ -149,8 +185,10 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
     }
 
     private void init() {
-        if (getActivity() != null & goodsViewModel == null) {
-            goodsViewModel = GoodsViewModel.getInstance(getActivity());
+        FragmentActivity activity = getActivity();
+        if (activity == null) return;
+        if (goodsViewModel == null) {
+            goodsViewModel = GoodsViewModel.getInstance(activity);
             goodsViewModel.getGoodsList().observe(this, new Observer<GoodsListBean>() {
                 @Override
                 public void onChanged(@Nullable GoodsListBean goodsListBean) {
@@ -158,26 +196,17 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
                 }
             });
         }
-    }
 
-
-    private void requestAPI() {
-        if (goodsViewModel != null) goodsViewModel.requestGoodsList(this, 0, 1, 10, 0, 0);
-    }
-
-    @MainThread
-    private void updateUI(@Nullable GoodsListBean goodsListBean) {
-        if (goodsListBean == null) return;
-        GoodsListBean.Data data = goodsListBean.data;
-        int current = data.current;
-        int pages = data.pages;
-        int total = data.total;
-        List<GoodsListBean.Data.Goods> goodsList = data.goods;
-    }
-
-    @MainThread
-    private void updateUI() {
-
+        nested_scroll_view.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+//                recycler_view.offsetTopAndBottom(-scrollY);
+                System.out.println(scrollY);
+//                recycler_view.setTranslationY(-scrollY);
+                nsv_home_bg.setTranslationY(-scrollY);
+//                nsv_home_bg.scrollTo(scrollY);
+            }
+        });
         recycler_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -188,90 +217,198 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                nested_scroll_view.scrollBy(0, dy);
+//                nested_scroll_view.scrollBy(0, dy);
 
                 System.out.println("dy=" + dy);
-                System.out.println(nested_scroll_view.getScrollY());
+                // System.out.println(nested_scroll_view.getScrollY());
+
+                //iv_home_bg.scrollBy(0, dy);
+                nested_scroll_view.setTranslationY(nested_scroll_view.getTranslationY() - dy);
             }
         });
 
-        GoodsAdapter goodsAdapter = new GoodsAdapter();
-        for (int i = 0; i < 2; i++) goodsAdapter.goodsList.add("");
-        recycler_view.setAdapter(goodsAdapter);
+        /*if (recycler_view.getLayoutManager() instanceof GridLayoutManager) {
+            GridLayoutManager glm = (GridLayoutManager) recycler_view.getLayoutManager();
+            glm.setSpanCount(2);
+            glm.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                @Override
+                public int getSpanSize(int position) {
+                    return position == 0 ? 2 : 1;
+                }
+            });
+        }*/
+
+
+        homeAdapter = new HomeAdapter();
+//        for (int i = 0; i < 20; i++) goodsAdapter.goodsList.add("");
+        recycler_view.setAdapter(homeAdapter);
     }
 
+
+    private void requestAPI() {
+        if (goodsViewModel != null) goodsViewModel.requestGoodsList(this, goodsType, 1, 10, 0, 0);
+    }
+
+    @MainThread
+    private void updateUI(@Nullable GoodsListBean goodsListBean) {
+        if (goodsListBean == null) return;
+        GoodsListBean.Data data = goodsListBean.data;
+        int current = data.current;
+        int pages = data.pages;
+        int total = data.total;
+        List<GoodsListBean.Data.Goods> goodsList = data.goods;
+        if (goodsType == 0) {
+            retailGoodsList.addAll(goodsList);
+            homeAdapter.homeList.clear();
+            //homeAdapter.homeList.add(0, null);
+            homeAdapter.homeList.addAll(retailGoodsList);
+            homeAdapter.notifyDataSetChanged();
+        } else if (goodsType == 1) {
+            wholesaleGoodsList.addAll(goodsList);
+            homeAdapter.homeList.clear();
+//            homeAdapter.homeList.add(0, null);
+            homeAdapter.homeList.addAll(wholesaleGoodsList);
+            homeAdapter.notifyDataSetChanged();
+        }
+    }
 
     private void findViewById(@NonNull View view) {
         tv_home_share = view.findViewById(R.id.tv_home_share);
         tv_home_notice = view.findViewById(R.id.tv_home_notice);
         tvHomeLocation = view.findViewById(R.id.tv_home_location);
+        nsv_home_bg = view.findViewById(R.id.nsv_home_bg);
         nested_scroll_view = view.findViewById(R.id.nested_scroll_view);
+
+        iv_home_goods_indicator_retail = view.findViewById(R.id.iv_home_goods_indicator_retail);
+        iv_home_goods_indicator_wholesale = view.findViewById(R.id.iv_home_goods_indicator_wholesale);
+        iv_home_goods_retail = view.findViewById(R.id.iv_home_goods_retail);
+        iv_home_goods_wholesale = view.findViewById(R.id.iv_home_goods_wholesale);
+        rg_home_tab_bar = view.findViewById(R.id.rg_home_tab_bar);
+
         recycler_view = view.findViewById(R.id.recycler_view);
         tvHomeLocation.setOnClickListener(this);
         tv_home_share.setOnClickListener(this);
         tv_home_notice.setOnClickListener(this);
+        rg_home_tab_bar.setOnCheckedChangeListener(this);
+        rg_home_tab_bar.clearCheck();
     }
 
-    private class GoodsAdapter extends RecyclerView.Adapter<GoodsAdapter.GoodsHolder> {
+    private static class HomeAdapter extends RecyclerView.Adapter {
         private LayoutInflater inflater;
-        final List<String> goodsList = new ArrayList<>();
+        final List<GoodsListBean.Data.Goods> homeList = new ArrayList<>();
+
+        public HomeAdapter() {
+            // homeList.add(0, null);
+        }
 
         @NonNull
         @Override
-        public GoodsHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
+        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             if (inflater == null) inflater = LayoutInflater.from(parent.getContext());
-            View itemView = inflater.inflate(R.layout.fragment_home_item, parent, false);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    HRActivity.start(
-                            getContext(),
-                            null,
-                            GoodsSPUFragment.class,
-                            GoodsEvaluateFragment.class,
-                            GoodsDetailFragment.class,
-                            GoodsSpecFragment.class,
-                            GoodsServiceFragment.class
-                    );
-                }
-            });
+//            if (viewType == 1) {
+//                View itemView = inflater.inflate(R.layout.fragment_home_header, parent, false);
+//                return new HomeHeaderHolder(itemView);
+//            } else {
+//                View itemView = inflater.inflate(R.layout.fragment_home_goods_item, parent, false);
+//                return new GoodsHolder(itemView);
+//            }
+            View itemView = inflater.inflate(R.layout.fragment_home_goods_item, parent, false);
             return new GoodsHolder(itemView);
         }
 
         @Override
-        public void onBindViewHolder(@NonNull GoodsHolder holder, int position) {
-            holder.updateUI();
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+            /*if (getItemViewType(position) != 1) {
+                GoodsHolder goodsHolder = (GoodsHolder) holder;
+                GoodsListBean.Data.Goods goods = homeList.get(position);
+                goodsHolder.updateUI(goods);
+            } else {
+                holder.itemView.setVisibility(View.GONE);
+            }*/
+            GoodsHolder goodsHolder = (GoodsHolder) holder;
+            GoodsListBean.Data.Goods goods = homeList.get(position);
+            goodsHolder.updateUI(goods);
         }
 
         @Override
         public int getItemCount() {
-            return goodsList.size();
+            return homeList.size();
         }
 
-        private class GoodsHolder extends RecyclerView.ViewHolder {
+        @Override
+        public int getItemViewType(int position) {
+            return position == 0 ? 1 : super.getItemViewType(position);
+        }
+    }
 
-            private ImageView iv_home_goods_url;
-            private TextView tv_home_goods_name;
-            private TextView tv_home_goods_price;
+    private static class GoodsHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-            GoodsHolder(@NonNull View itemView) {
-                super(itemView);
-                findViewById(itemView);
-            }
+        private ImageView iv_home_goods_url;
+        private TextView tv_home_goods_name;
+        private TextView tv_home_goods_price;
 
-            @MainThread
-            void updateUI() {
-                iv_home_goods_url.setImageResource(R.drawable.ic_home_red_packet);
-                tv_home_goods_name.setText("这里是一段商品标题信息最多展示2行");
-                tv_home_goods_price.setText("¥123.45");
-            }
+        GoodsHolder(@NonNull View itemView) {
+            super(itemView);
+            findViewById(itemView);
+            itemView.setOnClickListener(this);
+        }
 
-            private void findViewById(@NonNull View itemView) {
-                iv_home_goods_url = itemView.findViewById(R.id.iv_home_goods_url);
-                tv_home_goods_name = itemView.findViewById(R.id.tv_home_goods_name);
-                tv_home_goods_price = itemView.findViewById(R.id.tv_home_goods_price);
+        @Override
+        public void onClick(View v) {
+            Object tag = v.getTag();
+            if (tag instanceof GoodsListBean.Data.Goods) {
+                int goodsId = ((GoodsListBean.Data.Goods) tag).goodsId;
+                int goodsType = ((GoodsListBean.Data.Goods) tag).goodsType;
+                Bundle extras = new Bundle();
+                extras.putInt("home_goods_id", goodsId);
+                extras.putInt("home_goods_type", goodsType);
+                HRActivity.start(v.getContext(), extras, GoodsSPUFragment.class, GoodsEvaluateFragment.class, GoodsDetailFragment.class, GoodsSpecFragment.class, GoodsServiceFragment.class);
             }
         }
 
+        @MainThread
+        void updateUI(GoodsListBean.Data.Goods goods) {
+            itemView.setTag(goods);
+            String goodsImgUrl = goods.goodsImgUrl;
+            String retailPrice = goods.retailPrice;
+            String wholesalePrice = goods.wholesalePrice;
+            String goodsName = goods.goodsName;
+            int goodsType = goods.goodsType;
+            String price = goodsType == 1 ? wholesalePrice : retailPrice;
+            ImageApi.displayImage(iv_home_goods_url.getContext(), iv_home_goods_url, goodsImgUrl);
+            tv_home_goods_name.setText(goodsName);
+            tv_home_goods_price.setText("¥" + price);
+        }
+
+        private void findViewById(@NonNull View itemView) {
+            iv_home_goods_url = itemView.findViewById(R.id.iv_home_goods_url);
+            tv_home_goods_name = itemView.findViewById(R.id.tv_home_goods_name);
+            tv_home_goods_price = itemView.findViewById(R.id.tv_home_goods_price);
+        }
+    }
+
+    private static class HomeHeaderHolder extends RecyclerView.ViewHolder {
+
+        private ImageView iv_home_header_1;
+        private ImageView iv_home_header_2;
+        private ImageView iv_home_header_3;
+        private ImageView iv_home_header_4;
+
+        HomeHeaderHolder(@NonNull View itemView) {
+            super(itemView);
+            findViewById(itemView);
+        }
+
+        @MainThread
+        void updateUI() {
+
+        }
+
+        private void findViewById(@NonNull View itemView) {
+            iv_home_header_1 = itemView.findViewById(R.id.iv_home_header_1);
+            iv_home_header_2 = itemView.findViewById(R.id.iv_home_header_2);
+            iv_home_header_3 = itemView.findViewById(R.id.iv_home_header_3);
+            iv_home_header_4 = itemView.findViewById(R.id.iv_home_header_4);
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.idengyun.heartretail.goods;
 
 import android.arch.lifecycle.Observer;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.MainThread;
@@ -90,6 +91,9 @@ public final class GoodsSPUFragment extends BaseFragment implements View.OnClick
         super.onActivityCreated(savedInstanceState);
         FragmentActivity activity = getActivity();
         assert activity != null;
+        Intent intent = activity.getIntent();
+        int goodsId = intent.getIntExtra("home_goods_id", -1);
+        int goodsType = intent.getIntExtra("home_goods_type", -1);
 
         Fragment fragment = HRActivity.findFragmentByTag(getActivity(), GoodsDetailFragment.class.getName());
         if (fragment instanceof NestedScrollView.OnScrollChangeListener) {
@@ -111,7 +115,7 @@ public final class GoodsSPUFragment extends BaseFragment implements View.OnClick
                 }
             });
         }
-        goodsViewModel.requestGoodsDetail(this, "123", 0);
+        goodsViewModel.requestGoodsDetail(this, goodsId, goodsType);
     }
 
     @Override
@@ -140,12 +144,12 @@ public final class GoodsSPUFragment extends BaseFragment implements View.OnClick
         if (evaluationList.isEmpty()) return;
 
         GoodsEvaluateBean.Data.Evaluation evaluation = evaluationList.get(0);
-        String userImgUrl = evaluation.userImgUrl;
+        String userImgUrl = evaluation.userHeadImg;
         String userName = evaluation.userName;
         int userLevel = evaluation.userLevel;
-        String commentTime = evaluation.commentTime;
+        String commentTime = evaluation.evaluationDate;
         int commentStar = evaluation.commentStar;
-        String contents = evaluation.contents;
+        String contents = evaluation.evaluationContent;
         String orderId = evaluation.orderId;
         int isShow = evaluation.isShow;
 
