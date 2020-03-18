@@ -28,6 +28,7 @@ import com.dengyun.splashmodule.utils.MyUpdateLoader;
 
 import com.idengyun.heartretail.R;
 import com.idengyun.msgmodule.MsgPushConfig;
+import com.idengyun.paylibrary.payutil.PayUtils;
 import com.idengyun.updatelib.update.UpdateUtils;
 import com.meituan.android.walle.WalleChannelReader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -97,6 +98,8 @@ public class MyApplication extends LitePalApplication {
             initSADate();
             //初始化分享模块
             initShareModule();
+            //初始化支付模块
+            initPayModule();
             //Android7.0相机权限问题
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
@@ -212,6 +215,16 @@ public class MyApplication extends LitePalApplication {
                 SINA_REDIREC_URL);
     }
 
+    /**
+     * 初始化支付模块
+     */
+    private void initPayModule() {
+        PayUtils.initPayConfig(WX_APPID);
+    }
+
+    /**
+     * 初始化下载模块
+     */
     private void initDownloadModule() {
         DownloadUtil.init(getFilesDir().getAbsolutePath() + "/download");
     }
