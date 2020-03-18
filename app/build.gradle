@@ -104,6 +104,7 @@ dependencies {
     implementation project(':splashmodule')
     implementation project(':msgmodule')
     implementation project(':maplibrary')
+    implementation project(':sobotsdk-mall')
     implementation rootProject.ext.dependencies.updatelib
     //路由插件
     annotationProcessor rootProject.ext.dependencies.arouter_compiler

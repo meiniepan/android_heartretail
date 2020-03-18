@@ -4,6 +4,8 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.View;
@@ -19,13 +21,15 @@ import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.baselibrary.utils.SizeUtils;
 import com.dengyun.baselibrary.utils.ToastUtils;
 import com.dengyun.baselibrary.utils.phoneapp.AppUtils;
+import com.dengyun.baselibrary.widgets.toolbar.BaseToolBar;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.google.gson.reflect.TypeToken;
+import com.idengyun.commonmodule.beans.OrderStatusBean;
 import com.idengyun.heartretail.Constants;
 import com.idengyun.heartretail.R;
+import com.idengyun.heartretail.SystemUIHelper;
 import com.idengyun.heartretail.adapters.OderDetailGoodsListAdapter;
 import com.idengyun.heartretail.beans.ConfirmOrderRspBean;
-import com.idengyun.heartretail.beans.OrderStatusBean;
 import com.idengyun.statusrecyclerviewlib.RecycleViewDivider;
 import com.idengyun.statusrecyclerviewlib.StatusRecyclerView;
 import com.idengyun.usermodule.HRUser;
@@ -45,9 +49,13 @@ import butterknife.OnClick;
  * @description:
  * @date :2020/3/5 0005 10:35
  */
-public class OrderDetailActivity extends BaseActivity {
-    @BindView(R.id.back)
-    View backView;
+public class OrderDetailActivity extends BaseActivity implements NestedScrollView.OnScrollChangeListener {
+    @BindView(R.id.fl_second_title2)
+    View flBackView2;
+    @BindView(R.id.iv_order_detail_back2)
+    View backView2;
+    @BindView(R.id.toolbar_title_order_detail)
+    BaseToolBar toolBar;
     @BindView(R.id.ll_dl_detail)
     LinearLayout llDlDetail;
     @BindView(R.id.tv_order_detail_order_id)
@@ -81,11 +89,13 @@ public class OrderDetailActivity extends BaseActivity {
     @BindView(R.id.ll_bottom)
     LinearLayout llBottom;
     @BindView(R.id.tv_residue_time1)
-    TextView tvResidueTime;
+    TextView tvResidueTime;@BindView(R.id.nsv_order_detail)
+    NestedScrollView nestedScrollView;
     private SecondsTimer timer;
     OrderStatusBean dataSource;
     OrderStatusBean data;
     private String orderId;
+    private int dimension;
 
     public static void start(Context context, String orderId) {
         Intent starter = new Intent(context, OrderDetailActivity.class);
@@ -96,6 +106,18 @@ public class OrderDetailActivity extends BaseActivity {
     @Override
     protected int getLayoutId() {
         return R.layout.activity_order_detail;
+    }
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initBase();
+    }
+
+    private void initBase() {
+        dimension = SizeUtils.dp2px(64f);
+        SystemUIHelper.applySystemUI(this);
+        nestedScrollView.setOnScrollChangeListener(this);
     }
 
     @Override
@@ -171,10 +193,10 @@ public class OrderDetailActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.back, R.id.ll_dl_detail, R.id.tv_customer_service, R.id.tv_order_id_copy, R.id.tv_bottom_operate1, R.id.tv_bottom_operate2})
+    @OnClick({R.id.iv_order_detail_back2, R.id.ll_dl_detail, R.id.tv_customer_service, R.id.tv_order_id_copy, R.id.tv_bottom_operate1, R.id.tv_bottom_operate2})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.back:
+            case R.id.iv_order_detail_back2:
                 finish();
                 break;
             case R.id.ll_dl_detail:
@@ -238,5 +260,18 @@ public class OrderDetailActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         timer.cancel();
+    }
+
+    @Override
+    public void onScrollChange(NestedScrollView nestedScrollView, int i, int i1, int i2, int i3) {
+
+            // System.out.println("scrollY=" + scrollY + "\t" + "oldScrollY=" + oldScrollY);
+            if (i1 < dimension) {
+                flBackView2.setVisibility(View.VISIBLE);
+                toolBar.setVisibility(View.GONE);
+            } else {
+                flBackView2.setVisibility(View.GONE);
+                toolBar.setVisibility(View.VISIBLE);
+            }
     }
 }

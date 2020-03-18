@@ -16,6 +16,8 @@ public class SobotLoaderFactory {
 
         } else if ("ym".equals(fromWhere)) {
 
+        } else if ("xls".equals(fromWhere)) {
+            sobotLoader = new XlsLoader();
         }
         return sobotLoader;
     }

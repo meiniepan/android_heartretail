@@ -1,19 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-        <style name="HRAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-                <!--value-->
-                <item name="colorPrimary">@color/colorPrimary</item>
-                <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-                <item name="colorAccent">@color/colorAccent</item>
-                <item name="android:textColor">@color/black</item>
-                <item name="android:editTextColor">@color/black</item>
-                <item name="android:windowContentOverlay">@null</item>
-                <!--value-19-->
-                <!-- 虚拟按键不透明 -->
-                <item name="android:windowTranslucentNavigation">false</item>
-                <!-- 透明状态栏 -->
-                <!--<item name="android:windowTranslucentStatus">true</item>-->
-        </style>
-
 </resources>

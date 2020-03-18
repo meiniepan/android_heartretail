@@ -19,7 +19,6 @@ import com.idengyun.heartretail.adapters.LogisticalmsgAdapter;
 import com.idengyun.heartretail.beans.LogisticalBean;
 import com.idengyun.heartretail.beans.LogisticalMessageBean;
 import com.idengyun.heartretail.beans.LogisticalStatusBean;
-import com.idengyun.heartretail.beans.OrderStatusBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +50,7 @@ public class LogisticsDetailActivity extends BaseActivity {
     RecyclerView rlvLogisticalStatus;
     @BindView(R.id.lv_logistical)
     RecyclerView lvLogistical;
-    private String order_id = "";
+    private String orderId = "";
     private int shipping_status; //发货状态(0:已发货、1:运输中、2:派件中、3:已签收、4:已提货
     private List<LogisticalStatusBean> logisticalStatusBeanList;
     private LogisticalStatusAdapter logisticalStatusAdapter;
@@ -70,6 +69,7 @@ public class LogisticsDetailActivity extends BaseActivity {
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
+        orderId = getIntent().getStringExtra(Constants.ORDER_ID);
         initAdapter();
         initLogisticalStatus();
     }

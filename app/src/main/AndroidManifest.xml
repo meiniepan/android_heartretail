@@ -11,17 +11,19 @@
         android:roundIcon="@mipmap/ic_logo_app"
         android:screenOrientation="portrait"
         android:supportsRtl="true"
-        android:theme="@style/HRAppTheme"
+        android:theme="@style/BaseAppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:theme">
         <activity android:name=".activitys.ShareQRCodeActivity"></activity>
-        <activity android:name=".activitys.SomeWebActivity" /> <!-- 尺寸适配 -->
+        <activity android:name=".activitys.SomeWebActivity" />
+        <!-- 尺寸适配 -->
         <meta-data
             android:name="design_width_in_dp"
             android:value="375" />
         <meta-data
             android:name="design_height_in_dp"
-            android:value="667" /> <!-- 微信支付 -->
+            android:value="667" />
+        <!-- 微信支付 -->
         <activity
             android:name=".wxapi.WXPayEntryActivity"
             android:exported="true"
@@ -35,18 +37,10 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity android:name=".shop.ShopDetailActivity" />
-        <activity
-            android:name=".activitys.FirstActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".shop.ShopListActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".HRActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".MainActivity"
-            android:screenOrientation="portrait" />
+        <activity android:name=".activitys.FirstActivity" />
+        <activity android:name=".shop.ShopListActivity" />
+        <activity android:name=".HRActivity" />
+        <activity android:name=".MainActivity" />
         <activity android:name=".activitys.ChoosePayModeActivity" />
         <activity android:name=".activitys.PaySuccessActivity" />
         <activity android:name=".activitys.ConfirmOrderActivity" />

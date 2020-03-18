@@ -10,6 +10,7 @@ import android.os.Environment;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.activity.BaseActivity;
@@ -45,8 +46,8 @@ public class ShareQRCodeActivity extends BaseActivity {
     ImageView ivQrCode;
     @BindView(R.id.tv_save_share)
     TextView tvSaveShare;
-    @BindView(R.id.ll_share_parent)
-    LinearLayout llShareParent;
+    @BindView(R.id.rl_share_parent)
+    RelativeLayout rlShareParent;
     @BindView(R.id.toolbar_share_qr)
     BaseToolBar toolbarShareQr;
 
@@ -105,7 +106,7 @@ public class ShareQRCodeActivity extends BaseActivity {
         toolbarShareQr.setVisibility(View.GONE);
         tvCopy.setVisibility(View.GONE);
         tvSaveShare.setVisibility(View.GONE);
-        Bitmap bitmapNoCompress = ImageUtils.view2Bitmap(llShareParent);
+        Bitmap bitmapNoCompress = ImageUtils.view2Bitmap(rlShareParent);
         Bitmap bitmap = ImageUtils.compressBySampleSize(bitmapNoCompress,ScreenUtil.getScreenWidth()/3,ScreenUtil.getScreenHeight()/3,true);
         toolbarShareQr.setVisibility(View.VISIBLE);
         tvCopy.setVisibility(View.VISIBLE);

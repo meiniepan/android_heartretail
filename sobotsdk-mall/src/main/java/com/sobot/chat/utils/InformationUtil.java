@@ -16,10 +16,12 @@ import com.sobot.chat.api.model.ConsultingContent;
 import com.sobot.chat.api.model.Information;
 import com.sobot.chat.beans.KefuFlagBean;
 import com.sobot.chat.dengy.bean.SobotUserBean;
+import com.sobot.chat.dengy.utils.SpliceUtil;
 
 
 /**
  * Created by liupeng on 2017/10/11.
+ * new InformationUtil(getActivity()).startSobot(null, null);
  * <p>
  * 需要增加  queryOrderListForKF 查询订单接口
  * kefuFlag            配置接口
@@ -34,6 +36,17 @@ public class InformationUtil {
         SobotApi.setEvaluationCompletedExit(context, true);
         info = new Information();
         mContext = context;
+    }
+
+    /**
+     * @param context 测试商品发送客服
+     */
+    public static void testGoods(Context context){
+        String productSplice = SpliceUtil.getProductSplice( "4169",
+                "艾丽婷双头纸轴棉棒",
+                "http://resource.idengyun.com/resource/images/2017/11/e2dc0dbe-e96a-41fd-abe1-b62d0cdc1872.jpg",
+                4.8);
+        new InformationUtil(context).startSobot("商品", productSplice);
     }
 
     /**
@@ -108,9 +121,9 @@ public class InformationUtil {
      */
     private SobotUserBean getUser() {
         SobotUserBean sobotUserBean = new SobotUserBean();
-        sobotUserBean.isShowOrder = "0";
+        sobotUserBean.isShowOrder = "1";
         sobotUserBean.isShowAfterOrder = "0";
-        sobotUserBean.fromWhere = "mtmy";
+        sobotUserBean.fromWhere = "xls";
         return sobotUserBean;
     }
 

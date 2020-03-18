@@ -19,8 +19,11 @@ import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.google.gson.reflect.TypeToken;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.adapters.OderStatusListAdapter;
-import com.idengyun.heartretail.beans.OrderListBean;
-import com.idengyun.heartretail.beans.OrderStatusBean;
+import com.idengyun.commonmodule.beans.OrderListBean;
+import com.idengyun.commonmodule.beans.OrderStatusBean;
+import com.idengyun.heartretail.interfaces.ITimer;
+import com.idengyun.routermodule.ARouterInstance;
+import com.idengyun.routermodule.AppRouter;
 import com.idengyun.statusrecyclerviewlib.RefreshStatusRecyclerView;
 import com.idengyun.usermodule.HRUser;
 import com.idengyun.usermodule.utils.SecondsTimer;
@@ -37,10 +40,10 @@ import butterknife.BindView;
 
 /**
  * @author Burning
- * @description:订单状态详情 待付款, 代销中, 待发货, 待收货, 待评价
+ * @description:订单状态详情
  * @date :2020/3/4 0004 13:25
  */
-public class OrderStatusFragment extends BaseFragment {
+public class OrderStatusFragment extends BaseFragment implements ITimer {
     @BindView(R.id.rsr_order_status)
     RefreshStatusRecyclerView rsrOrderStatus;
     List<OrderStatusBean> mData = new ArrayList<>();
@@ -73,15 +76,19 @@ public class OrderStatusFragment extends BaseFragment {
 
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                mData.clear();
-                page = 1;
-                getData();
+                doRefresh();
             }
         });
     }
 
+    private void doRefresh() {
+        mData.clear();
+        page = 1;
+        getData();
+    }
+
     private void initUI() {
-         adapter = new OderStatusListAdapter(getActivity(),R.layout.item_order_status, mData);
+         adapter = new OderStatusListAdapter(this,R.layout.item_order_status, mData);
         rsrOrderStatus.setLayoutManager(new LinearLayoutManager(getActivity()));
         rsrOrderStatus.setAdapter(adapter);
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -93,27 +100,12 @@ public class OrderStatusFragment extends BaseFragment {
     }
 
     private void getData() {
-        Type type = new TypeToken<ApiBean<OrderListBean>>() {
-        }.getType();
-        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.queryOrderList())
-                .activity(getActivity())
-                .params("version", AppUtils.getAppVersionName())
-                .params("page", page)
-                .params("userId", HRUser.getId())
-                .params("flag", status)
-                .params("pageSize", 10)
-                .isShowDialog(true)
-                .type(type)
-                .build();
-
-        NetApi.getData(RequestMethod.GET, netOption, new JsonCallback<ApiBean<OrderListBean>>(netOption) {
+        ARouterInstance.getAppRouter().getOrderListAsyn(getMyActivity(), status, page, new AppRouter.OnRequestOrderListListener() {
             @Override
-            public void onSuccess(Response<ApiBean<OrderListBean>> response) {
-                rsrOrderStatus.finishRefreshLoadMore();
-                ApiBean<OrderListBean> body = response.body();
-                if (body.data.orders != null && body.data.orders.size() > 0) {
-                    mData.addAll(body.data.orders);
-                    setTimerList(body.data.orders);
+            public void onResultOrderList(OrderListBean resultOrderListBean) {
+                if (resultOrderListBean.orders != null && resultOrderListBean.orders.size() > 0) {
+                    mData.addAll(resultOrderListBean.orders);
+                    setTimerList(resultOrderListBean.orders);
                 } else {
                     if (page != 1) {
                         ToastUtils.showShort(R.string.load_more_end);
@@ -123,8 +115,7 @@ public class OrderStatusFragment extends BaseFragment {
             }
 
             @Override
-            public void onError(Response<ApiBean<OrderListBean>> response) {
-                super.onError(response);
+            public void onError() {
                 rsrOrderStatus.finishRefreshLoadMore();
             }
         });
@@ -154,4 +145,8 @@ public class OrderStatusFragment extends BaseFragment {
         super.onDestroyView();
     }
 
+    @Override
+    public void workOnFinish() {
+        doRefresh();
+    }
 }

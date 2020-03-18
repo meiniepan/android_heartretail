@@ -24,9 +24,12 @@ import java.util.List;
  * @CreateDate: 2020-03-09 09:19
  */
 public class PoiSearchUtil {
-    private static final String POI_SEARCH_TYPE = "汽车服务|汽车销售|汽车维修|摩托车服务|餐饮服务|购物服务|" +
+    /*private static final String POI_SEARCH_TYPE = "汽车服务|汽车销售|汽车维修|摩托车服务|餐饮服务|购物服务|" +
             "生活服务|体育休闲服务|医疗保健服务|住宿服务|风景名胜|商务住宅|政府机构及社会团体|科教文化服务|" +
-            "交通设施服务|金融保险服务|公司企业|道路附属设施|地名地址信息|公共设施";
+            "交通设施服务|金融保险服务|公司企业|道路附属设施|地名地址信息|公共设施";*/
+
+    // 商务写字楼|住宅小区|培训机构|学校|知名企业|购物中心|综合酒楼|公园|地铁站
+    private static final String POI_SEARCH_TYPE = "120201|120302|141400|141200|170100|060101|050101|110101|150500";
 
     /**
      * 搜索周边一公里范围的poi数据

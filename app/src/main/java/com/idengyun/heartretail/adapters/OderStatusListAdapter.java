@@ -1,10 +1,7 @@
 package com.idengyun.heartretail.adapters;
 
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -21,11 +18,14 @@ import com.dengyun.baselibrary.utils.ToastUtils;
 import com.dengyun.baselibrary.utils.phoneapp.AppUtils;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.heartretail.R;
+import com.idengyun.heartretail.activitys.CheckLogisticsActivity;
 import com.idengyun.heartretail.activitys.ChoosePayModeActivity;
 import com.idengyun.heartretail.activitys.EvaluateDetailActivity;
 import com.idengyun.heartretail.activitys.LogisticsDetailActivity;
+import com.idengyun.heartretail.activitys.OrderStatusFragment;
 import com.idengyun.heartretail.beans.ConfirmOrderRspBean;
-import com.idengyun.heartretail.beans.OrderStatusBean;
+import com.idengyun.commonmodule.beans.OrderStatusBean;
+import com.idengyun.heartretail.interfaces.ITimer;
 import com.idengyun.heartretail.widget.RecycleViewDivider;
 import com.idengyun.statusrecyclerviewlib.StatusRecyclerView;
 import com.idengyun.usermodule.HRUser;
@@ -37,16 +37,18 @@ import java.util.List;
 
 /**
  * @author Burning
- * @description:
+ * @description:(0:待付款、1:待发货:2:已发货、3:代销中、4:待提货、5:已完成、6:已关闭、7:已评价)
  * @date :2020/3/4 0004 16:43
  */
 public class OderStatusListAdapter extends BaseQuickAdapter<OrderStatusBean, BaseViewHolder> {
-    private final FragmentActivity mActivity;
+    private final OrderStatusFragment fragment;
     private HashMap<String, SecondsTimer> timerMap = new HashMap();
+    ITimer iTimer;
 
-    public OderStatusListAdapter(FragmentActivity activity, int layoutResId, @Nullable List<OrderStatusBean> data) {
+    public OderStatusListAdapter(OrderStatusFragment activity, int layoutResId, @Nullable List<OrderStatusBean> data) {
         super(layoutResId, data);
-        mActivity = activity;
+        fragment = activity;
+        iTimer = activity;
     }
 
     @Override
@@ -62,7 +64,7 @@ public class OderStatusListAdapter extends BaseQuickAdapter<OrderStatusBean, Bas
         TextView tv_total_pay = helper.getView(R.id.tv_total_pay);
         tv_total_pay.setText("¥" + item.orderAmount + "(含运费 ¥" + item.shippingPrice + ")");
         tv_order_type.setText(item.orderType == 1 ? "零售订单" : "批发订单");
-        if (item.orderStatus == 0) {
+        if (item.orderStatus == 5||item.orderStatus == 7) {
             ll_surplus_pay_time.setVisibility(View.GONE);
             ll_advanced_operate.setVisibility(View.VISIBLE);
             tv_order_status_status.setText("已完成");
@@ -71,7 +73,7 @@ public class OderStatusListAdapter extends BaseQuickAdapter<OrderStatusBean, Bas
             tv_operate1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    LogisticsDetailActivity.start(mContext, item.orderId);
+                    CheckLogisticsActivity.start(mContext, item.orderId);
                 }
             });
             tv_operate2.setOnClickListener(new View.OnClickListener() {
@@ -80,7 +82,7 @@ public class OderStatusListAdapter extends BaseQuickAdapter<OrderStatusBean, Bas
                     EvaluateDetailActivity.start(mContext, item.orderId);
                 }
             });
-        } else if (item.orderStatus == 1) {
+        } else if (item.orderStatus == 0) {
             ll_surplus_pay_time.setVisibility(View.VISIBLE);
             ll_advanced_operate.setVisibility(View.VISIBLE);
             tv_order_status_status.setText("待付款");
@@ -103,15 +105,15 @@ public class OderStatusListAdapter extends BaseQuickAdapter<OrderStatusBean, Bas
             TextView tv_order_status_time_s = helper.getView(R.id.tv_order_status_time_s);
             //todo 时间测试
             startTimer(item.orderId, item.orderStatus, tv_order_status_time_h, tv_order_status_time_m, tv_order_status_time_s);
-        } else if (item.orderStatus == 2) {
-            ll_surplus_pay_time.setVisibility(View.GONE);
-            ll_advanced_operate.setVisibility(View.GONE);
-            tv_order_status_status.setText("代销中");
         } else if (item.orderStatus == 3) {
             ll_surplus_pay_time.setVisibility(View.GONE);
             ll_advanced_operate.setVisibility(View.GONE);
+            tv_order_status_status.setText("代销中");
+        } else if (item.orderStatus == 1) {
+            ll_surplus_pay_time.setVisibility(View.GONE);
+            ll_advanced_operate.setVisibility(View.GONE);
             tv_order_status_status.setText("待发货");
-        } else if (item.orderStatus == 4) {
+        } else if (item.orderStatus == 2) {
             ll_surplus_pay_time.setVisibility(View.GONE);
             ll_advanced_operate.setVisibility(View.VISIBLE);
             tv_order_status_status.setText("待收货");
@@ -120,10 +122,16 @@ public class OderStatusListAdapter extends BaseQuickAdapter<OrderStatusBean, Bas
             tv_operate1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    LogisticsDetailActivity.start(mContext, item.orderId);
+                    CheckLogisticsActivity.start(mContext, item.orderId);
                 }
             });
-        } else if (item.orderStatus == 5) {
+            tv_operate2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ToastUtils.showShort("暂未开通");
+                }
+            });
+        } else if (item.orderStatus == 4) {
             ll_surplus_pay_time.setVisibility(View.GONE);
             ll_advanced_operate.setVisibility(View.GONE);
             tv_order_status_status.setText("待评价");
@@ -173,7 +181,7 @@ public class OderStatusListAdapter extends BaseQuickAdapter<OrderStatusBean, Bas
         map.put("userId", TextUtils.isEmpty(HRUser.getId()) ? "1" : HRUser.getId());
         map.put("userName", TextUtils.isEmpty(HRUser.getId()) ? "1" : HRUser.getNickname());
         NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.changeOrderState())
-                .activity(mActivity)
+                .fragment(fragment)
                 .params(map)
                 .isShowDialog(true)
                 .clazz(ApiBean.class)
@@ -184,7 +192,7 @@ public class OderStatusListAdapter extends BaseQuickAdapter<OrderStatusBean, Bas
             public void onSuccess(Response<ApiBean> response) {
                 ApiBean<ConfirmOrderRspBean> body = response.body();
                 ToastUtils.showShort("取消订单成功");
-                notifyDataSetChanged();
+                iTimer.workOnFinish();
             }
 
             @Override
