@@ -40,7 +40,7 @@ import butterknife.BindView;
 
 /**
  * @author Burning
- * @description:订单状态详情 待付款, 代销中, 待发货, 待收货, 待评价
+ * @description:订单状态详情
  * @date :2020/3/4 0004 13:25
  */
 public class OrderStatusFragment extends BaseFragment implements ITimer {
