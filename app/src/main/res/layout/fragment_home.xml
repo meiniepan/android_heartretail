@@ -131,7 +131,9 @@
                 android:drawableEnd="@drawable/ic_home_title_ext"
                 android:drawablePadding="10dp"
                 android:gravity="center_vertical"
-                android:text="大族广场T5"
+                android:maxLength="10"
+                android:ellipsize="end"
+                android:text="--"
                 android:textColor="#ffffffff"
                 android:textSize="18sp" />
 
