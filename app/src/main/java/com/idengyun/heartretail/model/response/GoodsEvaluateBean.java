@@ -20,17 +20,20 @@ public final class GoodsEvaluateBean {
         public int total;
 
         public static class Evaluation {
-            public int commentId;
+            public int evaluationId;
             public int goodsId;
             public int userId;
             public String userName;
             public int userLevel;
-            public String commentTime;
+            public String evaluationDate;
             public int commentStar;
-            public String contents;
+            public String evaluationContent;
             public String orderId;
             public int isShow;
-            public String userImgUrl;
+            public String userHeadImg;
+            public String customerReplyName;
+            public String customerReplyTime;
+            public String customerReplyContent;
 
         }
     }

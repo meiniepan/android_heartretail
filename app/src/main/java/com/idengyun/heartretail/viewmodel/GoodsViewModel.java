@@ -62,7 +62,7 @@ public final class GoodsViewModel extends ViewModel {
     }
 
     /* 商品详情 */
-    public void requestGoodsDetail(Fragment fragment, String goodsId, int goodsType) {
+    public void requestGoodsDetail(Fragment fragment, int goodsId, int goodsType) {
         NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.goodsDetail())
                 .fragment(fragment)
                 .isShowDialog(true)
@@ -80,7 +80,7 @@ public final class GoodsViewModel extends ViewModel {
     }
 
     /* 商品评价 */
-    public void requestGoodsEvaluate(Fragment fragment, String goodsId, int page, int pageSize) {
+    public void requestGoodsEvaluate(Fragment fragment, int goodsId, int page, int pageSize) {
         NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.evaluationList())
                 .fragment(fragment)
                 .isShowDialog(true)
