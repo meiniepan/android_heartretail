@@ -30,7 +30,7 @@ import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.adapters.OderStatusGoodsListAdapter;
 import com.idengyun.heartretail.beans.ConfirmOrderReqBean;
 import com.idengyun.heartretail.beans.ConfirmOrderRspBean;
-import com.idengyun.heartretail.beans.OrderStatusBean;
+import com.idengyun.commonmodule.beans.OrderStatusBean;
 import com.idengyun.heartretail.shop.ShopListActivity;
 import com.idengyun.heartretail.utils.DecimalFormatUtil;
 import com.idengyun.heartretail.widget.RecycleViewDivider;

@@ -1,4 +1,4 @@
-package com.idengyun.heartretail.beans;
+package com.idengyun.commonmodule.beans;
 
 import java.util.List;
 

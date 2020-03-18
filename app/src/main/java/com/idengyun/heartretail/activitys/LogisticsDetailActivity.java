@@ -19,7 +19,6 @@ import com.idengyun.heartretail.adapters.LogisticalmsgAdapter;
 import com.idengyun.heartretail.beans.LogisticalBean;
 import com.idengyun.heartretail.beans.LogisticalMessageBean;
 import com.idengyun.heartretail.beans.LogisticalStatusBean;
-import com.idengyun.heartretail.beans.OrderStatusBean;
 
 import java.util.ArrayList;
 import java.util.List;

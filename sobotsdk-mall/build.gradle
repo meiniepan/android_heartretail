@@ -30,6 +30,8 @@ dependencies {
     compileOnly rootProject.ext.dependencies.okgo
     implementation(project(':baselibrary'))
     implementation(project(':usermodule'))
+    implementation(project(':commonmodule'))
+    implementation(project(':routermodule'))
     api("com.malinskiy:superrecyclerview:1.1.4") { exclude group: 'com.android.support' }
     api('com.eowise:recyclerview-stickyheaders:0.5.0@aar'){ exclude group: 'com.android.support' }
 }

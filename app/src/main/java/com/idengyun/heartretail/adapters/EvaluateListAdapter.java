@@ -4,7 +4,7 @@ import android.support.annotation.Nullable;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.idengyun.heartretail.beans.OrderStatusBean;
+import com.idengyun.commonmodule.beans.OrderStatusBean;
 
 import java.util.List;
 

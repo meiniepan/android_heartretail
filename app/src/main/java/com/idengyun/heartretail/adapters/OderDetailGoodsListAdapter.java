@@ -7,7 +7,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.dengyun.baselibrary.net.ImageApi;
 import com.idengyun.heartretail.R;
-import com.idengyun.heartretail.beans.OrderStatusBean;
+import com.idengyun.commonmodule.beans.OrderStatusBean;
 
 import java.util.List;
 

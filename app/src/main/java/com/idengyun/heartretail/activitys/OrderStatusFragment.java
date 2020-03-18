@@ -19,9 +19,11 @@ import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.google.gson.reflect.TypeToken;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.adapters.OderStatusListAdapter;
-import com.idengyun.heartretail.beans.OrderListBean;
-import com.idengyun.heartretail.beans.OrderStatusBean;
+import com.idengyun.commonmodule.beans.OrderListBean;
+import com.idengyun.commonmodule.beans.OrderStatusBean;
 import com.idengyun.heartretail.interfaces.ITimer;
+import com.idengyun.routermodule.ARouterInstance;
+import com.idengyun.routermodule.AppRouter;
 import com.idengyun.statusrecyclerviewlib.RefreshStatusRecyclerView;
 import com.idengyun.usermodule.HRUser;
 import com.idengyun.usermodule.utils.SecondsTimer;
@@ -98,27 +100,12 @@ public class OrderStatusFragment extends BaseFragment implements ITimer {
     }
 
     private void getData() {
-        Type type = new TypeToken<ApiBean<OrderListBean>>() {
-        }.getType();
-        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.queryOrderList())
-                .activity(getActivity())
-                .params("version", AppUtils.getAppVersionName())
-                .params("page", page)
-                .params("userId", HRUser.getId())
-                .params("flag", status)
-                .params("pageSize", 10)
-                .isShowDialog(true)
-                .type(type)
-                .build();
-
-        NetApi.getData(RequestMethod.GET, netOption, new JsonCallback<ApiBean<OrderListBean>>(netOption) {
+        ARouterInstance.getAppRouter().getOrderListAsyn(getMyActivity(), status, page, new AppRouter.OnRequestOrderListListener() {
             @Override
-            public void onSuccess(Response<ApiBean<OrderListBean>> response) {
-                rsrOrderStatus.finishRefreshLoadMore();
-                ApiBean<OrderListBean> body = response.body();
-                if (body.data.orders != null && body.data.orders.size() > 0) {
-                    mData.addAll(body.data.orders);
-                    setTimerList(body.data.orders);
+            public void onResultOrderList(OrderListBean resultOrderListBean) {
+                if (resultOrderListBean.orders != null && resultOrderListBean.orders.size() > 0) {
+                    mData.addAll(resultOrderListBean.orders);
+                    setTimerList(resultOrderListBean.orders);
                 } else {
                     if (page != 1) {
                         ToastUtils.showShort(R.string.load_more_end);
@@ -128,8 +115,7 @@ public class OrderStatusFragment extends BaseFragment implements ITimer {
             }
 
             @Override
-            public void onError(Response<ApiBean<OrderListBean>> response) {
-                super.onError(response);
+            public void onError() {
                 rsrOrderStatus.finishRefreshLoadMore();
             }
         });

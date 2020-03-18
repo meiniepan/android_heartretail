@@ -25,7 +25,7 @@ import com.idengyun.heartretail.Constants;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.adapters.OderDetailGoodsListAdapter;
 import com.idengyun.heartretail.beans.ConfirmOrderRspBean;
-import com.idengyun.heartretail.beans.OrderStatusBean;
+import com.idengyun.commonmodule.beans.OrderStatusBean;
 import com.idengyun.statusrecyclerviewlib.RecycleViewDivider;
 import com.idengyun.statusrecyclerviewlib.StatusRecyclerView;
 import com.idengyun.usermodule.HRUser;

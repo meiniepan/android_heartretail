@@ -11,8 +11,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.dengyun.baselibrary.base.activity.BaseActivity;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.adapters.AwardIncomeListAdapter;
-import com.idengyun.heartretail.adapters.EvaluateListAdapter;
-import com.idengyun.heartretail.beans.OrderStatusBean;
+import com.idengyun.commonmodule.beans.OrderStatusBean;
 import com.idengyun.statusrecyclerviewlib.StatusRecyclerView;
 
 import java.util.ArrayList;

@@ -11,15 +11,13 @@ import com.dengyun.baselibrary.base.activity.BaseActivity;
 import com.idengyun.heartretail.Constants;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.adapters.EvaluateDetailListAdapter;
-import com.idengyun.heartretail.adapters.EvaluateListAdapter;
-import com.idengyun.heartretail.beans.OrderStatusBean;
+import com.idengyun.commonmodule.beans.OrderStatusBean;
 import com.idengyun.statusrecyclerviewlib.StatusRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * @author Burning

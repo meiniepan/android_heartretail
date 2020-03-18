@@ -23,7 +23,7 @@ import com.idengyun.heartretail.activitys.EvaluateDetailActivity;
 import com.idengyun.heartretail.activitys.LogisticsDetailActivity;
 import com.idengyun.heartretail.activitys.OrderStatusFragment;
 import com.idengyun.heartretail.beans.ConfirmOrderRspBean;
-import com.idengyun.heartretail.beans.OrderStatusBean;
+import com.idengyun.commonmodule.beans.OrderStatusBean;
 import com.idengyun.heartretail.interfaces.ITimer;
 import com.idengyun.heartretail.widget.RecycleViewDivider;
 import com.idengyun.statusrecyclerviewlib.StatusRecyclerView;
