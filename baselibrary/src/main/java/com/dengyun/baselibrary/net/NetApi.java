@@ -5,12 +5,12 @@ import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.baselibrary.net.deal.DealParamsUtil;
 import com.dengyun.baselibrary.net.exception.NoNetException;
-import com.dengyun.baselibrary.net.rx.RxUtils;
+import com.dengyun.baselibrary.net.util.JsonConvert;
 import com.dengyun.baselibrary.net.util.NetworkUtils;
-import com.dengyun.baselibrary.utils.AppLogUtil;
 import com.dengyun.baselibrary.utils.ObjectUtils;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.model.HttpParams;
+import com.lzy.okrx2.adapter.ObservableBody;
 import com.orhanobut.logger.Logger;
 
 import java.io.File;
@@ -82,16 +82,18 @@ public class NetApi {
             jsonCallback.onNoNet();
             return;
         }
-        String jsonParams = DealParamsUtil.getDealParams(netOption);
-        pringLog(netOption.getUrl(),jsonParams);
 
         if(requestMethod == RequestMethod.GET){
             DealParamsUtil.dealUrlForGet(netOption);
+            pringLog(netOption.getUrl());
+
             OkGo.<T>get(netOption.getUrl())
                     .tag(getRequestTag(netOption))
                     .headers(netOption.getHeaders())
                     .execute(jsonCallback);
         }else if(requestMethod == RequestMethod.POST_JSON){
+            String jsonParams = DealParamsUtil.getDealParams(netOption);
+            pringLog(netOption.getUrl(),jsonParams);
             OkGo.<T>post(netOption.getUrl())
                     .tag(getRequestTag(netOption))
                     .headers(netOption.getHeaders())
@@ -99,6 +101,8 @@ public class NetApi {
                     .execute(jsonCallback);
 
         }else if(requestMethod == RequestMethod.POST_FORM){
+            String jsonParams = DealParamsUtil.getDealParams(netOption);
+            pringLog(netOption.getUrl(),jsonParams);
             HttpParams httpParams = new HttpParams();
             httpParams.put(netOption.getParams());
             OkGo.<T>post(netOption.getUrl())
@@ -116,12 +120,9 @@ public class NetApi {
      * @param <T>
      */
     public static <T> Response getDataSync(@RequestMethod int requestMethod, NetOption netOption) {
-
-        String jsonParams = DealParamsUtil.getDealParams(netOption);
-        pringLog(netOption.getUrl(),jsonParams);
-
         if(requestMethod == RequestMethod.GET){
             DealParamsUtil.dealUrlForGet(netOption);
+            pringLog(netOption.getUrl());
             try {
                 return OkGo.<T>get(netOption.getUrl())
                         .tag(getRequestTag(netOption))
@@ -131,6 +132,8 @@ public class NetApi {
                 e.printStackTrace();
             }
         }else if(requestMethod == RequestMethod.POST_JSON){
+            String jsonParams = DealParamsUtil.getDealParams(netOption);
+            pringLog(netOption.getUrl(),jsonParams);
             try {
                 return OkGo.<T>post(netOption.getUrl())
                         .tag(getRequestTag(netOption))
@@ -142,6 +145,9 @@ public class NetApi {
             }
 
         }else if(requestMethod == RequestMethod.POST_FORM){
+            String jsonParams = DealParamsUtil.getDealParams(netOption);
+            pringLog(netOption.getUrl(),jsonParams);
+
             HttpParams httpParams = new HttpParams();
             httpParams.put(netOption.getParams());
             try {
@@ -205,9 +211,37 @@ public class NetApi {
         if (!NetworkUtils.isConnected()) {
             return Observable.error(new NoNetException());
         }
-        String jsonParams = DealParamsUtil.getDealParams(netOption);
-        pringLog(netOption.getUrl(),jsonParams);
-        return RxUtils.requestPost(requestMethod,netOption,jsonParams);
+        if(requestMethod == RequestMethod.GET){
+            DealParamsUtil.dealUrlForGet(netOption);
+            pringLog(netOption.getUrl());
+            return OkGo.<T>get(netOption.getUrl())
+                    .tag(NetApi.getRequestTag(netOption))
+                    .headers(netOption.getHeaders())
+                    .converter(new JsonConvert<T>(netOption))
+                    .adapt(new ObservableBody<T>());
+        }else if(requestMethod == RequestMethod.POST_JSON){
+            String jsonParams = DealParamsUtil.getDealParams(netOption);
+            pringLog(netOption.getUrl(),jsonParams);
+            return OkGo.<T>post(netOption.getUrl())
+                    .tag(NetApi.getRequestTag(netOption))
+                    .headers(netOption.getHeaders())
+                    .upJson(jsonParams)
+                    .converter(new JsonConvert<T>(netOption))
+                    .adapt(new ObservableBody<T>());
+        }else if(requestMethod == RequestMethod.POST_FORM){
+            String jsonParams = DealParamsUtil.getDealParams(netOption);
+            pringLog(netOption.getUrl(),jsonParams);
+            HttpParams httpParams = new HttpParams();
+            httpParams.put(netOption.getParams());
+            return OkGo.<T>post(netOption.getUrl())
+                    .tag(NetApi.getRequestTag(netOption))
+                    .headers(netOption.getHeaders())
+                    .params(httpParams)
+                    .converter(new JsonConvert<T>(netOption))
+                    .adapt(new ObservableBody<T>());
+
+        }
+        return null;
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -258,5 +292,10 @@ public class NetApi {
         if(!AppConfig.isDebug)return;
         Logger.t("real-request").d(url);
         Logger.t("real-request").d(jsonParams);
+    }
+
+    private static void pringLog(String url){
+        if(!AppConfig.isDebug)return;
+        Logger.t("real-request").d(url);
     }
 }

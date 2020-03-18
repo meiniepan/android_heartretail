@@ -98,7 +98,6 @@ public abstract class RxMergeObserver<T> implements Observer<T> {
         if (e instanceof EOFException || e instanceof ConnectException || e instanceof SocketException || e instanceof BindException || e instanceof SocketTimeoutException || e instanceof UnknownHostException) {
             Toast.makeText(activity, "网络异常，请稍后重试！", Toast.LENGTH_SHORT).show();
         } /*else if (e instanceof ApiException) {
-            todo
             onError(mWhichRequest, e);
         }*/ else {
             Toast.makeText(activity, "未知错误！", Toast.LENGTH_SHORT).show();
