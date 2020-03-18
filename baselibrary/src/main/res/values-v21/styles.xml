@@ -10,6 +10,8 @@
         <item name="android:windowBackground">@color/white</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <!--使用Activity转场动画-->
+        <item name="android:windowAnimationStyle">@style/base_activity_animation</item>
         <item name="android:windowContentOverlay" tools:ignore="DuplicateDefinition">@null</item>
         <item name="android:navigationBarColor">@color/baselib_black</item>
     </style>
