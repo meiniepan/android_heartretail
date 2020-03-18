@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+
+    android:layout_height="64dp">
+
+    <!-- 标题 -->
+    <FrameLayout
+        android:id="@+id/fl_second_title2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="24dp"
+        >
+
+        <ImageView
+            android:id="@+id/iv_order_detail_back2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:src="@drawable/ic_goods_detail_back_arrow_alpha" />
+    </FrameLayout>
+    <com.dengyun.baselibrary.widgets.toolbar.BaseToolBar
+        android:id="@+id/toolbar_title_order_detail"
+        android:visibility="gone"
+        android:paddingTop="24dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:toolbar_title="订单详情" />
+
+</FrameLayout>
+
+
