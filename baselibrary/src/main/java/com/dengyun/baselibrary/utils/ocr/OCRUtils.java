@@ -21,7 +21,7 @@ import java.io.IOException;
  */
 public class OCRUtils {
 
-    private static String appcode = "";
+    private static String appcode = "c88ac3ef5117409e860c7958e72f376c";
 
     /**
      * 识别身份证(正面)
@@ -83,7 +83,7 @@ public class OCRUtils {
      * @param localImagePath 本地图片路径
      */
     public static void recoBankCard(String localImagePath,OnBankCardResult onBankCardResult){
-        String url = "http://yhk.market.alicloudapi.com/rest/160601/ocr/ocr_bank_card.json";
+        String url = "http://bankocrb.shumaidata.com/getbankocrb";
         NetOption netOption = NetOption.newBuilder(url)
                 .headers("Authorization", "APPCODE " + appcode) //你自己的AppCode
                 .params("image", conventImageBase64(localImagePath)) // 图片二进制数据的base64编码/图片url
@@ -93,6 +93,13 @@ public class OCRUtils {
         NetApi.<BankCardBean>getData(netOption, new JsonCallback<BankCardBean>(netOption) {
             @Override
             public void onSuccess(Response<BankCardBean> response) {
+                /*200	成功	成功
+                400	参数错误	参数错误
+                404	请求资源不存在	请求资源不存在
+                500	系统内部错误，请联系服务商	系统内部错误，请联系服务商
+                501	第三方服务异常	第三方服务异常
+                604	接口停用	接口停用
+                1001	服务异常，会返回具体的错误原因	服务异常，会返回具体的错误原因*/
                 BankCardBean bankCardBean = response.body();
                 if (bankCardBean.isSuccess()){
                     onBankCardResult.onResult(bankCardBean);
