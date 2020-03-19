@@ -86,7 +86,7 @@ import com.idengyun.heartretail.bases.PagerParentFragment;
 //    @Override
 //    public TabLayout.Tab getTab(int position) {
 //        TabLayout.Tab tab = tab_layout.newTab();
-//        tab.setCustomView(R.layout.fragment_message_tab);
+//        tab.setCustomView(R.layout.notice_tab);
 //        switch (position) {
 //            case 1:
 //                updateCustomView(tab.getCustomView(), "邀请返利");

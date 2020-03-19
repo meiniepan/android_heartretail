@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false"
+    android:clipToPadding="false">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#c51333" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="22dp"
+        android:layout_marginEnd="22dp"
+        android:background="#f83e3e" />
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/nsv_home_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/ic_home_bg" />
+    </android.support.v4.widget.NestedScrollView>
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/nested_scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="365dp"
+                android:layout_marginEnd="22dp"
+                android:background="#f83e3e" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="22dp"
+                android:layout_marginEnd="22dp"
+                android:orientation="vertical">
+
+                <include layout="@layout/fragment_home_header" />
+
+                <include layout="@layout/fragment_home_goods_nav_bar" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:orientation="vertical"
+                    android:overScrollMode="never"
+                    android:paddingStart="22dp"
+                    android:paddingEnd="22dp"
+                    android:scrollbars="none"
+                    android:visibility="visible"
+                    app:layoutManager="android.support.v7.widget.GridLayoutManager"
+                    app:spanCount="2"
+                    tools:itemCount="2"
+                    tools:listitem="@layout/fragment_home_goods_item" />
+            </LinearLayout>
+        </FrameLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="68dp"
+        android:background="@android:color/transparent"
+        android:paddingTop="24dp"
+        android:visibility="visible">
+
+        <!--        <com.dengyun.baselibrary.widgets.toolbar.BaseToolBar-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="@dimen/basetool_height"-->
+        <!--            android:visibility="gone"-->
+        <!--            app:toolbar_title="设置" />-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp">
+
+            <TextView
+                android:id="@+id/tv_home_location"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:drawableStart="@drawable/ic_home_title_location"
+                android:drawableEnd="@drawable/ic_home_title_ext"
+                android:drawablePadding="10dp"
+                android:gravity="center_vertical"
+                android:maxLength="10"
+                android:ellipsize="end"
+                android:text="--"
+                android:textColor="#ffffffff"
+                android:textSize="18sp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/tv_home_share"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:drawableStart="@drawable/ic_home_title_share"
+                android:drawablePadding="4dp"
+                android:gravity="center_vertical"
+                android:text="分享"
+                android:textColor="#ffffffff"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_home_notice"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="16dp"
+                android:drawableStart="@drawable/ic_home_title_notice"
+                android:drawablePadding="4dp"
+                android:gravity="center_vertical"
+                android:text="消息"
+                android:textColor="#ffffffff"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </FrameLayout>
+</FrameLayout>
+
+

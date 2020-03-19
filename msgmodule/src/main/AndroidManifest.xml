@@ -1,15 +1,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.idengyun.msgmodule" >
+    package="com.idengyun.msgmodule">
+
     <application>
         <service
             android:name="com.idengyun.msgmodule.services.CustomPushService"
             android:exported="true"
             android:label="PushService"
-            android:process=":pushservice">
-        </service>
+            android:process=":pushservice" />
         <service
             android:name=".services.CustomMsgReciveService"
-            android:permission="android.permission.BIND_JOB_SERVICE"/>
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <activity
+            android:name=".NoticeActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 

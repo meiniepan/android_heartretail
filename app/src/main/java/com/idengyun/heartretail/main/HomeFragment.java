@@ -1,13 +1,13 @@
 package com.idengyun.heartretail.main;
 
 import android.arch.lifecycle.Observer;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.NestedScrollView;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -32,20 +32,18 @@ import com.idengyun.heartretail.goods.GoodsSPUFragment;
 import com.idengyun.heartretail.goods.GoodsServiceFragment;
 import com.idengyun.heartretail.goods.GoodsSpecFragment;
 import com.idengyun.heartretail.model.response.GoodsListBean;
-import com.idengyun.heartretail.notice.NoticeFragment;
 import com.idengyun.heartretail.viewmodel.GoodsViewModel;
 import com.idengyun.maplibrary.MyMapActivity;
 import com.idengyun.maplibrary.beans.EventChoosePoiItem;
 import com.idengyun.maplibrary.utils.AmapLocationWapper;
 import com.idengyun.maplibrary.utils.PoiSearchUtil;
+import com.idengyun.msgmodule.NoticeActivity;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.function.Predicate;
 
 /**
  * 首页
@@ -121,7 +119,8 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
         if (tv_home_share == v) {
             ShareQRCodeActivity.start(getContext());
         } else if (tv_home_notice == v) {
-            HRActivity.start(getContext(), NoticeFragment.class);
+            NoticeActivity.start(getContext());
+            //HRActivity.start(getContext(), NoticeFragment.class);
         } else if (tvHomeLocation == v) {
             if (TextUtils.isEmpty(cityName)) {
                 ToastUtils.showShort("还没有定位成功");
@@ -200,11 +199,9 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
         nested_scroll_view.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-//                recycler_view.offsetTopAndBottom(-scrollY);
                 System.out.println(scrollY);
-//                recycler_view.setTranslationY(-scrollY);
                 nsv_home_bg.setTranslationY(-scrollY);
-//                nsv_home_bg.scrollTo(scrollY);
+                nsv_home_bg.setBackgroundColor(Color.MAGENTA);
             }
         });
         recycler_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -217,13 +214,11 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-//                nested_scroll_view.scrollBy(0, dy);
-
                 System.out.println("dy=" + dy);
-                // System.out.println(nested_scroll_view.getScrollY());
-
-                //iv_home_bg.scrollBy(0, dy);
-                nested_scroll_view.setTranslationY(nested_scroll_view.getTranslationY() - dy);
+                if (dy > 0) {
+                    //nested_scroll_view.setTranslationY(nested_scroll_view.getTranslationY() - dy);
+                    //nested_scroll_view.scrollBy(0, dy);
+                }
             }
         });
 
@@ -242,6 +237,16 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
         homeAdapter = new HomeAdapter();
 //        for (int i = 0; i < 20; i++) goodsAdapter.goodsList.add("");
         recycler_view.setAdapter(homeAdapter);
+
+//        DisplayMetrics outMetrics = new DisplayMetrics();
+//        getActivity().getWindow().getWindowManager().getDefaultDisplay().getMetrics(outMetrics);
+//        int widthPixels = outMetrics.widthPixels;
+//        int heightPixels = outMetrics.heightPixels;
+//        ViewGroup.LayoutParams params = recycler_view.getLayoutParams();
+//        params.height = heightPixels;
+//        recycler_view.setLayoutParams(params);
+//        recycler_view.setBackgroundColor(Color.MAGENTA);
+        recycler_view.setNestedScrollingEnabled(false);
     }
 
 

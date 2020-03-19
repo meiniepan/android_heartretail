@@ -31,6 +31,9 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':baselibrary')
+    implementation project(':usermodule')
+    implementation project(':splashmodule')
     //个推
     implementation 'com.getui:sdk:2.13.3.0'
+    implementation rootProject.ext.dependencies.lifecycle
 }

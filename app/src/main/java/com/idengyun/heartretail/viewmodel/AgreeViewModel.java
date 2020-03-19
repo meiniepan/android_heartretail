@@ -41,7 +41,7 @@ public final class AgreeViewModel extends ViewModel {
                 .fragment(fragment)
                 .isShowDialog(true)
                 .clazz(ProtocolsBean.class)
-                .params("protocolIds", protocols)
+                .params("protocolKeys", protocols)
                 .build();
         NetApi.getData(netOption, new JsonCallback<ProtocolsBean>(netOption) {
             @Override

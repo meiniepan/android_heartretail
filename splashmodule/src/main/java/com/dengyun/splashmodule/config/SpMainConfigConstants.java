@@ -119,21 +119,18 @@ public class SpMainConfigConstants {
     /* ================================== 推送消息 ================================== */
 
     /* 查询用户未读推送数量 */
-    public static String todo12() {
-        // TODO: 2020/3/9
-        return getMainConfigUrl("todo12");
+    public static String messageCounts() {
+        return getMainConfigUrl("messageCounts");
     }
 
     /* 更新用户阅读状态 */
-    public static String todo13() {
-        // TODO: 2020/3/9
-        return getMainConfigUrl("todo13");
+    public static String messageStatusUpdate() {
+        return getMainConfigUrl("messageStatusUpdate");
     }
 
     /* 推送消息列表查询 */
-    public static String todo14() {
-        // TODO: 2020/3/9
-        return getMainConfigUrl("todo14");
+    public static String messageList() {
+        return getMainConfigUrl("messageList");
     }
 
     /* ================================== 常见问题 ================================== */

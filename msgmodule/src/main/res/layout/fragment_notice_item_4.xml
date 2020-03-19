@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingStart="15dp"
+    android:paddingEnd="15dp">
+
+    <TextView
+        android:id="@+id/tv_notice_4_push_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="12dp"
+        android:textColor="#ff999999"
+        android:textSize="14sp"
+        tools:text="昨天 09:00" />
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="#fff"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="2dp">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="15dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="15dp"
+            android:paddingBottom="16dp">
+
+            <TextView
+                android:id="@+id/tv_notice_4_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#ff333333"
+                android:textSize="16sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="优惠券过期提醒" />
+
+            <ImageView
+                android:id="@+id/iv_notice_4_url"
+                android:layout_width="66dp"
+                android:layout_height="44dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/ic_notice_4"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_notice_4_title" />
+
+            <TextView
+                android:id="@+id/tv_notice_4_invalid"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_notice_view_type_c_bg"
+                android:gravity="center"
+                android:textColor="#ffffffff"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_notice_4_url"
+                app:layout_constraintLeft_toLeftOf="@id/iv_notice_4_url"
+                app:layout_constraintRight_toRightOf="@+id/iv_notice_4_url"
+                tools:text="即将过期" />
+
+            <TextView
+                android:id="@+id/tv_notice_4_detail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:textColor="#ff666666"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/iv_notice_4_url"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_notice_4_title"
+                app:layout_constraintVertical_bias="0"
+                tools:text="您有5张总价值99元的超值优惠券，将在今日过期，好券不等人，赶紧去用掉吧~" />
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>
