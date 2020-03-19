@@ -72,10 +72,13 @@ public class DealParamsUtil {
     public static void dealUrlForGet(NetOption netOption) {
         if (netOption.getProjectType() == ProjectType.IDENGYUN_HR) {
             Map queryMap = netOption.getParams();
-            if (queryMap.isEmpty()) return;
+            //添加公共参数
+            setHRPublicParam(queryMap);
+            //if (queryMap.isEmpty()) return;
             if (netOption.getUrl().contains("?")) return;
             if (queryMap.get("sign") != null) queryMap.remove("sign");
 
+            //整理参数拼接
             StringBuilder builder = new StringBuilder().append("?");
             /* 真实请求参数 */
             Object[] array = queryMap.keySet().toArray();

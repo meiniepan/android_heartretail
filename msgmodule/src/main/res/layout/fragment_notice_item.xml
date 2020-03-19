@@ -166,7 +166,7 @@
                 android:id="@+id/tv_notice_view_type_c_2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/shape_notice_view_type_c_bg"
+                android:background="@drawable/shape_notice_t4_bg"
                 android:gravity="center"
                 android:textColor="#ffffffff"
                 android:textSize="12sp"

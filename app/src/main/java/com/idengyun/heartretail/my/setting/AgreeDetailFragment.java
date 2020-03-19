@@ -38,11 +38,11 @@ public final class AgreeDetailFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Intent intent = getActivity().getIntent();
-        int protocolId = intent.getIntExtra("protocol_id", 0);
+        int protocolKey = intent.getIntExtra("protocol_key", 0);
         String protocolName = intent.getStringExtra("protocol_name");
         String protocolContent = intent.getStringExtra("protocol_content");
         ProtocolsBean.Data data = new ProtocolsBean.Data();
-        data.protocolId = protocolId;
+        data.protocolKey = protocolKey;
         data.protocolName = protocolName;
         data.protocolContent = protocolContent;
         updateUI(data);

@@ -116,7 +116,7 @@ public final class AgreeListFragment extends BaseFragment {
             public void onClick(View v) {
                 Bundle extras = new Bundle();
                 ProtocolsBean.Data data = agreeList.get(getAdapterPosition());
-                extras.putInt("protocol_id", data.protocolId);
+                extras.putInt("protocol_key", data.protocolKey);
                 extras.putString("protocol_name", data.protocolName);
                 extras.putString("protocol_content", data.protocolContent);
                 HRActivity.start(v.getContext(), extras, AgreeDetailFragment.class);

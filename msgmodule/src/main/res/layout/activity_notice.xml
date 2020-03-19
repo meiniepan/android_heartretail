@@ -6,17 +6,18 @@
     android:background="#F8F8F8"
     android:orientation="vertical">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="68dp"
-        android:background="@android:color/white"
-        android:paddingTop="24dp">
+<!--    <FrameLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="68dp"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:background="@android:color/white"-->
+<!--        android:paddingTop="24dp">-->
 
         <com.dengyun.baselibrary.widgets.toolbar.BaseToolBar
             android:layout_width="match_parent"
             android:layout_height="@dimen/basetool_height"
             app:toolbar_title="消息中心" />
-    </FrameLayout>
+<!--    </FrameLayout>-->
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tab_layout"

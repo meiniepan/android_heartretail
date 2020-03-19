@@ -33,6 +33,13 @@ public final class NoticeFragment extends BaseFragment {
     private NoticeViewModel noticeViewModel;
     private NoticeAdapter noticeAdapter;
 
+    /* 分页 */
+    private int totalPageSize = -1;
+    private int totalPage = -1;
+    private int pageSize = 10;
+    private int page = 0;
+    private boolean loadMore = true;
+
     @Override
     public int getLayoutId() {
         return R.layout.fragment_notice;
@@ -60,11 +67,19 @@ public final class NoticeFragment extends BaseFragment {
     private void updateUI(@Nullable NoticeBean noticeBean) {
         if (noticeBean == null) return;
         NoticeBean.Data data = noticeBean.data;
+
+        totalPageSize = data.total;
+        totalPage = (int) Math.ceil(1D * totalPageSize / pageSize);
+        loadMore = ++page < totalPage;
+
+        noticeAdapter.noticeList.addAll(data.contentList);
+        noticeAdapter.notifyDataSetChanged();
     }
 
     private void requestAPI() {
         if (noticeViewModel != null && notifyGroup != -1) {
-            noticeViewModel.requestNoticeList(this, 1, 10, notifyGroup);
+            //if (!loadMore) return;
+            noticeViewModel.requestNoticeList(this, page + 1, pageSize, notifyGroup);
         }
     }
 
@@ -72,6 +87,13 @@ public final class NoticeFragment extends BaseFragment {
         notifyGroup = getNotifyGroup();
         findViewById();
         initViewModel();
+
+        recycler_view.addOnScrollListener(new More() {
+            @Override
+            public void onLoadMore(RecyclerView recyclerView) {
+                requestAPI();
+            }
+        });
         noticeAdapter = new NoticeAdapter();
         recycler_view.setAdapter(noticeAdapter);
     }
@@ -162,13 +184,6 @@ public final class NoticeFragment extends BaseFragment {
         @Override
         public int getItemViewType(int position) {
             return noticeList.get(position).contentType;
-        }
-
-        private static class NoticeHolder extends RecyclerView.ViewHolder {
-
-            public NoticeHolder(@NonNull View itemView) {
-                super(itemView);
-            }
         }
     }
 
