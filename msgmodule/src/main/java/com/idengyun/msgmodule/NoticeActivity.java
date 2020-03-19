@@ -1,15 +1,23 @@
 package com.idengyun.msgmodule;
 
+import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.MainThread;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.activity.BaseActivity;
+import com.idengyun.msgmodule.beans.NoticeCountBean;
+import com.idengyun.msgmodule.viewmodel.NoticeViewModel;
+
+import java.util.List;
 
 /**
  * 消息模块-主页
@@ -17,6 +25,9 @@ import com.dengyun.baselibrary.base.activity.BaseActivity;
  * @author aLang
  */
 public final class NoticeActivity extends BaseActivity implements TabLayout.OnTabSelectedListener {
+
+    private TabLayout tab_layout;
+    private SparseArray<TabHolder> noticeCountArray = new SparseArray<>();
 
     public static void start(Context context) {
         Intent starter = new Intent(context, NoticeActivity.class);
@@ -45,40 +56,46 @@ public final class NoticeActivity extends BaseActivity implements TabLayout.OnTa
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        NoticeViewModel noticeViewModel = NoticeViewModel.getInstance(this);
+        noticeViewModel.getNoticeCount().observe(this, new Observer<NoticeCountBean>() {
+            @Override
+            public void onChanged(@Nullable NoticeCountBean noticeCountBean) {
+                updateUI(noticeCountBean);
+            }
+        });
+        noticeViewModel.requestNoticeCount(this);
+    }
+
+    @Override
     public void onTabSelected(TabLayout.Tab tab) {
         int position = tab.getPosition();
-        if (position == 0) {
-            showFragment0();
-        } else if (position == 1) {
-            showFragment1();
-        } else if (position == 2) {
-            showFragment2();
-        }
-        View view = tab.getCustomView();
-        assert view != null;
-        TextView tv_msg_tab_text = view.findViewById(R.id.tv_msg_tab_text);
-        View iv_msg_tab_indicator_line = view.findViewById(R.id.iv_msg_tab_indicator_line);
-        View iv_msg_tab_indicator_dot = view.findViewById(R.id.iv_msg_tab_indicator_dot);
-        tv_msg_tab_text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18f);
-        iv_msg_tab_indicator_line.setVisibility(View.VISIBLE);
-        iv_msg_tab_indicator_dot.setVisibility(View.VISIBLE);
+        TabHolder holder = noticeCountArray.get(position);
+        holder.onTabSelected();
+        showFragment(position);
     }
 
     @Override
     public void onTabUnselected(TabLayout.Tab tab) {
-        View view = tab.getCustomView();
-        assert view != null;
-        TextView tv_msg_tab_text = view.findViewById(R.id.tv_msg_tab_text);
-        View iv_msg_tab_indicator_line = view.findViewById(R.id.iv_msg_tab_indicator_line);
-        View iv_msg_tab_indicator_dot = view.findViewById(R.id.iv_msg_tab_indicator_dot);
-        tv_msg_tab_text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16f);
-        iv_msg_tab_indicator_line.setVisibility(View.INVISIBLE);
-        iv_msg_tab_indicator_dot.setVisibility(View.INVISIBLE);
+        int position = tab.getPosition();
+        TabHolder holder = noticeCountArray.get(position);
+        holder.onTabUnselected();
     }
 
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
 
+    }
+
+    @MainThread
+    private void updateUI(@Nullable NoticeCountBean noticeCountBean) {
+        if (noticeCountBean == null) return;
+        List<NoticeCountBean.Data> dataList = noticeCountBean.data;
+        for (NoticeCountBean.Data data : dataList) {
+            TabHolder holder = noticeCountArray.get(data.notifyGroup);
+            if (holder != null) holder.updateCount(data.counts);
+        }
     }
 
     private void init() {
@@ -98,27 +115,29 @@ public final class NoticeActivity extends BaseActivity implements TabLayout.OnTa
                 .hide(fragment2)
                 .commit();
 
-        TabLayout tab_layout = findViewById(R.id.tab_layout);
+        tab_layout = findViewById(R.id.tab_layout);
         tab_layout.clearOnTabSelectedListeners();
         tab_layout.removeAllTabs();
         String[] tabs = new String[]{"促销优惠", "账户通知", "服务通知"};
         for (int i = 0; i < tabs.length; i++) {
             TabLayout.Tab tab = tab_layout.newTab();
-            tab.setCustomView(R.layout.notice_tab);
-            View customView = tab.getCustomView();
-            if (customView != null) {
-                TextView tv_msg_tab_text = customView.findViewById(R.id.tv_msg_tab_text);
-                View iv_msg_tab_indicator_line = customView.findViewById(R.id.iv_msg_tab_indicator_line);
-                View iv_msg_tab_indicator_dot = customView.findViewById(R.id.iv_msg_tab_indicator_dot);
-                tv_msg_tab_text.setText(tabs[i]);
-                iv_msg_tab_indicator_line.setVisibility(View.INVISIBLE);
-                iv_msg_tab_indicator_dot.setVisibility(View.INVISIBLE);
-            }
+            TabHolder holder = new TabHolder(tab, tabs[i]);
+            noticeCountArray.append(i, holder);
             tab_layout.addTab(tab, i, false);
         }
         tab_layout.addOnTabSelectedListener(this);
         TabLayout.Tab tab = tab_layout.getTabAt(0);
         if (tab != null) tab.select();
+    }
+
+    private void showFragment(int position) {
+        if (position == 0) {
+            showFragment0();
+        } else if (position == 1) {
+            showFragment1();
+        } else if (position == 2) {
+            showFragment2();
+        }
     }
 
     private void showFragment2() {
@@ -158,5 +177,47 @@ public final class NoticeActivity extends BaseActivity implements TabLayout.OnTa
         fragment0.setUserVisibleHint(true);
         fragment1.setUserVisibleHint(false);
         fragment2.setUserVisibleHint(false);
+    }
+
+    private final static class TabHolder {
+
+        private final TabLayout.Tab tab;
+        private final View customView;
+        private final TextView tv_msg_tab_text;
+        private final View iv_msg_tab_indicator_line;
+        private final View iv_msg_tab_indicator_dot;
+        private final TextView tv_notice_count;
+
+        public TabHolder(@NonNull TabLayout.Tab tab, String text) {
+            this.tab = tab;
+            tab.setCustomView(R.layout.notice_tab);
+            customView = tab.getCustomView();
+            assert customView != null;
+            tv_msg_tab_text = customView.findViewById(R.id.tv_msg_tab_text);
+            iv_msg_tab_indicator_line = customView.findViewById(R.id.iv_msg_tab_indicator_line);
+            iv_msg_tab_indicator_dot = customView.findViewById(R.id.iv_msg_tab_indicator_dot);
+            tv_notice_count = customView.findViewById(R.id.tv_notice_count);
+
+            tv_msg_tab_text.setText(text);
+            iv_msg_tab_indicator_line.setVisibility(View.INVISIBLE);
+            iv_msg_tab_indicator_dot.setVisibility(View.INVISIBLE);
+        }
+
+        public void onTabSelected() {
+            tv_msg_tab_text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18f);
+            iv_msg_tab_indicator_line.setVisibility(View.VISIBLE);
+            iv_msg_tab_indicator_dot.setVisibility(View.VISIBLE);
+        }
+
+        public void onTabUnselected() {
+            tv_msg_tab_text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16f);
+            iv_msg_tab_indicator_line.setVisibility(View.INVISIBLE);
+            iv_msg_tab_indicator_dot.setVisibility(View.INVISIBLE);
+        }
+
+        public void updateCount(int noticeCount) {
+            tv_notice_count.setText(noticeCount + "+");
+            tv_notice_count.setVisibility(noticeCount > 0 ? View.VISIBLE : View.INVISIBLE);
+        }
     }
 }

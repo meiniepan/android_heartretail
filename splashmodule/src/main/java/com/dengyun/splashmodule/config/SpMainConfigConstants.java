@@ -133,6 +133,11 @@ public class SpMainConfigConstants {
         return getMainConfigUrl("messageList");
     }
 
+    /* 推送消息详情查询 */
+    public static String queryMessageDetail() {
+        return getMainConfigUrl("queryMessageDetail");
+    }
+
     /* ================================== 常见问题 ================================== */
 
     /* 常见问题分类 */

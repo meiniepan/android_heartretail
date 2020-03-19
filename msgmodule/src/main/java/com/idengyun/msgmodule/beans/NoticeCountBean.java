@@ -1,5 +1,7 @@
 package com.idengyun.msgmodule.beans;
 
+import java.util.List;
+
 /**
  * 查询用户未读推送数量
  *
@@ -8,7 +10,7 @@ package com.idengyun.msgmodule.beans;
 public final class NoticeCountBean {
     public String code;
     public String msg;
-    public Data data;
+    public List<Data> data;
 
     public static class Data {
         public int notifyGroup;

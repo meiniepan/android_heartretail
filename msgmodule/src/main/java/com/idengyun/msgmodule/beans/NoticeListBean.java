@@ -7,7 +7,7 @@ import java.util.List;
  *
  * @author aLang
  */
-public final class NoticeBean {
+public final class NoticeListBean {
     public String code;
     public String msg;
     public Data data;
@@ -40,7 +40,7 @@ public final class NoticeBean {
             public static class Type2 {
                 public String contentTitle;
                 public String contentDetail;
-                public List<Goods> GoodsList;
+                public List<Goods> goodsList;
 
                 public static class Goods {
                     public String imgUrl;

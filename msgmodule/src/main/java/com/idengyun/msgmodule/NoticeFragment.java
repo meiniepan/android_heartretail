@@ -14,8 +14,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
+import com.dengyun.baselibrary.net.ImageApi;
 import com.dengyun.baselibrary.utils.GsonConvertUtil;
-import com.idengyun.msgmodule.beans.NoticeBean;
+import com.idengyun.msgmodule.beans.NoticeListBean;
 import com.idengyun.msgmodule.viewmodel.NoticeViewModel;
 
 import java.util.ArrayList;
@@ -64,13 +65,13 @@ public final class NoticeFragment extends BaseFragment {
     }
 
     @MainThread
-    private void updateUI(@Nullable NoticeBean noticeBean) {
-        if (noticeBean == null) return;
-        NoticeBean.Data data = noticeBean.data;
+    private void updateUI(@Nullable NoticeListBean noticeListBean) {
+        if (noticeListBean == null) return;
+        NoticeListBean.Data data = noticeListBean.data;
 
         totalPageSize = data.total;
         totalPage = (int) Math.ceil(1D * totalPageSize / pageSize);
-        loadMore = ++page < totalPage;
+        // loadMore = ++page < totalPage;
 
         noticeAdapter.noticeList.addAll(data.contentList);
         noticeAdapter.notifyDataSetChanged();
@@ -78,8 +79,9 @@ public final class NoticeFragment extends BaseFragment {
 
     private void requestAPI() {
         if (noticeViewModel != null && notifyGroup != -1) {
-            //if (!loadMore) return;
-            noticeViewModel.requestNoticeList(this, page + 1, pageSize, notifyGroup);
+            // if (!loadMore) return;
+            // noticeViewModel.requestNoticeList(this, page + 1, pageSize, notifyGroup);
+            noticeViewModel.requestNoticeList(this, page , pageSize, notifyGroup);
         }
     }
 
@@ -102,11 +104,11 @@ public final class NoticeFragment extends BaseFragment {
         FragmentActivity activity = getActivity();
         if (activity == null) return;
         if (noticeViewModel == null) {
-            noticeViewModel = NoticeViewModel.getInstance(activity);
-            noticeViewModel.getNoticeList().observe(this, new Observer<NoticeBean>() {
+            noticeViewModel = NoticeViewModel.getInstance(this);
+            noticeViewModel.getNoticeList().observe(this, new Observer<NoticeListBean>() {
                 @Override
-                public void onChanged(@Nullable NoticeBean noticeBean) {
-                    updateUI(noticeBean);
+                public void onChanged(@Nullable NoticeListBean noticeListBean) {
+                    updateUI(noticeListBean);
                 }
             });
         }
@@ -132,7 +134,7 @@ public final class NoticeFragment extends BaseFragment {
     private static class NoticeAdapter extends RecyclerView.Adapter {
 
         private LayoutInflater inflater;
-        final List<NoticeBean.Data.Content> noticeList = new ArrayList<>();
+        final List<NoticeListBean.Data.Content> noticeList = new ArrayList<>();
 
         @NonNull
         @Override
@@ -161,7 +163,7 @@ public final class NoticeFragment extends BaseFragment {
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-            NoticeBean.Data.Content content = noticeList.get(position);
+            NoticeListBean.Data.Content content = noticeList.get(position);
             int viewType = getItemViewType(position);
             if (0 == viewType) {
                 ((Holder0) holder).updateUI(content);
@@ -199,8 +201,16 @@ public final class NoticeFragment extends BaseFragment {
         }
 
         @MainThread
-        private void updateUI(NoticeBean.Data.Content content) {
-            NoticeBean.Data.Content.Type0 type0 = GsonConvertUtil.fromJson(content.content, NoticeBean.Data.Content.Type0.class);
+        private void updateUI(NoticeListBean.Data.Content content) {
+            String pushTime = content.pushTime;
+            String title = content.title;
+            NoticeListBean.Data.Content.Type0 type0 = GsonConvertUtil.fromJson(content.content, NoticeListBean.Data.Content.Type0.class);
+            String contentTitle = type0.contentTitle;
+            String contentDetail = type0.contentDetail;
+
+            tv_notice_0_push_time.setText(pushTime);
+            tv_notice_0_title.setText(contentTitle);
+            tv_notice_0_detail.setText(contentDetail);
         }
 
         private void findViewById(@NonNull View itemView) {
@@ -222,8 +232,17 @@ public final class NoticeFragment extends BaseFragment {
         }
 
         @MainThread
-        private void updateUI(NoticeBean.Data.Content content) {
-            NoticeBean.Data.Content.Type1 type1 = GsonConvertUtil.fromJson(content.content, NoticeBean.Data.Content.Type1.class);
+        private void updateUI(NoticeListBean.Data.Content content) {
+            String pushTime = content.pushTime;
+            String title = content.title;
+            String json = content.content;
+            NoticeListBean.Data.Content.Type1 type1 = GsonConvertUtil.fromJson(json, NoticeListBean.Data.Content.Type1.class);
+            String contentTitle = type1.contentTitle;
+            String contentDetail = type1.contentDetail;
+
+            tv_notice_1_push_time.setText(pushTime);
+            tv_notice_1_title.setText(contentTitle);
+            // ImageApi.displayImage(iv_notice_1_url.getContext(), iv_notice_1_url, contentDetail);
         }
 
         private void findViewById(@NonNull View itemView) {
@@ -249,8 +268,34 @@ public final class NoticeFragment extends BaseFragment {
         }
 
         @MainThread
-        private void updateUI(NoticeBean.Data.Content content) {
-            NoticeBean.Data.Content.Type2 type2 = GsonConvertUtil.fromJson(content.content, NoticeBean.Data.Content.Type2.class);
+        private void updateUI(NoticeListBean.Data.Content content) {
+            String pushTime = content.pushTime;
+            String title = content.title;
+            NoticeListBean.Data.Content.Type2 type2 = GsonConvertUtil.fromJson(content.content, NoticeListBean.Data.Content.Type2.class);
+            String contentTitle = type2.contentTitle;
+            String contentDetail = type2.contentDetail;
+            List<NoticeListBean.Data.Content.Type2.Goods> goodsList = type2.goodsList;
+
+            tv_notice_2_push_time.setText(pushTime);
+            tv_tv_notice_2_title.setText(contentTitle);
+            if (!goodsList.isEmpty()) {
+                NoticeListBean.Data.Content.Type2.Goods goods = goodsList.get(0);
+                String goodsName = goods.goodsName;
+                String goodsNumStr = goods.goodsNumStr;
+                String imgUrl = goods.imgUrl;
+                String specKeyName = goods.specKeyName;
+
+                tv_notice_2_goods_title.setText(goodsName);
+                tv_notice_2_goods_spec.setText(specKeyName);
+                tv_notice_2_goods_num.setText(goodsNumStr);
+                ImageApi.displayImage(iv_notice_2_goods_url.getContext(), iv_notice_2_goods_url, imgUrl);
+            } else {
+                tv_notice_2_goods_title.setText(null);
+                tv_notice_2_goods_spec.setText(null);
+                tv_notice_2_goods_num.setText(null);
+                iv_notice_2_goods_url.setImageDrawable(null);
+            }
+
         }
 
         private void findViewById(@NonNull View itemView) {
@@ -278,8 +323,20 @@ public final class NoticeFragment extends BaseFragment {
         }
 
         @MainThread
-        private void updateUI(NoticeBean.Data.Content content) {
-            NoticeBean.Data.Content.Type4 type4 = GsonConvertUtil.fromJson(content.content, NoticeBean.Data.Content.Type4.class);
+        private void updateUI(NoticeListBean.Data.Content content) {
+            String pushTime = content.pushTime;
+            String title = content.title;
+            String json = content.content;
+            NoticeListBean.Data.Content.Type4 type4 = GsonConvertUtil.fromJson(json, NoticeListBean.Data.Content.Type4.class);
+            String contentTitle = type4.contentTitle;
+            String contentDetail = type4.contentDetail;
+            String imgUrl = type4.imgUrl;
+
+            tv_notice_4_push_time.setText(pushTime);
+            tv_notice_4_title.setText(contentTitle);
+            tv_notice_4_detail.setText(contentDetail);
+            ImageApi.displayImage(iv_notice_4_url.getContext(), iv_notice_4_url, imgUrl);
+            //tv_notice_4_invalid.setText(pushTime);
         }
 
         private void findViewById(@NonNull View itemView) {
@@ -303,8 +360,17 @@ public final class NoticeFragment extends BaseFragment {
         }
 
         @MainThread
-        private void updateUI(NoticeBean.Data.Content content) {
-            NoticeBean.Data.Content.Type11 type11 = GsonConvertUtil.fromJson(content.content, NoticeBean.Data.Content.Type11.class);
+        private void updateUI(NoticeListBean.Data.Content content) {
+            String pushTime = content.pushTime;
+            String title = content.title;
+            String json = content.content;
+            NoticeListBean.Data.Content.Type11 type11 = GsonConvertUtil.fromJson(json, NoticeListBean.Data.Content.Type11.class);
+            String contentDetail = type11.contentDetail;
+            String imgUrl = type11.imgUrl;
+
+            tv_notice_11_push_time.setText(pushTime);
+            ImageApi.displayImage(iv_notice_type_11_url.getContext(), iv_notice_type_11_url, imgUrl);
+            tv_notice_type_11_detail.setText(contentDetail);
         }
 
         private void findViewById(@NonNull View itemView) {
