@@ -61,6 +61,7 @@ public class BaseLoadingDialog extends BaseDialogFragment {
         setDimAmount(0);
         setOutCancel(false);
         setBackCancel(true);
+        setAnimStyle(R.style.base_dialog_no_animation);
     }
 
 //    private String loadingTag;
