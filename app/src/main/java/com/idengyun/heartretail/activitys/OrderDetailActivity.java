@@ -86,16 +86,22 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
     TextView tvBottomOperate1;
     @BindView(R.id.tv_bottom_operate2)
     TextView tvBottomOperate2;
+    @BindView(R.id.ll_shop_choose2)
+    LinearLayout llShopChoose;
     @BindView(R.id.ll_bottom)
     LinearLayout llBottom;
     @BindView(R.id.tv_residue_time1)
-    TextView tvResidueTime;@BindView(R.id.nsv_order_detail)
+    TextView tvResidueTime;
+    @BindView(R.id.tv_status_name)
+    TextView tvStatusName;
+    @BindView(R.id.nsv_order_detail)
     NestedScrollView nestedScrollView;
     private SecondsTimer timer;
     OrderStatusBean dataSource;
     OrderStatusBean data;
     private String orderId;
     private int dimension;
+    private int orderStatus = 0;
 
     public static void start(Context context, String orderId) {
         Intent starter = new Intent(context, OrderDetailActivity.class);
@@ -123,8 +129,68 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
     @Override
     protected void initViews(Bundle savedInstanceState) {
         orderId = getIntent().getStringExtra(Constants.ORDER_ID);
+        initStatus();
         getData();
         startTimer();
+    }
+
+    private void initStatus() {
+        if (orderStatus == 5 || orderStatus == 7) {
+            tvStatusName.setText("已完成");
+            tvBottomOperate1.setText("查看物流");
+            tvBottomOperate2.setText("查看评价");
+            tvBottomOperate1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CheckLogisticsActivity.start(getContext(), orderId);
+                }
+            });
+            tvBottomOperate2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    EvaluateDetailActivity.start(getContext(), orderId);
+                }
+            });
+        } else if (orderStatus == 0) {
+            llShopChoose.setVisibility(View.GONE);
+            tvStatusName.setText("待付款");
+            tvBottomOperate1.setText("取消订单");
+            tvBottomOperate2.setText("立即付款");
+            tvBottomOperate1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    cancelOrder();
+                }
+            });
+            tvBottomOperate2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ChoosePayModeActivity.start(getContext(), orderId);
+                }
+            });
+        } else if (orderStatus == 3) {
+            tvStatusName.setText("代销中");
+        } else if (orderStatus == 1) {
+            tvStatusName.setText("待发货");
+        } else if (orderStatus == 2) {
+            tvStatusName.setText("待收货");
+            tvBottomOperate1.setText("查看物流");
+            tvBottomOperate2.setText("确认收货");
+            tvBottomOperate1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CheckLogisticsActivity.start(getContext(), orderId);
+                }
+            });
+            tvBottomOperate2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ToastUtils.showShort("暂未开通");
+                }
+            });
+        } else if (orderStatus == 4) {
+            tvStatusName.setText("待评价");
+        }
     }
 
     private void getData() {
@@ -134,7 +200,7 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
                 .activity(this)
                 .params("version", AppUtils.getAppVersionName())
                 .params("userId", HRUser.getId())
-                .params("orderId", TextUtils.isEmpty(orderId)?"":orderId)
+                .params("orderId", TextUtils.isEmpty(orderId) ? "" : orderId)
                 .isShowDialog(true)
                 .type(type)
                 .build();
@@ -211,12 +277,12 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
                 ToastUtils.showShort("功能暂未开通");
                 break;
             case R.id.tv_bottom_operate1:
-                if (tvBottomOperate1.getText().equals("取消订单")){
+                if (tvBottomOperate1.getText().equals("取消订单")) {
                     cancelOrder();
                 }
                 break;
             case R.id.tv_bottom_operate2:
-                if (tvBottomOperate2.getText().equals("立即付款")){
+                if (tvBottomOperate2.getText().equals("立即付款")) {
                     payNow();
                 }
                 break;
@@ -224,7 +290,7 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
     }
 
     private void payNow() {
-        ChoosePayModeActivity.start(this,orderId);
+        ChoosePayModeActivity.start(this, orderId);
     }
 
     private void cancelOrder() {
@@ -232,8 +298,8 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
         map.put("version", AppUtils.getAppVersionName());
         map.put("orderId", orderId);
         map.put("state", 1);
-        map.put("userId", TextUtils.isEmpty(HRUser.getId())?"1":HRUser.getId());
-        map.put("userName", TextUtils.isEmpty(HRUser.getId())?"1":HRUser.getNickname());
+        map.put("userId", TextUtils.isEmpty(HRUser.getId()) ? "1" : HRUser.getId());
+        map.put("userName", TextUtils.isEmpty(HRUser.getId()) ? "1" : HRUser.getNickname());
         NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.changeOrderState())
                 .activity(this)
                 .params(map)
@@ -265,13 +331,13 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
     @Override
     public void onScrollChange(NestedScrollView nestedScrollView, int i, int i1, int i2, int i3) {
 
-            // System.out.println("scrollY=" + scrollY + "\t" + "oldScrollY=" + oldScrollY);
-            if (i1 < dimension) {
-                flBackView2.setVisibility(View.VISIBLE);
-                toolBar.setVisibility(View.GONE);
-            } else {
-                flBackView2.setVisibility(View.GONE);
-                toolBar.setVisibility(View.VISIBLE);
-            }
+        // System.out.println("scrollY=" + scrollY + "\t" + "oldScrollY=" + oldScrollY);
+        if (i1 < dimension) {
+            flBackView2.setVisibility(View.VISIBLE);
+            toolBar.setVisibility(View.GONE);
+        } else {
+            flBackView2.setVisibility(View.GONE);
+            toolBar.setVisibility(View.VISIBLE);
+        }
     }
 }
