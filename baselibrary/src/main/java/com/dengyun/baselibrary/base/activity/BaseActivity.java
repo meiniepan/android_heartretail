@@ -11,10 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.dengyun.baselibrary.R;
-import com.dengyun.baselibrary.base.dialog.BaseLoadingDialog;
+import com.dengyun.baselibrary.base.dialog.loading.LoadingDialog1;
 import com.dengyun.baselibrary.base.view.BaseActivityView;
 import com.dengyun.baselibrary.config.AppConfig;
-import com.dengyun.baselibrary.net.ImageApi;
 import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.rx.RxManager;
 import com.dengyun.baselibrary.utils.AppLogUtil;
@@ -41,7 +40,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseActi
     private boolean hasBus = false;
     private Fragment currentV4Fragment;
     private Unbinder unbinder;
-    private BaseLoadingDialog loadingDialog;
+    private LoadingDialog1 loadingDialog;
     private String TAG = "BaseActivity";//本activity的tag，在onCreate方法中重置，为当前activity的包名+类名路径
 
     @Override
@@ -259,7 +258,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseActi
     @Override
     public void showProgress() {
         if (null == loadingDialog) {
-            loadingDialog = new BaseLoadingDialog();
+            loadingDialog = new LoadingDialog1();
         }
         loadingDialog.show(this);
     }

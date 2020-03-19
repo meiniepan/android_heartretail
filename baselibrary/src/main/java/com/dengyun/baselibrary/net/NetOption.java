@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 
 import com.dengyun.baselibrary.base.dialog.BaseDialogFragment;
-import com.dengyun.baselibrary.base.dialog.BaseLoadingDialog;
+import com.dengyun.baselibrary.base.dialog.loading.LoadingDialog1;
 import com.dengyun.baselibrary.net.constants.ProjectType;
 import com.lzy.okgo.model.HttpHeaders;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -109,7 +109,7 @@ public class NetOption {
         if (isShowDialog
                 && (null!=getActivity() || null!=getFragment())
                 && null == loadingDialog){
-            loadingDialog = BaseLoadingDialog.getInstance(this);
+            loadingDialog = LoadingDialog1.getInstance(this);
         }
         return loadingDialog;
     }

@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
 
-import com.dengyun.baselibrary.base.dialog.BaseLoadingDialog;
+import com.dengyun.baselibrary.base.dialog.loading.LoadingDialog1;
 import com.dengyun.baselibrary.utils.phoneapp.AppUtils;
 
 import java.io.EOFException;
@@ -27,7 +27,7 @@ public abstract class RxMergeObserver<T> implements Observer<T> {
     private String mKey;
     private boolean isShowDialog;   //是否显示缓冲菊花
     private int mWhichRequest;
-    private BaseLoadingDialog loadingDialog;
+    private LoadingDialog1 loadingDialog;
     private RxManager mRxManager;
     public RxMergeObserver(Fragment fragment, int whichRequest, boolean isShowDialog){
         this(fragment.getActivity(),
@@ -63,7 +63,7 @@ public abstract class RxMergeObserver<T> implements Observer<T> {
         this.mWhichRequest = whichRequest;
         if(isShowDialog){
             if(null==loadingDialog){
-                loadingDialog = new BaseLoadingDialog();
+                loadingDialog = new LoadingDialog1();
             }
         }
         mRxManager = RxManager.getInstance();
@@ -78,7 +78,7 @@ public abstract class RxMergeObserver<T> implements Observer<T> {
         mRxManager.add(mKey, d);
         if (isShowDialog) {
             if(null==loadingDialog){
-                loadingDialog = new BaseLoadingDialog();
+                loadingDialog = new LoadingDialog1();
             }
             loadingDialog.show(activity);
         }

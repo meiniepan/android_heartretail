@@ -11,7 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.dengyun.baselibrary.base.dialog.BaseLoadingDialog;
+import com.dengyun.baselibrary.base.dialog.loading.LoadingDialog1;
 import com.dengyun.baselibrary.base.view.BaseFragmentView;
 import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.rx.RxManager;
@@ -38,7 +38,7 @@ public abstract class BaseFragment extends Fragment implements BaseFragmentView 
     protected Bundle mBundle;
     private boolean hasBus = false;
     private Unbinder unbinder;
-    private BaseLoadingDialog loadingDialog;
+    private LoadingDialog1 loadingDialog;
     private String TAG = "BaseFragment";//本fragment的tag，在onAttach方法中重置，为当前Fragment的包名+类名路径
     private View contentView;
 
@@ -270,7 +270,7 @@ public abstract class BaseFragment extends Fragment implements BaseFragmentView 
     @Override
     public void showProgress() {
         if(null==loadingDialog){
-            loadingDialog = new BaseLoadingDialog();
+            loadingDialog = new LoadingDialog1();
         }
         loadingDialog.show(this);
     }

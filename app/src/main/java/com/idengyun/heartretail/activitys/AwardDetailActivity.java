@@ -10,6 +10,12 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.dengyun.baselibrary.base.activity.BaseActivity;
+import com.dengyun.baselibrary.base.dialog.BaseDialog;
+import com.dengyun.baselibrary.base.dialog.BaseDialogFragment;
+import com.dengyun.baselibrary.base.dialog.ViewConvertListener;
+import com.dengyun.baselibrary.base.dialog.listener.DialogViewHolder;
+import com.dengyun.baselibrary.utils.ToastUtils;
+import com.dengyun.baselibrary.widgets.toolbar.BaseOneRightToolBar;
 import com.idengyun.commonmodule.beans.OrderStatusBean;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.adapters.AwardExpendListAdapter;
@@ -28,6 +34,8 @@ import butterknife.OnClick;
  * @date :2020/3/16 0016 16:53
  */
 public class AwardDetailActivity extends BaseActivity {
+    @BindView(R.id.toolbar_title_award)
+    BaseOneRightToolBar toolBar;
     @BindView(R.id.tv_income)
     TextView tvIncome;
     @BindView(R.id.tv_expend)
@@ -51,6 +59,14 @@ public class AwardDetailActivity extends BaseActivity {
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
+        toolBar.setOnRightButtonClickLinster(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BaseDialog.init().setLayoutId(R.layout.dialog_withdraw_spec)
+                        .setWidthMarginDp(30)
+                        .show(getSupportFragmentManager());
+            }
+        });
         initData();
         adapterIncome = new AwardIncomeListAdapter(R.layout.item_award_income, mDataIncome);
         adapterExpend = new AwardExpendListAdapter(R.layout.item_award_expend, mDataIncome);

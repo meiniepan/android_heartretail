@@ -1,7 +1,7 @@
 package com.dengyun.baselibrary.net.rx;
 
 import com.dengyun.baselibrary.base.dialog.BaseDialogFragment;
-import com.dengyun.baselibrary.base.dialog.BaseLoadingDialog;
+import com.dengyun.baselibrary.base.dialog.loading.LoadingDialog1;
 import com.dengyun.baselibrary.config.AppConfig;
 import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.deal.DefultDealNoNetUtil;
@@ -43,10 +43,10 @@ public abstract class RxObserver<T> implements Observer<T> {
 
         if (netOption.isShowDialog() && null!=loadingDialog) {
             if (null!=netOption.getActivity()){
-                if (loadingDialog instanceof BaseLoadingDialog) ((BaseLoadingDialog) loadingDialog).show(netOption.getActivity());
+                if (loadingDialog instanceof LoadingDialog1) ((LoadingDialog1) loadingDialog).show(netOption.getActivity());
                 else loadingDialog.show(netOption.getActivity().getSupportFragmentManager());
             }else if (null != netOption.getFragment() && null != netOption.getFragment().getActivity()) {
-                if (loadingDialog instanceof BaseLoadingDialog) ((BaseLoadingDialog) loadingDialog).show(netOption.getFragment());
+                if (loadingDialog instanceof LoadingDialog1) ((LoadingDialog1) loadingDialog).show(netOption.getFragment());
                 else loadingDialog.show(netOption.getFragment().getActivity().getSupportFragmentManager());
             }
         }

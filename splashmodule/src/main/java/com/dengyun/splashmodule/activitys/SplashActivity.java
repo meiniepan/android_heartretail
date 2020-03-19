@@ -28,6 +28,7 @@ public class SplashActivity extends BaseSplashActivity {
         Type type = new TypeToken<ApiBean<MainConfig>>() {}.getType();
         NetOption netOption = NetOption.newBuilder(MainUrlConstants.MAINHTTP)
                 .activity(this)
+                .isShowDialog(false)
                 .type(type)
                 .build();
         NetApi.<ApiBean<MainConfig>>getData(RequestMethod.GET, netOption, new JsonCallback<ApiBean<MainConfig>>(netOption) {

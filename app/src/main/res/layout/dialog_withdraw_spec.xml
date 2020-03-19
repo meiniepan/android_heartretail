@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bac_withdraw_window"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_40"
+        android:src="@drawable/ic_grant" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="23dp"
+        android:text="1、当好友下单后您并不会直接获取到可提现红包，此时收入明细为待发放
+
+\n\n2、当好友去门店题后确认且商品售后期结束后，您的红包才会发放到可提现账户内，用户提现或二次消费
+
+\n\n3、明细更新存在5-10分钟的延迟"
+        />
+
+</LinearLayout>
