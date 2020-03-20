@@ -10,10 +10,11 @@
         <item name="android:windowBackground">@color/white</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <!-- 虚拟按键不透明 -->
+        <item name="android:windowTranslucentNavigation">false</item>
         <!--使用Activity转场动画-->
         <item name="android:windowAnimationStyle">@style/base_activity_animation</item>
-        <item name="android:windowContentOverlay" tools:ignore="DuplicateDefinition">@null</item>
-        <item name="android:navigationBarColor">@color/baselib_black</item>
+        <item name="android:navigationBarColor">@color/white</item>
     </style>
 
 </resources>

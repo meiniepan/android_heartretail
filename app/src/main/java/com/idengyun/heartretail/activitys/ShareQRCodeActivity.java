@@ -60,7 +60,7 @@ public class ShareQRCodeActivity extends BaseActivity {
 
     @Override
     public void setStatusBar() {
-        StatusBarUtil.setTransparent(this);
+        StatusBarUtil.setTranslucentForImageViewInFragment(this, null);
     }
 
     @Override

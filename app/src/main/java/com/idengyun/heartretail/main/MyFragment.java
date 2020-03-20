@@ -16,6 +16,7 @@ import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.activitys.AwardDetailActivity;
 import com.idengyun.heartretail.activitys.MyEvaluateActivity;
+import com.idengyun.heartretail.activitys.OrderDetailActivity;
 import com.idengyun.heartretail.activitys.OrderListActivity;
 import com.idengyun.heartretail.model.response.BalanceBean;
 import com.idengyun.heartretail.my.SettingFragment;
@@ -161,7 +162,7 @@ public final class MyFragment extends BaseFragment implements View.OnClickListen
 
     private void startMyHelpActivity() {
 //        HelpCenterActivity.start(getActivity());
-        AwardDetailActivity.start(getActivity());
+        OrderDetailActivity.start(getActivity(),"");
     }
 
     private void startMyEvaluationActivity() {
