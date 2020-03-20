@@ -5,7 +5,7 @@ import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.baselibrary.net.deal.DealParamsUtil;
 import com.dengyun.baselibrary.net.exception.NoNetException;
-import com.dengyun.baselibrary.net.util.JsonConvert;
+import com.dengyun.baselibrary.net.util.JsonConvert2;
 import com.dengyun.baselibrary.net.util.NetworkUtils;
 import com.dengyun.baselibrary.utils.ObjectUtils;
 import com.lzy.okgo.OkGo;
@@ -217,7 +217,7 @@ public class NetApi {
             return OkGo.<T>get(netOption.getUrl())
                     .tag(NetApi.getRequestTag(netOption))
                     .headers(netOption.getHeaders())
-                    .converter(new JsonConvert<T>(netOption))
+                    .converter(new JsonConvert2<T>(netOption))
                     .adapt(new ObservableBody<T>());
         }else if(requestMethod == RequestMethod.POST_JSON){
             String jsonParams = DealParamsUtil.getDealParams(netOption);
@@ -226,7 +226,7 @@ public class NetApi {
                     .tag(NetApi.getRequestTag(netOption))
                     .headers(netOption.getHeaders())
                     .upJson(jsonParams)
-                    .converter(new JsonConvert<T>(netOption))
+                    .converter(new JsonConvert2<T>(netOption))
                     .adapt(new ObservableBody<T>());
         }else if(requestMethod == RequestMethod.POST_FORM){
             String jsonParams = DealParamsUtil.getDealParams(netOption);
@@ -237,7 +237,7 @@ public class NetApi {
                     .tag(NetApi.getRequestTag(netOption))
                     .headers(netOption.getHeaders())
                     .params(httpParams)
-                    .converter(new JsonConvert<T>(netOption))
+                    .converter(new JsonConvert2<T>(netOption))
                     .adapt(new ObservableBody<T>());
 
         }

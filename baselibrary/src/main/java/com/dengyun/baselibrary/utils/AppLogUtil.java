@@ -14,29 +14,27 @@ import java.util.Map;
  */
 
 public class AppLogUtil {
-    public static void setActivityLCLog(String activityName,String lcName){
-        if(!AppConfig.isActivityLCLog)return;
-        Logger.t("LC_aaaaaa").d(activityName+"-->> %s", lcName);
+    public static void setActivityLCLog(String activityName, String lcName) {
+        if (!AppConfig.isActivityLCLog) return;
+        Logger.t("LC_aaaaaa").d(activityName + "-->> %s", lcName);
     }
 
-    public static void setFragmentLCLog(String fragmentName,String lcName){
-        if(!AppConfig.isFragmentLCLog)return;
-        Logger.t("LC_ffffff").d(fragmentName+"-->> %s", lcName);
+    public static void setFragmentLCLog(String fragmentName, String lcName) {
+        if (!AppConfig.isFragmentLCLog) return;
+        Logger.t("LC_ffffff").d(fragmentName + "-->> %s", lcName);
     }
 
-    public static void setNetLog(String netMessage){
-        if(!AppConfig.isDebug)return;
-        Logger.t("wwwwww").d(netMessage);
+    public static synchronized void setNetResultLog(String url, Map params, String resultJson) {
+        if (!AppConfig.isDebug) return;
+        Logger.t("wwwwww").d(url);
+        Logger.t("wwwwww").d(params);
+        Logger.t("wwwwww").json(resultJson);
     }
 
-    public static void setNetLogJson(String netMessage){
-        if(!AppConfig.isDebug)return;
-        Logger.t("wwwwww").json(netMessage);
-    }
-
-    public static void setNetLog(Map netMessage){
-        if(!AppConfig.isDebug)return;
-        Logger.t("wwwwww").d(netMessage);
+    public static synchronized void setNetErrorLog(String url, String errorMsg) {
+        if (!AppConfig.isDebug) return;
+        Logger.t("wwwwww").e(url);
+        Logger.t("wwwwww").e(errorMsg);
     }
 
     public static void initLog() {
@@ -47,7 +45,8 @@ public class AppLogUtil {
                 .tag("Logger--》")   // （可选）每个日志的全局标签。默认PRETTY_LOGGER
                 .build();
         Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy) {
-            @Override public boolean isLoggable(int priority, String tag) {
+            @Override
+            public boolean isLoggable(int priority, String tag) {
                 return AppConfig.isDebug;//如果是Debug  模式 ；打印日志
             }
         });

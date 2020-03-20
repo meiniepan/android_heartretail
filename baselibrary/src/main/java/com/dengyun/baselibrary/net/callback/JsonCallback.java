@@ -22,7 +22,7 @@ import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.deal.DefultDealNoNetUtil;
 import com.dengyun.baselibrary.net.deal.NetDealConfig;
 import com.dengyun.baselibrary.net.exception.ApiException;
-import com.dengyun.baselibrary.net.util.JsonConvert;
+import com.dengyun.baselibrary.net.util.JsonConvert2;
 import com.dengyun.baselibrary.utils.AppLogUtil;
 import com.lzy.okgo.callback.AbsCallback;
 import com.lzy.okgo.request.base.Request;
@@ -51,13 +51,16 @@ public abstract class JsonCallback<T> extends AbsCallback<T> {
         // 使用的设备信息
         // 可以随意添加,也可以什么都不传
         // 还可以在这里对所有的参数进行加密，均在这里实现
-        if (netOption.isShowDialog() && null!=loadingDialog) {
-            if (null!=netOption.getActivity()){
-                if (loadingDialog instanceof LoadingDialog1) ((LoadingDialog1) loadingDialog).show(netOption.getActivity());
+        if (netOption.isShowDialog() && null != loadingDialog) {
+            if (null != netOption.getActivity()) {
+                if (loadingDialog instanceof LoadingDialog1)
+                    ((LoadingDialog1) loadingDialog).show(netOption.getActivity());
                 else loadingDialog.show(netOption.getActivity().getSupportFragmentManager());
-            }else if (null != netOption.getFragment() && null != netOption.getFragment().getActivity()) {
-                if (loadingDialog instanceof LoadingDialog1) ((LoadingDialog1) loadingDialog).show(netOption.getFragment());
-                else loadingDialog.show(netOption.getFragment().getActivity().getSupportFragmentManager());
+            } else if (null != netOption.getFragment() && null != netOption.getFragment().getActivity()) {
+                if (loadingDialog instanceof LoadingDialog1)
+                    ((LoadingDialog1) loadingDialog).show(netOption.getFragment());
+                else
+                    loadingDialog.show(netOption.getFragment().getActivity().getSupportFragmentManager());
             }
         }
     }
@@ -65,31 +68,31 @@ public abstract class JsonCallback<T> extends AbsCallback<T> {
     @Override
     public void onError(com.lzy.okgo.model.Response<T> response) {
         super.onError(response);
-        if (AppConfig.isDebug&&!(response.getException() instanceof ApiException)) {
-            AppLogUtil.setNetLog(netOption.getUrl());
-            AppLogUtil.setNetLog(netOption.getParams());
-            AppLogUtil.setNetLog(response.getException().getMessage());
+        if (AppConfig.isDebug && !(response.getException() instanceof ApiException)) {
+            AppLogUtil.setNetErrorLog(netOption.getUrl(),response.getException().getMessage());
         }
         dismissUi(false);
         handleError(response);
 
     }
 
-    public void handleError(com.lzy.okgo.model.Response<T> response){
-        ApiException.parseError(this, netOption,response.getException());
+    public void handleError(com.lzy.okgo.model.Response<T> response) {
+        ApiException.parseError(this, netOption, response.getException());
     }
 
     public void onNoNet() {
         dismissUi(false);
-        if(null!= NetDealConfig.netDealNoNet){
+        if (null != NetDealConfig.netDealNoNet) {
             NetDealConfig.netDealNoNet.dealNoNet(netOption);
-        }else { DefultDealNoNetUtil.dealNoNet(netOption); }
+        } else {
+            DefultDealNoNetUtil.dealNoNet(netOption);
+        }
 
     }
 
     @Override
     public T convertResponse(Response response) throws Throwable {
-        JsonConvert<T> convert = new JsonConvert<>(netOption);
+        JsonConvert2<T> convert = new JsonConvert2<T>(netOption);
         return convert.convertResponse(response);
     }
 
@@ -99,11 +102,11 @@ public abstract class JsonCallback<T> extends AbsCallback<T> {
         dismissUi(true);
     }
 
-    private void dismissUi(boolean isEnableLoadMore){
+    private void dismissUi(boolean isEnableLoadMore) {
         if (loadingDialog != null && loadingDialog.getShowsDialog()) {
             loadingDialog.dismiss();
         }
-        if(null!=netOption.getRefreshLayout()){
+        if (null != netOption.getRefreshLayout()) {
             netOption.getRefreshLayout().finishRefresh().finishLoadMore();
             if (!isEnableLoadMore) netOption.getRefreshLayout().setEnableLoadMore(false);
         }
