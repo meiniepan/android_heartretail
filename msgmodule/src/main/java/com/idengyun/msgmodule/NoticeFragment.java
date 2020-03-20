@@ -31,6 +31,7 @@ public final class NoticeFragment extends BaseFragment {
 
     private int notifyGroup;
     private RecyclerView recycler_view;
+    private View tv_notice_no_more;
     private NoticeViewModel noticeViewModel;
     private NoticeAdapter noticeAdapter;
 
@@ -71,17 +72,17 @@ public final class NoticeFragment extends BaseFragment {
 
         totalPageSize = data.total;
         totalPage = (int) Math.ceil(1D * totalPageSize / pageSize);
-        // loadMore = ++page < totalPage;
+        loadMore = ++page < totalPage;
 
         noticeAdapter.noticeList.addAll(data.contentList);
         noticeAdapter.notifyDataSetChanged();
+        tv_notice_no_more.setVisibility(loadMore ? View.GONE : View.VISIBLE);
     }
 
     private void requestAPI() {
         if (noticeViewModel != null && notifyGroup != -1) {
-            // if (!loadMore) return;
-            // noticeViewModel.requestNoticeList(this, page + 1, pageSize, notifyGroup);
-            noticeViewModel.requestNoticeList(this, page , pageSize, notifyGroup);
+            if (!loadMore) return;
+            noticeViewModel.requestNoticeList(this, page + 1, pageSize, notifyGroup);
         }
     }
 
@@ -94,6 +95,19 @@ public final class NoticeFragment extends BaseFragment {
             @Override
             public void onLoadMore(RecyclerView recyclerView) {
                 requestAPI();
+            }
+        });
+        recycler_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                System.out.println("newState= "+newState);
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                System.out.println("dy= "+dy);
             }
         });
         noticeAdapter = new NoticeAdapter();
@@ -129,6 +143,7 @@ public final class NoticeFragment extends BaseFragment {
 
     private void findViewById() {
         recycler_view = findViewById(R.id.recycler_view);
+        tv_notice_no_more = findViewById(R.id.tv_notice_no_more);
     }
 
     private static class NoticeAdapter extends RecyclerView.Adapter {
@@ -242,7 +257,7 @@ public final class NoticeFragment extends BaseFragment {
 
             tv_notice_1_push_time.setText(pushTime);
             tv_notice_1_title.setText(contentTitle);
-            // ImageApi.displayImage(iv_notice_1_url.getContext(), iv_notice_1_url, contentDetail);
+            ImageApi.displayImage(iv_notice_1_url.getContext(), iv_notice_1_url, contentDetail);
         }
 
         private void findViewById(@NonNull View itemView) {

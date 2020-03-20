@@ -30,6 +30,7 @@ public class More extends RecyclerView.OnScrollListener {
     @Override
     public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
+        System.out.println(dy);
         LinearLayoutManager lm = (LinearLayoutManager) recyclerView.getLayoutManager();
         if (lm == null) return;
         int lastVisibleItemPosition = lm.findLastVisibleItemPosition();
@@ -38,7 +39,8 @@ public class More extends RecyclerView.OnScrollListener {
         if (lastChildView == null) return;
         int lastChildBottom = lastChildView.getBottom();
         int recyclerBottom = recyclerView.getBottom();
-        if (lastVisibleItemPosition == itemCount - 1 && lastChildBottom == recyclerBottom) {
+        int paddingBottom = recyclerView.getPaddingBottom();
+        if (lastVisibleItemPosition == itemCount - 1 && lastChildBottom == recyclerBottom - paddingBottom) {
             if (isCanLoadMore) {
                 // 业务代码
                 if (listener != null) listener.onLoadMore(recyclerView);

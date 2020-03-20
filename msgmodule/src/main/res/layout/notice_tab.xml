@@ -48,8 +48,8 @@
         android:paddingBottom="2dp"
         android:textColor="#ffffffff"
         android:textSize="10sp"
-        app:layout_constraintBottom_toTopOf="@+id/tv_msg_tab_text"
-        app:layout_constraintLeft_toRightOf="@+id/tv_msg_tab_text"
+        app:layout_constraintRight_toRightOf="@+id/tv_msg_tab_text"
+        app:layout_constraintTop_toTopOf="@+id/tv_msg_tab_text"
         tools:text="99+" />
 </android.support.constraint.ConstraintLayout>
 
