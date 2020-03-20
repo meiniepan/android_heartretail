@@ -38,6 +38,9 @@ import com.idengyun.maplibrary.beans.EventChoosePoiItem;
 import com.idengyun.maplibrary.utils.AmapLocationWapper;
 import com.idengyun.maplibrary.utils.PoiSearchUtil;
 import com.idengyun.msgmodule.NoticeActivity;
+import com.idengyun.usermodule.HRUser;
+import com.idengyun.usermodule.LoginActivity;
+import com.idengyun.usermodule.VerifyDeviceActivity;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -119,8 +122,17 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
         if (tv_home_share == v) {
             ShareQRCodeActivity.start(getContext());
         } else if (tv_home_notice == v) {
+            if (!HRUser.isLogin()) {
+                LoginActivity.start(getContext());
+                return;
+            }
+
+            if (!HRUser.isAuthentication()) {
+                VerifyDeviceActivity.start(getContext());
+                return;
+            }
+
             NoticeActivity.start(getContext());
-            //HRActivity.start(getContext(), NoticeFragment.class);
         } else if (tvHomeLocation == v) {
             if (TextUtils.isEmpty(cityName)) {
                 ToastUtils.showShort("还没有定位成功");

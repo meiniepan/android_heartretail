@@ -66,9 +66,9 @@ public final class NoticeViewModel extends ViewModel {
     }
 
     /* 更新用户阅读状态 */
-    public void requestNoticeUpdateStatus(Fragment fragment, int notifyId, int status) {
+    public void requestNoticeUpdateStatus(FragmentActivity activity , int notifyId, int status) {
         NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.messageStatusUpdate())
-                .fragment(fragment)
+                .activity(activity)
                 .isShowDialog(true)
                 .clazz(NoticeStatusBean.class)
                 .params("userId", HRUser.getId())

@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.activity.BaseActivity;
 import com.idengyun.msgmodule.beans.NoticeCountBean;
+import com.idengyun.msgmodule.beans.NoticeStatusBean;
 import com.idengyun.msgmodule.viewmodel.NoticeViewModel;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public final class NoticeActivity extends BaseActivity implements TabLayout.OnTa
 
     private TabLayout tab_layout;
     private SparseArray<TabHolder> noticeCountArray = new SparseArray<>();
+    private NoticeViewModel noticeViewModel;
 
     public static void start(Context context) {
         Intent starter = new Intent(context, NoticeActivity.class);
@@ -58,14 +60,24 @@ public final class NoticeActivity extends BaseActivity implements TabLayout.OnTa
     @Override
     protected void onResume() {
         super.onResume();
-        NoticeViewModel noticeViewModel = NoticeViewModel.getInstance(this);
-        noticeViewModel.getNoticeCount().observe(this, new Observer<NoticeCountBean>() {
-            @Override
-            public void onChanged(@Nullable NoticeCountBean noticeCountBean) {
-                updateUI(noticeCountBean);
-            }
-        });
+        if (noticeViewModel == null) {
+            noticeViewModel = NoticeViewModel.getInstance(this);
+            noticeViewModel.getNoticeCount().observe(this, new Observer<NoticeCountBean>() {
+                @Override
+                public void onChanged(@Nullable NoticeCountBean noticeCountBean) {
+                    updateUI(noticeCountBean);
+                }
+            });
+            noticeViewModel.getNoticeStatus().observe(this, new Observer<NoticeStatusBean>() {
+                @Override
+                public void onChanged(@Nullable NoticeStatusBean noticeStatusBean) {
+
+                }
+            });
+        }
+
         noticeViewModel.requestNoticeCount(this);
+        noticeViewModel.requestNoticeUpdateStatus(this, -1, 1);
     }
 
     @Override
