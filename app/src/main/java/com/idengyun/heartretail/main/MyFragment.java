@@ -15,6 +15,7 @@ import com.dengyun.baselibrary.net.ImageApi;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.activitys.AwardDetailActivity;
+import com.idengyun.heartretail.activitys.MyBalanceActivity;
 import com.idengyun.heartretail.activitys.MyEvaluateActivity;
 import com.idengyun.heartretail.activitys.OrderDetailActivity;
 import com.idengyun.heartretail.activitys.OrderListActivity;
@@ -162,7 +163,8 @@ public final class MyFragment extends BaseFragment implements View.OnClickListen
 
     private void startMyHelpActivity() {
 //        HelpCenterActivity.start(getActivity());
-        OrderDetailActivity.start(getActivity(),"");
+//        OrderDetailActivity.start(getActivity(),"");
+        MyBalanceActivity.start(getActivity());
     }
 
     private void startMyEvaluationActivity() {
