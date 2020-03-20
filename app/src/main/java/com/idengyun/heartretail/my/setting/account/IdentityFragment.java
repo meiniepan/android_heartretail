@@ -15,7 +15,8 @@ import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.utils.ToastUtils;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
-import com.idengyun.heartretail.viewmodel.VerifyCodeViewModel;
+import com.idengyun.heartretail.model.response.MobileBindBean;
+import com.idengyun.heartretail.viewmodel.SettingViewModel;
 import com.idengyun.usermodule.HRConst;
 import com.idengyun.usermodule.HRUser;
 import com.idengyun.usermodule.beans.VerifyCodeBean;
@@ -35,7 +36,7 @@ public final class IdentityFragment extends BaseFragment implements View.OnClick
     private View tv_identity_next;
 
     private SecondsTimer timer;
-    private VerifyCodeViewModel verifyCodeViewModel;
+    private SettingViewModel settingViewModel;
 
     @Override
     public int getLayoutId() {
@@ -50,17 +51,8 @@ public final class IdentityFragment extends BaseFragment implements View.OnClick
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        FragmentActivity activity = getActivity();
-        if (activity == null) return;
-        if (verifyCodeViewModel == null) {
-            verifyCodeViewModel = VerifyCodeViewModel.getInstance(activity);
-            verifyCodeViewModel.getVerifyCode().observe(this, new Observer<VerifyCodeBean>() {
-                @Override
-                public void onChanged(@Nullable VerifyCodeBean verifyCodeBean) {
-                    ToastUtils.showLong("验证码已发出");
-                }
-            });
-        }
+        observe();
+
         String mobile = HRUser.getMobile();
         tv_identity_mobile.setText(mobile);
         if (mobile.length() == 11) {
@@ -82,15 +74,31 @@ public final class IdentityFragment extends BaseFragment implements View.OnClick
         } else if (tv_identity_contact_service == v) {
             // TODO: 2020/3/9
         } else if (tv_identity_next == v) {
-            startPhoneActivity();
+            nextStep();
+        }
+    }
+
+    private void observe() {
+        FragmentActivity activity = getActivity();
+        if (activity == null) return;
+        if (settingViewModel == null) {
+            settingViewModel = SettingViewModel.getInstance(activity);
+            settingViewModel.getVerifyCode().observe(this, new Observer<VerifyCodeBean>() {
+                @Override
+                public void onChanged(@Nullable VerifyCodeBean verifyCodeBean) {
+                    ToastUtils.showLong("验证码已发出");
+                }
+            });
+            settingViewModel.getIdentityVerify().observe(this, new Observer<MobileBindBean>() {
+                @Override
+                public void onChanged(@Nullable MobileBindBean mobileBindBean) {
+                    startPhoneActivity();
+                }
+            });
         }
     }
 
     private void startPhoneActivity() {
-        if (et_identity_verify_code.length() < 1) {
-            ToastUtils.showShort("请输入有效验证码");
-            return;
-        }
         HRActivity.start(getContext(), MobileBindFragment.class);
         if (getActivity() != null) getActivity().finish();
     }
@@ -99,8 +107,18 @@ public final class IdentityFragment extends BaseFragment implements View.OnClick
     private void sendVerifyCode() {
         startTimer(tv_identity_verify_code);
 
-        if (verifyCodeViewModel == null) return;
-        verifyCodeViewModel.requestVerifyCode(this, HRConst.IDENTIFY_TYPE_4);
+        if (settingViewModel == null) return;
+        settingViewModel.requestVerifyCode(this, HRConst.IDENTIFY_TYPE_4);
+    }
+
+    private void nextStep() {
+        if (et_identity_verify_code.length() < 1) {
+            ToastUtils.showShort("请输入有效验证码");
+            return;
+        }
+        if (settingViewModel != null) {
+            settingViewModel.requestIdentityVerify(this, et_identity_verify_code.getText().toString());
+        }
     }
 
     private void startTimer(TextView textView) {

@@ -26,7 +26,7 @@ import com.idengyun.heartretail.model.response.PersonalDataBean;
 import com.idengyun.heartretail.model.response.UserAvatarBean;
 import com.idengyun.heartretail.my.setting.personal.InviteCodeFragment;
 import com.idengyun.heartretail.my.setting.personal.NicknameFragment;
-import com.idengyun.heartretail.viewmodel.UserViewModel;
+import com.idengyun.heartretail.viewmodel.SettingViewModel;
 import com.idengyun.usermodule.HRUser;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.entity.LocalMedia;
@@ -53,7 +53,7 @@ public final class PersonalFragment extends BaseFragment implements View.OnClick
     private TextView tv_personal_nickname;
     private TextView tv_personal_invite_code;
 
-    private UserViewModel userViewModel;
+    private SettingViewModel settingViewModel;
 
     @Override
     public int getLayoutId() {
@@ -70,9 +70,9 @@ public final class PersonalFragment extends BaseFragment implements View.OnClick
         super.onActivityCreated(savedInstanceState);
         FragmentActivity activity = getActivity();
         if (activity == null) return;
-        if (userViewModel == null) {
-            userViewModel = UserViewModel.getInstance(activity);
-            userViewModel.getModifyAvatar().observe(this, new Observer<UserAvatarBean>() {
+        if (settingViewModel == null) {
+            settingViewModel = SettingViewModel.getInstance(activity);
+            settingViewModel.getModifyAvatar().observe(this, new Observer<UserAvatarBean>() {
                 @Override
                 public void onChanged(@Nullable UserAvatarBean userAvatarBean) {
                     HRUser.saveAvatar(avatarUrl);
@@ -130,8 +130,8 @@ public final class PersonalFragment extends BaseFragment implements View.OnClick
     private String avatarUrl;
 
     private void modifyAvatar() {
-        if (userViewModel == null) return;
-        userViewModel.requestModifyAvatar(this, avatarUrl);
+        if (settingViewModel == null) return;
+        settingViewModel.requestModifyAvatar(this, avatarUrl);
     }
 
     @MainThread

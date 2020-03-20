@@ -14,7 +14,7 @@ import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.utils.ToastUtils;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.UserNickBean;
-import com.idengyun.heartretail.viewmodel.UserViewModel;
+import com.idengyun.heartretail.viewmodel.SettingViewModel;
 import com.idengyun.usermodule.HRUser;
 
 /**
@@ -26,7 +26,7 @@ public final class InviteCodeFragment extends BaseFragment implements View.OnCli
 
     private EditText et_invite_code;
     private View tv_invite_code_modify;
-    private UserViewModel userViewModel;
+    private SettingViewModel settingViewModel;
 
     @Override
     public int getLayoutId() {
@@ -43,9 +43,9 @@ public final class InviteCodeFragment extends BaseFragment implements View.OnCli
         super.onActivityCreated(savedInstanceState);
         FragmentActivity activity = getActivity();
         if (activity == null) return;
-        if (userViewModel == null) {
-            userViewModel = UserViewModel.getInstance(activity);
-            userViewModel.getModifyNickname().observe(this, new Observer<UserNickBean>() {
+        if (settingViewModel == null) {
+            settingViewModel = SettingViewModel.getInstance(activity);
+            settingViewModel.getModifyNickname().observe(this, new Observer<UserNickBean>() {
                 @Override
                 public void onChanged(@Nullable UserNickBean userNickBean) {
                     HRUser.saveInviteCode(et_invite_code.getText().toString());
@@ -65,8 +65,8 @@ public final class InviteCodeFragment extends BaseFragment implements View.OnCli
     }
 
     private void modifyInviteCode(final String inviteCode) {
-        if (userViewModel == null) return;
-        userViewModel.requestModifyNickname(this, HRUser.getNickname(), inviteCode);
+        if (settingViewModel == null) return;
+        settingViewModel.requestModifyNickname(this, HRUser.getNickname(), inviteCode);
     }
 
     private void findViewById(View view) {

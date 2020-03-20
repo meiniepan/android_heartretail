@@ -11,13 +11,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
-import com.dengyun.baselibrary.utils.ToastUtils;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.RealVerifyBean;
-import com.idengyun.heartretail.viewmodel.UserViewModel;
-import com.idengyun.heartretail.viewmodel.VerifyCodeViewModel;
+import com.idengyun.heartretail.viewmodel.SettingViewModel;
 import com.idengyun.usermodule.HRConst;
-import com.idengyun.usermodule.beans.VerifyCodeBean;
 import com.idengyun.usermodule.utils.SecondsTimer;
 
 /**
@@ -39,8 +36,7 @@ public final class RealFragment extends BaseFragment implements View.OnClickList
     private TextView tv_real_go_auth;
 
     private SecondsTimer timer;
-    private UserViewModel userViewModel;
-    private VerifyCodeViewModel verifyCodeViewModel;
+    private SettingViewModel settingViewModel;
 
     @Override
     public int getLayoutId() {
@@ -57,22 +53,12 @@ public final class RealFragment extends BaseFragment implements View.OnClickList
         super.onActivityCreated(savedInstanceState);
         FragmentActivity activity = getActivity();
         if (activity == null) return;
-        if (userViewModel == null) {
-            userViewModel = UserViewModel.getInstance(activity);
-            userViewModel.getRealVerify().observe(this, new Observer<RealVerifyBean>() {
+        if (settingViewModel == null) {
+            settingViewModel = SettingViewModel.getInstance(activity);
+            settingViewModel.getRealVerify().observe(this, new Observer<RealVerifyBean>() {
                 @Override
                 public void onChanged(@Nullable RealVerifyBean realVerifyBean) {
                     updateUI(realVerifyBean);
-                }
-            });
-        }
-
-        if (verifyCodeViewModel == null) {
-            verifyCodeViewModel = VerifyCodeViewModel.getInstance(activity);
-            verifyCodeViewModel.getVerifyCode().observe(this, new Observer<VerifyCodeBean>() {
-                @Override
-                public void onChanged(@Nullable VerifyCodeBean verifyCodeBean) {
-                    ToastUtils.showLong("验证码已发出");
                 }
             });
         }
@@ -94,8 +80,8 @@ public final class RealFragment extends BaseFragment implements View.OnClickList
     }
 
     private void toAuth() {
-        if (userViewModel == null) return;
-        userViewModel.requestRealVerify(this,
+        if (settingViewModel == null) return;
+        settingViewModel.requestRealVerify(this,
                 et_real_reserved_mobile.getText().toString(),
                 et_real_nationality.getText().toString(),
                 et_real_id_type.getText().toString(),
@@ -114,8 +100,8 @@ public final class RealFragment extends BaseFragment implements View.OnClickList
     private void sendVerifyCode() {
         startTimer(tv_real_verify_code);
 
-        if (verifyCodeViewModel == null) return;
-        verifyCodeViewModel.requestVerifyCode(this, HRConst.IDENTIFY_TYPE_0);
+//        if (verifyCodeViewModel == null) return;
+//        verifyCodeViewModel.requestVerifyCode(this, HRConst.IDENTIFY_TYPE_0);
     }
 
     private void startTimer(final TextView textView) {

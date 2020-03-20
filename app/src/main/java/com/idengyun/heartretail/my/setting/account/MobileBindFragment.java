@@ -16,8 +16,7 @@ import com.dengyun.baselibrary.utils.RegexUtils;
 import com.dengyun.baselibrary.utils.ToastUtils;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.MobileBindBean;
-import com.idengyun.heartretail.viewmodel.UserViewModel;
-import com.idengyun.heartretail.viewmodel.VerifyCodeViewModel;
+import com.idengyun.heartretail.viewmodel.SettingViewModel;
 import com.idengyun.usermodule.HRConst;
 import com.idengyun.usermodule.HRUser;
 import com.idengyun.usermodule.beans.VerifyCodeBean;
@@ -36,8 +35,7 @@ public final class MobileBindFragment extends BaseFragment implements View.OnCli
     private View tv_phone_bind;
 
     private SecondsTimer timer;
-    private UserViewModel userViewModel;
-    private VerifyCodeViewModel verifyCodeViewModel;
+    private SettingViewModel settingViewModel;
 
     @Override
     public int getLayoutId() {
@@ -52,28 +50,7 @@ public final class MobileBindFragment extends BaseFragment implements View.OnCli
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        FragmentActivity activity = getActivity();
-        if (activity == null) return;
-        if (userViewModel == null) {
-            userViewModel = UserViewModel.getInstance(activity);
-            userViewModel.getBindMobile().observe(this, new Observer<MobileBindBean>() {
-                @Override
-                public void onChanged(@Nullable MobileBindBean mobileBindBean) {
-                    HRUser.saveMobile(et_phone_mobile.getText().toString());
-                    ToastUtils.showShort("手机号绑定成功");
-                    if (getActivity() != null) getActivity().finish();
-                }
-            });
-        }
-        if (verifyCodeViewModel == null) {
-            verifyCodeViewModel = VerifyCodeViewModel.getInstance(activity);
-            verifyCodeViewModel.getVerifyCode().observe(this, new Observer<VerifyCodeBean>() {
-                @Override
-                public void onChanged(@Nullable VerifyCodeBean verifyCodeBean) {
-                    ToastUtils.showLong("验证码已发出");
-                }
-            });
-        }
+        observe();
     }
 
     @Override
@@ -91,6 +68,28 @@ public final class MobileBindFragment extends BaseFragment implements View.OnCli
         }
     }
 
+    private void observe() {
+        FragmentActivity activity = getActivity();
+        if (activity == null) return;
+        if (settingViewModel == null) {
+            settingViewModel = SettingViewModel.getInstance(activity);
+            settingViewModel.getVerifyCode().observe(this, new Observer<VerifyCodeBean>() {
+                @Override
+                public void onChanged(@Nullable VerifyCodeBean verifyCodeBean) {
+                    ToastUtils.showLong("验证码已发出");
+                }
+            });
+            settingViewModel.getBindMobile().observe(this, new Observer<MobileBindBean>() {
+                @Override
+                public void onChanged(@Nullable MobileBindBean mobileBindBean) {
+                    HRUser.saveMobile(et_phone_mobile.getText().toString());
+                    ToastUtils.showShort("手机号绑定成功");
+                    if (getActivity() != null) getActivity().finish();
+                }
+            });
+        }
+    }
+
     private void bindNewMobile() {
         if (!RegexUtils.isMobileSimple(et_phone_mobile.getText())) {
             ToastUtils.showShort("请输入有效手机号码");
@@ -102,16 +101,16 @@ public final class MobileBindFragment extends BaseFragment implements View.OnCli
             return;
         }
 
-        if (userViewModel == null) return;
-        userViewModel.requestBindMobile(this, et_phone_mobile.getText().toString(), et_phone_verify_code.getText().toString());
+        if (settingViewModel == null) return;
+        settingViewModel.requestBindMobile(this, et_phone_mobile.getText().toString(), et_phone_verify_code.getText().toString());
     }
 
     /* 发送手机验证码API */
     private void sendVerifyCode() {
         startTimer(tv_phone_verify_code);
 
-        if (verifyCodeViewModel == null) return;
-        verifyCodeViewModel.requestVerifyCode(this, HRConst.IDENTIFY_TYPE_4);
+        if (settingViewModel == null) return;
+        settingViewModel.requestVerifyCode(this, HRConst.IDENTIFY_TYPE_4);
     }
 
     private void startTimer(TextView textView) {

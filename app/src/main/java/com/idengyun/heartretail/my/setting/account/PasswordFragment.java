@@ -22,8 +22,7 @@ import com.dengyun.baselibrary.utils.activity.ActivityUtils;
 import com.idengyun.heartretail.MainActivity;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.PwdModifyBean;
-import com.idengyun.heartretail.viewmodel.UserViewModel;
-import com.idengyun.heartretail.viewmodel.VerifyCodeViewModel;
+import com.idengyun.heartretail.viewmodel.SettingViewModel;
 import com.idengyun.usermodule.HRConst;
 import com.idengyun.usermodule.HRUser;
 import com.idengyun.usermodule.LoginActivity;
@@ -47,8 +46,7 @@ public final class PasswordFragment extends BaseFragment implements CompoundButt
 
     private SecondsTimer timer;
 
-    private UserViewModel userViewModel;
-    private VerifyCodeViewModel verifyCodeViewModel;
+    private SettingViewModel settingViewModel;
 
     @Override
     public int getLayoutId() {
@@ -63,27 +61,8 @@ public final class PasswordFragment extends BaseFragment implements CompoundButt
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        FragmentActivity activity = getActivity();
-        if (activity == null) return;
-        if (userViewModel == null) {
-            userViewModel = UserViewModel.getInstance(activity);
-            userViewModel.getModifyPwd().observe(this, new Observer<PwdModifyBean>() {
-                @Override
-                public void onChanged(@Nullable PwdModifyBean pwdModifyBean) {
-                    ToastUtils.showLong("密码修改成功");
-                    logout();
-                }
-            });
-        }
-        if (verifyCodeViewModel == null) {
-            verifyCodeViewModel = VerifyCodeViewModel.getInstance(activity);
-            verifyCodeViewModel.getVerifyCode().observe(this, new Observer<VerifyCodeBean>() {
-                @Override
-                public void onChanged(@Nullable VerifyCodeBean verifyCodeBean) {
-                    ToastUtils.showLong("验证码已发出");
-                }
-            });
-        }
+        observe();
+
         String mobile = HRUser.getMobile();
         tv_pwd_mobile.setText(mobile);
         if (mobile.length() == 11) {
@@ -115,6 +94,27 @@ public final class PasswordFragment extends BaseFragment implements CompoundButt
         et_pwd_new_pwd.setTransformationMethod(method);
     }
 
+    private void observe() {
+        FragmentActivity activity = getActivity();
+        if (activity == null) return;
+        if (settingViewModel == null) {
+            settingViewModel = SettingViewModel.getInstance(activity);
+            settingViewModel.getVerifyCode().observe(this, new Observer<VerifyCodeBean>() {
+                @Override
+                public void onChanged(@Nullable VerifyCodeBean verifyCodeBean) {
+                    ToastUtils.showLong("验证码已发出");
+                }
+            });
+            settingViewModel.getModifyPwd().observe(this, new Observer<PwdModifyBean>() {
+                @Override
+                public void onChanged(@Nullable PwdModifyBean pwdModifyBean) {
+                    ToastUtils.showLong("密码修改成功");
+                    logout();
+                }
+            });
+        }
+    }
+
     private void modifyPwd() {
         if (et_pwd_verify_code.length() < 1) {
             ToastUtils.showShort("请输入有效验证码");
@@ -126,8 +126,8 @@ public final class PasswordFragment extends BaseFragment implements CompoundButt
             return;
         }
 
-        if (userViewModel == null) return;
-        userViewModel.requestBindMobile(this, et_pwd_verify_code.getText().toString(), et_pwd_new_pwd.getText().toString());
+        if (settingViewModel == null) return;
+        settingViewModel.requestModifyPwd(this, et_pwd_verify_code.getText().toString(), et_pwd_new_pwd.getText().toString());
     }
 
     private void logout() {
@@ -144,8 +144,8 @@ public final class PasswordFragment extends BaseFragment implements CompoundButt
     private void sendVerifyCode() {
         startTimer(tv_pwd_verify_code);
 
-        if (verifyCodeViewModel == null) return;
-        verifyCodeViewModel.requestVerifyCode(this, HRConst.IDENTIFY_TYPE_2);
+        if (settingViewModel == null) return;
+        settingViewModel.requestVerifyCode(this, HRConst.IDENTIFY_TYPE_2);
     }
 
     private void startTimer(final TextView textView) {

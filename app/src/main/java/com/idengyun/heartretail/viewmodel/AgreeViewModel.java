@@ -36,12 +36,12 @@ public final class AgreeViewModel extends ViewModel {
     }
 
     /* 查询协议 */
-    public void requestAgreeList(Fragment fragment, List<Integer> protocols) {
+    public void requestAgreeList(Fragment fragment, List<Integer> protocolIds) {
         NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.protocolDetail())
                 .fragment(fragment)
                 .isShowDialog(true)
                 .clazz(ProtocolsBean.class)
-                .params("protocolKeys", protocols)
+                .params("protocolIds", protocolIds)
                 .build();
         NetApi.getData(netOption, new JsonCallback<ProtocolsBean>(netOption) {
             @Override

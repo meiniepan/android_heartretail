@@ -20,6 +20,7 @@ import com.idengyun.heartretail.model.response.RealVerifyBean;
 import com.idengyun.heartretail.model.response.UserAvatarBean;
 import com.idengyun.heartretail.model.response.UserNickBean;
 import com.idengyun.usermodule.HRUser;
+import com.idengyun.usermodule.beans.VerifyCodeBean;
 import com.lzy.okgo.model.Response;
 
 /**
@@ -27,27 +28,85 @@ import com.lzy.okgo.model.Response;
  *
  * @author aLang
  */
-public final class UserViewModel extends ViewModel {
+public final class SettingViewModel extends ViewModel {
 
-    public static UserViewModel getInstance(@NonNull FragmentActivity activity) {
-        return ViewModelProviders.of(activity).get(UserViewModel.class);
+    public static SettingViewModel getInstance(@NonNull FragmentActivity activity) {
+        return ViewModelProviders.of(activity).get(SettingViewModel.class);
     }
 
+    private final MutableLiveData<VerifyCodeBean> verifyCodeLiveData;
     private final MutableLiveData<PersonalDataBean> userInfoLiveData;
+
+    /* 个人资料 */
     private final MutableLiveData<UserAvatarBean> avatarModifyLiveData;
     private final MutableLiveData<UserNickBean> nicknameModifyLiveData;
+
+    /* 账号管理 */
     private final MutableLiveData<PwdModifyBean> pwdModifyLiveData;
+    private final MutableLiveData<MobileBindBean> idVerifyLiveData;
     private final MutableLiveData<MobileBindBean> mobileBindLiveData;
     private final MutableLiveData<RealVerifyBean> realVerifyLiveData;
 
-    public UserViewModel() {
+    public SettingViewModel() {
         super();
+        verifyCodeLiveData = new MutableLiveData<>();
         userInfoLiveData = new MutableLiveData<>();
         avatarModifyLiveData = new MutableLiveData<>();
         nicknameModifyLiveData = new MutableLiveData<>();
         pwdModifyLiveData = new MutableLiveData<>();
+        idVerifyLiveData = new MutableLiveData<>();
         mobileBindLiveData = new MutableLiveData<>();
         realVerifyLiveData = new MutableLiveData<>();
+    }
+
+    public LiveData<VerifyCodeBean> getVerifyCode() {
+        return verifyCodeLiveData;
+    }
+
+    public LiveData<PersonalDataBean> getUserInfo() {
+        return userInfoLiveData;
+    }
+
+    public LiveData<UserAvatarBean> getModifyAvatar() {
+        return avatarModifyLiveData;
+    }
+
+    public LiveData<UserNickBean> getModifyNickname() {
+        return nicknameModifyLiveData;
+    }
+
+    public LiveData<PwdModifyBean> getModifyPwd() {
+        return pwdModifyLiveData;
+    }
+
+    public LiveData<MobileBindBean> getIdentityVerify() {
+        return idVerifyLiveData;
+    }
+
+    public LiveData<MobileBindBean> getBindMobile() {
+        return mobileBindLiveData;
+    }
+
+    public LiveData<RealVerifyBean> getRealVerify() {
+        return realVerifyLiveData;
+    }
+
+    /* 发送验证码 */
+    public void requestVerifyCode(Fragment fragment, String identifyType) {
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.getIdentifyCode())
+                .fragment(fragment)
+                .isShowDialog(true)
+                .clazz(VerifyCodeBean.class)
+                .params("mobile", HRUser.getMobile())
+                .params("identifyType", identifyType)
+                .build();
+
+        NetApi.getData(RequestMethod.GET, netOption, new JsonCallback<VerifyCodeBean>(netOption) {
+            @Override
+            public void onSuccess(Response<VerifyCodeBean> response) {
+                verifyCodeLiveData.setValue(response.body());
+            }
+        });
     }
 
     /* 查询用户信息 */
@@ -119,6 +178,25 @@ public final class UserViewModel extends ViewModel {
         });
     }
 
+    /* 身份验证 */
+    public void requestIdentityVerify(Fragment fragment, String identifyCode) {
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.smsIdentity())
+                .fragment(fragment)
+                .isShowDialog(true)
+                .clazz(MobileBindBean.class)
+                .params("mobile", HRUser.getMobile())
+                .params("identifyCode", identifyCode)
+                .params("userId", HRUser.getId())
+                .params("identifyType", 4)
+                .build();
+        NetApi.getData(netOption, new JsonCallback<MobileBindBean>(netOption) {
+            @Override
+            public void onSuccess(Response<MobileBindBean> response) {
+                idVerifyLiveData.setValue(response.body());
+            }
+        });
+    }
+
     /* 绑定新手机号码 */
     public void requestBindMobile(Fragment fragment, String mobile, String verifyCode) {
         NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.changeMobile())
@@ -158,29 +236,5 @@ public final class UserViewModel extends ViewModel {
                 realVerifyLiveData.setValue(response.body());
             }
         });
-    }
-
-    public LiveData<PersonalDataBean> getUserInfo() {
-        return userInfoLiveData;
-    }
-
-    public LiveData<UserAvatarBean> getModifyAvatar() {
-        return avatarModifyLiveData;
-    }
-
-    public LiveData<UserNickBean> getModifyNickname() {
-        return nicknameModifyLiveData;
-    }
-
-    public LiveData<PwdModifyBean> getModifyPwd() {
-        return pwdModifyLiveData;
-    }
-
-    public LiveData<MobileBindBean> getBindMobile() {
-        return mobileBindLiveData;
-    }
-
-    public LiveData<RealVerifyBean> getRealVerify() {
-        return realVerifyLiveData;
     }
 }

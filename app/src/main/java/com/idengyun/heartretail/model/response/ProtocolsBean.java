@@ -13,7 +13,7 @@ public final class ProtocolsBean {
     public List<Data> data;
 
     public final static class Data {
-        public int protocolKey;
+        public int protocolId;
         public String protocolName;
         public String protocolContent;
     }

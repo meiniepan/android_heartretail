@@ -236,6 +236,11 @@ public class SpMainConfigConstants {
         return getMainConfigUrl("login");
     }
 
+    /* 校验验证码 */
+    public static String smsIdentity() {
+        return getMainConfigUrl("smsIdentity");
+    }
+
     /* ================================= 我的订单 ================================= */
 
     /* 订单详情 */
