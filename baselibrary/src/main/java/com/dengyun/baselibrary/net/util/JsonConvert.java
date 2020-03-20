@@ -240,11 +240,9 @@ public class JsonConvert<T> implements Converter<T> {
         }
     }
 
-    private void printLog(String json){
-        AppLogUtil.setNetLog(netOption.getUrl());
-        AppLogUtil.setNetLog(netOption.getParams());
-        AppLogUtil.setNetLogJson(json);
-//        AppLogUtil.setNetLog(json);
+    private void printLog(String json) {
+        if (!AppConfig.isDebug) return;
+        AppLogUtil.setNetResultLog(netOption.getUrl(), netOption.getParams(), json);
     }
 
     private void printRealRequset(String json){

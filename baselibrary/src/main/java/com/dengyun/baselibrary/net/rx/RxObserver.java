@@ -41,13 +41,16 @@ public abstract class RxObserver<T> implements Observer<T> {
     public void onSubscribe(Disposable d) {
         mRxManager.add(mKey, d);
 
-        if (netOption.isShowDialog() && null!=loadingDialog) {
-            if (null!=netOption.getActivity()){
-                if (loadingDialog instanceof LoadingDialog1) ((LoadingDialog1) loadingDialog).show(netOption.getActivity());
+        if (netOption.isShowDialog() && null != loadingDialog) {
+            if (null != netOption.getActivity()) {
+                if (loadingDialog instanceof LoadingDialog1)
+                    ((LoadingDialog1) loadingDialog).show(netOption.getActivity());
                 else loadingDialog.show(netOption.getActivity().getSupportFragmentManager());
-            }else if (null != netOption.getFragment() && null != netOption.getFragment().getActivity()) {
-                if (loadingDialog instanceof LoadingDialog1) ((LoadingDialog1) loadingDialog).show(netOption.getFragment());
-                else loadingDialog.show(netOption.getFragment().getActivity().getSupportFragmentManager());
+            } else if (null != netOption.getFragment() && null != netOption.getFragment().getActivity()) {
+                if (loadingDialog instanceof LoadingDialog1)
+                    ((LoadingDialog1) loadingDialog).show(netOption.getFragment());
+                else
+                    loadingDialog.show(netOption.getFragment().getActivity().getSupportFragmentManager());
             }
         }
     }
@@ -59,16 +62,14 @@ public abstract class RxObserver<T> implements Observer<T> {
             onNoNet(e);
             return;
         }
-        if (AppConfig.isDebug&&!(e instanceof ApiException)) {
-            AppLogUtil.setNetLog(netOption.getUrl());
-            AppLogUtil.setNetLog(netOption.getParams());
-            AppLogUtil.setNetLog(e.getMessage());
+        if (AppConfig.isDebug && !(e instanceof ApiException)) {
+            AppLogUtil.setNetErrorLog(netOption.getUrl(), e.getMessage());
         }
         handleError(e);
     }
 
-    public void handleError(Throwable e){
-        ApiException.parseErrorRx(this,netOption,e);
+    public void handleError(Throwable e) {
+        ApiException.parseErrorRx(this, netOption, e);
     }
 
     @Override
@@ -78,16 +79,18 @@ public abstract class RxObserver<T> implements Observer<T> {
 
     public void onNoNet(Throwable e) {
         dismissUi(false);
-        if(null!= NetDealConfig.netDealNoNet){
+        if (null != NetDealConfig.netDealNoNet) {
             NetDealConfig.netDealNoNet.dealNoNet(netOption);
-        }else { DefultDealNoNetUtil.dealNoNet(netOption); }
+        } else {
+            DefultDealNoNetUtil.dealNoNet(netOption);
+        }
     }
 
-    private void dismissUi(boolean isEnableLoadMore){
+    private void dismissUi(boolean isEnableLoadMore) {
         if (loadingDialog != null && loadingDialog.getShowsDialog()) {
             loadingDialog.dismiss();
         }
-        if(null!=netOption.getRefreshLayout()){
+        if (null != netOption.getRefreshLayout()) {
             netOption.getRefreshLayout().finishRefresh().finishLoadMore();
             if (!isEnableLoadMore) netOption.getRefreshLayout().setEnableLoadMore(false);
         }
