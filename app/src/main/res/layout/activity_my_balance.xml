@@ -164,6 +164,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:hint="待发放余额"
+                    android:drawableEnd="@drawable/ic_exclamation_small"
+                    android:drawablePadding="@dimen/dp_3"
                     android:textSize="@dimen/sp_12" />
 
                 <TextView
