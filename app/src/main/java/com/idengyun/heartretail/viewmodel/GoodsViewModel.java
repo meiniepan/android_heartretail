@@ -29,6 +29,10 @@ public final class GoodsViewModel extends ViewModel {
         return ViewModelProviders.of(activity).get(GoodsViewModel.class);
     }
 
+    public static GoodsViewModel getInstance(@NonNull Fragment fragment) {
+        return ViewModelProviders.of(fragment).get(GoodsViewModel.class);
+    }
+
     private final MutableLiveData<GoodsListBean> goodsListLiveData;
     private final MutableLiveData<GoodsDetailBean> goodsDetailLiveData;
     private final MutableLiveData<GoodsEvaluateBean> goodsEvaluateLiveData;

@@ -7,6 +7,7 @@ import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.dengyun.baselibrary.net.ImageApi;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.GoodsEvaluateBean;
 import com.idengyun.heartretail.viewmodel.GoodsViewModel;
+import com.idengyun.msgmodule.LoadMore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +31,7 @@ import java.util.List;
  *
  * @author aLang
  */
-public final class GoodsEvaluateFragment extends BaseFragment {
+public final class GoodsEvaluateFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private TextView tv_favorable_rate;
     private RecyclerView recycler_view;
@@ -37,12 +39,13 @@ public final class GoodsEvaluateFragment extends BaseFragment {
 
     private GoodsViewModel goodsViewModel;
 
-    /* 分页 */
-    private int totalPageSize = -1;
-    private int totalPage = -1;
-    private int pageSize = 10;
-    private int page = 0;
-    private boolean loadMore = true;
+    /* 分页加载 */
+    private int totalSize = 0;
+    private int totalPage = 0;
+    private int pageSize = 0;
+    private int currentPage = 0;
+    private boolean isLoadMore;
+    private boolean isRequesting;
 
     @Override
     public int getLayoutId() {
@@ -55,10 +58,11 @@ public final class GoodsEvaluateFragment extends BaseFragment {
         recycler_view = view.findViewById(R.id.recycler_view);
         evaluationAdapter = new EvaluationAdapter();
         recycler_view.setAdapter(evaluationAdapter);
-        recycler_view.addOnScrollListener(new LoadMore() {
+        final LoadMore loadMore = new LoadMore(recycler_view);
+        recycler_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onLoadMore(RecyclerView recyclerView) {
-                requestAPI();
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                if (loadMore.isRequestLoadMore()) onLoadMore();
             }
         });
     }
@@ -66,8 +70,24 @@ public final class GoodsEvaluateFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        observe();
+        onRefresh();
+    }
+
+    @Override
+    public void onRefresh() {
+        totalSize = 0;
+        totalPage = 0;
+        pageSize = 10;
+        currentPage = 0;
+        isLoadMore = true;
+        isRequesting = false;
+        onLoadMore();
+    }
+
+    private void observe() {
         FragmentActivity activity = getActivity();
-        assert activity != null;
+        if (activity == null) return;
         if (goodsViewModel == null) {
             goodsViewModel = GoodsViewModel.getInstance(activity);
             goodsViewModel.getGoodsEvaluate().observe(this, new Observer<GoodsEvaluateBean>() {
@@ -77,34 +97,38 @@ public final class GoodsEvaluateFragment extends BaseFragment {
                 }
             });
         }
-
-        requestAPI();
     }
 
-    private void requestAPI() {
+    private void onLoadMore() {
+        if (isRequesting || !isLoadMore) return;
         FragmentActivity activity = getActivity();
-        assert activity != null;
+        if (activity == null) return;
         Intent intent = activity.getIntent();
         int goodsId = intent.getIntExtra("home_goods_id", -1);
         int goodsType = intent.getIntExtra("home_goods_type", -1);
-        if (!loadMore) return;
-        goodsViewModel.requestGoodsEvaluate(this, goodsId, page + 1, pageSize);
+        if (goodsViewModel != null) {
+            isRequesting = true;
+            goodsViewModel.requestGoodsEvaluate(this, goodsId, currentPage + 1, pageSize);
+        }
     }
 
     @MainThread
     private void updateUI(@Nullable GoodsEvaluateBean goodsEvaluateBean) {
+        isRequesting = false;
         if (goodsEvaluateBean == null) return;
         GoodsEvaluateBean.Data data = goodsEvaluateBean.data;
+        List<GoodsEvaluateBean.Data.Evaluation> evaluationList = data.evaluationList;
 
-        totalPageSize = data.total;
-        totalPage = (int) Math.ceil(1D * totalPageSize / pageSize);
-        loadMore = ++page < totalPage;
+        totalSize = data.total;
+        totalPage = data.pages;
+        currentPage = data.current;
+        isLoadMore = currentPage < totalPage;
 
         int evaluationCounts = data.total;
         String praiseRate = data.praiseRate;
-        List<GoodsEvaluateBean.Data.Evaluation> evaluationList = data.evaluationList;
-
         tv_favorable_rate.setText(evaluationCounts + "+条评论，" + praiseRate + "%好评率");
+
+        if (currentPage == 1) evaluationAdapter.evaluationList.clear();
         evaluationAdapter.evaluationList.addAll(evaluationList);
         evaluationAdapter.notifyDataSetChanged();
     }
@@ -167,12 +191,7 @@ public final class GoodsEvaluateFragment extends BaseFragment {
                 rb_user_rating.setNumStars(commentStar);
                 tv_user_evaluation_content.setText(contents);
 
-
-                if (getAdapterPosition() + 1 == totalPageSize) {
-                    tv_no_more.setVisibility(View.VISIBLE);
-                } else {
-                    tv_no_more.setVisibility(View.GONE);
-                }
+                tv_no_more.setVisibility(currentPage < totalPage ? View.GONE : View.VISIBLE);
             }
 
             private void findViewById(@NonNull View itemView) {

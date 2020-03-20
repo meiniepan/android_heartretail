@@ -4,54 +4,68 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#f83e3e"
-    android:padding="5dp">
+    android:layout_margin="5dp">
 
-    <android.support.v7.widget.CardView
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="210dp"
-        android:minHeight="210dp"
-        app:cardBackgroundColor="@android:color/white"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="0dp">
+        android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="vertical">
+        <android.support.v7.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:minHeight="210dp"
+            app:cardBackgroundColor="@android:color/white"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="H,140:210"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/iv_home_goods_url"
-                android:layout_width="140dp"
-                android:layout_height="140dp"
-                tools:background="#3f00" />
+        <ImageView
+            android:id="@+id/iv_home_goods_url"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="H,1:1"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0"
+            tools:background="#3f00" />
 
-            <TextView
-                android:id="@+id/tv_home_goods_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="7dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginEnd="7dp"
-                android:ellipsize="end"
-                android:gravity="center_horizontal"
-                android:maxLines="2"
-                android:textColor="#ff333333"
-                android:textSize="13sp"
-                tools:text="这里是一段商品标题信息最多展示2行…" />
+        <TextView
+            android:id="@+id/tv_home_goods_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="#ff333333"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_home_goods_price"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_home_goods_url"
+            tools:text="这里是一段商品标题信息最多展示2行…" />
 
-            <TextView
-                android:id="@+id/tv_home_goods_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:textColor="#ffff6633"
-                android:textSize="14sp"
-                tools:text="¥123.45" />
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
+        <TextView
+            android:id="@+id/tv_home_goods_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:textColor="#ffff6633"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_home_goods_name"
+            tools:text="¥123.45" />
+    </android.support.constraint.ConstraintLayout>
 </FrameLayout>
 
 

@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#F8F8F8">
-
+    android:layout_height="wrap_content"
+    android:background="#f83e3e"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:orientation="vertical"
         android:overScrollMode="never"
-        android:paddingStart="22dp"
-        android:paddingEnd="22dp"
         android:scrollbars="none"
         android:visibility="visible"
         app:layoutManager="android.support.v7.widget.GridLayoutManager"
@@ -22,7 +25,16 @@
         tools:itemCount="2"
         tools:listitem="@layout/fragment_home_goods_item" />
 
-    <include layout="@layout/fragment_home_goods_nav_bar" />
-</FrameLayout>
+    <TextView
+        android:id="@+id/tv_home_load_more"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingTop="24dp"
+        android:paddingBottom="24dp"
+        android:text="~ 点击查看更多 ~"
+        android:textColor="#ffe2e2e2"
+        android:textSize="14sp" />
+</LinearLayout>
 
 

@@ -6,7 +6,7 @@ import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +28,7 @@ import java.util.List;
  *
  * @author aLang
  */
-public final class NoticeFragment extends BaseFragment {
+public final class NoticeFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private int notifyGroup;
     private RecyclerView recycler_view;
@@ -36,12 +36,13 @@ public final class NoticeFragment extends BaseFragment {
     private NoticeViewModel noticeViewModel;
     private NoticeAdapter noticeAdapter;
 
-    /* 分页 */
-    private int totalPageSize = -1;
-    private int totalPage = -1;
-    private int pageSize = 10;
-    private int page = 0;
-    private boolean noMore;
+    /* 分页加载 */
+    private int totalSize = 0;
+    private int totalPage = 0;
+    private int pageSize = 0;
+    private int currentPage = 0;
+    private boolean isLoadMore;
+    private boolean isRequesting;
 
     @Override
     public int getLayoutId() {
@@ -63,21 +64,38 @@ public final class NoticeFragment extends BaseFragment {
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (hidden) return;
-        requestAPI();
+        if (getUserVisibleHint()) {
+            setUserVisibleHint(false);
+            onRefresh();
+        }
+    }
+
+    @Override
+    public void onRefresh() {
+        totalSize = 0;
+        totalPage = 0;
+        pageSize = 10;
+        currentPage = 0;
+        isLoadMore = true;
+        isRequesting = false;
+        onLoadMore();
     }
 
     @MainThread
     private void updateUI(@Nullable NoticeListBean noticeListBean) {
+        isRequesting = false;
         if (noticeListBean == null) return;
         NoticeListBean.Data data = noticeListBean.data;
+        List<NoticeListBean.Data.Content> contentList = data.contentList;
 
-        totalPageSize = data.total;
-        totalPage = (int) Math.ceil(1D * totalPageSize / pageSize);
-        ++page;
-        noMore = page >= totalPage;
+        totalSize = data.total;
+        totalPage = data.pages;
+        currentPage = data.current;
+        isLoadMore = currentPage < totalPage;
 
-        noticeAdapter.noticeList.addAll(data.contentList);
-        if (noMore) {
+        if (currentPage == 1) noticeAdapter.noticeList.clear();
+        noticeAdapter.noticeList.addAll(contentList);
+        if (!isLoadMore) {
             NoticeListBean.Data.Content content = new NoticeListBean.Data.Content();
             content.contentType = -1;
             noticeAdapter.noticeList.add(content);
@@ -85,9 +103,11 @@ public final class NoticeFragment extends BaseFragment {
         noticeAdapter.notifyDataSetChanged();
     }
 
-    private void requestAPI() {
-        if (noticeViewModel != null && notifyGroup != -1 && !noMore) {
-            noticeViewModel.requestNoticeList(this, page + 1, pageSize, notifyGroup);
+    private void onLoadMore() {
+        if (isRequesting || !isLoadMore) return;
+        if (noticeViewModel != null && notifyGroup != -1) {
+            isRequesting = true;
+            noticeViewModel.requestNoticeList(this, currentPage + 1, pageSize, notifyGroup);
         }
     }
 
@@ -98,28 +118,11 @@ public final class NoticeFragment extends BaseFragment {
 
         final LoadMore loadMore = new LoadMore(recycler_view);
         recycler_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            private int scrollState;
-
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                scrollState = newState;
-            }
 
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if (scrollState != RecyclerView.SCROLL_STATE_IDLE && dy > 0) {
-                    LinearLayoutManager lm = (LinearLayoutManager) recyclerView.getLayoutManager();
-                    if (lm == null) return;
-                    int itemCount = lm.getItemCount();
-                    View lastChildView = lm.getChildAt(lm.getChildCount() - 1);
-                    if (lastChildView == null) return;
-                    int lastCompletelyVisibleItemPosition = lm.findLastCompletelyVisibleItemPosition();
-                    if (lastCompletelyVisibleItemPosition == itemCount - 1) {
-                        requestAPI();
-                    }
-                }
+                if (loadMore.isRequestLoadMore()) onLoadMore();
             }
         });
         noticeAdapter = new NoticeAdapter();

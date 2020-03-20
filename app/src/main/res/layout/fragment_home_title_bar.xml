@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_home_title"
+    android:layout_width="match_parent"
+    android:layout_height="68dp"
+    android:paddingTop="24dp"
+    android:visibility="visible"
+    tools:background="#3f00">
+
+    <!--        <com.dengyun.baselibrary.widgets.toolbar.BaseToolBar-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="@dimen/basetool_height"-->
+    <!--            android:visibility="gone"-->
+    <!--            app:toolbar_title="设置" />-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp">
+
+        <TextView
+            android:id="@+id/tv_home_location"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:drawableStart="@drawable/selector_home_location"
+            android:drawableEnd="@drawable/selector_home_arrow_down"
+            android:drawablePadding="10dp"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:maxLength="10"
+            android:text="--"
+            android:textColor="@color/selector_home_title"
+            android:textSize="18sp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/tv_home_share"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:drawableStart="@drawable/selector_home_share"
+            android:drawablePadding="4dp"
+            android:gravity="center_vertical"
+            android:text="分享"
+            android:textColor="@color/selector_home_title"
+            android:textSize="14sp" />
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_home_notice"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="16dp"
+                android:drawableStart="@drawable/selector_home_notice"
+                android:drawablePadding="4dp"
+                android:gravity="center_vertical"
+                android:text="消息"
+                android:textColor="@color/selector_home_title"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:background="@drawable/selector_hom_notice_count"
+                android:paddingStart="4dp"
+                android:paddingTop="2dp"
+                android:paddingEnd="4dp"
+                android:paddingBottom="2dp"
+                android:textColor="#ffffffff"
+                android:textSize="10sp"
+                tools:text="99999" />
+        </FrameLayout>
+    </LinearLayout>
+</FrameLayout>
+
+

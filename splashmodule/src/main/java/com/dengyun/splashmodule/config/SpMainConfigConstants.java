@@ -124,8 +124,8 @@ public class SpMainConfigConstants {
     }
 
     /* 更新用户阅读状态 */
-    public static String messageStatusUpdate() {
-        return getMainConfigUrl("messageStatusUpdate");
+    public static String updateMessageStatus() {
+        return getMainConfigUrl("updateMessageStatus");
     }
 
     /* 推送消息列表查询 */
