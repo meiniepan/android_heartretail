@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.View;
@@ -56,8 +57,10 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
     View backView2;
     @BindView(R.id.toolbar_title_order_detail)
     BaseToolBar toolBar;
+    @BindView(R.id.ll_shop_choose2)
+    CardView llShopChoose;
     @BindView(R.id.ll_dl_detail)
-    LinearLayout llDlDetail;
+    CardView llDlDetail;
     @BindView(R.id.tv_order_detail_order_id)
     TextView tvOrderId;
     @BindView(R.id.sr_goods1)
@@ -80,17 +83,19 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
     TextView tvOrderProtocol;
     @BindView(R.id.tv_buyer_msg)
     TextView tvBuyerMsg;
-    @BindView(R.id.tv_should_pay)
+    @BindView(R.id.tv_should_pay_tag)
+    TextView tvShouldPayTag;@BindView(R.id.tv_should_pay)
     TextView tvShouldPay;
     @BindView(R.id.tv_bottom_operate1)
     TextView tvBottomOperate1;
     @BindView(R.id.tv_bottom_operate2)
     TextView tvBottomOperate2;
-    @BindView(R.id.ll_shop_choose2)
-    LinearLayout llShopChoose;
     @BindView(R.id.ll_bottom)
     LinearLayout llBottom;
-    @BindView(R.id.tv_residue_time1)
+    @BindView(R.id.ll_pay_about2)
+    LinearLayout llPayAbout;
+    @BindView(R.id.tv_residue_time1_tag)
+    TextView tvResidueTimeTag;@BindView(R.id.tv_residue_time1)
     TextView tvResidueTime;
     @BindView(R.id.tv_status_name)
     TextView tvStatusName;
@@ -103,9 +108,10 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
     private int dimension;
     private int orderStatus = 0;
 
-    public static void start(Context context, String orderId) {
+    public static void start(Context context, String orderId,int status) {
         Intent starter = new Intent(context, OrderDetailActivity.class);
         starter.putExtra(Constants.ORDER_ID, orderId);
+        starter.putExtra(Constants.ORDER_STATUS, status);
         context.startActivity(starter);
     }
 
@@ -129,6 +135,7 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
     @Override
     protected void initViews(Bundle savedInstanceState) {
         orderId = getIntent().getStringExtra(Constants.ORDER_ID);
+        orderStatus = getIntent().getIntExtra(Constants.ORDER_STATUS,0);
         initStatus();
         getData();
         startTimer();
@@ -137,22 +144,22 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
     private void initStatus() {
         if (orderStatus == 5 || orderStatus == 7) {
             tvStatusName.setText("已完成");
+            llDlDetail.setVisibility(View.GONE);
             tvBottomOperate1.setText("查看物流");
-            tvBottomOperate2.setText("查看评价");
+            tvBottomOperate2.setVisibility(View.GONE);
+            tvShouldPay.setVisibility(View.INVISIBLE);
+            tvShouldPayTag.setVisibility(View.INVISIBLE);
             tvBottomOperate1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     CheckLogisticsActivity.start(getContext(), orderId);
                 }
             });
-            tvBottomOperate2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    EvaluateDetailActivity.start(getContext(), orderId);
-                }
-            });
         } else if (orderStatus == 0) {
+            tvResidueTimeTag.setVisibility(View.VISIBLE);
+            tvResidueTime.setVisibility(View.VISIBLE);
             llShopChoose.setVisibility(View.GONE);
+            llPayAbout.setVisibility(View.GONE);
             tvStatusName.setText("待付款");
             tvBottomOperate1.setText("取消订单");
             tvBottomOperate2.setText("立即付款");
@@ -172,6 +179,7 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
             tvStatusName.setText("代销中");
         } else if (orderStatus == 1) {
             tvStatusName.setText("待发货");
+            llBottom.setVisibility(View.GONE);
         } else if (orderStatus == 2) {
             tvStatusName.setText("待收货");
             tvBottomOperate1.setText("查看物流");

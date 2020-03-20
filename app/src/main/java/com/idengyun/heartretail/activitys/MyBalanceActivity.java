@@ -13,7 +13,6 @@ import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.SystemUIHelper;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -56,9 +55,12 @@ public class MyBalanceActivity extends BaseActivity {
 
     }
 
-    @OnClick({R.id.ll_balance_withdraw, R.id.ll_bill_record})
+    @OnClick({R.id.tv_back, R.id.ll_balance_withdraw, R.id.ll_bill_record})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.tv_back:
+                finish();
+                break;
             case R.id.ll_balance_withdraw:
                 break;
             case R.id.ll_bill_record:
