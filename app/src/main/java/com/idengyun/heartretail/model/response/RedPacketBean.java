@@ -23,6 +23,7 @@ public final class RedPacketBean {
             public int status;
             public int friendId;
             public String friendName;
+            public String friendHeadImg;
             public String inviteTime;
             public String businessMoney;
             public String consumeMoney;

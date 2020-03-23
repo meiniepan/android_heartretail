@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8F8F8"
+    android:background="#FFF"
     android:orientation="vertical">
 
     <android.support.v4.widget.NestedScrollView
@@ -194,6 +194,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="67dp"
+                        android:layout_marginEnd="8dp"
                         android:background="@drawable/shape_red_packet_cash_text_bg"
                         android:paddingStart="5dp"
                         android:paddingTop="2dp"
@@ -203,7 +204,7 @@
                         android:textColor="#ffffffff"
                         android:textSize="12sp"
                         app:layout_constraintBaseline_toBaselineOf="@+id/tv_red_packet_0"
-                        app:layout_constraintLeft_toLeftOf="parent" />
+                        app:layout_constraintRight_toLeftOf="@+id/tv_red_packet_0" />
 
                     <TextView
                         android:id="@+id/tv_red_packet_0"
@@ -291,7 +292,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="已兑换"
+                        android:text="已提现"
                         android:textColor="#ff666666"
                         android:textSize="14sp"
                         app:layout_constraintBaseline_toBaselineOf="@+id/tv_red_packet_key_1"
@@ -315,28 +316,53 @@
                     <View
                         android:id="@+id/v_red_packet_dash_line"
                         android:layout_width="0dp"
-                        android:layout_height="1dp"
+                        android:layout_height="1.5dp"
                         android:layout_marginStart="25dp"
                         android:layout_marginEnd="25dp"
                         android:layout_marginBottom="19dp"
                         android:background="@drawable/shape_red_packet_dash_line"
-                        app:layout_constraintBottom_toTopOf="@+id/tv_red_packet_tail"
+                        app:layout_constraintBottom_toTopOf="@+id/layout_red_packet_tail"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent" />
 
-                    <TextView
-                        android:id="@+id/tv_red_packet_tail"
+                    <LinearLayout
+                        android:id="@+id/layout_red_packet_tail"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="61dp"
-                        android:layout_marginEnd="61dp"
                         android:layout_marginBottom="16dp"
-                        android:text="您当前等级为二级，奖励好友消费额的3%"
-                        android:textColor="#ff666666"
-                        android:textSize="12sp"
+                        android:orientation="horizontal"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent" />
+                        app:layout_constraintRight_toRightOf="parent">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="您当前等级为"
+                            android:textColor="#ff666666"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="二级"
+                            android:textColor="#ffff6633"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="，奖励好友消费额的"
+                            android:textColor="#ff666666"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="3%"
+                            android:textColor="#ffff6633"
+                            android:textSize="12sp" />
+                    </LinearLayout>
                 </android.support.constraint.ConstraintLayout>
             </android.support.v7.widget.CardView>
 

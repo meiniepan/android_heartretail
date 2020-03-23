@@ -41,13 +41,14 @@ public final class AuthenticationFragment extends BaseFragment implements View.O
 
     @Override
     public void onClick(View v) {
-        if (layout_auth_id_card_info == v) {
+        /*if (layout_auth_id_card_info == v) {
             HRActivity.start(getContext(), IDCardInfoFragment.class);
         } else if (layout_auth_bank_card_info == v) {
             HRActivity.start(getContext(), BankCardInfoFragment.class);
         } else if (tv_to_auth_steps == v) {
             HRActivity.start(getContext(), Step1Fragment.class);
-        }
+        }*/
+        HRActivity.start(getContext(), Step1Fragment.class);
     }
 
     private void findViewById(View view) {

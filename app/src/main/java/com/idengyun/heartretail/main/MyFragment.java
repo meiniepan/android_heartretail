@@ -164,7 +164,7 @@ public final class MyFragment extends BaseFragment implements View.OnClickListen
     private void startMyHelpActivity() {
 //        HelpCenterActivity.start(getActivity());
 //        OrderDetailActivity.start(getActivity(),"");
-        MyBalanceActivity.start(getActivity());
+        AwardDetailActivity.start(getActivity());
     }
 
     private void startMyEvaluationActivity() {

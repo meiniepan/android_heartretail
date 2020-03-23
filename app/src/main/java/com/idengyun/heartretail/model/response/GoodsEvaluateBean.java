@@ -26,7 +26,7 @@ public final class GoodsEvaluateBean {
             public String userName;
             public int userLevel;
             public String evaluationDate;
-            public int commentStar;
+            public int evaluationStar;
             public String evaluationContent;
             public String orderId;
             public int isShow;

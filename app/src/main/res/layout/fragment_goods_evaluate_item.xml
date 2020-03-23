@@ -68,10 +68,11 @@
                 android:maxHeight="13dp"
                 android:minHeight="13dp"
                 android:numStars="5"
-                android:rating="3.5"
-                android:stepSize="0.5"
+                android:progressDrawable="@drawable/layer_list_rating_bar"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/iv_user_avatar" />
+                app:layout_constraintTop_toTopOf="@+id/iv_user_avatar"
+                tools:rating="3.5"
+                tools:stepSize="0.5" />
 
             <TextView
                 android:id="@+id/tv_user_evaluation_date"

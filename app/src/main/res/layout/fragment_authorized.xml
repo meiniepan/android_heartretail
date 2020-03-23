@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F8F8F8"
@@ -42,13 +43,13 @@
                 android:paddingEnd="15dp"
                 android:paddingBottom="12dp">
 
-                <ImageView
+                <com.dengyun.baselibrary.widgets.imageview.CircleImageView
                     android:id="@+id/iv_real_avatar"
                     android:layout_width="64dp"
                     android:layout_height="64dp"
-                    android:background="#fff"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:background="#fff" />
 
                 <ImageView
                     android:id="@+id/iv_auth_yes_or_no"
@@ -194,8 +195,8 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/shape_real_step_oval"
                         android:gravity="center"
-                        android:minWidth="32dp"
-                        android:minHeight="32dp"
+                        android:minWidth="24dp"
+                        android:minHeight="24dp"
                         android:text="1"
                         android:textColor="#ffffffff"
                         android:textSize="18sp"
@@ -262,7 +263,7 @@
                         android:layout_marginTop="16dp"
                         android:gravity="center_horizontal"
                         android:text="上传身份信息"
-                        android:textColor="#ffff6633"
+                        android:textColor="#ff666666"
                         android:textSize="14sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"

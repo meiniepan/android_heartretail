@@ -158,7 +158,7 @@ public final class MobileBindFragment extends BaseFragment implements View.OnCli
 
             @Override
             public void afterTextChanged(Editable s) {
-                tv_phone_bind.setEnabled(s.length() > 0);
+                tv_phone_bind.setEnabled(RegexUtils.isMobileSimple(et_phone_mobile.getText()) && et_phone_verify_code.length() > 5);
             }
         });
         et_phone_verify_code.addTextChangedListener(new TextWatcher() {
@@ -174,7 +174,7 @@ public final class MobileBindFragment extends BaseFragment implements View.OnCli
 
             @Override
             public void afterTextChanged(Editable s) {
-                tv_phone_bind.setEnabled(s.length() > 0);
+                tv_phone_bind.setEnabled(RegexUtils.isMobileSimple(et_phone_mobile.getText()) && et_phone_verify_code.length() > 5);
             }
         });
 

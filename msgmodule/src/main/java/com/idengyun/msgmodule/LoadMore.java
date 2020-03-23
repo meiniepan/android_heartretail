@@ -44,7 +44,6 @@ public final class LoadMore {
                 int lastCompletelyVisibleItemPosition = lm.findLastCompletelyVisibleItemPosition();
                 if (lastCompletelyVisibleItemPosition == itemCount - 1) {
                     requestLoadMore = true;
-                    System.out.println("--------");
                 }
             }
         }

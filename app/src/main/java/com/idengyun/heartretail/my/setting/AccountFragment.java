@@ -62,7 +62,11 @@ public final class AccountFragment extends BaseFragment implements View.OnClickL
 
     @MainThread
     private void updateUI() {
-        tv_account_mobile.setText(HRUser.getMobile());
+        String mobile = HRUser.getMobile();
+        if (mobile.length() == 11) {
+            mobile = mobile.substring(0, 3) + "****" + mobile.substring(7, 11);
+            tv_account_mobile.setText(mobile);
+        }
         tv_account_auth_state.setText(HRUser.isAuthentication() ? "已认证" : "未认证");
     }
 

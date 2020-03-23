@@ -1,8 +1,10 @@
 package com.idengyun.msgmodule;
 
 import android.arch.lifecycle.Observer;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.activity.BaseActivity;
 import com.idengyun.msgmodule.beans.NoticeCountBean;
+import com.idengyun.msgmodule.beans.NoticeStatusBean;
 import com.idengyun.msgmodule.viewmodel.NoticeViewModel;
 
 import java.util.List;
@@ -26,23 +29,36 @@ import java.util.List;
  */
 public final class NoticeActivity extends BaseActivity implements TabLayout.OnTabSelectedListener {
 
-    private TabLayout tab_layout;
-    private SparseArray<TabHolder> noticeCountArray = new SparseArray<>();
-
     public static void start(Context context) {
         Intent starter = new Intent(context, NoticeActivity.class);
         // starter.putExtra();
         context.startActivity(starter);
     }
 
+    private final BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            requestNoticeCount();
+            requestNoticeUpdateStatus();
+        }
+    };
+
     private NoticeFragment fragment0;
     private NoticeFragment fragment1;
     private NoticeFragment fragment2;
 
+    private TabLayout tab_layout;
+    private SparseArray<TabHolder> noticeCountArray = new SparseArray<>();
+    private NoticeViewModel noticeViewModel;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        registerReceiver(receiver, new IntentFilter());
+        setContentView(R.layout.activity_notice);
         init();
+        observe();
+        requestNoticeCount();
     }
 
     @Override
@@ -56,16 +72,9 @@ public final class NoticeActivity extends BaseActivity implements TabLayout.OnTa
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        NoticeViewModel noticeViewModel = NoticeViewModel.getInstance(this);
-        noticeViewModel.getNoticeCount().observe(this, new Observer<NoticeCountBean>() {
-            @Override
-            public void onChanged(@Nullable NoticeCountBean noticeCountBean) {
-                updateUI(noticeCountBean);
-            }
-        });
-        noticeViewModel.requestNoticeCount(this);
+    protected void onDestroy() {
+        unregisterReceiver(receiver);
+        super.onDestroy();
     }
 
     @Override
@@ -88,19 +97,43 @@ public final class NoticeActivity extends BaseActivity implements TabLayout.OnTa
 
     }
 
+    private void observe() {
+        if (noticeViewModel == null) {
+            noticeViewModel = NoticeViewModel.getInstance(this);
+            noticeViewModel.getNoticeCount().observe(this, new Observer<NoticeCountBean>() {
+                @Override
+                public void onChanged(@Nullable NoticeCountBean noticeCountBean) {
+                    updateNoticeCount(noticeCountBean);
+                }
+            });
+            noticeViewModel.getNoticeStatus().observe(this, new Observer<NoticeStatusBean>() {
+                @Override
+                public void onChanged(@Nullable NoticeStatusBean noticeStatusBean) {
+
+                }
+            });
+        }
+    }
+
     @MainThread
-    private void updateUI(@Nullable NoticeCountBean noticeCountBean) {
+    private void updateNoticeCount(@Nullable NoticeCountBean noticeCountBean) {
         if (noticeCountBean == null) return;
         List<NoticeCountBean.Data> dataList = noticeCountBean.data;
         for (NoticeCountBean.Data data : dataList) {
             TabHolder holder = noticeCountArray.get(data.notifyGroup);
-            if (holder != null) holder.updateCount(data.counts);
+            if (holder != null) holder.updateNoticeCount(data.counts);
         }
     }
 
-    private void init() {
-        setContentView(R.layout.activity_notice);
+    private void requestNoticeUpdateStatus() {
+        if (noticeViewModel != null) noticeViewModel.requestNoticeUpdateStatus(this, -1, 1);
+    }
 
+    private void requestNoticeCount() {
+        if (noticeViewModel != null) noticeViewModel.requestNoticeCount(this);
+    }
+
+    private void init() {
         fragment0 = new NoticeFragment();
         fragment1 = new NoticeFragment();
         fragment2 = new NoticeFragment();
@@ -148,9 +181,9 @@ public final class NoticeActivity extends BaseActivity implements TabLayout.OnTa
                 .hide(fragment1)
                 .commit();
 
-        fragment0.setUserVisibleHint(false);
+        /*fragment0.setUserVisibleHint(false);
         fragment1.setUserVisibleHint(false);
-        fragment2.setUserVisibleHint(true);
+        fragment2.setUserVisibleHint(true);*/
     }
 
     private void showFragment1() {
@@ -161,9 +194,9 @@ public final class NoticeActivity extends BaseActivity implements TabLayout.OnTa
                 .hide(fragment2)
                 .commit();
 
-        fragment0.setUserVisibleHint(false);
+        /*fragment0.setUserVisibleHint(false);
         fragment1.setUserVisibleHint(true);
-        fragment2.setUserVisibleHint(false);
+        fragment2.setUserVisibleHint(false);*/
     }
 
     private void showFragment0() {
@@ -174,9 +207,9 @@ public final class NoticeActivity extends BaseActivity implements TabLayout.OnTa
                 .hide(fragment2)
                 .commit();
 
-        fragment0.setUserVisibleHint(true);
+        /*fragment0.setUserVisibleHint(true);
         fragment1.setUserVisibleHint(false);
-        fragment2.setUserVisibleHint(false);
+        fragment2.setUserVisibleHint(false);*/
     }
 
     private final static class TabHolder {
@@ -215,7 +248,7 @@ public final class NoticeActivity extends BaseActivity implements TabLayout.OnTa
             iv_msg_tab_indicator_dot.setVisibility(View.INVISIBLE);
         }
 
-        public void updateCount(int noticeCount) {
+        public void updateNoticeCount(int noticeCount) {
             tv_notice_count.setText(noticeCount + "+");
             tv_notice_count.setVisibility(noticeCount > 0 ? View.VISIBLE : View.INVISIBLE);
         }

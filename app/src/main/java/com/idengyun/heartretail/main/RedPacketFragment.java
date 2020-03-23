@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
+import com.dengyun.baselibrary.net.ImageApi;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.RedPacketBean;
 import com.idengyun.heartretail.viewmodel.RedPacketViewModel;
@@ -37,6 +38,7 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
     private TextView tv_red_packet_1;
     private TextView tv_red_packet_2;
     private TextView tv_red_packet_3;
+    private View v_red_packet_dash_line;
 
     private RecyclerView recycler_view;
     private TextView tv_red_packet_more;
@@ -119,10 +121,10 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
         String total = packet.total;
         String hasExchange = packet.hasExchange;
         String willSend = packet.willSend;
-        tv_red_packet_0.setText(canExchange);
-        tv_red_packet_1.setText(total);
-        tv_red_packet_2.setText(hasExchange);
-        tv_red_packet_3.setText(willSend);
+        tv_red_packet_0.setText("¥" + canExchange);
+        tv_red_packet_1.setText("¥" + total);
+        tv_red_packet_2.setText("¥" + hasExchange);
+        tv_red_packet_3.setText("¥" + willSend);
 
         FriendAdapter friendAdapter = new FriendAdapter();
         friendAdapter.friendList.clear();
@@ -130,7 +132,7 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
         friendAdapter.notifyDataSetChanged();
         recycler_view.setAdapter(friendAdapter);
 
-        tv_red_packet_more.setVisibility(friendAdapter.getItemCount() == friendsCount ? View.GONE : View.VISIBLE);
+        // tv_red_packet_more.setVisibility(friendAdapter.getItemCount() == friendsCount ? View.GONE : View.VISIBLE);
     }
 
     private void findViewById(@NonNull View view) {
@@ -140,6 +142,8 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
         tv_red_packet_1 = view.findViewById(R.id.tv_red_packet_1);
         tv_red_packet_2 = view.findViewById(R.id.tv_red_packet_2);
         tv_red_packet_3 = view.findViewById(R.id.tv_red_packet_3);
+        v_red_packet_dash_line = view.findViewById(R.id.v_red_packet_dash_line);
+        v_red_packet_dash_line.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 
         recycler_view = view.findViewById(R.id.recycler_view);
         tv_red_packet_more = view.findViewById(R.id.tv_red_packet_more);
@@ -186,11 +190,15 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
 
             public void updateUI(RedPacketBean.Data.Friend friend) {
                 String friendName = friend.friendName;
+                String friendHeadImg = friend.friendHeadImg;
                 String inviteTime = friend.inviteTime;
                 String consumeMoney = friend.consumeMoney;
+                String[] split = inviteTime.split(" ");
+                String date = split.length > 0 ? split[0] : "";
 
+                ImageApi.displayImage(iv_red_packet_user_avatar.getContext(), iv_red_packet_user_avatar, friendHeadImg);
                 tv_red_packet_user_name.setText(friendName);
-                tv_red_packet_date.setText(inviteTime);
+                tv_red_packet_date.setText(date);
                 tv_red_packet_out_money.setText(consumeMoney + "元");
             }
 
