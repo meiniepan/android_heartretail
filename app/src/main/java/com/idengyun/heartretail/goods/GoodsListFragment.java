@@ -84,9 +84,10 @@ public final class GoodsListFragment extends BaseFragment implements SwipeRefres
                 }
             });
         }
+        onRefresh();
     }
 
-    @Override
+    /*@Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (hidden) return;
@@ -94,7 +95,7 @@ public final class GoodsListFragment extends BaseFragment implements SwipeRefres
             setUserVisibleHint(false);
             onRefresh();
         }
-    }
+    }*/
 
     @Override
     public void onRefresh() {
@@ -177,7 +178,7 @@ public final class GoodsListFragment extends BaseFragment implements SwipeRefres
                 return new RecyclerView.ViewHolder(itemView) {
                 };
             }
-            View itemView = inflater.inflate(R.layout.fragment_home_goods_item, parent, false);
+            View itemView = inflater.inflate(R.layout.fragment_goods_list_item, parent, false);
             return new GoodsHolder(itemView);
         }
 
@@ -238,6 +239,7 @@ public final class GoodsListFragment extends BaseFragment implements SwipeRefres
             ImageApi.displayImage(iv_home_goods_url.getContext(), iv_home_goods_url, goodsImgUrl);
             tv_home_goods_name.setText(goodsName);
             tv_home_goods_price.setText("¥" + price);
+            tv_home_goods_price.setSelected(goodsType == 1);
         }
 
         private void findViewById(@NonNull View itemView) {

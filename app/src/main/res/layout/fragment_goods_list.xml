@@ -23,7 +23,7 @@
         app:layoutManager="android.support.v7.widget.GridLayoutManager"
         app:spanCount="2"
         tools:itemCount="2"
-        tools:listitem="@layout/fragment_home_goods_item" />
+        tools:listitem="@layout/fragment_goods_list_item" />
 
     <TextView
         android:id="@+id/tv_home_load_more"

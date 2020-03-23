@@ -50,6 +50,7 @@ public final class SettingFragment extends BaseFragment implements View.OnClickL
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         tv_setting_version.setText(AppUtils.getAppVersionName());
+        tv_setting_version.setCompoundDrawables(null, null, null, null);
     }
 
     @Override

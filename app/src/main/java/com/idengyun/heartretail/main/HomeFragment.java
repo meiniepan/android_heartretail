@@ -44,6 +44,7 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
     private TextView tv_home_location;
     private View tv_home_share;
     private View tv_home_notice;
+    private TextView tv_home_notice_count;
 
     private NestedScrollView nsv_home_bg;
     private NestedScrollView nested_scroll_view;
@@ -97,11 +98,13 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
                     tv_home_location.setSelected(false);
                     tv_home_share.setSelected(false);
                     tv_home_notice.setSelected(false);
+                    tv_home_notice_count.setSelected(false);
                 } else {
                     layout_home_title.setBackgroundColor(Color.WHITE);
                     tv_home_location.setSelected(true);
                     tv_home_share.setSelected(true);
                     tv_home_notice.setSelected(true);
+                    tv_home_notice_count.setSelected(true);
                 }
             }
         });
@@ -125,6 +128,16 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
     @Override
     public void onClick(View v) {
         if (tv_home_share == v) {
+            if (!HRUser.isLogin()) {
+                LoginActivity.start(getContext());
+                return;
+            }
+
+            if (!HRUser.isAuthentication()) {
+                VerifyDeviceActivity.start(getContext());
+                return;
+            }
+            
             ShareQRCodeActivity.start(getContext());
         } else if (tv_home_notice == v) {
             if (!HRUser.isLogin()) {
@@ -211,6 +224,7 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
         tv_home_location = view.findViewById(R.id.tv_home_location);
         tv_home_share = view.findViewById(R.id.tv_home_share);
         tv_home_notice = view.findViewById(R.id.tv_home_notice);
+        tv_home_notice_count = view.findViewById(R.id.tv_home_notice_count);
 
         nsv_home_bg = view.findViewById(R.id.nsv_home_bg);
         nested_scroll_view = view.findViewById(R.id.nested_scroll_view);

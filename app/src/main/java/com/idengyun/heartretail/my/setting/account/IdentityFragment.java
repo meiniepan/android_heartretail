@@ -54,7 +54,6 @@ public final class IdentityFragment extends BaseFragment implements View.OnClick
         observe();
 
         String mobile = HRUser.getMobile();
-        tv_identity_mobile.setText(mobile);
         if (mobile.length() == 11) {
             mobile = mobile.substring(0, 3) + "****" + mobile.substring(7, 11);
             tv_identity_mobile.setText(mobile);
@@ -170,7 +169,7 @@ public final class IdentityFragment extends BaseFragment implements View.OnClick
 
             @Override
             public void afterTextChanged(Editable s) {
-                tv_identity_next.setEnabled(s.length() > 0);
+                tv_identity_next.setEnabled(s.length() > 5);
             }
         });
     }

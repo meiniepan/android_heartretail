@@ -134,11 +134,12 @@ public final class GoodsSPUFragment extends BaseFragment implements View.OnClick
     private void updateUI(@Nullable GoodsEvaluateBean goodsEvaluateBean) {
         if (goodsEvaluateBean == null) return;
         GoodsEvaluateBean.Data data = goodsEvaluateBean.data;
-        if (data == null || data.current != 1 || !data.evaluationList.isEmpty()) return;
+        if (data == null || data.current != 1 || data.evaluationList.isEmpty()) return;
 
         int evaluationCounts = data.total;
         String praiseRate = data.praiseRate;
-        tv_user_favorable_rate.setText(evaluationCounts + "+条评论，" + praiseRate + "%好评率");
+        String count = evaluationCounts > 999 ? 999 + "+" : evaluationCounts + "";
+        tv_user_favorable_rate.setText(count + "条评论，" + praiseRate + "%好评率");
 
         List<GoodsEvaluateBean.Data.Evaluation> evaluationList = data.evaluationList;
         if (evaluationList.isEmpty()) return;
@@ -147,17 +148,19 @@ public final class GoodsSPUFragment extends BaseFragment implements View.OnClick
         String userImgUrl = evaluation.userHeadImg;
         String userName = evaluation.userName;
         int userLevel = evaluation.userLevel;
-        String commentTime = evaluation.evaluationDate;
-        int commentStar = evaluation.commentStar;
+        String evaluationDate = evaluation.evaluationDate;
+        int evaluationStar = evaluation.evaluationStar;
         String contents = evaluation.evaluationContent;
         String orderId = evaluation.orderId;
         int isShow = evaluation.isShow;
+        String[] split = evaluationDate.split(" ");
+        String date = split.length > 0 ? split[0] : "";
 
         ImageApi.displayImage(iv_user_avatar.getContext(), iv_user_avatar, userImgUrl);
         tv_user_name.setText(userName);
         tv_user_level.setText("LV" + userLevel);
-        tv_user_evaluation_date.setText(commentTime);
-        rb_user_rating.setNumStars(commentStar);
+        tv_user_evaluation_date.setText(date);
+        rb_user_rating.setRating(evaluationStar);
         tv_user_evaluation_content.setText(contents);
     }
 

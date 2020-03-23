@@ -64,7 +64,6 @@ public final class PasswordFragment extends BaseFragment implements CompoundButt
         observe();
 
         String mobile = HRUser.getMobile();
-        tv_pwd_mobile.setText(mobile);
         if (mobile.length() == 11) {
             mobile = mobile.substring(0, 3) + "****" + mobile.substring(7, 11);
             tv_pwd_mobile.setText(mobile);
@@ -199,7 +198,7 @@ public final class PasswordFragment extends BaseFragment implements CompoundButt
 
             @Override
             public void afterTextChanged(Editable s) {
-                tv_pwd_confirm.setEnabled(s.length() > 0);
+                tv_pwd_confirm.setEnabled(et_pwd_verify_code.length() > 5 && et_pwd_new_pwd.length() > 0);
             }
         });
         et_pwd_new_pwd.addTextChangedListener(new TextWatcher() {
@@ -215,7 +214,7 @@ public final class PasswordFragment extends BaseFragment implements CompoundButt
 
             @Override
             public void afterTextChanged(Editable s) {
-                tv_pwd_confirm.setEnabled(s.length() > 0);
+                tv_pwd_confirm.setEnabled(et_pwd_verify_code.length() > 5 && et_pwd_new_pwd.length() > 0);
             }
         });
     }

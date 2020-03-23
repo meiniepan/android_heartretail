@@ -126,7 +126,8 @@ public final class GoodsEvaluateFragment extends BaseFragment implements SwipeRe
 
         int evaluationCounts = data.total;
         String praiseRate = data.praiseRate;
-        tv_favorable_rate.setText(evaluationCounts + "+条评论，" + praiseRate + "%好评率");
+        String count = evaluationCounts > 999 ? 999 + "+" : evaluationCounts + "";
+        tv_favorable_rate.setText(count + "条评论，" + praiseRate + "%好评率");
 
         if (currentPage == 1) evaluationAdapter.evaluationList.clear();
         evaluationAdapter.evaluationList.addAll(evaluationList);
@@ -178,17 +179,19 @@ public final class GoodsEvaluateFragment extends BaseFragment implements SwipeRe
                 String userImgUrl = evaluation.userHeadImg;
                 String userName = evaluation.userName;
                 int userLevel = evaluation.userLevel;
-                String commentTime = evaluation.evaluationDate;
-                int commentStar = evaluation.commentStar;
+                String evaluationDate = evaluation.evaluationDate;
+                int evaluationStar = evaluation.evaluationStar;
                 String contents = evaluation.evaluationContent;
                 String orderId = evaluation.orderId;
                 int isShow = evaluation.isShow;
+                String[] split = evaluationDate.split(" ");
+                String date = split.length > 0 ? split[0] : "";
 
                 ImageApi.displayImage(itemView.getContext(), iv_user_avatar, userImgUrl);
                 tv_user_name.setText(userName);
                 tv_user_level.setText("LV" + userLevel);
-                tv_user_evaluation_date.setText(commentTime);
-                rb_user_rating.setNumStars(commentStar);
+                tv_user_evaluation_date.setText(date);
+                rb_user_rating.setRating(evaluationStar);
                 tv_user_evaluation_content.setText(contents);
 
                 tv_no_more.setVisibility(currentPage < totalPage ? View.GONE : View.VISIBLE);
@@ -204,14 +207,6 @@ public final class GoodsEvaluateFragment extends BaseFragment implements SwipeRe
                 tv_user_evaluation_content = itemView.findViewById(R.id.tv_user_evaluation_content);
                 tv_divider = itemView.findViewById(R.id.tv_divider);
                 tv_no_more = itemView.findViewById(R.id.tv_no_more);
-
-                //rb_user_rating.setMax();
-//                rb_user_rating.setProgressDrawable(getResources().getDrawable(R.drawable.layer_list_ratingbar));
-//                Drawable drawable = getResources().getDrawable(R.drawable.ic_start_16dp_bg);
-//                Drawable drawable1 = getResources().getDrawable(R.drawable.ic_star_16dp);
-//                Drawable pd = new LayerDrawable(new Drawable[]{drawable, new GradientDrawable(), drawable1});
-//                rb_user_rating.setProgressDrawable(pd);
-//                new BitmapDrawable().setTileModeXY();
             }
         }
     }
