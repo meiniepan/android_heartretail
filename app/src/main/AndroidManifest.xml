@@ -55,6 +55,7 @@
         <activity android:name=".activitys.SendGoodsTimeQ1Activity" />
         <activity android:name=".activitys.WithdrawActivity" />
         <activity android:name=".activitys.AwardDetailActivity" />
+        <activity android:name=".activitys.MyBalanceActivity" />
     </application>
 
 </manifest>
