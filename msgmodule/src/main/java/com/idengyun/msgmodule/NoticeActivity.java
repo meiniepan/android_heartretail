@@ -58,6 +58,7 @@ public final class NoticeActivity extends BaseActivity implements TabLayout.OnTa
         setContentView(R.layout.activity_notice);
         init();
         observe();
+        requestNoticeCount();
     }
 
     @Override
