@@ -43,12 +43,21 @@
                     android:gravity="center"
                     android:minWidth="24dp"
                     android:minHeight="24dp"
-                    android:text="1"
+                    android:text=""
                     android:textColor="#ffffffff"
                     android:textSize="18sp"
                     app:layout_constraintBaseline_toBaselineOf="@+id/tv_real_step_b"
                     app:layout_constraintLeft_toLeftOf="@+id/tv_real_step_1"
                     app:layout_constraintRight_toRightOf="@+id/tv_real_step_1" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_real_check_mark"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_real_step_a"
+                    app:layout_constraintLeft_toLeftOf="@+id/tv_real_step_a"
+                    app:layout_constraintRight_toRightOf="@+id/tv_real_step_a"
+                    app:layout_constraintTop_toTopOf="@+id/tv_real_step_a" />
 
                 <TextView
                     android:id="@+id/tv_real_step_b"
@@ -163,15 +172,17 @@
                     android:paddingBottom="24dp">
 
                     <ImageView
+                        android:id="@+id/iv_bank_card_true"
                         android:layout_width="241dp"
                         android:layout_height="164dp"
-                        android:src="@drawable/ic_bank_card_true" />
+                        android:background="@drawable/ic_bank_card_true" />
 
                     <ImageView
+                        android:id="@+id/iv_bank_card_false"
                         android:layout_width="241dp"
                         android:layout_height="164dp"
                         android:layout_marginTop="16dp"
-                        android:src="@drawable/ic_bank_card_false" />
+                        android:background="@drawable/ic_bank_card_false" />
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
@@ -185,7 +196,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:background="#FF6633"
+                android:background="@drawable/selector_real_step_btn_bg"
+                android:enabled="false"
                 android:gravity="center"
                 android:minHeight="49dp"
                 android:text="下一步"

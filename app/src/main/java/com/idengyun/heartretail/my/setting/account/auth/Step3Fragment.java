@@ -1,5 +1,6 @@
 package com.idengyun.heartretail.my.setting.account.auth;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,7 +14,15 @@ import com.idengyun.heartretail.R;
  *
  * @author aLang
  */
-public final class Step3Fragment extends BaseFragment {
+public final class Step3Fragment extends BaseFragment implements View.OnClickListener {
+
+    private View tv_real_go_auth;
+
+    /* 身份证和银行卡正反面本地文件路径 */
+    private String idCardTrueUrl;
+    private String idCardFalseUrl;
+    private String bankCardTrueUrl;
+    private String bankCardFalseUrl;
 
     @Override
     public int getLayoutId() {
@@ -28,8 +37,16 @@ public final class Step3Fragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        Intent intent = getActivity().getIntent();
+        idCardTrueUrl = intent.getStringExtra("id_card_true_url");
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 
     private void findViewById(View view) {
+        tv_real_go_auth = view.findViewById(R.id.tv_real_go_auth);
     }
 }
