@@ -98,9 +98,9 @@ public final class Step2Fragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onClick(View v) {
         if (iv_bank_card_true == v) {
-            TakePhotoUtil.takePhotoWithItem(this, true, REQUEST_CODE_REAL_BANK_CARD_TRUE);
+            TakePhotoUtil.takePhotoWithItem(this, true,315,215,1, REQUEST_CODE_REAL_BANK_CARD_TRUE);
         } else if (iv_bank_card_false == v) {
-            TakePhotoUtil.takePhotoWithItem(this, true, REQUEST_CODE_REAL_BANK_CARD_FALSE);
+            TakePhotoUtil.takePhotoWithItem(this, true,315,215,1, REQUEST_CODE_REAL_BANK_CARD_FALSE);
         } else if (tv_real_next_step_2 == v) {
             HRActivity.start(getContext(), Step3Fragment.class);
         }
