@@ -42,6 +42,7 @@
 
                 <TextView
                     android:layout_width="wrap_content"
+                    android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp_4"
                     android:background="@drawable/shape_orange_bac_rec_2"
