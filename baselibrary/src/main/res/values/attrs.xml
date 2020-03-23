@@ -5,6 +5,11 @@
     <attr name="emptyView" format="reference" />
     <attr name="errorView" format="reference" />
     <attr name="loadingView" format="reference" />
+    <attr name="emptyViewDrawable" format="reference" />
+    <attr name="emptyViewText" format="string" />
+    <attr name="errorViewDrawable" format="reference" />
+    <attr name="errorViewText" format="string" />
+    <attr name="loadingViewText" format="string" />
 
     <declare-styleable name="StateLayout">
         <attr name="errorDrawable" format="reference" />
@@ -67,6 +72,11 @@
         <attr name="emptyView" />
         <attr name="errorView" />
         <attr name="loadingView" />
+        <attr name="emptyViewDrawable" />
+        <attr name="emptyViewText" />
+        <attr name="errorViewDrawable" />
+        <attr name="errorViewText" />
+        <attr name="loadingViewText" />
         <attr name="noNetworkView" format="reference" />
         <attr name="contentView" format="reference" />
     </declare-styleable>

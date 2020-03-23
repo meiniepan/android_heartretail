@@ -20,46 +20,13 @@ import java.util.Map;
  */
 
 @SuppressWarnings("unused")
-public class StateFrameLayout extends FrameLayout {
-    private static final String TAG = "MultipleStatusView";
-
+public class StateFrameLayout extends FrameLayout implements IStatusView{
     /*布局是FrameLayout，使用FrameLayout的LayoutParams*/
     private static final LayoutParams DEFAULT_LAYOUT_PARAMS =
             new LayoutParams(LayoutParams.MATCH_PARENT,
                     LayoutParams.MATCH_PARENT);
 
-    public static final int STATUS_CONTENT = 0x00;
-    public static final int STATUS_LOADING = 0x01;
-    public static final int STATUS_EMPTY = 0x02;
-    public static final int STATUS_ERROR = 0x03;
-    public static final int STATUS_NO_NETWORK = 0x04;
-
-    private static final int NULL_RESOURCE_ID = -1;
-
-    private View mEmptyView;
-    private View mErrorView;
-    private View mLoadingView;
-    private View mNoNetworkView;
-    private View mContentView;
-    private int mEmptyViewResId;
-    private int mErrorViewResId;
-    private int mLoadingViewResId;
-    private int mNoNetworkViewResId;
-    private int mContentViewResId;
-
-    private int mViewStatus;
-    private LayoutInflater mInflater;
-    //    private OnClickListener mOnRetryClickListener;
-    private OnClickListener mOnErrorRetryClickListener;
-    private OnClickListener mOnEmptyRetryClickListener;
-    private OnClickListener mOnNoNetRetryClickListener;
-
-    //保存子view切换状态布局之前的显隐状态，使用view的tag保存
-    private Map<Integer, Integer> viewVisibilityMap = new HashMap<>();
-    //给添加的子view添加tag，tag向后++，这是最后一个tab的值+1
-    private int viewLastTag;
-
-    private final ArrayList<Integer> mOtherIds = new ArrayList<>();//保存状态布局的view的id
+    private StatusViewWapper statusViewWapper;
 
     public StateFrameLayout(Context context) {
         this(context, null);
@@ -71,14 +38,8 @@ public class StateFrameLayout extends FrameLayout {
 
     public StateFrameLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.StateRelativeLayout, defStyleAttr, 0);
-        mEmptyViewResId = a.getResourceId(R.styleable.StateRelativeLayout_emptyView, R.layout.base_empty_view);
-        mErrorViewResId = a.getResourceId(R.styleable.StateRelativeLayout_errorView, R.layout.base_error_view);
-        mLoadingViewResId = a.getResourceId(R.styleable.StateRelativeLayout_loadingView, R.layout.base_loading_view);
-        mNoNetworkViewResId = a.getResourceId(R.styleable.StateRelativeLayout_noNetworkView, R.layout.base_no_network_view);
-        mContentViewResId = a.getResourceId(R.styleable.StateRelativeLayout_contentView, NULL_RESOURCE_ID);
-        a.recycle();
-        mInflater = LayoutInflater.from(getContext());
+        statusViewWapper = new StatusViewWapper(this,this);
+        statusViewWapper.initAttr(context,attrs,defStyleAttr);
     }
 
     @Override
@@ -90,22 +51,8 @@ public class StateFrameLayout extends FrameLayout {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        clear(mEmptyView, mLoadingView, mErrorView, mNoNetworkView);
-        if (null != mOtherIds) {
-            mOtherIds.clear();
-        }
-        if (null != mOnErrorRetryClickListener) {
-            mOnErrorRetryClickListener = null;
-        }
-        if (null != mOnEmptyRetryClickListener) {
-            mOnEmptyRetryClickListener = null;
-        }
-        if (null != mOnNoNetRetryClickListener) {
-            mOnNoNetRetryClickListener = null;
-        }
-        mInflater = null;
-        if (null != viewVisibilityMap) {
-            viewVisibilityMap.clear();
+        if (null!=statusViewWapper){
+            statusViewWapper.clear();
         }
     }
 
@@ -113,297 +60,206 @@ public class StateFrameLayout extends FrameLayout {
      * 获取当前状态
      */
     public int getViewStatus() {
-        return mViewStatus;
-    }
-
-
-    /**
-     * 设置错误重试点击事件
-     *
-     * @param onErrorRetryClickListener 重试点击事件
-     */
-    public void setOnErrorRetryClickListener(OnClickListener onErrorRetryClickListener) {
-        this.mOnErrorRetryClickListener = onErrorRetryClickListener;
-    }
-
-    /**
-     * 设置空布局重试点击事件
-     *
-     * @param onEmptyRetryClickListener 重试点击事件
-     */
-    public void setOnEmptyRetryClickListener(OnClickListener onEmptyRetryClickListener) {
-        this.mOnEmptyRetryClickListener = onEmptyRetryClickListener;
-    }
-
-    /**
-     * 设置没网络重试点击事件
-     *
-     * @param onNoNetRetryClickListener 重试点击事件
-     */
-    public void setOnNoNetRetryClickListener(OnClickListener onNoNetRetryClickListener) {
-        this.mOnNoNetRetryClickListener = onNoNetRetryClickListener;
+        if (null!=statusViewWapper){
+            return statusViewWapper.getViewStatus();
+        }
+        return 0;
     }
 
     /**
      * 显示空视图
      */
     public final void showEmpty() {
-        showEmpty(mEmptyViewResId, DEFAULT_LAYOUT_PARAMS);
-    }
-
-    /**
-     * 显示空视图
-     *
-     * @param layoutId     自定义布局文件
-     * @param layoutParams 布局参数
-     */
-    public final void showEmpty(int layoutId, LayoutParams layoutParams) {
-        showEmpty(inflateView(layoutId), layoutParams);
+        if (null!=statusViewWapper){
+            statusViewWapper.showEmpty();
+        }
     }
 
     public final void showEmpty(int layoutId) {
-        showEmpty(inflateView(layoutId), DEFAULT_LAYOUT_PARAMS);
+        if (null!=statusViewWapper){
+            statusViewWapper.showEmpty(layoutId);
+        }
     }
 
     public final void showEmpty(View view) {
-        showEmpty(view, DEFAULT_LAYOUT_PARAMS);
+        if (null!=statusViewWapper){
+            statusViewWapper.showEmpty(view);
+        }
     }
 
     /**
-     * 显示空视图
-     *
-     * @param view         自定义视图
-     * @param layoutParams 布局参数
+     * 设置空布局的文案
+     * @param emptyChildViewId 空布局中的textview的id
+     * @param emptyText 设置的文案
      */
-    public final void showEmpty(View view, LayoutParams layoutParams) {
-        checkNull(view, "Empty view is null!");
-        mViewStatus = STATUS_EMPTY;
-        if (null == mEmptyView) {
-            mEmptyView = view;
-            if (mEmptyView.getId() == -1) {
-                mEmptyView.setId(R.id.base_empty_view);
-            }
-            View emptyRetryView = mEmptyView.findViewById(R.id.empty_retry_view);
-            if (null != mOnEmptyRetryClickListener && null != emptyRetryView) {
-                emptyRetryView.setOnClickListener(mOnEmptyRetryClickListener);
-            }
-            mOtherIds.add(mEmptyView.getId());
-            addView(mEmptyView, 0, layoutParams);
+    public void setEmptyChildText(int emptyChildViewId,String emptyText){
+        if (null!=statusViewWapper){
+            statusViewWapper.setEmptyChildText(emptyChildViewId, emptyText);
         }
-        showViewById(mEmptyView.getId());
+    }
+
+    /**
+     * 设置空布局的图片
+     * @param emptyChildViewId 空布局中的ImageView的id
+     * @param imgResId  设置的图片
+     */
+    public void setEmptyChildImg(int emptyChildViewId,int imgResId){
+        if (null!=statusViewWapper){
+            statusViewWapper.setEmptyChildImg(emptyChildViewId, imgResId);
+        }
+    }
+
+    /**
+     * 设置空布局的子view的监听
+     * @param emptyChildViewId 空布局的子view的id
+     * @param onClickListener 布局中子view的点击监听
+     */
+    public void setOnEmptyChildClickListener(int emptyChildViewId, OnClickListener onClickListener) {
+        if (null!=statusViewWapper){
+            statusViewWapper.setOnEmptyChildClickListener(emptyChildViewId, onClickListener);
+        }
     }
 
     /**
      * 显示错误视图
      */
     public final void showError() {
-        showError(mErrorViewResId, DEFAULT_LAYOUT_PARAMS);
-    }
-
-    /**
-     * 显示错误视图
-     *
-     * @param layoutId     自定义布局文件
-     * @param layoutParams 布局参数
-     */
-    public final void showError(int layoutId, LayoutParams layoutParams) {
-        showError(inflateView(layoutId), layoutParams);
+        if (null!=statusViewWapper){
+            statusViewWapper.showError();
+        }
     }
 
     public final void showError(int layoutId) {
-        showError(inflateView(layoutId), DEFAULT_LAYOUT_PARAMS);
+        if (null!=statusViewWapper){
+            statusViewWapper.showError(layoutId);
+        }
     }
 
     public final void showError(View view) {
-        showError(view, DEFAULT_LAYOUT_PARAMS);
+        if (null!=statusViewWapper){
+            statusViewWapper.showError(view);
+        }
     }
 
     /**
-     * 显示错误视图
-     *
-     * @param view         自定义视图
-     * @param layoutParams 布局参数
+     * 设置错误布局的文案
+     * @param errorChildViewId 错误布局中的textview的id
+     * @param errorText 设置的文案
      */
-    public final void showError(View view, LayoutParams layoutParams) {
-        checkNull(view, "Error view is null!");
-        mViewStatus = STATUS_ERROR;
-        if (null == mErrorView) {
-            mErrorView = view;
-            if (mErrorView.getId() == -1) {
-                mErrorView.setId(R.id.base_error_view);
-            }
-            View errorRetryView = mErrorView.findViewById(R.id.error_retry_view);
-            if (null != mOnErrorRetryClickListener && null != errorRetryView) {
-                errorRetryView.setOnClickListener(mOnErrorRetryClickListener);
-            }
-            mOtherIds.add(mErrorView.getId());
-            addView(mErrorView, 0, layoutParams);
+    public void setErrorChildText(int errorChildViewId,String errorText){
+        if (null!=statusViewWapper){
+            statusViewWapper.setErrorChildText(errorChildViewId, errorText);
         }
-        showViewById(mErrorView.getId());
+    }
+
+    /**
+     * 设置错误布局的图片
+     * @param errorChildViewId 错误布局中的ImageView的id
+     * @param imgResId  设置的图片
+     */
+    public void setErrorChildImg(int errorChildViewId,int imgResId){
+        if (null!=statusViewWapper){
+            statusViewWapper.setErrorChildImg(errorChildViewId, imgResId);
+        }
+    }
+
+    /**
+     * 设置错误布局的子view的监听
+     * @param errorChildViewId 错误布局的子view的id
+     * @param onClickListener 布局中子view的点击监听
+     */
+    public void setOnErrorChildClickListener(int errorChildViewId, OnClickListener onClickListener) {
+        if (null!=statusViewWapper){
+            statusViewWapper.setOnErrorChildClickListener(errorChildViewId, onClickListener);
+        }
     }
 
     /**
      * 显示加载中视图
      */
     public final void showLoading() {
-        showLoading(mLoadingViewResId, DEFAULT_LAYOUT_PARAMS);
-    }
-
-    /**
-     * 显示加载中视图
-     *
-     * @param layoutId     自定义布局文件
-     * @param layoutParams 布局参数
-     */
-    public final void showLoading(int layoutId, LayoutParams layoutParams) {
-        showLoading(inflateView(layoutId), layoutParams);
+        if (null!=statusViewWapper){
+            statusViewWapper.showLoading();
+        }
     }
 
     public final void showLoading(int layoutId) {
-        showLoading(inflateView(layoutId), DEFAULT_LAYOUT_PARAMS);
+        if (null!=statusViewWapper){
+            statusViewWapper.showLoading(layoutId);
+        }
     }
 
     public final void showLoading(View view) {
-        showLoading(view, DEFAULT_LAYOUT_PARAMS);
+        if (null!=statusViewWapper){
+            statusViewWapper.showLoading(view);
+        }
     }
 
     /**
-     * 显示加载中视图
-     *
-     * @param view         自定义视图
-     * @param layoutParams 布局参数
+     * 设置加载布局的文案
+     * @param loadingChildViewId 加载布局中的textview的id
+     * @param loadingText 设置的文案
      */
-    public final void showLoading(View view, LayoutParams layoutParams) {
-        checkNull(view, "Loading view is null!");
-        mViewStatus = STATUS_LOADING;
-        if (null == mLoadingView) {
-            mLoadingView = view;
-            if (mLoadingView.getId() == -1) {
-                mLoadingView.setId(R.id.base_loading_view);
-            }
-            mOtherIds.add(mLoadingView.getId());
-            addView(mLoadingView, 0, layoutParams);
+    public void setLoadingChildText(int loadingChildViewId,String loadingText){
+        if (null!=statusViewWapper){
+            statusViewWapper.setLoadingChildText(loadingChildViewId, loadingText);
         }
-        showViewById(mLoadingView.getId());
+    }
+
+    /**
+     * 设置加载布局的子view的监听
+     * @param loadingChildViewId 加载布局的子view的id
+     * @param onClickListener 布局中子view的点击监听
+     */
+    public void setOnLoadingChildClickListener(int loadingChildViewId, OnClickListener onClickListener) {
+        if (null!=statusViewWapper){
+            statusViewWapper.setOnLoadingChildClickListener(loadingChildViewId, onClickListener);
+        }
     }
 
     /**
      * 显示无网络视图
      */
     public final void showNoNetwork() {
-        showNoNetwork(mNoNetworkViewResId, DEFAULT_LAYOUT_PARAMS);
-    }
-
-    /**
-     * 显示无网络视图
-     *
-     * @param layoutId     自定义布局文件
-     * @param layoutParams 布局参数
-     */
-    public final void showNoNetwork(int layoutId, LayoutParams layoutParams) {
-        showNoNetwork(inflateView(layoutId), layoutParams);
+        if (null!=statusViewWapper){
+            statusViewWapper.showNoNetwork();
+        }
     }
 
     public final void showNoNetwork(int layoutId) {
-        showNoNetwork(inflateView(layoutId), DEFAULT_LAYOUT_PARAMS);
+        if (null!=statusViewWapper){
+            statusViewWapper.showNoNetwork(layoutId);
+        }
     }
 
     public final void showNoNetwork(View view) {
-        showNoNetwork(view, DEFAULT_LAYOUT_PARAMS);
+        if (null!=statusViewWapper){
+            statusViewWapper.showNoNetwork(view);
+        }
     }
 
-    /**
-     * 显示无网络视图
-     *
-     * @param view         自定义视图
-     * @param layoutParams 布局参数
-     */
-    public final void showNoNetwork(View view, LayoutParams layoutParams) {
-        checkNull(view, "No network view is null!");
-        mViewStatus = STATUS_NO_NETWORK;
-        if (null == mNoNetworkView) {
-            mNoNetworkView = view;
-            if (mNoNetworkView.getId() == -1) {
-                mNoNetworkView.setId(R.id.base_no_network_view);
-            }
-            View noNetworkRetryView = mNoNetworkView.findViewById(R.id.no_network_retry_view);
-            if (null != mOnNoNetRetryClickListener && null != noNetworkRetryView) {
-                noNetworkRetryView.setOnClickListener(mOnNoNetRetryClickListener);
-            }
-            mOtherIds.add(mNoNetworkView.getId());
-            addView(mNoNetworkView, 0, layoutParams);
+    public void setOnNoNetChildClickListener(int noNetChildViewId, OnClickListener onClickListener) {
+        if (null!=statusViewWapper){
+            statusViewWapper.setOnNoNetChildClickListener(noNetChildViewId, onClickListener);
         }
-        showViewById(mNoNetworkView.getId());
     }
 
     /**
      * 显示内容视图
      */
     public final void showContent() {
-        mViewStatus = STATUS_CONTENT;
-        if (null == mContentView && mContentViewResId != NULL_RESOURCE_ID) {
-            mContentView = mInflater.inflate(mContentViewResId, null);
-            addView(mContentView, 0, DEFAULT_LAYOUT_PARAMS);
-        }
-        showContentView();
-    }
-
-    private void showContentView() {
-        final int childCount = getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            View view = getChildAt(i);
-            if (null == view.getTag()) {
-                view.setTag(viewLastTag);
-                viewVisibilityMap.put(viewLastTag, view.getVisibility());
-                viewLastTag++;
-            }
-
-            int viewStatus = viewVisibilityMap.get(view.getTag());//获取此View开始状态
-            view.setVisibility(mOtherIds.contains(view.getId()) ? View.GONE : viewStatus);
+        if (null!=statusViewWapper){
+            statusViewWapper.showContent();
         }
     }
 
-    private View inflateView(int layoutId) {
-        return mInflater.inflate(layoutId, null);
+
+    @Override
+    public void setLayoutParamsWithToolbar(int toolbarId) {
     }
 
-    private void showViewById(int viewId) {
-        final int childCount = getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            View view = getChildAt(i);
-            //展现非内容布局的时候，将内容布局的view显示状态记录下来
-            if (null == view.getTag()) {
-                view.setTag(viewLastTag);
-                viewLastTag++;
-            }
-            viewVisibilityMap.put((int) view.getTag(), view.getVisibility());
-            /*展现非内容布局的时候，如果有toolbar，将toolbar也显示*/
-            if (view instanceof Toolbar) {
-                view.setVisibility(VISIBLE);
-            } else {
-                view.setVisibility(view.getId() == viewId ? View.VISIBLE : View.GONE);
-            }
-        }
-    }
-
-    private void checkNull(Object object, String hint) {
-        if (null == object) {
-            throw new NullPointerException(hint);
-        }
-    }
-
-    private void clear(View... views) {
-        if (null == views) {
-            return;
-        }
-        try {
-            for (View view : views) {
-                if (null != view) {
-                    removeView(view);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    @Override
+    public void addInnerStatusView(View innerStatusView) {
+        addView(innerStatusView, 0, DEFAULT_LAYOUT_PARAMS);
     }
 }
