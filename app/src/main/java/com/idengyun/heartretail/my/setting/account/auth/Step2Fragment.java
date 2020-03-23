@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
+import com.dengyun.baselibrary.net.ImageApi;
 import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
@@ -84,8 +85,10 @@ public final class Step2Fragment extends BaseFragment implements View.OnClickLis
 
         if (REQUEST_CODE_REAL_BANK_CARD_TRUE == requestCode) {
             bankCardTruePath = TakePhotoUtil.getResultPath(localMediaList.get(0));
+            ImageApi.displayImage(iv_bank_card_true.getContext(), iv_bank_card_true, bankCardTruePath);
         } else if (REQUEST_CODE_REAL_BANK_CARD_FALSE == requestCode) {
             bankCardFalsePath = TakePhotoUtil.getResultPath(localMediaList.get(0));
+            ImageApi.displayImage(iv_bank_card_false.getContext(), iv_bank_card_false, bankCardFalsePath);
         }
 
         boolean enabled = !(TextUtils.isEmpty(bankCardTruePath) || TextUtils.isEmpty(bankCardFalsePath));
@@ -95,9 +98,9 @@ public final class Step2Fragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onClick(View v) {
         if (iv_bank_card_true == v) {
-            TakePhotoUtil.takePhotoWithItem(this, true, REQUEST_CODE_PERSONAL);
+            TakePhotoUtil.takePhotoWithItem(this, true, REQUEST_CODE_REAL_BANK_CARD_TRUE);
         } else if (iv_bank_card_false == v) {
-            TakePhotoUtil.takePhotoWithItem(this, true, REQUEST_CODE_PERSONAL);
+            TakePhotoUtil.takePhotoWithItem(this, true, REQUEST_CODE_REAL_BANK_CARD_FALSE);
         } else if (tv_real_next_step_2 == v) {
             HRActivity.start(getContext(), Step3Fragment.class);
         }

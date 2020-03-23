@@ -10,10 +10,12 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
+import com.dengyun.baselibrary.net.ImageApi;
 import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.baselibrary.net.upload.UploadBean;
+import com.dengyun.baselibrary.utils.ImageUtils;
 import com.dengyun.baselibrary.utils.ListUtils;
 import com.dengyun.baselibrary.utils.TakePhotoUtil;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
@@ -71,8 +73,12 @@ public final class Step1Fragment extends BaseFragment implements View.OnClickLis
 
         if (REQUEST_CODE_REAL_ID_CARD_TRUE == requestCode) {
             idCardTruePath = TakePhotoUtil.getResultPath(localMediaList.get(0));
+            System.out.println(idCardTruePath);
+            ImageApi.displayImage(iv_id_card_true.getContext(), iv_id_card_true, idCardTruePath);
         } else if (REQUEST_CODE_REAL_ID_CARD_FALSE == requestCode) {
             idCardFalsePath = TakePhotoUtil.getResultPath(localMediaList.get(0));
+            System.out.println(idCardFalsePath);
+            ImageApi.displayImage(iv_id_card_false.getContext(), iv_id_card_false, idCardFalsePath);
         }
 
         boolean enabled = !(TextUtils.isEmpty(idCardTruePath) || TextUtils.isEmpty(idCardFalsePath));
@@ -82,9 +88,9 @@ public final class Step1Fragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onClick(View v) {
         if (iv_id_card_true == v) {
-            TakePhotoUtil.takePhotoWithItem(this, true, REQUEST_CODE_PERSONAL);
+            TakePhotoUtil.takePhotoWithItem(this, true, REQUEST_CODE_REAL_ID_CARD_TRUE);
         } else if (iv_id_card_false == v) {
-            TakePhotoUtil.takePhotoWithItem(this, true, REQUEST_CODE_PERSONAL);
+            TakePhotoUtil.takePhotoWithItem(this, true, REQUEST_CODE_REAL_ID_CARD_FALSE);
         } else if (tv_real_next_step_1 == v) {
             HRActivity.start(getContext(), Step2Fragment.class);
         }

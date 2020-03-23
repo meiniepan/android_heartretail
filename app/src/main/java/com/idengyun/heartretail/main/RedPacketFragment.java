@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
+import com.dengyun.baselibrary.net.ImageApi;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.RedPacketBean;
 import com.idengyun.heartretail.viewmodel.RedPacketViewModel;
@@ -189,11 +190,15 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
 
             public void updateUI(RedPacketBean.Data.Friend friend) {
                 String friendName = friend.friendName;
+                String friendHeadImg = friend.friendHeadImg;
                 String inviteTime = friend.inviteTime;
                 String consumeMoney = friend.consumeMoney;
+                String[] split = inviteTime.split(" ");
+                String date = split.length > 0 ? split[0] : "";
 
+                ImageApi.displayImage(iv_red_packet_user_avatar.getContext(), iv_red_packet_user_avatar, friendHeadImg);
                 tv_red_packet_user_name.setText(friendName);
-                tv_red_packet_date.setText(inviteTime);
+                tv_red_packet_date.setText(date);
                 tv_red_packet_out_money.setText(consumeMoney + "元");
             }
 
