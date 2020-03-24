@@ -6,6 +6,7 @@ import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdate;
 import com.amap.api.maps.CameraUpdateFactory;
+import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.dengyun.baselibrary.utils.Utils;
 import com.idengyun.maplibrary.R;
@@ -35,16 +36,30 @@ public class AmapLocationWapper {
         myLocationStyle.strokeColor(Utils.getApp().getResources().getColor(R.color.transparent));
         //设置定位蓝点的Style
         aMap.setMyLocationStyle(myLocationStyle);
-        //aMap.getUiSettings().setMyLocationButtonEnabled(true);设置默认定位按钮是否显示，非必需设置。
         // 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
         aMap.setMyLocationEnabled(true);
 
+        //设置缩放级别
         CameraUpdate mCameraUpdate = CameraUpdateFactory.zoomTo(17);
         aMap.animateCamera(mCameraUpdate);
 
         //设置定位的回调
         aMap.setOnMyLocationChangeListener(onMyLocationChangeListener);
+        //设置交互按钮
+        setUiSettings(aMap);
     }
+
+    private void setUiSettings(AMap aMap) {
+        //实例化UiSettings类对象
+        UiSettings mUiSettings = aMap.getUiSettings();
+        //缩放按钮,此控件默认打开
+        mUiSettings.setZoomControlsEnabled(true);
+        //指南针,默认不显示
+        mUiSettings.setCompassEnabled(true);
+        //设置默认定位按钮是否显示。
+        mUiSettings.setMyLocationButtonEnabled(true);
+    }
+
 
     public void startLocation(AMapLocationListener mLocationListener) {
         AndPermission.with(Utils.getApp())

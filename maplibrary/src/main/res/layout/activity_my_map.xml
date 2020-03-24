@@ -10,7 +10,8 @@
         android:id="@+id/map"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="60dp"/>
+        android:layout_marginBottom="192dp"
+        android:layout_marginTop="60dp"/>
     <com.idengyun.maplibrary.view.PoiScrollLayout
         android:id="@+id/sl_map_poi"
         android:layout_width="match_parent"
