@@ -1,11 +1,13 @@
 package com.dengyun.baselibrary.utils.ocr;
 
+
 import android.util.Base64;
 
 import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.baselibrary.net.constants.ProjectType;
+import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.baselibrary.utils.ToastUtils;
 import com.lzy.okgo.model.Response;
 
@@ -21,19 +23,23 @@ import java.io.IOException;
  */
 public class OCRUtils {
 
-    private static String appcode = "c88ac3ef5117409e860c7958e72f376c";
+        private static String appcode = "c88ac3ef5117409e860c7958e72f376c";
+//    private static String appcode = "524fb872670d4a508fb6b446d8ecf064";//妃子校
 
     /**
      * 识别身份证(正面)
      *
-     * @param localImagePath 本地图片路径
+     * @param isLocal            是否是本地图片
+     * @param imagePath          图片路径（本地就是本地路径，远程就是url）
+     * @param onIdCardFaceResult
      */
-    public static void recoIdCardFace(String localImagePath, OnIdCardFaceResult onIdCardFaceResult) {
-        String url = "http://dm-51.data.aliyun.com/rest/160601/ocr/ocr_idcard.json";
+    public static void recoIdCardFace(boolean isLocal, String imagePath, OnIdCardFaceResult onIdCardFaceResult) {
+//        String url = "http://dm-51.data.aliyun.com/rest/160601/ocr/ocr_idcard.json";
+        String url = "https://dm-51.data.aliyun.com/rest/160601/ocr/ocr_idcard.json";
         NetOption netOption = NetOption.newBuilder(url)
                 .headers("Authorization", "APPCODE " + appcode) //你自己的AppCode
                 .params("configure", "{\"side\":\"face\"}") // 身份证正反面类型:face/back
-                .params("image", conventImageBase64(localImagePath)) // 图片二进制数据的base64编码/图片url
+                .params("image", isLocal ? conventImageBase64(imagePath) : imagePath) // 图片二进制数据的base64编码/图片url
                 .clazz(IdCardFaceBean.class)
                 .projectType(ProjectType.NONE)
                 .build();
@@ -53,14 +59,16 @@ public class OCRUtils {
     /**
      * 识别身份证(反面)
      *
-     * @param localImagePath 本地图片路径
+     * @param isLocal   是否是本地图片
+     * @param imagePath 图片路径（本地就是本地路径，远程就是url）
      */
-    public static void recoIdCardBack(String localImagePath, OnIdCardBackResult onIdCardBackResult) {
-        String url = "http://dm-51.data.aliyun.com/rest/160601/ocr/ocr_idcard.json";
+    public static void recoIdCardBack(boolean isLocal, String imagePath, OnIdCardBackResult onIdCardBackResult) {
+//        String url = "http://dm-51.data.aliyun.com/rest/160601/ocr/ocr_idcard.json";
+        String url = "https://dm-51.data.aliyun.com/rest/160601/ocr/ocr_idcard.json";
         NetOption netOption = NetOption.newBuilder(url)
                 .headers("Authorization", "APPCODE " + appcode) //你自己的AppCode
                 .params("configure", "{\"side\":\"back\"}") // 身份证正反面类型:face/back
-                .params("image", conventImageBase64(localImagePath)) // 图片二进制数据的base64编码/图片url
+                .params("image", isLocal ? conventImageBase64(imagePath) : imagePath) // 图片二进制数据的base64编码/图片url
                 .clazz(IdCardBackBean.class)
                 .projectType(ProjectType.NONE)
                 .build();
@@ -80,17 +88,22 @@ public class OCRUtils {
     /**
      * 识别银行卡
      *
-     * @param localImagePath 本地图片路径
+     * @param isLocal   是否是本地图片
+     * @param imagePath 图片路径（本地就是本地路径，远程就是url）
      */
-    public static void recoBankCard(String localImagePath, OnBankCardResult onBankCardResult) {
+    public static void recoBankCard(boolean isLocal, String imagePath, OnBankCardResult onBankCardResult) {
         String url = "http://bankocrb.shumaidata.com/getbankocrb";
-        NetOption netOption = NetOption.newBuilder(url)
-                .headers("Authorization", "APPCODE " + appcode) //你自己的AppCode
-                .params("image", conventImageBase64(localImagePath)) // 图片二进制数据的base64编码/图片url
-                .clazz(BankCardBean.class)
+        NetOption.Builder netBuilder = NetOption.newBuilder(url)
+                .headers("Authorization", "APPCODE " + appcode); //你自己的AppCode
+        if (isLocal) {
+            netBuilder.params("image", conventImageBase64(imagePath));// 图片二进制数据的base64编码
+        } else {
+            netBuilder.params("url", imagePath);//图片url
+        }
+        NetOption netOption = netBuilder.clazz(BankCardBean.class)
                 .projectType(ProjectType.NONE)
                 .build();
-        NetApi.<BankCardBean>getData(netOption, new JsonCallback<BankCardBean>(netOption) {
+        NetApi.<BankCardBean>getData(RequestMethod.POST_FORM,netOption, new JsonCallback<BankCardBean>(netOption) {
             @Override
             public void onSuccess(Response<BankCardBean> response) {
                 /*200	成功	成功
@@ -98,6 +111,9 @@ public class OCRUtils {
                 404	请求资源不存在	请求资源不存在
                 500	系统内部错误，请联系服务商	系统内部错误，请联系服务商
                 501	第三方服务异常	第三方服务异常
+                601	服务商未开通接口权限
+                602	账号停用
+                603	余额不足请充值
                 604	接口停用	接口停用
                 1001	服务异常，会返回具体的错误原因	服务异常，会返回具体的错误原因*/
                 BankCardBean bankCardBean = response.body();

@@ -63,14 +63,14 @@ public class BankCardBean {
          * card_type : 借记卡
          */
 
-        private String order_no;
-        private Object exif_orientation;
-        private String image_id;
-        private String card_number;
-        private String bank_name;
-        private String bank_identification_number;
-        private String card_name;
-        private String card_type;
+        private String order_no;        //订单号
+        private Object exif_orientation;//exif信息，暂时用不到
+        private String image_id;        //图片上传云端后的id
+        private String card_number;     //银行卡号
+        private String bank_name;       //发卡行名称
+        private String bank_identification_number;//发卡行标识代码
+        private String card_name;       //卡片名称
+        private String card_type;       //卡片类型
 
         public String getOrder_no() {
             return order_no;

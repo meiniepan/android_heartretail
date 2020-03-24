@@ -26,15 +26,15 @@ public class AppLogUtil {
 
     public static synchronized void setNetResultLog(String url, Map params, String resultJson) {
         if (!AppConfig.isDebug) return;
-        Logger.t("wwwwww").d(url);
-        Logger.t("wwwwww").d(params);
-        Logger.t("wwwwww").json(resultJson);
+        Logger.t("wwwwww-u").d(url);
+        Logger.t("wwwwww-p").d(params);
+        Logger.t("wwwwww-r").json(resultJson);
     }
 
     public static synchronized void setNetErrorLog(String url, String errorMsg) {
         if (!AppConfig.isDebug) return;
-        Logger.t("wwwwww").e(url);
-        Logger.t("wwwwww").e(errorMsg);
+        Logger.t("wwwwww-u").e(url);
+        Logger.t("wwwwww-e").e(errorMsg);
     }
 
     public static void initLog() {

@@ -153,43 +153,17 @@ public final class Step2Fragment extends BaseFragment implements View.OnClickLis
         System.out.println("urlIdCardBack= " + urlIdCardBack);
         System.out.println("urlBankCardFront= " + urlBankCardFront);
         System.out.println("urlBankCardBack= " + urlBankCardBack);
-        recognizeIdCardFront();
-    }
 
-    /* 识别身份证正面 */
-    private void recognizeIdCardFront() {
-        OCRUtils.recoIdCardFace(urlIdCardFront, new OCRUtils.OnIdCardFaceResult() {
-            @Override
-            public void onResult(IdCardFaceBean idCardFaceBean) {
-                System.out.println(idCardFaceBean);
-                recognizeIdCardBack();
-            }
-        });
-    }
-
-    /* 识别身份证反面 */
-    private void recognizeIdCardBack() {
-        OCRUtils.recoIdCardBack(urlIdCardBack, new OCRUtils.OnIdCardBackResult() {
-            @Override
-            public void onResult(IdCardBackBean idCardBackBean) {
-                System.out.println(idCardBackBean);
-                recognizeBankCardFront();
-            }
-        });
-    }
-
-    /* 识别银行卡正面 */
-    private void recognizeBankCardFront() {
-        OCRUtils.recoBankCard(urlBankCardFront, new OCRUtils.OnBankCardResult() {
+        OCRUtils.recoBankCard(false,urlBankCardFront, new OCRUtils.OnBankCardResult() {
             @Override
             public void onResult(BankCardBean bankCardBean) {
                 System.out.println(bankCardBean);
-                // startStep3Activity();
             }
         });
+
+        // startStep3Activity();
     }
 
-    /* 下一步跳转逻辑 */
     private void startStep3Activity() {
         Bundle extras = new Bundle();
         extras.putString("url_id_card_front", urlIdCardFront);
