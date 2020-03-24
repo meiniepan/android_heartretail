@@ -45,7 +45,7 @@
             android:background="#ef508d"
             android:gravity="center"
             android:textColor="#ffffffff"
-            android:textSize="30dp"
+            android:textSize="30sp"
             android:visibility="invisible" />
 
         <com.idengyun.maplibrary.citylist.SideBar
