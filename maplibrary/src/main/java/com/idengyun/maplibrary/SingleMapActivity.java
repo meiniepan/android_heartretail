@@ -114,11 +114,7 @@ public class SingleMapActivity extends BaseActivity {
     }
 
     private void startLocation() {
-        new AmapLocationWapper().startLocationWithMap(aMap, new AMap.OnMyLocationChangeListener() {
-            @Override
-            public void onMyLocationChange(Location location) {
-            }
-        });
+        new AmapLocationWapper().startLocationWithMap(aMap, null);
     }
 
 }

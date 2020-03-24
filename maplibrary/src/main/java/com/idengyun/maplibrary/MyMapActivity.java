@@ -9,14 +9,17 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.amap.api.maps.AMap;
+import com.amap.api.maps.model.LatLng;
 import com.amap.api.services.core.PoiItem;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.dengyun.baselibrary.base.activity.BaseActivity;
+import com.dengyun.baselibrary.config.GlobalProperty;
 import com.dengyun.baselibrary.utils.SizeUtils;
 import com.idengyun.maplibrary.beans.EventChoosePoiItem;
 import com.idengyun.maplibrary.citylist.ChooseAddrActivity;
 import com.idengyun.maplibrary.citylist.CityListActivity;
 import com.idengyun.maplibrary.utils.AmapLocationWapper;
+import com.idengyun.maplibrary.utils.AmapPointUtil;
 import com.idengyun.maplibrary.utils.PoiSearchUtil;
 import com.idengyun.maplibrary.view.DyMapView;
 import com.idengyun.maplibrary.view.PoiScrollLayout;
@@ -51,24 +54,23 @@ public class MyMapActivity extends BaseActivity {
     private AMap aMap;
 
     //从上个页面传过来的定位城市和最近的店
-    private String cityName,nearShop,poiId;
+    private String cityName, nearShop, poiId;
 
     //poi数据列表适配器
     private PoiListAdapter poiListAdapter;
     private ArrayList<PoiItem> pois = new ArrayList<>();
 
 
-
     /**
      * @param context
-     * @param cityName  定位的城市名称
-     * @param nearShop  定位的推荐最近的店铺
+     * @param cityName 定位的城市名称
+     * @param nearShop 定位的推荐最近的店铺
      */
-    public static void start(Context context,String cityName,String nearShop,String poiId) {
+    public static void start(Context context, String cityName, String nearShop, String poiId) {
         Intent starter = new Intent(context, MyMapActivity.class);
-        starter.putExtra("cityName",cityName);
-        starter.putExtra("nearShop",nearShop);
-        starter.putExtra("poiId",poiId);
+        starter.putExtra("cityName", cityName);
+        starter.putExtra("nearShop", nearShop);
+        starter.putExtra("poiId", poiId);
         context.startActivity(starter);
     }
 
@@ -92,32 +94,23 @@ public class MyMapActivity extends BaseActivity {
         nearShop = getIntent().getStringExtra("nearShop");
         poiId = getIntent().getStringExtra("poiId");
 
-        //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，创建地图
-        mMapView.onCreate(savedInstanceState);
-        aMap = mMapView.getMap();
-        //设置定位
-        startLocation();
-
         //setView
         tvMapSelectCity.setText(cityName);
         tvMapSelectAddr.setText(nearShop);
         initPoiList();
-        setScroll();
+
+        //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，创建地图
+        mMapView.onCreate(savedInstanceState);
+        aMap = mMapView.getMap();
+        //开始给用户定位
+        startLocation();
+        //移动到当前全局选择的定位点
+        moveToSpecity();
+        //查询全局定位点附件的poi列表
+        queryPoiList();
 
     }
 
-    private void setScroll() {
-        slMapPoi.setOnScrollChangedListener(new PoiScrollLayout.OnScrollChangedListener() {
-            @Override
-            public void onScrollChange(int status) {
-            }
-
-            @Override
-            public void onScrollProgress(int progress) {
-
-            }
-        });
-    }
 
     @Override
     protected void onDestroy() {
@@ -125,18 +118,21 @@ public class MyMapActivity extends BaseActivity {
         //在activity执行onDestroy时执行mMapView.onDestroy()，销毁地图
         mMapView.onDestroy();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         //在activity执行onResume时执行mMapView.onResume ()，重新绘制加载地图
         mMapView.onResume();
     }
+
     @Override
     protected void onPause() {
         super.onPause();
         //在activity执行onPause时执行mMapView.onPause ()，暂停地图的绘制
         mMapView.onPause();
     }
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -163,7 +159,7 @@ public class MyMapActivity extends BaseActivity {
     private void initPoiList() {
         rvMapPoi.setLayoutManager(new LinearLayoutManager(this));
         rvMapPoi.addItemDecoration(new RecycleViewDivider(this, SizeUtils.dp2px(10)));
-        poiListAdapter = new PoiListAdapter(R.layout.item_map_poi,pois);
+        poiListAdapter = new PoiListAdapter(R.layout.item_map_poi, pois);
         rvMapPoi.setAdapter(poiListAdapter);
         poiListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
@@ -177,15 +173,14 @@ public class MyMapActivity extends BaseActivity {
     }
 
     private void startLocation() {
-        new AmapLocationWapper().startLocationWithMap(aMap, new AMap.OnMyLocationChangeListener() {
-            @Override
-            public void onMyLocationChange(Location location) {
-                //纬度
-                double latitude = location.getLatitude();
-                //经度
-                double longitude= location.getLongitude();
-                Logger.d("经度："+longitude+"   ; 纬度："+latitude);
-                PoiSearchUtil.searchPOIWithBound(MyMapActivity.this, latitude, longitude, new PoiSearchUtil.OnPoiBoundSearchListener() {
+        new AmapLocationWapper().startLocationWithMap(aMap, null);
+    }
+
+    private void queryPoiList() {
+        PoiSearchUtil.searchPOIWithBound(MyMapActivity.this,
+                GlobalProperty.getInstance().getLatitude(),
+                GlobalProperty.getInstance().getLongitude(),
+                new PoiSearchUtil.OnPoiBoundSearchListener() {
                     @Override
                     public void onSearchResult(List<PoiItem> resultPois) {
                         pois.clear();
@@ -194,21 +189,28 @@ public class MyMapActivity extends BaseActivity {
                         poiListAdapter.notifyDataSetChanged();
                     }
                 });
-            }
-        });
+    }
+
+    /**
+     * 移动到指定位置
+     */
+    private void moveToSpecity() {
+        LatLng latLng = new LatLng(GlobalProperty.getInstance().getLatitude(), GlobalProperty.getInstance().getLongitude());
+        //绘制点
+        AmapPointUtil.drawOnePoint(aMap, latLng, nearShop, nearShop);
     }
 
     /**
      * @param view 点击选择城市按钮
      */
     public void chooseCity(View view) {
-        CityListActivity.start(this,cityName);
+        CityListActivity.start(this, cityName);
     }
 
     /**
      * @param view 点击选择地址按钮
      */
     public void chooseAddr(View view) {
-        ChooseAddrActivity.start(this,cityName);
+        ChooseAddrActivity.start(this, cityName);
     }
 }
