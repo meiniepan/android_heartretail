@@ -25,10 +25,11 @@ public final class GoodsDetailBean {
         public int shopId;
         public String shopName;
         public List<Banner> imageList;
-        public List<Protocol> protocolList;
+        public List<Rule> ruleList;
         public List<GoodsSpec> goodsSpecList;
         public List<GoodsSku> goodsSkuList;
-        public List<String> goodsDetailList;
+        // public List<String> goodsDetailList;
+        public String goodsDetail;
 
         public static class Banner {
             public String imgUrl;
@@ -56,10 +57,10 @@ public final class GoodsDetailBean {
             public int wholesaleFlag;
         }
 
-        public static class Protocol {
-            public int protocolId;
-            public String protocolName;
-            public int protocolSort;
+        public static class Rule {
+            public String title;
+            public String content;
+            public String ruleKey;
         }
     }
 }

@@ -1,5 +1,6 @@
-package com.idengyun.heartretail.my.setting;
+package com.idengyun.heartretail.main;
 
+import android.arch.lifecycle.Observer;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.MainThread;
@@ -13,13 +14,15 @@ import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.widgets.toolbar.BaseToolBar;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.ProtocolBean;
+import com.idengyun.heartretail.model.response.RuleBean;
+import com.idengyun.heartretail.viewmodel.RuleViewModel;
 
 /**
- * 用户协议
+ * 玩法规则
  *
  * @author aLang
  */
-public final class AgreeDetailFragment extends BaseFragment {
+public final class PlayRuleDetailFragment extends BaseFragment {
 
     private BaseToolBar base_tool_bar;
     private TextView tv_agree_detail;
@@ -37,22 +40,25 @@ public final class AgreeDetailFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Intent intent = getActivity().getIntent();
-        String protocolName = intent.getStringExtra("protocol_name");
-        String protocolContent = intent.getStringExtra("protocol_content");
-        ProtocolBean.Protocol protocol = new ProtocolBean.Protocol();
-        protocol.protocolName = protocolName;
-        protocol.protocolContent = protocolContent;
-        updateUI(protocol);
+        RuleViewModel ruleViewModel = RuleViewModel.getInstance(this);
+        ruleViewModel.getPlayRule().observe(this, new Observer<RuleBean.Rule>() {
+            @Override
+            public void onChanged(@Nullable RuleBean.Rule rule) {
+                updateUI(rule);
+            }
+        });
+        ruleViewModel.requestPlayRule(this);
     }
 
     @MainThread
-    private void updateUI(ProtocolBean.Protocol protocol) {
-        String protocolName = protocol.protocolName;
-        String protocolContent = protocol.protocolContent;
+    private void updateUI(@Nullable RuleBean.Rule rule) {
+        if (rule == null) return;
 
-        base_tool_bar.setTitle(protocolName);
-        tv_agree_detail.setText(Html.fromHtml(protocolContent));
+        String title = rule.title;
+        String content = rule.content;
+
+        base_tool_bar.setTitle(title);
+        tv_agree_detail.setText(Html.fromHtml(content));
     }
 
     private void findViewById(View view) {

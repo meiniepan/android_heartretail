@@ -384,6 +384,61 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:text="银行归属地"
+                            android:textColor="#ff333333"
+                            android:textSize="16sp" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2">
+
+                            <EditText
+                                android:id="@+id/et_real_sss"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:background="@null"
+                                android:enabled="false"
+                                android:hint="请选择银行卡归属地"
+                                android:imeOptions="actionNext"
+                                android:inputType="text"
+                                android:maxLength="6"
+                                android:textColor="#333333"
+                                android:textColorHint="#ff999999"
+                                android:textCursorDrawable="@null"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:drawableEnd="@drawable/ic_goods_detail_arrow_dark"
+                                android:enabled="false"
+                                android:gravity="center"
+                                android:text=""
+                                android:textColor="@color/selector_real_step_3_verify_code"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#EEEEEE" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:minHeight="50dp"
+                        android:orientation="horizontal"
+                        android:paddingStart="15dp"
+                        android:paddingEnd="15dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:text="预留手机号"
                             android:textColor="#ff333333"
                             android:textSize="16sp" />

@@ -455,7 +455,7 @@
                 android:layout_height="281dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="8dp"
-                android:background="@drawable/ic_star_16dp" />
+                tools:background="@drawable/ic_star_16dp" />
         </LinearLayout>
 
         <TextView

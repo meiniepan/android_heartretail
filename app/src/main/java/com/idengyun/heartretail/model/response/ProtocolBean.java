@@ -7,13 +7,13 @@ import java.util.List;
  *
  * @author aLang
  */
-public final class ProtocolsBean {
+public final class ProtocolBean {
     public String code;
     public String msg;
-    public List<Data> data;
+    public List<Protocol> data;
 
-    public final static class Data {
-        public int protocolId;
+    public final static class Protocol {
+        public String protocolKey;
         public String protocolName;
         public String protocolContent;
     }

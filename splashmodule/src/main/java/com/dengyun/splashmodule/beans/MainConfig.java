@@ -10,5 +10,7 @@ public class MainConfig {
     //Url集合
     public List<UrlConfigBean> urlConfig;
     //协议集合
-    public List<ProtocolConfigs> protocolConfigs;
+    public List<ProtocolConfigs> protocolList;
+    //规则集合
+    public List<ProtocolConfigs> ruleList;
 }

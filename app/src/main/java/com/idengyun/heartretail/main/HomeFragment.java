@@ -16,6 +16,7 @@ import com.amap.api.services.core.PoiItem;
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.utils.SizeUtils;
 import com.dengyun.baselibrary.utils.ToastUtils;
+import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.activitys.ShareQRCodeActivity;
 import com.idengyun.heartretail.goods.GoodsListFragment;
@@ -48,6 +49,8 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
 
     private NestedScrollView nsv_home_bg;
     private NestedScrollView nested_scroll_view;
+
+    private View tv_home_rule;
 
     private View iv_home_goods_indicator_retail;
     private View iv_home_goods_indicator_wholesale;
@@ -137,7 +140,7 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
                 VerifyDeviceActivity.start(getContext());
                 return;
             }
-            
+
             ShareQRCodeActivity.start(getContext());
         } else if (tv_home_notice == v) {
             if (!HRUser.isLogin()) {
@@ -157,6 +160,8 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
             } else {
                 MyMapActivity.start(getContext(), cityName, poiName, poiId);
             }
+        } else if (tv_home_rule == v) {
+            HRActivity.start(getContext(), PlayRuleDetailFragment.class);
         }
     }
 
@@ -228,6 +233,7 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
 
         nsv_home_bg = view.findViewById(R.id.nsv_home_bg);
         nested_scroll_view = view.findViewById(R.id.nested_scroll_view);
+        tv_home_rule = view.findViewById(R.id.tv_home_rule);
 
         iv_home_goods_indicator_retail = view.findViewById(R.id.iv_home_goods_indicator_retail);
         iv_home_goods_indicator_wholesale = view.findViewById(R.id.iv_home_goods_indicator_wholesale);
@@ -238,6 +244,7 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
         tv_home_location.setOnClickListener(this);
         tv_home_share.setOnClickListener(this);
         tv_home_notice.setOnClickListener(this);
+        tv_home_rule.setOnClickListener(this);
         rg_home_tab_bar.setOnCheckedChangeListener(this);
         rg_home_tab_bar.clearCheck();
     }

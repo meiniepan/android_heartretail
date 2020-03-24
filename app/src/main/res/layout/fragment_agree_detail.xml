@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F8F8F8"
@@ -16,7 +17,7 @@
             android:id="@+id/base_tool_bar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/basetool_height"
-            app:toolbar_title="协议详情" />
+            tools:toolbar_title="协议详情" />
     </FrameLayout>
 
     <android.support.v4.widget.NestedScrollView
