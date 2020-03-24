@@ -67,6 +67,11 @@ public class SpMainConfigConstants {
         return getMainConfigUrl("evaluationList");
     }
 
+    /* 评价商品 */
+    public static String saveEvaluation() {
+        return getMainConfigUrl("saveEvaluation");
+    }
+
     /* 我的评价列表 */
     public static String todo1() {
         // TODO: 2020/3/9

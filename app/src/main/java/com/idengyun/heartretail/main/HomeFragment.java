@@ -1,9 +1,15 @@
 package com.idengyun.heartretail.main;
 
+import android.arch.lifecycle.Observer;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.NestedScrollView;
 import android.text.TextUtils;
 import android.view.View;
@@ -25,6 +31,10 @@ import com.idengyun.maplibrary.beans.EventChoosePoiItem;
 import com.idengyun.maplibrary.utils.AmapLocationWapper;
 import com.idengyun.maplibrary.utils.PoiSearchUtil;
 import com.idengyun.msgmodule.NoticeActivity;
+import com.idengyun.msgmodule.NoticeConst;
+import com.idengyun.msgmodule.beans.NoticeCountBean;
+import com.idengyun.msgmodule.beans.NoticeStatusBean;
+import com.idengyun.msgmodule.viewmodel.NoticeViewModel;
 import com.idengyun.usermodule.HRUser;
 import com.idengyun.usermodule.LoginActivity;
 import com.idengyun.usermodule.VerifyDeviceActivity;
@@ -40,6 +50,15 @@ import java.util.List;
  * @author aLang
  */
 public final class HomeFragment extends BaseFragment implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
+
+    private final BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (NoticeConst.ACTION_NOTICE_API.equals(action)) requestNoticeCount();
+        }
+    };
+    private NoticeViewModel noticeViewModel;
 
     private View layout_home_title;
     private TextView tv_home_location;
@@ -67,6 +86,16 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
     private GoodsListFragment wholesaleFragment;
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Context context = getContext();
+        if (context != null) {
+            IntentFilter filter = new IntentFilter(NoticeConst.ACTION_NOTICE_API);
+            context.registerReceiver(receiver, filter);
+        }
+    }
+
+    @Override
     public int getLayoutId() {
         return R.layout.fragment_home;
     }
@@ -81,6 +110,7 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        observe();
         retailFragment = new GoodsListFragment();
         wholesaleFragment = new GoodsListFragment();
         getChildFragmentManager()
@@ -111,6 +141,8 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
                 }
             }
         });
+
+        requestNoticeCount();
     }
 
     @Override
@@ -118,6 +150,15 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
         super.onDestroyView();
         amapLocationWapper.stopLocation();
         amapLocationWapper.onDestroy();
+    }
+
+    @Override
+    public void onDestroy() {
+        Context context = getContext();
+        if (context != null) {
+            context.unregisterReceiver(receiver);
+        }
+        super.onDestroy();
     }
 
     @Override
@@ -184,6 +225,35 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
                     .hide(retailFragment)
                     .commit();
         }
+    }
+
+    private void observe() {
+        if (noticeViewModel == null) {
+            noticeViewModel = NoticeViewModel.getInstance(this);
+            noticeViewModel.getNoticeCount().observe(this, new Observer<NoticeCountBean>() {
+                @Override
+                public void onChanged(@Nullable NoticeCountBean noticeCountBean) {
+                    updateNoticeCount(noticeCountBean);
+                }
+            });
+        }
+    }
+
+    private void updateNoticeCount(@Nullable NoticeCountBean noticeCountBean) {
+        if (noticeCountBean == null) return;
+        List<NoticeCountBean.Data> dataList = noticeCountBean.data;
+
+        int count = 0;
+        for (NoticeCountBean.Data data : dataList) count += data.counts;
+        String text = count > 999 ? "999+" : "" + count;
+        tv_home_notice_count.setText(text);
+        tv_home_notice_count.setVisibility(count > 0 ? View.VISIBLE : View.INVISIBLE);
+    }
+
+    private void requestNoticeCount() {
+        FragmentActivity activity = getActivity();
+        if (activity == null) return;
+        if (noticeViewModel != null) noticeViewModel.requestNoticeCount(activity);
     }
 
     /*选择完地址*/

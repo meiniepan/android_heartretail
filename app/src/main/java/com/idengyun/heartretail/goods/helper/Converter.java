@@ -20,6 +20,8 @@ public final class Converter {
     private final List<SKU> mSKUList;
     private final List<Section> mSectionList;
     private SKU mDefaultSKU;
+    private SKU mSelectedSKU;
+
     @Nullable
     private List<String> selectedSpecIDList;
 
@@ -33,8 +35,8 @@ public final class Converter {
         for (final GoodsDetailBean.Data.GoodsSku goodsSku : goodsSkuList) {
             SKU sku = goodsSkuToSKU(goodsSku);
             // println(sku.specList);
-            if (sku.goodsCount > 0 && sku.canBuyCount > 0 && sku.wholesaleFlag == 1) {
-                // if (sku.goodsCount > 0) {
+            // if (sku.goodsCount > 0 && sku.canBuyCount > 0 && sku.wholesaleFlag == 1) {
+            if (sku.goodsCount > 0 && sku.canBuyCount > 0) {
                 mSKUList.add(sku);
                 /* 默认SKU */
                 if (sku.isDefault == 1) mDefaultSKU = sku;
@@ -86,6 +88,11 @@ public final class Converter {
     }
 
     @Nullable
+    public SKU getSelectedSKU() {
+        return mSelectedSKU;
+    }
+
+    @Nullable
     public List<String> getSelectedSpecIDList() {
         return selectedSpecIDList;
     }
@@ -99,7 +106,10 @@ public final class Converter {
             else selectedSectionList.add(section);
         }
 
+        selectedSpecIDList = null;
+        mSelectedSKU = null;
         if (selectedSectionList.size() == mSectionList.size()) {
+            /* 被选中的specItemIdList */
             selectedSpecIDList = new ArrayList<>();
             for (Section section : mSectionList) {
                 if (!section.checked) continue;
@@ -107,8 +117,16 @@ public final class Converter {
                     if (cell.checked) selectedSpecIDList.add(cell.specItemId);
                 }
             }
-        } else {
-            selectedSpecIDList = null;
+
+            /* 被选中的SKU */
+            if (!selectedSpecIDList.isEmpty()) {
+                for (SKU sku : mSKUList) {
+                    if (sku.specIDList.containsAll(selectedSpecIDList)) {
+                        mSelectedSKU = sku;
+                        break;
+                    }
+                }
+            }
         }
 
         /* 2.遍历未被选中选区，设置是否启用 */
