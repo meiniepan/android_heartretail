@@ -32,6 +32,11 @@ public class SpMainConfigConstants {
 
     /* ================================== 协议 ================================== */
 
+    /* 规则详情 */
+    public static String ruleQueryDetail() {
+        return getMainConfigUrl("ruleQueryDetail");
+    }
+
     /* 协议详情查询 */
     public static String protocolDetail() {
         return getMainConfigUrl("protocolDetail");

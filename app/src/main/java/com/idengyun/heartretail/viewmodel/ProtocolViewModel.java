@@ -12,46 +12,46 @@ import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
-import com.idengyun.heartretail.model.response.ProtocolsBean;
+import com.idengyun.heartretail.model.response.ProtocolBean;
 import com.lzy.okgo.model.Response;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * 协议模块API
  *
  * @author aLang
  */
-public final class AgreeViewModel extends ViewModel {
+public final class ProtocolViewModel extends ViewModel {
 
-    public static AgreeViewModel getInstance(@NonNull FragmentActivity activity) {
-        return ViewModelProviders.of(activity).get(AgreeViewModel.class);
+    public static ProtocolViewModel getInstance(@NonNull FragmentActivity activity) {
+        return ViewModelProviders.of(activity).get(ProtocolViewModel.class);
     }
 
-    private final MutableLiveData<ProtocolsBean> agreeListLiveData;
+    private final MutableLiveData<ProtocolBean> protocolListLiveData;
 
-    public AgreeViewModel() {
+    public ProtocolViewModel() {
         super();
-        agreeListLiveData = new MutableLiveData<>();
+        protocolListLiveData = new MutableLiveData<>();
     }
 
     /* 查询协议 */
-    public void requestAgreeList(Fragment fragment, List<Integer> protocolIds) {
+    public void requestProtocolList(Fragment fragment, Set<String> protocolKeySet) {
         NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.protocolDetail())
                 .fragment(fragment)
                 .isShowDialog(true)
-                .clazz(ProtocolsBean.class)
-                .params("protocolIds", protocolIds)
+                .clazz(ProtocolBean.class)
+                .params("protocolKeys", protocolKeySet)
                 .build();
-        NetApi.getData(netOption, new JsonCallback<ProtocolsBean>(netOption) {
+        NetApi.getData(netOption, new JsonCallback<ProtocolBean>(netOption) {
             @Override
-            public void onSuccess(Response<ProtocolsBean> response) {
-                agreeListLiveData.setValue(response.body());
+            public void onSuccess(Response<ProtocolBean> response) {
+                protocolListLiveData.setValue(response.body());
             }
         });
     }
 
-    public LiveData<ProtocolsBean> getAgreeList() {
-        return agreeListLiveData;
+    public LiveData<ProtocolBean> getProtocolList() {
+        return protocolListLiveData;
     }
 }

@@ -2,6 +2,7 @@ package com.idengyun.heartretail.goods;
 
 import android.arch.lifecycle.Observer;
 import android.os.Bundle;
+import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
@@ -16,8 +17,6 @@ import android.widget.TextView;
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.GoodsDetailBean;
-import com.idengyun.heartretail.model.response.ProtocolsBean;
-import com.idengyun.heartretail.viewmodel.AgreeViewModel;
 import com.idengyun.heartretail.viewmodel.GoodsViewModel;
 
 import java.util.ArrayList;
@@ -34,7 +33,6 @@ public final class GoodsServiceFragment extends BaseFragment implements View.OnC
 
     private ServiceAdapter serviceAdapter;
     private GoodsViewModel goodsViewModel;
-    private AgreeViewModel agreeViewModel;
 
     @Override
     public int getLayoutId() {
@@ -46,58 +44,12 @@ public final class GoodsServiceFragment extends BaseFragment implements View.OnC
         findViewById(view);
     }
 
-    List<Integer> protocolIds;
-
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        observe();
         serviceAdapter = new ServiceAdapter();
         recycler_view.setAdapter(serviceAdapter);
-
-        FragmentActivity activity = getActivity();
-        if (activity == null) return;
-        if (goodsViewModel == null) {
-            goodsViewModel = GoodsViewModel.getInstance(activity);
-            goodsViewModel.getGoodsDetail().observe(this, new Observer<GoodsDetailBean>() {
-                @Override
-                public void onChanged(@Nullable GoodsDetailBean goodsDetailBean) {
-                    if (goodsDetailBean == null) return;
-                    GoodsDetailBean.Data data = goodsDetailBean.data;
-                    if (data == null) return;
-                    List<GoodsDetailBean.Data.Protocol> protocolList = data.protocolList;
-                    if (protocolList != null) {
-                        protocolIds = new ArrayList<>();
-                        for (int i = 0; i < protocolList.size(); i++) {
-                            GoodsDetailBean.Data.Protocol protocol = protocolList.get(i);
-                            protocolIds.add(protocol.protocolId);
-                        }
-                    }
-                }
-            });
-        }
-        if (agreeViewModel == null) {
-            agreeViewModel = AgreeViewModel.getInstance(activity);
-            agreeViewModel.getAgreeList().observe(this, new Observer<ProtocolsBean>() {
-                @Override
-                public void onChanged(@Nullable ProtocolsBean protocolsBean) {
-                    updateUI(protocolsBean);
-                }
-            });
-        }
-    }
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        if (!hidden) {
-            if (protocolIds != null && !protocolIds.isEmpty()) requestAPI(protocolIds);
-        }
-    }
-
-    private void requestAPI(List<Integer> protocolIds) {
-        FragmentActivity activity = getActivity();
-        if (activity == null) return;
-        agreeViewModel.requestAgreeList(this, protocolIds);
     }
 
     @Override
@@ -106,11 +58,29 @@ public final class GoodsServiceFragment extends BaseFragment implements View.OnC
         if (fragmentManager != null) fragmentManager.beginTransaction().hide(this).commit();
     }
 
-    private void updateUI(@Nullable ProtocolsBean protocolsBean) {
-        if (protocolsBean == null) return;
-        List<ProtocolsBean.Data> data = protocolsBean.data;
-        serviceAdapter.serviceItems.addAll(data);
+    @MainThread
+    private void updateUI(@Nullable GoodsDetailBean goodsDetailBean) {
+        if (goodsDetailBean == null) return;
+        GoodsDetailBean.Data data = goodsDetailBean.data;
+        List<GoodsDetailBean.Data.Rule> ruleList = data.ruleList;
+
+        serviceAdapter.ruleList.clear();
+        serviceAdapter.ruleList.addAll(ruleList);
         serviceAdapter.notifyDataSetChanged();
+    }
+
+    private void observe() {
+        FragmentActivity activity = getActivity();
+        if (activity == null) return;
+        if (goodsViewModel == null) {
+            goodsViewModel = GoodsViewModel.getInstance(activity);
+            goodsViewModel.getGoodsDetail().observe(this, new Observer<GoodsDetailBean>() {
+                @Override
+                public void onChanged(@Nullable GoodsDetailBean goodsDetailBean) {
+                    updateUI(goodsDetailBean);
+                }
+            });
+        }
     }
 
     private void findViewById(@NonNull View view) {
@@ -118,9 +88,9 @@ public final class GoodsServiceFragment extends BaseFragment implements View.OnC
         view.setOnClickListener(this);
     }
 
-    private static class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ServiceHolder> {
+    private static class ServiceAdapter extends RecyclerView.Adapter<ServiceHolder> {
         private LayoutInflater inflater;
-        final ArrayList<ProtocolsBean.Data> serviceItems = new ArrayList<>();
+        final ArrayList<GoodsDetailBean.Data.Rule> ruleList = new ArrayList<>();
 
         @NonNull
         @Override
@@ -132,35 +102,35 @@ public final class GoodsServiceFragment extends BaseFragment implements View.OnC
 
         @Override
         public void onBindViewHolder(@NonNull ServiceHolder holder, int position) {
-            holder.updateUI(serviceItems.get(position));
+            holder.updateUI(ruleList.get(position));
         }
 
         @Override
         public int getItemCount() {
-            return serviceItems.size();
+            return ruleList.size();
+        }
+    }
+
+    private static class ServiceHolder extends RecyclerView.ViewHolder {
+
+        private TextView tv_goods_service_title;
+        private TextView tv_goods_service_content;
+
+        private ServiceHolder(@NonNull View itemView) {
+            super(itemView);
+            findViewById(itemView);
         }
 
-        private static class ServiceHolder extends RecyclerView.ViewHolder {
+        public void updateUI(GoodsDetailBean.Data.Rule rule) {
+            String title = rule.title;
+            String content = rule.content;
+            tv_goods_service_title.setText(title);
+            tv_goods_service_content.setText(Html.fromHtml(content));
+        }
 
-            private TextView tv_goods_service_title;
-            private TextView tv_goods_service_content;
-
-            public ServiceHolder(@NonNull View itemView) {
-                super(itemView);
-                findViewById(itemView);
-            }
-
-            public void updateUI(ProtocolsBean.Data data) {
-                String protocolName = data.protocolName;
-                String protocolContent = data.protocolContent;
-                tv_goods_service_title.setText(protocolName);
-                tv_goods_service_content.setText(Html.fromHtml(protocolContent));
-            }
-
-            private void findViewById(@NonNull View itemView) {
-                tv_goods_service_title = itemView.findViewById(R.id.tv_goods_service_title);
-                tv_goods_service_content = itemView.findViewById(R.id.tv_goods_service_content);
-            }
+        private void findViewById(@NonNull View itemView) {
+            tv_goods_service_title = itemView.findViewById(R.id.tv_goods_service_title);
+            tv_goods_service_content = itemView.findViewById(R.id.tv_goods_service_content);
         }
     }
 }

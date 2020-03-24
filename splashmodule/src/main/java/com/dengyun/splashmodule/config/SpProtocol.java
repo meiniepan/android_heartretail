@@ -1,10 +1,10 @@
 package com.dengyun.splashmodule.config;
 
-import com.dengyun.baselibrary.utils.SharedPreferencesUtil;
+import android.content.Context;
+
 import com.dengyun.baselibrary.utils.Utils;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.Set;
 
 /**
  * @Title 主配置返回的协议本地存储
@@ -13,38 +13,14 @@ import java.util.List;
  */
 public class SpProtocol {
 
+    /* xml文件名 用户协议 代签协议 代销协议 */
     public static final String spFileName = "SpProtocol";
+    public static String PROTOCOL_KEY_USER = "user";
+    public static String PROTOCOL_KEY_ALLOGRAPH = "allograph";
+    public static String PROTOCOL_KEY_PROXYSALES = "proxySales";
 
-    /* 不要使用 */
-    private static int getProtocolId(String key) {
-        return SharedPreferencesUtil.getData(Utils.getApp(), spFileName, key, 0);
+    /* 获取所有protocolKey */
+    public static Set<String> getAllProtocolKey() {
+        return Utils.getApp().getSharedPreferences(spFileName, Context.MODE_PRIVATE).getAll().keySet();
     }
-
-
-    /* ================================== 公共方法 获取协议id ================================== */
-
-    /* 获取App所有协议 */
-    public static List<Integer> getAllProtocolIDs() {
-        return Arrays.asList(
-                getUserProtocolId(),
-                getAllographProtocolId(),
-                getProxySalesProtocolId()
-        );
-    }
-
-    /* 用户协议 */
-    public static int getUserProtocolId() {
-        return getProtocolId("user");
-    }
-
-    /* 代签协议 */
-    public static int getAllographProtocolId() {
-        return getProtocolId("allograph");
-    }
-
-    /* 代销协议 */
-    public static int getProxySalesProtocolId() {
-        return getProtocolId("proxySales");
-    }
-
 }

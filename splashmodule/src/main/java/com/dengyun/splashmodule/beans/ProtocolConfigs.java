@@ -6,10 +6,12 @@ package com.dengyun.splashmodule.beans;
  * @CreateDate: 2020-03-11 15:31
  */
 public class ProtocolConfigs {
-    //UI对应key
-    public String configKey;
-    //协议简介
-    public String protocolDesc;
-    //协议Id
-    public int protocolId;
+//    //UI对应key
+//    public String configKey;
+//    //协议简介
+//    public String protocolDesc;
+//    //协议Id
+//    public int protocolId;
+    public String key;
+    public String value;
 }

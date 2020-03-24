@@ -169,16 +169,16 @@ public final class GoodsSPUFragment extends BaseFragment implements View.OnClick
         if (goodsDetailBean == null) return;
         GoodsDetailBean.Data data = goodsDetailBean.data;
         List<GoodsDetailBean.Data.Banner> imageList = data.imageList;
-        List<GoodsDetailBean.Data.Protocol> protocolList = data.protocolList;
+        List<GoodsDetailBean.Data.Rule> ruleList = data.ruleList;
         List<GoodsDetailBean.Data.GoodsSpec> goodsSpecList = data.goodsSpecList;
         List<GoodsDetailBean.Data.GoodsSku> goodsSkuList = data.goodsSkuList;
-        List<String> goodsDetailList = data.goodsDetailList;
+//        List<String> goodsDetailList = data.goodsDetailList;
 
-        if (imageList == null ||
-                protocolList == null ||
-                goodsSpecList == null ||
-                goodsSkuList == null ||
-                goodsDetailList == null) return;
+//        if (imageList == null ||
+//                ruleList == null ||
+//                goodsSpecList == null ||
+//                goodsSkuList == null ||
+//                goodsDetailList == null) return;
 
 //        int wholesaleFlag = data.wholesaleFlag;
         String retailPrice = data.retailPrice;
@@ -231,23 +231,23 @@ public final class GoodsSPUFragment extends BaseFragment implements View.OnClick
 
         /* 服务说明 */
         StringBuilder sb = new StringBuilder();
-        for (GoodsDetailBean.Data.Protocol protocol : protocolList) {
-            sb.append(protocol.protocolName).append("&");
+        for (GoodsDetailBean.Data.Rule rule : ruleList) {
+            sb.append(rule.title).append("&");
         }
         tv_goods_service.setText(sb.subSequence(0, sb.length() - 1));
 
         /* 商品详情 */
-        layout_goods_detail.removeAllViews();
-        int width = SizeUtils.dp2px(345f);
-        int height = SizeUtils.dp2px(281f);
-        int topMargin = SizeUtils.dp2px(8f);
-        for (String url : goodsDetailList) {
-            ImageView child = new ImageView(layout_goods_detail.getContext());
-            ViewGroup.MarginLayoutParams params = new LinearLayout.MarginLayoutParams(width, height);
-            params.topMargin = topMargin;
-            ImageApi.displayImage(child.getContext(), child, url);
-            layout_goods_detail.addView(child, params);
-        }
+//        layout_goods_detail.removeAllViews();
+//        int width = SizeUtils.dp2px(345f);
+//        int height = SizeUtils.dp2px(281f);
+//        int topMargin = SizeUtils.dp2px(8f);
+//        for (String url : goodsDetailList) {
+//            ImageView child = new ImageView(layout_goods_detail.getContext());
+//            ViewGroup.MarginLayoutParams params = new LinearLayout.MarginLayoutParams(width, height);
+//            params.topMargin = topMargin;
+//            ImageApi.displayImage(child.getContext(), child, url);
+//            layout_goods_detail.addView(child, params);
+//        }
     }
 
     public void setGoodsSpecList(CharSequence text) {

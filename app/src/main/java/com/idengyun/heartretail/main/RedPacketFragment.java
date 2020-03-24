@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.net.ImageApi;
+import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.RedPacketBean;
 import com.idengyun.heartretail.viewmodel.RedPacketViewModel;
@@ -101,7 +102,7 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
         }
 
         if (layout_red_packet_rule == v) {
-
+            HRActivity.start(getContext(), InviteRuleDetailFragment.class);
         } else if (tv_red_packet_more == v) {
 
         }

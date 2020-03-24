@@ -16,8 +16,8 @@ import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.splashmodule.config.SpProtocol;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
-import com.idengyun.heartretail.model.response.ProtocolsBean;
-import com.idengyun.heartretail.viewmodel.AgreeViewModel;
+import com.idengyun.heartretail.model.response.ProtocolBean;
+import com.idengyun.heartretail.viewmodel.ProtocolViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,7 @@ import java.util.List;
 public final class AgreeListFragment extends BaseFragment {
 
     private RecyclerView recycler_view;
-    private AgreeViewModel agreeViewModel;
+    private ProtocolViewModel protocolViewModel;
 
     @Override
     public int getLayoutId() {
@@ -45,33 +45,36 @@ public final class AgreeListFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        FragmentActivity activity = getActivity();
-        if (activity == null) return;
-        if (agreeViewModel == null) {
-            agreeViewModel = AgreeViewModel.getInstance(activity);
-            agreeViewModel.getAgreeList().observe(this, new Observer<ProtocolsBean>() {
-                @Override
-                public void onChanged(@Nullable ProtocolsBean protocolsBean) {
-                    updateUI(protocolsBean);
-                }
-            });
-        }
+        observe();
         requestAPI();
     }
 
-    private void requestAPI() {
-        FragmentActivity activity = getActivity();
-        if (activity == null) return;
-        agreeViewModel.requestAgreeList(this, SpProtocol.getAllProtocolIDs());
+    @MainThread
+    private void updateUI(@Nullable ProtocolBean protocolBean) {
+        if (protocolBean == null) return;
+        List<ProtocolBean.Protocol> protocolList = protocolBean.data;
+        AgreeAdapter adapter = new AgreeAdapter();
+        adapter.agreeList.addAll(protocolList);
+        recycler_view.setAdapter(adapter);
     }
 
-    @MainThread
-    private void updateUI(@Nullable ProtocolsBean protocolsBean) {
-        if (protocolsBean == null) return;
-        List<ProtocolsBean.Data> data = protocolsBean.data;
-        AgreeAdapter adapter = new AgreeAdapter();
-        adapter.agreeList.addAll(data);
-        recycler_view.setAdapter(adapter);
+    private void observe() {
+        FragmentActivity activity = getActivity();
+        if (activity == null) return;
+        if (protocolViewModel == null) {
+            protocolViewModel = ProtocolViewModel.getInstance(activity);
+            protocolViewModel.getProtocolList().observe(this, new Observer<ProtocolBean>() {
+                @Override
+                public void onChanged(@Nullable ProtocolBean protocolBean) {
+                    updateUI(protocolBean);
+                }
+            });
+        }
+    }
+
+    private void requestAPI() {
+        if (protocolViewModel == null) return;
+        protocolViewModel.requestProtocolList(this, SpProtocol.getAllProtocolKey());
     }
 
     private void findViewById(View view) {
@@ -81,7 +84,7 @@ public final class AgreeListFragment extends BaseFragment {
     private static class AgreeAdapter extends RecyclerView.Adapter<AgreeAdapter.AgreeHolder> {
 
         private LayoutInflater inflater;
-        final List<ProtocolsBean.Data> agreeList = new ArrayList<>();
+        final List<ProtocolBean.Protocol> agreeList = new ArrayList<>();
 
         @NonNull
         @Override
@@ -115,14 +118,14 @@ public final class AgreeListFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 Bundle extras = new Bundle();
-                ProtocolsBean.Data data = agreeList.get(getAdapterPosition());
-                extras.putString("protocol_name", data.protocolName);
-                extras.putString("protocol_content", data.protocolContent);
+                ProtocolBean.Protocol protocol = agreeList.get(getAdapterPosition());
+                extras.putString("protocol_name", protocol.protocolName);
+                extras.putString("protocol_content", protocol.protocolContent);
                 HRActivity.start(v.getContext(), extras, AgreeDetailFragment.class);
             }
 
-            public void updateUI(ProtocolsBean.Data data) {
-                tv_agree_title.setText(data.protocolName);
+            public void updateUI(ProtocolBean.Protocol protocol) {
+                tv_agree_title.setText(protocol.protocolName);
                 v_agree_divider.setVisibility(getAdapterPosition() == getItemCount() - 1 ? View.INVISIBLE : View.VISIBLE);
             }
 
