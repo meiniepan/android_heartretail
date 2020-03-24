@@ -15,11 +15,14 @@ import com.dengyun.baselibrary.net.ImageApi;
 import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
-import com.dengyun.baselibrary.net.upload.UploadBean;
 import com.dengyun.baselibrary.net.upload.UploadListBean;
 import com.dengyun.baselibrary.utils.ListUtils;
 import com.dengyun.baselibrary.utils.TakePhotoUtil;
 import com.dengyun.baselibrary.utils.ToastUtils;
+import com.dengyun.baselibrary.utils.ocr.BankCardBean;
+import com.dengyun.baselibrary.utils.ocr.IdCardBackBean;
+import com.dengyun.baselibrary.utils.ocr.IdCardFaceBean;
+import com.dengyun.baselibrary.utils.ocr.OCRUtils;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
@@ -31,8 +34,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.idengyun.heartretail.Constants.REQUEST_CODE_PERSONAL;
-
 /**
  * 步骤2
  *
@@ -43,20 +44,21 @@ public final class Step2Fragment extends BaseFragment implements View.OnClickLis
     private static final int REQUEST_CODE_REAL_BANK_CARD_TRUE = 2003;
     private static final int REQUEST_CODE_REAL_BANK_CARD_FALSE = 2004;
 
-    private ImageView iv_bank_card_true;
-    private ImageView iv_bank_card_false;
+    private ImageView iv_bank_card_front;
+    private ImageView iv_bank_card_back;
     private View tv_real_next_step_2;
 
     /* 身份证和银行卡正反面本地文件路径 */
-    private String idCardTruePath;
-    private String idCardFalsePath;
-    private String bankCardTruePath;
-    private String bankCardFalsePath;
+    private String pathIdCardFront;
+    private String pathIdCardBack;
+    private String pathBankCardFront;
+    private String pathBankCardBack;
 
-    private String idCardTrueUrl;
-    private String idCardFalseUrl;
-    private String bankCardTrueUrl;
-    private String bankCardFalseUrl;
+    /* 身份证和银行卡正反面对应网络URL */
+    private String urlIdCardFront;
+    private String urlIdCardBack;
+    private String urlBankCardFront;
+    private String urlBankCardBack;
 
     @Override
     public int getLayoutId() {
@@ -74,8 +76,8 @@ public final class Step2Fragment extends BaseFragment implements View.OnClickLis
         FragmentActivity activity = getActivity();
         if (activity == null) return;
         Intent intent = activity.getIntent();
-        idCardTruePath = intent.getStringExtra("id_card_true_path");
-        idCardTruePath = intent.getStringExtra("id_card_false_path");
+        pathIdCardFront = intent.getStringExtra("path_id_card_front");
+        pathIdCardBack = intent.getStringExtra("path_id_card_back");
     }
 
     @Override
@@ -87,55 +89,38 @@ public final class Step2Fragment extends BaseFragment implements View.OnClickLis
         if (ListUtils.isEmpty(localMediaList)) return;
 
         if (REQUEST_CODE_REAL_BANK_CARD_TRUE == requestCode) {
-            bankCardTruePath = TakePhotoUtil.getResultPath(localMediaList.get(0));
-            ImageApi.displayImage(iv_bank_card_true.getContext(), iv_bank_card_true, bankCardTruePath);
+            pathBankCardFront = TakePhotoUtil.getResultPath(localMediaList.get(0));
+            ImageApi.displayImage(iv_bank_card_front.getContext(), iv_bank_card_front, pathBankCardFront);
         } else if (REQUEST_CODE_REAL_BANK_CARD_FALSE == requestCode) {
-            bankCardFalsePath = TakePhotoUtil.getResultPath(localMediaList.get(0));
-            ImageApi.displayImage(iv_bank_card_false.getContext(), iv_bank_card_false, bankCardFalsePath);
+            pathBankCardBack = TakePhotoUtil.getResultPath(localMediaList.get(0));
+            ImageApi.displayImage(iv_bank_card_back.getContext(), iv_bank_card_back, pathBankCardBack);
         }
 
-        boolean enabled = !(TextUtils.isEmpty(bankCardTruePath) || TextUtils.isEmpty(bankCardFalsePath));
+        boolean enabled = !(TextUtils.isEmpty(pathBankCardFront) || TextUtils.isEmpty(pathBankCardBack));
         tv_real_next_step_2.setEnabled(enabled);
     }
 
     @Override
     public void onClick(View v) {
-        if (iv_bank_card_true == v) {
+        if (iv_bank_card_front == v) {
             TakePhotoUtil.takePhotoWithItem(this, true, 315, 215, 1, REQUEST_CODE_REAL_BANK_CARD_TRUE);
-        } else if (iv_bank_card_false == v) {
+        } else if (iv_bank_card_back == v) {
             TakePhotoUtil.takePhotoWithItem(this, true, 315, 215, 1, REQUEST_CODE_REAL_BANK_CARD_FALSE);
         } else if (tv_real_next_step_2 == v) {
-//            HRActivity.start(getContext(), Step3Fragment.class);
             uploadFileList();
         }
-    }
-
-    private void uploadFilePath(String imgPath) {
-        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.upload())
-                .fragment(this)
-                .clazz(UploadBean.class)
-                .isShowDialog(false)
-                .build();
-        NetApi.upFileData(netOption, new File(imgPath), new JsonCallback<UploadBean>(netOption) {
-            @Override
-            public void onSuccess(Response<UploadBean> response) {
-//                avatarUrl = response.body().data.filePath;
-//                modifyAvatar();
-            }
-        });
     }
 
     /**
      * 多图片上传
      */
     private void uploadFileList() {
-        // TODO: 2020-03-24 身份证的照片没有传过来
         ArrayList<File> files = new ArrayList<>();
-        if (!TextUtils.isEmpty(idCardTruePath)) files.add(new File(idCardTruePath));
-        if (!TextUtils.isEmpty(idCardFalsePath)) files.add(new File(idCardFalsePath));
-        if (!TextUtils.isEmpty(bankCardTruePath)) files.add(new File(bankCardTruePath));
-        if (!TextUtils.isEmpty(bankCardFalsePath)) files.add(new File(bankCardFalsePath));
-        if (files.size()!=4){
+        if (!TextUtils.isEmpty(pathIdCardFront)) files.add(new File(pathIdCardFront));
+        if (!TextUtils.isEmpty(pathIdCardBack)) files.add(new File(pathIdCardBack));
+        if (!TextUtils.isEmpty(pathBankCardFront)) files.add(new File(pathBankCardFront));
+        if (!TextUtils.isEmpty(pathBankCardBack)) files.add(new File(pathBankCardBack));
+        if (files.size() != 4) {
             ToastUtils.showShort("图片不够四张");
             return;
         }
@@ -145,27 +130,54 @@ public final class Step2Fragment extends BaseFragment implements View.OnClickLis
                 .clazz(UploadListBean.class)
                 .isShowDialog(false)
                 .build();
-        NetApi.<UploadListBean>upFileListData(netOption, files, new JsonCallback<UploadListBean>(netOption) {
+        NetApi.upFileListData(netOption, files, new JsonCallback<UploadListBean>(netOption) {
             @Override
             public void onSuccess(Response<UploadListBean> response) {
                 //上传的图片和返回的图片时一一对应的，上传四张返回也是四张，一一对应
                 List<String> returnUrls = response.body().data.filePathList;
-                if (!ListUtils.isEmpty(returnUrls) && returnUrls.size() == 4){
-                    idCardTrueUrl = returnUrls.get(0);
-                    idCardFalseUrl = returnUrls.get(1);
-                    bankCardTrueUrl = returnUrls.get(2);
-                    bankCardFalseUrl = returnUrls.get(3);
+                if (!ListUtils.isEmpty(returnUrls) && returnUrls.size() == 4) {
+                    urlIdCardFront = returnUrls.get(0);
+                    urlIdCardBack = returnUrls.get(1);
+                    urlBankCardFront = returnUrls.get(2);
+                    urlBankCardBack = returnUrls.get(3);
+
+                    startOCRRecognize();
                 }
             }
         });
     }
 
+    /* 开始OCR识别 */
+    private void startOCRRecognize() {
+        OCRUtils.recoIdCardFace(urlIdCardFront, new OCRUtils.OnIdCardFaceResult() {
+            @Override
+            public void onResult(IdCardFaceBean idCardFaceBean) {
+                System.out.println(idCardFaceBean);
+            }
+        });
+        OCRUtils.recoIdCardBack(urlBankCardBack, new OCRUtils.OnIdCardBackResult() {
+            @Override
+            public void onResult(IdCardBackBean idCardBackBean) {
+                System.out.println(idCardBackBean);
+            }
+        });
+        OCRUtils.recoBankCard(urlBankCardFront, new OCRUtils.OnBankCardResult() {
+            @Override
+            public void onResult(BankCardBean bankCardBean) {
+                System.out.println(bankCardBean);
+            }
+        });
+
+        /*Bundle extras = new Bundle();
+        HRActivity.start(getContext(), extras, Step3Fragment.class);*/
+    }
+
     private void findViewById(View view) {
-        iv_bank_card_true = view.findViewById(R.id.iv_bank_card_true);
-        iv_bank_card_false = view.findViewById(R.id.iv_bank_card_false);
+        iv_bank_card_front = view.findViewById(R.id.iv_bank_card_front);
+        iv_bank_card_back = view.findViewById(R.id.iv_bank_card_back);
         tv_real_next_step_2 = view.findViewById(R.id.tv_real_next_step_2);
-        iv_bank_card_true.setOnClickListener(this);
-        iv_bank_card_false.setOnClickListener(this);
+        iv_bank_card_front.setOnClickListener(this);
+        iv_bank_card_back.setOnClickListener(this);
         tv_real_next_step_2.setOnClickListener(this);
     }
 }

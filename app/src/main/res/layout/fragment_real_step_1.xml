@@ -163,13 +163,13 @@
                     android:paddingBottom="24dp">
 
                     <ImageView
-                        android:id="@+id/iv_id_card_true"
+                        android:id="@+id/iv_id_card_front"
                         android:layout_width="241dp"
                         android:layout_height="164dp"
                         android:background="@drawable/ic_id_card_true" />
 
                     <ImageView
-                        android:id="@+id/iv_id_card_false"
+                        android:id="@+id/iv_id_card_back"
                         android:layout_width="241dp"
                         android:layout_height="164dp"
                         android:layout_marginTop="16dp"

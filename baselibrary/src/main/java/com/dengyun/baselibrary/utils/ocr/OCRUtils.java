@@ -41,9 +41,9 @@ public class OCRUtils {
             @Override
             public void onSuccess(Response<IdCardFaceBean> response) {
                 IdCardFaceBean idCardFaceBean = response.body();
-                if (idCardFaceBean.isSuccess()){
+                if (idCardFaceBean.isSuccess()) {
                     onIdCardFaceResult.onResult(idCardFaceBean);
-                }else {
+                } else {
                     ToastUtils.showShort("识别失败");
                 }
             }
@@ -68,9 +68,9 @@ public class OCRUtils {
             @Override
             public void onSuccess(Response<IdCardBackBean> response) {
                 IdCardBackBean idCardBackBean = response.body();
-                if (idCardBackBean.isSuccess()){
+                if (idCardBackBean.isSuccess()) {
                     onIdCardBackResult.onResult(idCardBackBean);
-                }else {
+                } else {
                     ToastUtils.showShort("识别失败");
                 }
             }
@@ -82,7 +82,7 @@ public class OCRUtils {
      *
      * @param localImagePath 本地图片路径
      */
-    public static void recoBankCard(String localImagePath,OnBankCardResult onBankCardResult){
+    public static void recoBankCard(String localImagePath, OnBankCardResult onBankCardResult) {
         String url = "http://bankocrb.shumaidata.com/getbankocrb";
         NetOption netOption = NetOption.newBuilder(url)
                 .headers("Authorization", "APPCODE " + appcode) //你自己的AppCode
@@ -101,9 +101,9 @@ public class OCRUtils {
                 604	接口停用	接口停用
                 1001	服务异常，会返回具体的错误原因	服务异常，会返回具体的错误原因*/
                 BankCardBean bankCardBean = response.body();
-                if (bankCardBean.isSuccess()){
+                if (bankCardBean.isSuccess()) {
                     onBankCardResult.onResult(bankCardBean);
-                }else {
+                } else {
                     ToastUtils.showShort("识别失败");
                 }
             }
@@ -132,15 +132,15 @@ public class OCRUtils {
         return imgBase64Str;
     }
 
-    interface OnIdCardFaceResult {
+    public interface OnIdCardFaceResult {
         void onResult(IdCardFaceBean idCardFaceBean);
     }
 
-    interface OnIdCardBackResult {
+    public interface OnIdCardBackResult {
         void onResult(IdCardBackBean idCardBackBean);
     }
 
-    interface OnBankCardResult {
+    public interface OnBankCardResult {
         void onResult(BankCardBean bankCardBean);
     }
 

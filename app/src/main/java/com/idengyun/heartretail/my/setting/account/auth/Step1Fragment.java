@@ -11,24 +11,14 @@ import android.widget.ImageView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.net.ImageApi;
-import com.dengyun.baselibrary.net.NetApi;
-import com.dengyun.baselibrary.net.NetOption;
-import com.dengyun.baselibrary.net.callback.JsonCallback;
-import com.dengyun.baselibrary.net.upload.UploadBean;
-import com.dengyun.baselibrary.utils.ImageUtils;
 import com.dengyun.baselibrary.utils.ListUtils;
 import com.dengyun.baselibrary.utils.TakePhotoUtil;
-import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.entity.LocalMedia;
-import com.lzy.okgo.model.Response;
 
-import java.io.File;
 import java.util.List;
-
-import static com.idengyun.heartretail.Constants.REQUEST_CODE_PERSONAL;
 
 /**
  * 步骤3
@@ -40,13 +30,13 @@ public final class Step1Fragment extends BaseFragment implements View.OnClickLis
     private static final int REQUEST_CODE_REAL_ID_CARD_TRUE = 2001;
     private static final int REQUEST_CODE_REAL_ID_CARD_FALSE = 2002;
 
-    private ImageView iv_id_card_true;
-    private ImageView iv_id_card_false;
+    private ImageView iv_id_card_front;
+    private ImageView iv_id_card_back;
     private View tv_real_next_step_1;
 
     /* 身份证正反面本地文件路径 */
-    private String idCardTruePath;
-    private String idCardFalsePath;
+    private String pathIdCardFront;
+    private String pathIdCardBack;
 
     @Override
     public int getLayoutId() {
@@ -72,36 +62,39 @@ public final class Step1Fragment extends BaseFragment implements View.OnClickLis
         if (ListUtils.isEmpty(localMediaList)) return;
 
         if (REQUEST_CODE_REAL_ID_CARD_TRUE == requestCode) {
-            idCardTruePath = TakePhotoUtil.getResultPath(localMediaList.get(0));
-            System.out.println(idCardTruePath);
-            ImageApi.displayImage(iv_id_card_true.getContext(), iv_id_card_true, idCardTruePath);
+            pathIdCardFront = TakePhotoUtil.getResultPath(localMediaList.get(0));
+            System.out.println(pathIdCardFront);
+            ImageApi.displayImage(iv_id_card_front.getContext(), iv_id_card_front, pathIdCardFront);
         } else if (REQUEST_CODE_REAL_ID_CARD_FALSE == requestCode) {
-            idCardFalsePath = TakePhotoUtil.getResultPath(localMediaList.get(0));
-            System.out.println(idCardFalsePath);
-            ImageApi.displayImage(iv_id_card_false.getContext(), iv_id_card_false, idCardFalsePath);
+            pathIdCardBack = TakePhotoUtil.getResultPath(localMediaList.get(0));
+            System.out.println(pathIdCardBack);
+            ImageApi.displayImage(iv_id_card_back.getContext(), iv_id_card_back, pathIdCardBack);
         }
 
-        boolean enabled = !(TextUtils.isEmpty(idCardTruePath) || TextUtils.isEmpty(idCardFalsePath));
+        boolean enabled = !(TextUtils.isEmpty(pathIdCardFront) || TextUtils.isEmpty(pathIdCardBack));
         tv_real_next_step_1.setEnabled(enabled);
     }
 
     @Override
     public void onClick(View v) {
-        if (iv_id_card_true == v) {
-            TakePhotoUtil.takePhotoWithItem(this, true,315,215,1, REQUEST_CODE_REAL_ID_CARD_TRUE);
-        } else if (iv_id_card_false == v) {
-            TakePhotoUtil.takePhotoWithItem(this, true,315,215,1, REQUEST_CODE_REAL_ID_CARD_FALSE);
+        if (iv_id_card_front == v) {
+            TakePhotoUtil.takePhotoWithItem(this, true, 315, 215, 1, REQUEST_CODE_REAL_ID_CARD_TRUE);
+        } else if (iv_id_card_back == v) {
+            TakePhotoUtil.takePhotoWithItem(this, true, 315, 215, 1, REQUEST_CODE_REAL_ID_CARD_FALSE);
         } else if (tv_real_next_step_1 == v) {
-            HRActivity.start(getContext(), Step2Fragment.class);
+            Bundle extras = new Bundle();
+            extras.putString("path_id_card_front", pathIdCardFront);
+            extras.putString("path_id_card_back", pathIdCardBack);
+            HRActivity.start(getContext(), extras, Step2Fragment.class);
         }
     }
 
     private void findViewById(View view) {
-        iv_id_card_true = view.findViewById(R.id.iv_id_card_true);
-        iv_id_card_false = view.findViewById(R.id.iv_id_card_false);
+        iv_id_card_front = view.findViewById(R.id.iv_id_card_front);
+        iv_id_card_back = view.findViewById(R.id.iv_id_card_back);
         tv_real_next_step_1 = view.findViewById(R.id.tv_real_next_step_1);
-        iv_id_card_true.setOnClickListener(this);
-        iv_id_card_false.setOnClickListener(this);
+        iv_id_card_front.setOnClickListener(this);
+        iv_id_card_back.setOnClickListener(this);
         tv_real_next_step_1.setOnClickListener(this);
     }
 }
