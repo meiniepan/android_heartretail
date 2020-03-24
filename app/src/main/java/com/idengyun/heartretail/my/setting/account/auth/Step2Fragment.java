@@ -125,7 +125,37 @@ public final class Step2Fragment extends BaseFragment implements View.OnClickLis
             return;
         }
 
-        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.uploads())
+
+        OCRUtils.recoIdCardFace(true, pathIdCardFront, new OCRUtils.OnIdCardFaceResult() {
+            @Override
+            public void onResult(IdCardFaceBean idCardFaceBean) {
+
+            }
+        });
+
+        OCRUtils.recoIdCardBack(true, pathIdCardBack, new OCRUtils.OnIdCardBackResult() {
+            @Override
+            public void onResult(IdCardBackBean idCardBackBean) {
+
+            }
+        });
+
+        OCRUtils.recoBankCard(true, pathBankCardFront, new OCRUtils.OnBankCardResult() {
+            @Override
+            public void onResult(BankCardBean bankCardBean) {
+
+            }
+        });
+
+        OCRUtils.recoBankCard(true, pathBankCardBack, new OCRUtils.OnBankCardResult() {
+            @Override
+            public void onResult(BankCardBean bankCardBean) {
+
+            }
+        });
+
+
+        /*NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.uploads())
                 .fragment(this)
                 .clazz(UploadListBean.class)
                 .isShowDialog(false)
@@ -144,7 +174,7 @@ public final class Step2Fragment extends BaseFragment implements View.OnClickLis
                     startOCRRecognize();
                 }
             }
-        });
+        });*/
     }
 
     /* 开始OCR识别 */
@@ -153,19 +183,19 @@ public final class Step2Fragment extends BaseFragment implements View.OnClickLis
         System.out.println("urlIdCardBack= " + urlIdCardBack);
         System.out.println("urlBankCardFront= " + urlBankCardFront);
         System.out.println("urlBankCardBack= " + urlBankCardBack);
-        OCRUtils.recoIdCardFace(urlIdCardFront, new OCRUtils.OnIdCardFaceResult() {
+        /*OCRUtils.recoIdCardFace(false,urlIdCardFront, new OCRUtils.OnIdCardFaceResult() {
             @Override
             public void onResult(IdCardFaceBean idCardFaceBean) {
                 System.out.println(idCardFaceBean);
             }
         });
-        OCRUtils.recoIdCardBack(urlIdCardBack, new OCRUtils.OnIdCardBackResult() {
+        OCRUtils.recoIdCardBack(false,urlIdCardBack, new OCRUtils.OnIdCardBackResult() {
             @Override
             public void onResult(IdCardBackBean idCardBackBean) {
                 System.out.println(idCardBackBean);
             }
-        });
-        OCRUtils.recoBankCard(urlBankCardFront, new OCRUtils.OnBankCardResult() {
+        });*/
+        OCRUtils.recoBankCard(false,urlBankCardFront, new OCRUtils.OnBankCardResult() {
             @Override
             public void onResult(BankCardBean bankCardBean) {
                 System.out.println(bankCardBean);
