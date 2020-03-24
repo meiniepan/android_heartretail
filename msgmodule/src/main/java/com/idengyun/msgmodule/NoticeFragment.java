@@ -361,7 +361,7 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
             tv_notice_4_title.setText(contentTitle);
             tv_notice_4_detail.setText(contentDetail);
             ImageApi.displayImage(iv_notice_4_url.getContext(), iv_notice_4_url, imgUrl);
-            //tv_notice_4_invalid.setText(pushTime);
+            // tv_notice_4_invalid.setVisibility();
         }
 
         private void findViewById(@NonNull View itemView) {
