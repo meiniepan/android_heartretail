@@ -29,7 +29,7 @@ public class AmapLocationWapper {
         //myLocationStyle.interval(2000);
         myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_SHOW);
         //定位一次，且将视角移动到地图中心点。
-        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE);
+//        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE);
         //设置定位蓝点精度圆圈的填充颜色的方法
         myLocationStyle.radiusFillColor(Utils.getApp().getResources().getColor(R.color.transparent));
         //设置定位蓝点精度圆圈的边框颜色的方法
@@ -44,7 +44,10 @@ public class AmapLocationWapper {
         aMap.animateCamera(mCameraUpdate);
 
         //设置定位的回调
-        aMap.setOnMyLocationChangeListener(onMyLocationChangeListener);
+        if (null != onMyLocationChangeListener) {
+            aMap.setOnMyLocationChangeListener(onMyLocationChangeListener);
+        }
+
         //设置交互按钮
         setUiSettings(aMap);
     }
@@ -107,13 +110,13 @@ public class AmapLocationWapper {
 
     }
 
-    public void stopLocation(){
+    public void stopLocation() {
         //停止定位后，本地定位服务并不会被销毁
-        if (null!=mLocationClient) mLocationClient.stopLocation();
+        if (null != mLocationClient) mLocationClient.stopLocation();
     }
 
-    public void onDestroy(){
+    public void onDestroy() {
         //销毁定位客户端，同时销毁本地定位服务。
-        if (null!=mLocationClient) mLocationClient.onDestroy();
+        if (null != mLocationClient) mLocationClient.onDestroy();
     }
 }
