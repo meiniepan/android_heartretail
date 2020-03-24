@@ -168,8 +168,16 @@ public final class Step2Fragment extends BaseFragment implements View.OnClickLis
             }
         });
 
-        /*Bundle extras = new Bundle();
-        HRActivity.start(getContext(), extras, Step3Fragment.class);*/
+        // startStep3Activity();
+    }
+
+    private void startStep3Activity() {
+        Bundle extras = new Bundle();
+        extras.putString("url_id_card_front", urlIdCardFront);
+        extras.putString("url_id_card_back", urlIdCardBack);
+        extras.putString("url_bank_card_front", urlBankCardFront);
+        extras.putString("url_bank_card_back", urlBankCardBack);
+        HRActivity.start(getContext(), extras, Step3Fragment.class);
     }
 
     private void findViewById(View view) {
