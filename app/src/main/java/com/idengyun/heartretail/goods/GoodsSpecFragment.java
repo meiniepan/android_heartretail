@@ -87,13 +87,19 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
     @Override
     public void onClick(View v) {
         if (getView() == v) {
-            HRActivity.hideFragment(getActivity(), getClass().getName());
-            String specList = getGoodsSpecList();
             Fragment fragment = HRActivity.findFragmentByTag(getActivity(), GoodsSPUFragment.class.getName());
             if (fragment instanceof GoodsSPUFragment) {
-                ((GoodsSPUFragment) fragment).setGoodsSpecList(specList);
+                if (converter.getData().goodsType == 1) {
+                    SKU selectedSKU = converter.getSelectedSKU();
+                    if (selectedSKU != null) {
+                        ((GoodsSPUFragment) fragment).setWholesaleFlag(selectedSKU.wholesaleFlag);
+                    }
+                }
 
+                String specList = getGoodsSpecList();
+                ((GoodsSPUFragment) fragment).setGoodsSKU(specList);
             }
+            HRActivity.hideFragment(getActivity(), getClass().getName());
         }
     }
 
