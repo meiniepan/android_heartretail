@@ -157,7 +157,7 @@ public final class GoodsEvaluateFragment extends BaseFragment implements SwipeRe
             if (getItemViewType(position) != -1) {
                 GoodsEvaluateBean.Data.Evaluation evaluation = evaluationList.get(position);
                 EvaluationHolder evaluationHolder = (EvaluationHolder) holder;
-                evaluationHolder.updateUI(evaluation);
+                evaluationHolder.updateUI(evaluation, position, getItemCount());
             }
         }
 
@@ -171,53 +171,54 @@ public final class GoodsEvaluateFragment extends BaseFragment implements SwipeRe
             if (evaluationList.get(position).evaluationId == -1) return -1;
             return super.getItemViewType(position);
         }
+    }
 
-        private static class EvaluationHolder extends RecyclerView.ViewHolder {
-            ImageView iv_user_avatar;
-            TextView tv_user_name;
-            TextView tv_user_level;
-            RatingBar rb_user_rating;
-            TextView tv_user_evaluation_date;
-            TextView tv_user_likes;
-            TextView tv_user_evaluation_content;
-            View tv_divider;
+    private static class EvaluationHolder extends RecyclerView.ViewHolder {
+        private ImageView iv_user_avatar;
+        private TextView tv_user_name;
+        private TextView tv_user_level;
+        private RatingBar rb_user_rating;
+        private TextView tv_user_evaluation_date;
+        private TextView tv_user_likes;
+        private TextView tv_user_evaluation_content;
+        private View tv_divider;
 
-            EvaluationHolder(@NonNull View itemView) {
-                super(itemView);
-                findViewById(itemView);
-            }
+        EvaluationHolder(@NonNull View itemView) {
+            super(itemView);
+            findViewById(itemView);
+        }
 
-            @MainThread
-            void updateUI(GoodsEvaluateBean.Data.Evaluation evaluation) {
-                String userImgUrl = evaluation.userHeadImg;
-                String userName = evaluation.userName;
-                int userLevel = evaluation.userLevel;
-                String evaluationDate = evaluation.evaluationDate;
-                int evaluationStar = evaluation.evaluationStar;
-                String contents = evaluation.evaluationContent;
-                String orderId = evaluation.orderId;
-                int isShow = evaluation.isShow;
-                String[] split = evaluationDate.split(" ");
-                String date = split.length > 0 ? split[0] : "";
+        @MainThread
+        void updateUI(GoodsEvaluateBean.Data.Evaluation evaluation, int position, int itemCount) {
+            String userImgUrl = evaluation.userHeadImg;
+            String userName = evaluation.userName;
+            int userLevel = evaluation.userLevel;
+            String evaluationDate = evaluation.evaluationDate;
+            int evaluationStar = evaluation.evaluationStar;
+            String contents = evaluation.evaluationContent;
+            String orderId = evaluation.orderId;
+            int isShow = evaluation.isShow;
+            String[] split = evaluationDate.split(" ");
+            String date = split.length > 0 ? split[0] : "";
 
-                ImageApi.displayImage(itemView.getContext(), iv_user_avatar, userImgUrl);
-                tv_user_name.setText(userName);
-                tv_user_level.setText("LV" + userLevel);
-                tv_user_evaluation_date.setText(date);
-                rb_user_rating.setRating(evaluationStar);
-                tv_user_evaluation_content.setText(contents);
-            }
+            ImageApi.displayImage(itemView.getContext(), iv_user_avatar, userImgUrl);
+            tv_user_name.setText(userName);
+            tv_user_level.setText("LV" + userLevel);
+            tv_user_evaluation_date.setText(date);
+            rb_user_rating.setRating(evaluationStar);
+            tv_user_evaluation_content.setText(contents);
+            tv_divider.setVisibility(position == itemCount - 1 ? View.GONE : View.VISIBLE);
+        }
 
-            private void findViewById(@NonNull View itemView) {
-                iv_user_avatar = itemView.findViewById(R.id.iv_user_avatar);
-                tv_user_name = itemView.findViewById(R.id.tv_user_name);
-                tv_user_level = itemView.findViewById(R.id.tv_user_level);
-                rb_user_rating = itemView.findViewById(R.id.rb_user_rating);
-                tv_user_evaluation_date = itemView.findViewById(R.id.tv_user_evaluation_date);
-                tv_user_likes = itemView.findViewById(R.id.tv_user_likes);
-                tv_user_evaluation_content = itemView.findViewById(R.id.tv_user_evaluation_content);
-                tv_divider = itemView.findViewById(R.id.tv_divider);
-            }
+        private void findViewById(@NonNull View itemView) {
+            iv_user_avatar = itemView.findViewById(R.id.iv_user_avatar);
+            tv_user_name = itemView.findViewById(R.id.tv_user_name);
+            tv_user_level = itemView.findViewById(R.id.tv_user_level);
+            rb_user_rating = itemView.findViewById(R.id.rb_user_rating);
+            tv_user_evaluation_date = itemView.findViewById(R.id.tv_user_evaluation_date);
+            tv_user_likes = itemView.findViewById(R.id.tv_user_likes);
+            tv_user_evaluation_content = itemView.findViewById(R.id.tv_user_evaluation_content);
+            tv_divider = itemView.findViewById(R.id.tv_divider);
         }
     }
 }

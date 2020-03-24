@@ -78,6 +78,7 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
         observe();
         friendAdapter = new FriendAdapter();
         recycler_view.setAdapter(friendAdapter);
+        recycler_view.addOnScrollListener(onScrollListener);
     }
 
     @Override
@@ -198,7 +199,7 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
         layout_red_packet_rule.setOnClickListener(this);
     }
 
-    private static class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendHolder> {
+    private static class FriendAdapter extends RecyclerView.Adapter {
 
         private LayoutInflater inflater;
         final List<RedPacketBean.Data.Friend> friendList = new ArrayList<>();
@@ -206,16 +207,24 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
         @NonNull
         @Override
 
-        public FriendHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
+        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             if (inflater == null) inflater = LayoutInflater.from(parent.getContext());
+            if (-1 == viewType) {
+                View itemView = inflater.inflate(R.layout.view_type_no_more, parent, false);
+                return new RecyclerView.ViewHolder(itemView) {
+                };
+            }
             View itemView = inflater.inflate(R.layout.fragment_red_packet_item, parent, false);
             return new FriendHolder(itemView);
         }
 
         @Override
-        public void onBindViewHolder(@NonNull FriendHolder holder, int position) {
-            RedPacketBean.Data.Friend friend = friendList.get(position);
-            holder.updateUI(friend);
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+            if (getItemViewType(position) != -1) {
+                RedPacketBean.Data.Friend friend = friendList.get(position);
+                FriendHolder friendHolder = (FriendHolder) holder;
+                friendHolder.updateUI(friend);
+            }
         }
 
         @Override
@@ -223,38 +232,44 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
             return friendList.size();
         }
 
-        private static class FriendHolder extends RecyclerView.ViewHolder {
+        @Override
+        public int getItemViewType(int position) {
+            if (friendList.get(position).friendId == -1) return -1;
+            return super.getItemViewType(position);
+        }
+    }
 
-            private ImageView iv_red_packet_user_avatar;
-            private TextView tv_red_packet_user_name;
-            private TextView tv_red_packet_date;
-            private TextView tv_red_packet_out_money;
+    private static class FriendHolder extends RecyclerView.ViewHolder {
 
-            public FriendHolder(@NonNull View itemView) {
-                super(itemView);
-                findViewById(itemView);
-            }
+        private ImageView iv_red_packet_user_avatar;
+        private TextView tv_red_packet_user_name;
+        private TextView tv_red_packet_date;
+        private TextView tv_red_packet_out_money;
 
-            public void updateUI(RedPacketBean.Data.Friend friend) {
-                String friendName = friend.friendName;
-                String friendHeadImg = friend.friendHeadImg;
-                String inviteTime = friend.inviteTime;
-                String consumeMoney = friend.consumeMoney;
-                String[] split = inviteTime.split(" ");
-                String date = split.length > 0 ? split[0] : "";
+        public FriendHolder(@NonNull View itemView) {
+            super(itemView);
+            findViewById(itemView);
+        }
 
-                ImageApi.displayImage(iv_red_packet_user_avatar.getContext(), iv_red_packet_user_avatar, friendHeadImg);
-                tv_red_packet_user_name.setText(friendName);
-                tv_red_packet_date.setText(date);
-                tv_red_packet_out_money.setText(consumeMoney + "元");
-            }
+        public void updateUI(RedPacketBean.Data.Friend friend) {
+            String friendName = friend.friendName;
+            String friendHeadImg = friend.friendHeadImg;
+            String inviteTime = friend.inviteTime;
+            String consumeMoney = friend.consumeMoney;
+            String[] split = inviteTime.split(" ");
+            String date = split.length > 0 ? split[0] : "";
 
-            private void findViewById(@NonNull View itemView) {
-                iv_red_packet_user_avatar = itemView.findViewById(R.id.iv_red_packet_user_avatar);
-                tv_red_packet_user_name = itemView.findViewById(R.id.tv_red_packet_user_name);
-                tv_red_packet_date = itemView.findViewById(R.id.tv_red_packet_date);
-                tv_red_packet_out_money = itemView.findViewById(R.id.tv_red_packet_out_money);
-            }
+            ImageApi.displayImage(iv_red_packet_user_avatar.getContext(), iv_red_packet_user_avatar, friendHeadImg);
+            tv_red_packet_user_name.setText(friendName);
+            tv_red_packet_date.setText(date);
+            tv_red_packet_out_money.setText(consumeMoney + "元");
+        }
+
+        private void findViewById(@NonNull View itemView) {
+            iv_red_packet_user_avatar = itemView.findViewById(R.id.iv_red_packet_user_avatar);
+            tv_red_packet_user_name = itemView.findViewById(R.id.tv_red_packet_user_name);
+            tv_red_packet_date = itemView.findViewById(R.id.tv_red_packet_date);
+            tv_red_packet_out_money = itemView.findViewById(R.id.tv_red_packet_out_money);
         }
     }
 }
