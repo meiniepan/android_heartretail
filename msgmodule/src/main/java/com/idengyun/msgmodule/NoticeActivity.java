@@ -38,8 +38,9 @@ public final class NoticeActivity extends BaseActivity implements TabLayout.OnTa
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            requestNoticeCount();
-            requestNoticeUpdateStatus();
+            String action = intent.getAction();
+            if (NoticeConst.ACTION_NOTICE_API.equals(action)) requestNoticeCount();
+            // requestNoticeUpdateStatus();
         }
     };
 
@@ -54,7 +55,8 @@ public final class NoticeActivity extends BaseActivity implements TabLayout.OnTa
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        registerReceiver(receiver, new IntentFilter());
+        IntentFilter filter = new IntentFilter(NoticeConst.ACTION_NOTICE_API);
+        registerReceiver(receiver, filter);
         setContentView(R.layout.activity_notice);
         init();
         observe();
@@ -221,7 +223,7 @@ public final class NoticeActivity extends BaseActivity implements TabLayout.OnTa
         private final View iv_msg_tab_indicator_dot;
         private final TextView tv_notice_count;
 
-        public TabHolder(@NonNull TabLayout.Tab tab, String text) {
+        private TabHolder(@NonNull TabLayout.Tab tab, String text) {
             this.tab = tab;
             tab.setCustomView(R.layout.notice_tab);
             customView = tab.getCustomView();
@@ -236,19 +238,19 @@ public final class NoticeActivity extends BaseActivity implements TabLayout.OnTa
             iv_msg_tab_indicator_dot.setVisibility(View.INVISIBLE);
         }
 
-        public void onTabSelected() {
+        private void onTabSelected() {
             tv_msg_tab_text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18f);
             iv_msg_tab_indicator_line.setVisibility(View.VISIBLE);
             iv_msg_tab_indicator_dot.setVisibility(View.VISIBLE);
         }
 
-        public void onTabUnselected() {
+        private void onTabUnselected() {
             tv_msg_tab_text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16f);
             iv_msg_tab_indicator_line.setVisibility(View.INVISIBLE);
             iv_msg_tab_indicator_dot.setVisibility(View.INVISIBLE);
         }
 
-        public void updateNoticeCount(int noticeCount) {
+        private void updateNoticeCount(int noticeCount) {
             tv_notice_count.setText(noticeCount + "+");
             tv_notice_count.setVisibility(noticeCount > 0 ? View.VISIBLE : View.INVISIBLE);
         }

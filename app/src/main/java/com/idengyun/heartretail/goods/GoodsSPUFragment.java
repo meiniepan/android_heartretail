@@ -20,7 +20,6 @@ import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.net.ImageApi;
-import com.dengyun.baselibrary.utils.SizeUtils;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.GoodsDetailBean;
@@ -180,7 +179,6 @@ public final class GoodsSPUFragment extends BaseFragment implements View.OnClick
 //                goodsSkuList == null ||
 //                goodsDetailList == null) return;
 
-//        int wholesaleFlag = data.wholesaleFlag;
         String retailPrice = data.retailPrice;
         String wholesalePrice = data.wholesalePrice;
         int goodsType = data.goodsType;
@@ -195,8 +193,24 @@ public final class GoodsSPUFragment extends BaseFragment implements View.OnClick
         GoodsBanner.setupBanner(layout_goods_banner_container, urls);
 
         /* 批发资格 */
-//        layout_goods_disqualification.setVisibility(wholesaleFlag == 1 ? View.VISIBLE : View.GONE);
-        layout_goods_disqualification.setVisibility(View.GONE);
+        if (goodsType == 1) {
+            GoodsDetailBean.Data.GoodsSku defaultGoodsSku = null;
+
+            for (GoodsDetailBean.Data.GoodsSku goodsSku : goodsSkuList) {
+                if (goodsSku.isDefault == 1) {
+                    defaultGoodsSku = goodsSku;
+                    break;
+                }
+            }
+
+            if (defaultGoodsSku != null && defaultGoodsSku.wholesaleFlag == 1) {
+                layout_goods_disqualification.setVisibility(View.VISIBLE);
+            } else {
+                layout_goods_disqualification.setVisibility(View.GONE);
+            }
+        } else {
+            layout_goods_disqualification.setVisibility(View.GONE);
+        }
 
         /* 商品价格 */
         String price = goodsType == 0 ? retailPrice : wholesalePrice;
@@ -250,8 +264,18 @@ public final class GoodsSPUFragment extends BaseFragment implements View.OnClick
 //        }
     }
 
-    public void setGoodsSpecList(CharSequence text) {
+    /* 设置规格列表 */
+    public void setGoodsSKU(CharSequence text) {
         tv_goods_spec.setText(text);
+    }
+
+    /* 是否具有批发资格 */
+    public void setWholesaleFlag(int wholesaleFlag) {
+        layout_goods_disqualification.setVisibility(wholesaleFlag == 1 ? View.GONE : View.VISIBLE);
+    }
+
+    public boolean isWholesaleFlagVisibility() {
+        return layout_goods_disqualification.getVisibility() == View.VISIBLE;
     }
 
     private void findViewById(@NonNull View view) {

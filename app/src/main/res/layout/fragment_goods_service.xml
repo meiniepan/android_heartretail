@@ -12,6 +12,7 @@
         android:layout_height="427dp"
         android:layout_gravity="bottom"
         android:background="@drawable/shape_goods_spec_bg"
+        android:clickable="true"
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
