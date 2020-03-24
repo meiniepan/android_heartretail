@@ -2,7 +2,9 @@ package com.idengyun.heartretail.adapters;
 
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -53,7 +55,7 @@ public class OderStatusListAdapter extends BaseQuickAdapter<OrderStatusBean, Bas
 
     @Override
     protected void convert(BaseViewHolder helper, OrderStatusBean item) {
-        initGoodsListRecyclerView(helper.getView(R.id.sr_goods), item.orderGoods);
+        initGoodsListRecyclerView(helper, item.orderGoods);
         helper.setText(R.id.tv_order_status_order_id, "订单号" + item.orderId);
         LinearLayout ll_surplus_pay_time = helper.getView(R.id.ll_surplus_pay_time);
         LinearLayout ll_advanced_operate = helper.getView(R.id.ll_advanced_operate);
@@ -138,12 +140,19 @@ public class OderStatusListAdapter extends BaseQuickAdapter<OrderStatusBean, Bas
         }
     }
 
-    private void initGoodsListRecyclerView(StatusRecyclerView recyclerView, List<OrderStatusBean.GoodsBean> goodsBeans) {
+    private void initGoodsListRecyclerView(BaseViewHolder holder, List<OrderStatusBean.GoodsBean> goodsBeans) {
+        RecyclerView recyclerView = holder.getView(R.id.sr_goods);
         OderStatusGoodsListAdapter adapter = new OderStatusGoodsListAdapter(R.layout.item_order_status_goods, goodsBeans);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         RecycleViewDivider divider = new RecycleViewDivider(SizeUtils.dp2px(1), mContext.getResources().getColor(R.color.lineColor));
         recyclerView.addItemDecoration(divider);
         recyclerView.setAdapter(adapter);
+        recyclerView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return holder.itemView.onTouchEvent(event);
+            }
+        });
     }
 
     public void setTimerMap(HashMap<String, SecondsTimer> timerMap) {

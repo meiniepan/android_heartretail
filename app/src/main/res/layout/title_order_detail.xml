@@ -14,13 +14,32 @@
         android:paddingTop="24dp"
         >
 
-        <ImageView
-            android:id="@+id/iv_order_detail_back2"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingStart="15dp"
-            android:paddingEnd="15dp"
-            android:src="@drawable/ic_goods_detail_back_arrow_alpha" />
+        <RelativeLayout
+            android:id="@+id/rl_order_detail_back2"
+            android:layout_marginStart="@dimen/dp_15"
+            android:layout_marginEnd="@dimen/dp_15"
+            android:layout_width="match_parent"
+            android:layout_height="44dp">
+            <TextView
+                android:id="@+id/tv_order_detail_back2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:drawableStart="@drawable/icon_arrow_back_white"
+                android:drawablePadding="8dp"
+                android:text="返回"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="订单详情"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
     </FrameLayout>
     <com.dengyun.baselibrary.widgets.toolbar.BaseToolBar
         android:id="@+id/toolbar_title_order_detail"
