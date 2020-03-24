@@ -27,7 +27,4 @@ public interface BaseView {
     void showNoNet(View noNetView);
     void showContent();
     int getViewStatus();
-    void setOnErrorRetryClickListener(View.OnClickListener onErrorRetryClickListener);
-    void setOnEmptyRetryClickListener(View.OnClickListener onEmptyRetryClickListener);
-    void setOnNoNetRetryClickListener(View.OnClickListener onNoNetRetryClickListener);
 }

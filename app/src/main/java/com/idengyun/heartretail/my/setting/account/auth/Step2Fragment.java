@@ -16,8 +16,10 @@ import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.baselibrary.net.upload.UploadBean;
+import com.dengyun.baselibrary.net.upload.UploadListBean;
 import com.dengyun.baselibrary.utils.ListUtils;
 import com.dengyun.baselibrary.utils.TakePhotoUtil;
+import com.dengyun.baselibrary.utils.ToastUtils;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
@@ -26,6 +28,7 @@ import com.luck.picture.lib.entity.LocalMedia;
 import com.lzy.okgo.model.Response;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.idengyun.heartretail.Constants.REQUEST_CODE_PERSONAL;
@@ -98,11 +101,12 @@ public final class Step2Fragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onClick(View v) {
         if (iv_bank_card_true == v) {
-            TakePhotoUtil.takePhotoWithItem(this, true, REQUEST_CODE_REAL_BANK_CARD_TRUE);
+            TakePhotoUtil.takePhotoWithItem(this, true, 315, 215, 1, REQUEST_CODE_REAL_BANK_CARD_TRUE);
         } else if (iv_bank_card_false == v) {
-            TakePhotoUtil.takePhotoWithItem(this, true, REQUEST_CODE_REAL_BANK_CARD_FALSE);
+            TakePhotoUtil.takePhotoWithItem(this, true, 315, 215, 1, REQUEST_CODE_REAL_BANK_CARD_FALSE);
         } else if (tv_real_next_step_2 == v) {
-            HRActivity.start(getContext(), Step3Fragment.class);
+//            HRActivity.start(getContext(), Step3Fragment.class);
+            uploadFileList();
         }
     }
 
@@ -117,6 +121,41 @@ public final class Step2Fragment extends BaseFragment implements View.OnClickLis
             public void onSuccess(Response<UploadBean> response) {
 //                avatarUrl = response.body().data.filePath;
 //                modifyAvatar();
+            }
+        });
+    }
+
+    /**
+     * 多图片上传
+     */
+    private void uploadFileList() {
+        // TODO: 2020-03-24 身份证的照片没有传过来
+        ArrayList<File> files = new ArrayList<>();
+        if (!TextUtils.isEmpty(idCardTruePath)) files.add(new File(idCardTruePath));
+        if (!TextUtils.isEmpty(idCardFalsePath)) files.add(new File(idCardFalsePath));
+        if (!TextUtils.isEmpty(bankCardTruePath)) files.add(new File(bankCardTruePath));
+        if (!TextUtils.isEmpty(bankCardFalsePath)) files.add(new File(bankCardFalsePath));
+        if (files.size()!=4){
+            ToastUtils.showShort("图片不够四张");
+            return;
+        }
+
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.uploads())
+                .fragment(this)
+                .clazz(UploadListBean.class)
+                .isShowDialog(false)
+                .build();
+        NetApi.<UploadListBean>upFileListData(netOption, files, new JsonCallback<UploadListBean>(netOption) {
+            @Override
+            public void onSuccess(Response<UploadListBean> response) {
+                //上传的图片和返回的图片时一一对应的，上传四张返回也是四张，一一对应
+                List<String> returnUrls = response.body().data.filePathList;
+                if (!ListUtils.isEmpty(returnUrls) && returnUrls.size() == 4){
+                    idCardTrueUrl = returnUrls.get(0);
+                    idCardFalseUrl = returnUrls.get(1);
+                    bankCardTrueUrl = returnUrls.get(2);
+                    bankCardFalseUrl = returnUrls.get(3);
+                }
             }
         });
     }

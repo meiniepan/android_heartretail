@@ -24,12 +24,11 @@ public class TakePhotoUtil {
      * @param isCrop   是否剪切
      */
     public static void takePhotoWithItem(Activity activity, boolean isCrop) {
-        takePhotoWithItem(activity, isCrop, -1, 0);
+        takePhotoWithItem(activity, isCrop,1,1, -1, 0);
     }
     public static void takePhotoWithItem(Fragment fragment, boolean isCrop) {
-        takePhotoWithItem(fragment, isCrop, -1, 0);
+        takePhotoWithItem(fragment, isCrop,1,1, -1, 0);
     }
-
 
     /**
      * @param activity    请求的activity
@@ -37,19 +36,21 @@ public class TakePhotoUtil {
      * @param requestCode 请求码
      */
     public static void takePhotoWithItem(Activity activity, boolean isCrop, int requestCode) {
-        takePhotoWithItem(activity, isCrop, -1, requestCode);
+        takePhotoWithItem(activity, isCrop, 1,1,-1, requestCode);
     }
     public static void takePhotoWithItem(Fragment fragment, boolean isCrop, int requestCode) {
-        takePhotoWithItem(fragment, isCrop, -1, requestCode);
+        takePhotoWithItem(fragment, isCrop,1,1, -1, requestCode);
     }
 
     /**
      * @param activity     请求的activity
      * @param isCrop       是否剪切
+     * @param scaleX       裁剪：xy比例中的x
+     * @param scaleY       裁剪：xy比例中的Y
      * @param maxSelectNum 最大选择图片数量
      * @param requestCode  请求码
      */
-    public static void takePhotoWithItem(Activity activity, boolean isCrop, int maxSelectNum, int requestCode) {
+    public static void takePhotoWithItem(Activity activity, boolean isCrop, int scaleX, int scaleY,int maxSelectNum, int requestCode) {
         BaseBottomItemDialog.newBuilder(activity)
                 .addSheetItem("用相机更换", BaseBottomItemDialog.Builder.SheetItemColor.Blue, (dialog, which) -> {
                     dialog.dismiss();
@@ -61,7 +62,7 @@ public class TakePhotoUtil {
                                 PictureSelectionModel model = PictureSelector.create(activity)
                                         .openCamera(PictureMimeType.ofImage())
                                         .enableCrop(isCrop)
-                                        .withAspectRatio(1,1)
+                                        .withAspectRatio(scaleX,scaleY)
                                         .compress(true);
                                 if (maxSelectNum > 0) model.maxSelectNum(maxSelectNum);
                                 model.minimumCompressSize(200).forResult(requestCode == 0 ? PictureConfig.CAMERA : requestCode);
@@ -96,10 +97,12 @@ public class TakePhotoUtil {
     /**
      * @param fragment     请求的fragment
      * @param isCrop       是否剪切
+     * @param scaleX       裁剪：xy比例中的x
+     * @param scaleY       裁剪：xy比例中的Y
      * @param maxSelectNum 最大选择图片数量
      * @param requestCode  请求码
      */
-    public static void takePhotoWithItem(Fragment fragment, boolean isCrop, int maxSelectNum, int requestCode) {
+    public static void takePhotoWithItem(Fragment fragment, boolean isCrop,int scaleX, int scaleY,int maxSelectNum, int requestCode) {
         BaseBottomItemDialog.newBuilder(fragment.getContext())
                 .addSheetItem("用相机更换", BaseBottomItemDialog.Builder.SheetItemColor.Blue, (dialog, which) -> {
                     dialog.dismiss();
@@ -111,7 +114,7 @@ public class TakePhotoUtil {
                                 PictureSelectionModel model = PictureSelector.create(fragment)
                                         .openCamera(PictureMimeType.ofImage())
                                         .enableCrop(isCrop)
-                                        .withAspectRatio(1,1)
+                                        .withAspectRatio(scaleX,scaleY)
                                         .compress(true);
                                 if (maxSelectNum > 0) model.maxSelectNum(maxSelectNum);
                                 model.minimumCompressSize(200).forResult(requestCode == 0 ? PictureConfig.CAMERA : requestCode);
@@ -129,7 +132,7 @@ public class TakePhotoUtil {
                                 PictureSelectionModel model = PictureSelector.create(fragment)
                                         .openGallery(PictureMimeType.ofImage())
                                         .enableCrop(isCrop)
-                                        .withAspectRatio(1,1)
+                                        .withAspectRatio(scaleX,scaleY)
                                         .compress(true)
                                         .isCamera(false);
                                 if (maxSelectNum > 0) model.maxSelectNum(maxSelectNum);

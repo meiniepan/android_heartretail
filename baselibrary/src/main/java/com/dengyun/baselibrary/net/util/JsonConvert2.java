@@ -15,6 +15,8 @@
  */
 package com.dengyun.baselibrary.net.util;
 
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 
 import com.dengyun.baselibrary.base.ApiBean;
@@ -104,7 +106,7 @@ public class JsonConvert2<T> implements Converter<T> {
 
         if (TextUtils.isEmpty(code)) {
             //不是标准的code、msg
-            return GsonConvertUtil.fromJson(responseJson, returnType);
+            return convertJson(responseJson,returnType);
         } else {
             boolean isContainsDealCode = ReturnCodeConstants.isContainsDealCode(netOption, code);
             boolean isContainsGlobalDealCode = ReturnCodeConstants.isContainsGlobalDealCode(netOption, code);
@@ -113,11 +115,19 @@ public class JsonConvert2<T> implements Converter<T> {
                 throw new ApiException(msg, code);
             } else if (!netOption.isInterceptErrorCode() || isContainsDealCode) {
                 //不拦截错误code 或者 code为需要正常返回的code
-                return GsonConvertUtil.fromJson(responseJson, returnType);
+                return convertJson(responseJson,returnType);
             } else {
                 //其余的错误code传递到错误回调
                 throw new ApiException(msg, code);
             }
+        }
+    }
+
+    private T convertJson(String responseJson,Type returnType){
+        if (returnType.equals(String.class)){
+            return (T) responseJson;
+        }else {
+            return GsonConvertUtil.fromJson(responseJson, returnType);
         }
     }
 

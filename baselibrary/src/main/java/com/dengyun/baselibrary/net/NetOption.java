@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @titile  本来要替换网络参数列表，参数不多，暂时不用此设计，多了再加
+ * @titile 本来要替换网络参数列表，参数不多，暂时不用此设计，多了再加
  * @desc Created by seven on 2018/4/24.
  */
 
@@ -81,16 +81,15 @@ public class NetOption {
         return headers;
     }
 
-    public void addHeaders(HttpHeaders addHeaders){
-        if (null==headers) headers = new HttpHeaders();
+    public void addHeaders(HttpHeaders addHeaders) {
+        if (null == headers) headers = new HttpHeaders();
         headers.put(addHeaders);
     }
 
-    public void addHeaders(String key,String value){
-        if (null==headers) headers = new HttpHeaders();
-        headers.put(key,value);
+    public void addHeaders(String key, String value) {
+        if (null == headers) headers = new HttpHeaders();
+        headers.put(key, value);
     }
-
 
 
     public Fragment getFragment() {
@@ -105,10 +104,10 @@ public class NetOption {
         return isShowDialog;
     }
 
-    public BaseDialogFragment getLoadingDialog(){
+    public BaseDialogFragment getLoadingDialog() {
         if (isShowDialog
-                && (null!=getActivity() || null!=getFragment())
-                && null == loadingDialog){
+                && (null != getActivity() || null != getFragment())
+                && null == loadingDialog) {
             loadingDialog = LoadingDialog1.getInstance(this);
         }
         return loadingDialog;
@@ -123,7 +122,7 @@ public class NetOption {
     }
 
     public void setUrl(String newUrl) {
-         url = newUrl;
+        url = newUrl;
     }
 
     public Map getParams() {
@@ -146,7 +145,10 @@ public class NetOption {
         return clazz;
     }
 
-    public @ProjectType int getProjectType(){return projectType;}
+    public @ProjectType
+    int getProjectType() {
+        return projectType;
+    }
 
     public static final class Builder {
         private String tag;
@@ -157,12 +159,13 @@ public class NetOption {
         private BaseDialogFragment loadingDialog;
         private SmartRefreshLayout refreshLayout;
         private String url;
-        private Map<String,Object> params = new HashMap<>();
+        private Map<String, Object> params = new HashMap<>();
         private boolean isEncrypt = true;
         private Type type;
         private Class clazz;
         private boolean isInterceptErrorCode = true;//是否拦截错误code (继续拦截全局的错误code，例如token过期，只是设置是否不拦截其他非全局的错误code)
-        private @ProjectType int projectType = ProjectType.IDENGYUN_HR;//项目类型（由于不同的项目的网络参数配置可能不一致)，默认每天美耶
+        private @ProjectType
+        int projectType = ProjectType.IDENGYUN_HR;//项目类型（由于不同的项目的网络参数配置可能不一致)，默认每天美耶
 
         private Builder(String url) {
             this.url = url;
@@ -182,9 +185,9 @@ public class NetOption {
             return this;
         }
 
-        public Builder headers(String key,String value) {
+        public Builder headers(String key, String value) {
             if (null == this.headers) this.headers = new HttpHeaders();
-            headers.put(key,value);
+            headers.put(key, value);
             return this;
         }
 
@@ -248,13 +251,13 @@ public class NetOption {
             return this;
         }
 
-        public Builder projectType(@ProjectType int projectType){
+        public Builder projectType(@ProjectType int projectType) {
             this.projectType = projectType;
             return this;
         }
 
         public NetOption build() {
-            if(null==type&&null==clazz){
+            if (null == type && null == clazz) {
                 clazz = String.class;
             }
             return new NetOption(this);
