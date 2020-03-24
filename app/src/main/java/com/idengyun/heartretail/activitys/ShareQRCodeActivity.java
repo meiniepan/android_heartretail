@@ -21,6 +21,7 @@ import com.dengyun.baselibrary.utils.ToastUtils;
 import com.dengyun.baselibrary.utils.bar.StatusBarUtil;
 import com.dengyun.baselibrary.widgets.toolbar.BaseToolBar;
 import com.dengyun.sharelibrary.callback.OnShareResult;
+import com.dengyun.sharelibrary.config.ShareChannelConstants;
 import com.dengyun.sharelibrary.utils.ShareOptions;
 import com.dengyun.sharelibrary.utils.ShareUtil;
 import com.idengyun.heartretail.R;
@@ -133,8 +134,9 @@ public class ShareQRCodeActivity extends BaseActivity {
                 boolean isSaveSuccess = ImageUtils.save(shareBitmap, shareImgPath, Bitmap.CompressFormat.JPEG, false);
                 if (isSaveSuccess) {
                     ShareOptions shareOptions = ShareOptions.newBuilder(ShareQRCodeActivity.this)
-                            .shareChannel("1_4_0")
+                            .shareChannel("1_2_4_0")
                             .shareTitle("图片")
+                            .shareBoardTitle("已保存至相册，请分享")
                             .shareImgBitmap(shareBitmap)
                             .build();
                     ShareUtil.shareWithPermission(shareOptions, new OnShareResult() {
