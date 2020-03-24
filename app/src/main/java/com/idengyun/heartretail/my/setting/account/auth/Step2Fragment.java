@@ -103,9 +103,9 @@ public final class Step2Fragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onClick(View v) {
         if (iv_bank_card_front == v) {
-            TakePhotoUtil.takePhotoWithItem(this, true, 315, 215, 1, REQUEST_CODE_REAL_BANK_CARD_TRUE);
+            TakePhotoUtil.takePhotoWithItem(this, true, 212, 136, 1, REQUEST_CODE_REAL_BANK_CARD_TRUE);
         } else if (iv_bank_card_back == v) {
-            TakePhotoUtil.takePhotoWithItem(this, true, 315, 215, 1, REQUEST_CODE_REAL_BANK_CARD_FALSE);
+            TakePhotoUtil.takePhotoWithItem(this, true, 212, 136, 1, REQUEST_CODE_REAL_BANK_CARD_FALSE);
         } else if (tv_real_next_step_2 == v) {
             uploadFileList();
         }
@@ -149,13 +149,17 @@ public final class Step2Fragment extends BaseFragment implements View.OnClickLis
 
     /* 开始OCR识别 */
     private void startOCRRecognize() {
+        System.out.println("urlIdCardFront= " + urlIdCardFront);
+        System.out.println("urlIdCardBack= " + urlIdCardBack);
+        System.out.println("urlBankCardFront= " + urlBankCardFront);
+        System.out.println("urlBankCardBack= " + urlBankCardBack);
         OCRUtils.recoIdCardFace(urlIdCardFront, new OCRUtils.OnIdCardFaceResult() {
             @Override
             public void onResult(IdCardFaceBean idCardFaceBean) {
                 System.out.println(idCardFaceBean);
             }
         });
-        OCRUtils.recoIdCardBack(urlBankCardBack, new OCRUtils.OnIdCardBackResult() {
+        OCRUtils.recoIdCardBack(urlIdCardBack, new OCRUtils.OnIdCardBackResult() {
             @Override
             public void onResult(IdCardBackBean idCardBackBean) {
                 System.out.println(idCardBackBean);

@@ -63,11 +63,9 @@ public final class Step1Fragment extends BaseFragment implements View.OnClickLis
 
         if (REQUEST_CODE_REAL_ID_CARD_TRUE == requestCode) {
             pathIdCardFront = TakePhotoUtil.getResultPath(localMediaList.get(0));
-            System.out.println(pathIdCardFront);
             ImageApi.displayImage(iv_id_card_front.getContext(), iv_id_card_front, pathIdCardFront);
         } else if (REQUEST_CODE_REAL_ID_CARD_FALSE == requestCode) {
             pathIdCardBack = TakePhotoUtil.getResultPath(localMediaList.get(0));
-            System.out.println(pathIdCardBack);
             ImageApi.displayImage(iv_id_card_back.getContext(), iv_id_card_back, pathIdCardBack);
         }
 
@@ -78,9 +76,9 @@ public final class Step1Fragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onClick(View v) {
         if (iv_id_card_front == v) {
-            TakePhotoUtil.takePhotoWithItem(this, true, 315, 215, 1, REQUEST_CODE_REAL_ID_CARD_TRUE);
+            TakePhotoUtil.takePhotoWithItem(this, true, 212, 136, 1, REQUEST_CODE_REAL_ID_CARD_TRUE);
         } else if (iv_id_card_back == v) {
-            TakePhotoUtil.takePhotoWithItem(this, true, 315, 215, 1, REQUEST_CODE_REAL_ID_CARD_FALSE);
+            TakePhotoUtil.takePhotoWithItem(this, true, 212, 136, 1, REQUEST_CODE_REAL_ID_CARD_FALSE);
         } else if (tv_real_next_step_1 == v) {
             Bundle extras = new Bundle();
             extras.putString("path_id_card_front", pathIdCardFront);
