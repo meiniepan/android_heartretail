@@ -13,6 +13,9 @@ public final class RedPacketBean {
     public Data data;
 
     public static class Data {
+        public int current;
+        public int pages;
+        public int total;
         public int friendsCount;
         public Packet packet;
         public List<Friend> friends;
@@ -34,6 +37,8 @@ public final class RedPacketBean {
             public String total;
             public String hasExchange;
             public String willSend;
+            public int level;
+            public String percent;
         }
     }
 }

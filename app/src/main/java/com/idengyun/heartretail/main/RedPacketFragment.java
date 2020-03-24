@@ -6,6 +6,7 @@ import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import com.dengyun.baselibrary.net.ImageApi;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.RedPacketBean;
 import com.idengyun.heartretail.viewmodel.RedPacketViewModel;
+import com.idengyun.msgmodule.RVLoadMore;
 import com.idengyun.usermodule.HRUser;
 import com.idengyun.usermodule.LoginActivity;
 import com.idengyun.usermodule.VerifyDeviceActivity;
@@ -30,7 +32,7 @@ import java.util.List;
  *
  * @author aLang
  */
-public final class RedPacketFragment extends BaseFragment implements View.OnClickListener {
+public final class RedPacketFragment extends BaseFragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private View layout_red_packet_rule;
 
@@ -39,10 +41,26 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
     private TextView tv_red_packet_2;
     private TextView tv_red_packet_3;
     private View v_red_packet_dash_line;
+    private TextView tv_red_packet_level;
+    private TextView tv_red_packet_percent;
 
     private RecyclerView recycler_view;
     private TextView tv_red_packet_more;
     private RedPacketViewModel redPacketViewModel;
+
+    /* 分页加载 */
+    private int totalSize = 0;
+    private int totalPage = 0;
+    private int pageSize = 0;
+    private int currentPage = 0;
+
+    private final RVLoadMore onScrollListener = new RVLoadMore() {
+        @Override
+        public void onLoadingMore(RVLoadMore listener) {
+            onLoadMore();
+        }
+    };
+    private FriendAdapter friendAdapter;
 
     @Override
     public int getLayoutId() {
@@ -57,17 +75,16 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        FragmentActivity activity = getActivity();
-        if (activity == null) return;
-        if (redPacketViewModel == null) {
-            redPacketViewModel = RedPacketViewModel.getInstance(activity);
-            redPacketViewModel.getRedPacketDetail().observe(this, new Observer<RedPacketBean>() {
-                @Override
-                public void onChanged(@Nullable RedPacketBean redPacketBean) {
-                    updateUI(redPacketBean);
-                }
-            });
-        }
+        observe();
+        friendAdapter = new FriendAdapter();
+        recycler_view.setAdapter(friendAdapter);
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (hidden) return;
+        if (HRUser.isLogin()) onLoadMore();
     }
 
     @Override
@@ -90,10 +107,13 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
     }
 
     @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        if (hidden) return;
-        if (HRUser.isLogin()) requestAPI();
+    public void onRefresh() {
+        totalSize = 0;
+        totalPage = 0;
+        pageSize = 10;
+        currentPage = 0;
+        onScrollListener.setCanLoadMore(true);
+        onLoadMore();
     }
 
     private void startDeviceVerifyActivity() {
@@ -104,16 +124,30 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
         LoginActivity.start(getContext());
     }
 
-    private void requestAPI() {
+    private void onLoadMore() {
         if (redPacketViewModel == null) return;
-        redPacketViewModel.requestRedPacketDetail(this, 1, Integer.MAX_VALUE);
+        redPacketViewModel.requestRedPacketDetail(this, currentPage + 1, pageSize);
+    }
+
+    private void observe() {
+        FragmentActivity activity = getActivity();
+        if (activity == null) return;
+        if (redPacketViewModel == null) {
+            redPacketViewModel = RedPacketViewModel.getInstance(activity);
+            redPacketViewModel.getRedPacketDetail().observe(this, new Observer<RedPacketBean>() {
+                @Override
+                public void onChanged(@Nullable RedPacketBean redPacketBean) {
+                    updateUI(redPacketBean);
+                }
+            });
+        }
     }
 
     @MainThread
     private void updateUI(@Nullable RedPacketBean redPacketBean) {
+        onScrollListener.setLoadingMore(false);
         if (redPacketBean == null) return;
         RedPacketBean.Data data = redPacketBean.data;
-        int friendsCount = data.friendsCount;
         RedPacketBean.Data.Packet packet = data.packet;
         List<RedPacketBean.Data.Friend> friends = data.friends;
 
@@ -121,17 +155,28 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
         String total = packet.total;
         String hasExchange = packet.hasExchange;
         String willSend = packet.willSend;
+        int level = packet.level;
+        String percent = packet.percent;
         tv_red_packet_0.setText("¥" + canExchange);
         tv_red_packet_1.setText("¥" + total);
         tv_red_packet_2.setText("¥" + hasExchange);
         tv_red_packet_3.setText("¥" + willSend);
+        tv_red_packet_level.setText(level + "级");
+        tv_red_packet_percent.setText(percent + "%");
 
-        FriendAdapter friendAdapter = new FriendAdapter();
-        friendAdapter.friendList.clear();
+        totalSize = data.total;
+        totalPage = data.pages;
+        currentPage = data.current;
+        onScrollListener.setCanLoadMore(currentPage < totalPage);
+
+        if (currentPage == 1) friendAdapter.friendList.clear();
         friendAdapter.friendList.addAll(friends);
+        if (!onScrollListener.isCanLoadMore()) {
+            RedPacketBean.Data.Friend friend = new RedPacketBean.Data.Friend();
+            friend.friendId = -1;
+            friendAdapter.friendList.add(friend);
+        }
         friendAdapter.notifyDataSetChanged();
-        recycler_view.setAdapter(friendAdapter);
-
         // tv_red_packet_more.setVisibility(friendAdapter.getItemCount() == friendsCount ? View.GONE : View.VISIBLE);
     }
 
@@ -143,11 +188,13 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
         tv_red_packet_2 = view.findViewById(R.id.tv_red_packet_2);
         tv_red_packet_3 = view.findViewById(R.id.tv_red_packet_3);
         v_red_packet_dash_line = view.findViewById(R.id.v_red_packet_dash_line);
-        v_red_packet_dash_line.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        tv_red_packet_level = view.findViewById(R.id.tv_red_packet_level);
+        tv_red_packet_percent = view.findViewById(R.id.tv_red_packet_percent);
 
         recycler_view = view.findViewById(R.id.recycler_view);
         tv_red_packet_more = view.findViewById(R.id.tv_red_packet_more);
 
+        v_red_packet_dash_line.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         layout_red_packet_rule.setOnClickListener(this);
     }
 

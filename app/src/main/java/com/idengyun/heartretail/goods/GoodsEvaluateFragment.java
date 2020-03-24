@@ -21,7 +21,7 @@ import com.dengyun.baselibrary.net.ImageApi;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.GoodsEvaluateBean;
 import com.idengyun.heartretail.viewmodel.GoodsViewModel;
-import com.idengyun.msgmodule.LoadMore;
+import com.idengyun.msgmodule.RVLoadMore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,8 +44,13 @@ public final class GoodsEvaluateFragment extends BaseFragment implements SwipeRe
     private int totalPage = 0;
     private int pageSize = 0;
     private int currentPage = 0;
-    private boolean isLoadMore;
-    private boolean isRequesting;
+
+    private final RVLoadMore onScrollListener = new RVLoadMore() {
+        @Override
+        public void onLoadingMore(RVLoadMore listener) {
+            onLoadMore();
+        }
+    };
 
     @Override
     public int getLayoutId() {
@@ -56,15 +61,9 @@ public final class GoodsEvaluateFragment extends BaseFragment implements SwipeRe
     public void initViews(@NonNull View view, @Nullable Bundle savedInstanceState) {
         tv_favorable_rate = view.findViewById(R.id.tv_favorable_rate);
         recycler_view = view.findViewById(R.id.recycler_view);
+        recycler_view.addOnScrollListener(onScrollListener);
         evaluationAdapter = new EvaluationAdapter();
         recycler_view.setAdapter(evaluationAdapter);
-        final LoadMore loadMore = new LoadMore(recycler_view);
-        recycler_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                if (loadMore.isRequestLoadMore()) onLoadMore();
-            }
-        });
     }
 
     @Override
@@ -80,8 +79,7 @@ public final class GoodsEvaluateFragment extends BaseFragment implements SwipeRe
         totalPage = 0;
         pageSize = 10;
         currentPage = 0;
-        isLoadMore = true;
-        isRequesting = false;
+        onScrollListener.setCanLoadMore(true);
         onLoadMore();
     }
 
@@ -100,21 +98,18 @@ public final class GoodsEvaluateFragment extends BaseFragment implements SwipeRe
     }
 
     private void onLoadMore() {
-        if (isRequesting || !isLoadMore) return;
         FragmentActivity activity = getActivity();
         if (activity == null) return;
         Intent intent = activity.getIntent();
         int goodsId = intent.getIntExtra("home_goods_id", -1);
         int goodsType = intent.getIntExtra("home_goods_type", -1);
-        if (goodsViewModel != null) {
-            isRequesting = true;
-            goodsViewModel.requestGoodsEvaluate(this, goodsId, currentPage + 1, pageSize);
-        }
+        if (goodsViewModel == null) return;
+        goodsViewModel.requestGoodsEvaluate(this, goodsId, currentPage + 1, pageSize);
     }
 
     @MainThread
     private void updateUI(@Nullable GoodsEvaluateBean goodsEvaluateBean) {
-        isRequesting = false;
+        onScrollListener.setLoadingMore(false);
         if (goodsEvaluateBean == null) return;
         GoodsEvaluateBean.Data data = goodsEvaluateBean.data;
         List<GoodsEvaluateBean.Data.Evaluation> evaluationList = data.evaluationList;
@@ -122,7 +117,7 @@ public final class GoodsEvaluateFragment extends BaseFragment implements SwipeRe
         totalSize = data.total;
         totalPage = data.pages;
         currentPage = data.current;
-        isLoadMore = currentPage < totalPage;
+        onScrollListener.setCanLoadMore(currentPage < totalPage);
 
         int evaluationCounts = data.total;
         String praiseRate = data.praiseRate;
@@ -131,26 +126,39 @@ public final class GoodsEvaluateFragment extends BaseFragment implements SwipeRe
 
         if (currentPage == 1) evaluationAdapter.evaluationList.clear();
         evaluationAdapter.evaluationList.addAll(evaluationList);
+        if (!onScrollListener.isCanLoadMore()) {
+            GoodsEvaluateBean.Data.Evaluation evaluation = new GoodsEvaluateBean.Data.Evaluation();
+            evaluation.evaluationId = -1;
+            evaluationAdapter.evaluationList.add(evaluation);
+        }
         evaluationAdapter.notifyDataSetChanged();
     }
 
-    private class EvaluationAdapter extends RecyclerView.Adapter<EvaluationAdapter.EvaluationHolder> {
+    private static class EvaluationAdapter extends RecyclerView.Adapter {
         final ArrayList<GoodsEvaluateBean.Data.Evaluation> evaluationList = new ArrayList<>();
         /* 布局填充器 */
         private LayoutInflater inflater;
 
         @NonNull
         @Override
-        public EvaluationHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int position) {
+        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
             if (inflater == null) inflater = LayoutInflater.from(viewGroup.getContext());
+            if (viewType == -1) {
+                View itemView = inflater.inflate(R.layout.view_type_no_more, viewGroup, false);
+                return new RecyclerView.ViewHolder(itemView) {
+                };
+            }
             View itemView = inflater.inflate(R.layout.fragment_goods_evaluate_item, viewGroup, false);
             return new EvaluationHolder(itemView);
         }
 
         @Override
-        public void onBindViewHolder(@NonNull EvaluationHolder holder, int position) {
-            GoodsEvaluateBean.Data.Evaluation evaluation = evaluationList.get(position);
-            holder.updateUI(evaluation);
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+            if (getItemViewType(position) != -1) {
+                GoodsEvaluateBean.Data.Evaluation evaluation = evaluationList.get(position);
+                EvaluationHolder evaluationHolder = (EvaluationHolder) holder;
+                evaluationHolder.updateUI(evaluation);
+            }
         }
 
         @Override
@@ -158,7 +166,13 @@ public final class GoodsEvaluateFragment extends BaseFragment implements SwipeRe
             return evaluationList.size();
         }
 
-        class EvaluationHolder extends RecyclerView.ViewHolder {
+        @Override
+        public int getItemViewType(int position) {
+            if (evaluationList.get(position).evaluationId == -1) return -1;
+            return super.getItemViewType(position);
+        }
+
+        private static class EvaluationHolder extends RecyclerView.ViewHolder {
             ImageView iv_user_avatar;
             TextView tv_user_name;
             TextView tv_user_level;
@@ -167,7 +181,6 @@ public final class GoodsEvaluateFragment extends BaseFragment implements SwipeRe
             TextView tv_user_likes;
             TextView tv_user_evaluation_content;
             View tv_divider;
-            TextView tv_no_more;
 
             EvaluationHolder(@NonNull View itemView) {
                 super(itemView);
@@ -193,8 +206,6 @@ public final class GoodsEvaluateFragment extends BaseFragment implements SwipeRe
                 tv_user_evaluation_date.setText(date);
                 rb_user_rating.setRating(evaluationStar);
                 tv_user_evaluation_content.setText(contents);
-
-                tv_no_more.setVisibility(currentPage < totalPage ? View.GONE : View.VISIBLE);
             }
 
             private void findViewById(@NonNull View itemView) {
@@ -206,7 +217,6 @@ public final class GoodsEvaluateFragment extends BaseFragment implements SwipeRe
                 tv_user_likes = itemView.findViewById(R.id.tv_user_likes);
                 tv_user_evaluation_content = itemView.findViewById(R.id.tv_user_evaluation_content);
                 tv_divider = itemView.findViewById(R.id.tv_divider);
-                tv_no_more = itemView.findViewById(R.id.tv_no_more);
             }
         }
     }

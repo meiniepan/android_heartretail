@@ -25,6 +25,8 @@ import java.util.List;
 
 /**
  * 消息模块
+ * 包含5套消息模块，对应5套UI视图，对应5套Holder
+ * 5套消息判断依据字段：contentType
  *
  * @author aLang
  */
@@ -32,7 +34,6 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
 
     private int notifyGroup;
     private RecyclerView recycler_view;
-    private View tv_notice_no_more;
     private NoticeViewModel noticeViewModel;
     private NoticeAdapter noticeAdapter;
 
@@ -41,8 +42,13 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
     private int totalPage = 0;
     private int pageSize = 0;
     private int currentPage = 0;
-    private boolean isLoadMore;
-    private boolean isRequesting;
+
+    private final RVLoadMore onScrollListener = new RVLoadMore() {
+        @Override
+        public void onLoadingMore(RVLoadMore listener) {
+            onLoadMore();
+        }
+    };
 
     @Override
     public int getLayoutId() {
@@ -76,14 +82,13 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
         totalPage = 0;
         pageSize = 10;
         currentPage = 0;
-        isLoadMore = true;
-        isRequesting = false;
+        onScrollListener.setCanLoadMore(true);
         onLoadMore();
     }
 
     @MainThread
     private void updateUI(@Nullable NoticeListBean noticeListBean) {
-        isRequesting = false;
+        onScrollListener.setLoadingMore(false);
         if (noticeListBean == null) return;
         NoticeListBean.Data data = noticeListBean.data;
         List<NoticeListBean.Data.Content> contentList = data.contentList;
@@ -91,11 +96,11 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
         totalSize = data.total;
         totalPage = data.pages;
         currentPage = data.current;
-        isLoadMore = currentPage < totalPage;
+        onScrollListener.setCanLoadMore(currentPage < totalPage);
 
         if (currentPage == 1) noticeAdapter.noticeList.clear();
         noticeAdapter.noticeList.addAll(contentList);
-        if (!isLoadMore) {
+        if (!onScrollListener.isCanLoadMore()) {
             NoticeListBean.Data.Content content = new NoticeListBean.Data.Content();
             content.contentType = -1;
             noticeAdapter.noticeList.add(content);
@@ -104,11 +109,8 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
     }
 
     private void onLoadMore() {
-        if (isRequesting || !isLoadMore) return;
-        if (noticeViewModel != null && notifyGroup != -1) {
-            isRequesting = true;
-            noticeViewModel.requestNoticeList(this, currentPage + 1, pageSize, notifyGroup);
-        }
+        if (noticeViewModel == null || notifyGroup == -1) return;
+        noticeViewModel.requestNoticeList(this, currentPage + 1, pageSize, notifyGroup);
     }
 
     private void init() {
@@ -116,15 +118,8 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
         findViewById();
         initViewModel();
 
-        final LoadMore loadMore = new LoadMore(recycler_view);
-        recycler_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (loadMore.isRequestLoadMore()) onLoadMore();
-            }
-        });
+        recycler_view.addOnScrollListener(onScrollListener);
         noticeAdapter = new NoticeAdapter();
         recycler_view.setAdapter(noticeAdapter);
     }
@@ -158,7 +153,6 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
 
     private void findViewById() {
         recycler_view = findViewById(R.id.recycler_view);
-        tv_notice_no_more = findViewById(R.id.tv_notice_no_more);
     }
 
     private static class NoticeAdapter extends RecyclerView.Adapter {
@@ -186,7 +180,7 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
                 View itemView = inflater.inflate(R.layout.fragment_notice_item_11, parent, false);
                 return new Holder11(itemView);
             } else {
-                View itemView = inflater.inflate(R.layout.fragment_notice_item_no_more, parent, false);
+                View itemView = inflater.inflate(R.layout.view_type_no_more, parent, false);
                 return new RecyclerView.ViewHolder(itemView) {
                 };
             }

@@ -20,7 +20,7 @@ import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.GoodsListBean;
 import com.idengyun.heartretail.viewmodel.GoodsViewModel;
-import com.idengyun.msgmodule.LoadMore;
+import com.idengyun.msgmodule.RVLoadMore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,9 +42,14 @@ public final class GoodsListFragment extends BaseFragment implements SwipeRefres
     private int totalPage = 0;
     private int pageSize = 0;
     private int currentPage = 0;
-    private boolean isLoadMore;
-    private boolean isRequesting;
+
     private GoodsAdapter goodsAdapter;
+    private final RVLoadMore onScrollListener = new RVLoadMore() {
+        @Override
+        public void onLoadingMore(RVLoadMore listener) {
+            onLoadMore();
+        }
+    };
 
 
     @Override
@@ -66,14 +71,8 @@ public final class GoodsListFragment extends BaseFragment implements SwipeRefres
         else if ("批发区".equals(tag)) goodsType = 1;
         observe();
         goodsAdapter = new GoodsAdapter();
+        recycler_view.addOnScrollListener(onScrollListener);
         recycler_view.setAdapter(goodsAdapter);
-        final LoadMore loadMore = new LoadMore(recycler_view);
-        recycler_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                if (loadMore.isRequestLoadMore()) onLoadMore();
-            }
-        });
         RecyclerView.LayoutManager lm = recycler_view.getLayoutManager();
         if (lm instanceof GridLayoutManager) {
             GridLayoutManager glm = (GridLayoutManager) lm;
@@ -103,17 +102,13 @@ public final class GoodsListFragment extends BaseFragment implements SwipeRefres
         totalPage = 0;
         pageSize = 10;
         currentPage = 0;
-        isLoadMore = true;
-        isRequesting = false;
+        onScrollListener.setCanLoadMore(true);
         onLoadMore();
     }
 
     private void onLoadMore() {
-        if (isRequesting || !isLoadMore) return;
-        if (goodsViewModel != null) {
-            isRequesting = true;
-            goodsViewModel.requestGoodsList(this, goodsType, currentPage + 1, pageSize, 0, 0);
-        }
+        if (goodsViewModel == null) return;
+        goodsViewModel.requestGoodsList(this, goodsType, currentPage + 1, pageSize, 0, 0);
     }
 
     private void observe() {
@@ -129,7 +124,7 @@ public final class GoodsListFragment extends BaseFragment implements SwipeRefres
     }
 
     private void updateUI(@Nullable GoodsListBean goodsListBean) {
-        isRequesting = false;
+        onScrollListener.setLoadingMore(false);
         if (goodsListBean == null) return;
         GoodsListBean.Data data = goodsListBean.data;
         List<GoodsListBean.Data.Goods> goodsList = data.goods;
@@ -137,17 +132,17 @@ public final class GoodsListFragment extends BaseFragment implements SwipeRefres
         totalSize = data.total;
         totalPage = data.pages;
         currentPage = data.current;
-        isLoadMore = currentPage < totalPage;
+        onScrollListener.setCanLoadMore(currentPage < totalPage);
 
         if (currentPage == 1) goodsAdapter.goodsList.clear();
         goodsAdapter.goodsList.addAll(goodsList);
-        if (!isLoadMore) {
+        if (!onScrollListener.isCanLoadMore()) {
             GoodsListBean.Data.Goods goods = new GoodsListBean.Data.Goods();
             goods.goodsId = -1;
             goodsAdapter.goodsList.add(goods);
         }
         goodsAdapter.notifyDataSetChanged();
-        tv_home_load_more.setVisibility(isLoadMore ? View.VISIBLE : View.GONE);
+        // tv_home_load_more.setVisibility(onScrollListener.isCanLoadMore() ? View.VISIBLE : View.GONE);
     }
 
     private void findViewById(View view) {
@@ -174,7 +169,7 @@ public final class GoodsListFragment extends BaseFragment implements SwipeRefres
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             if (inflater == null) inflater = LayoutInflater.from(parent.getContext());
             if (-1 == viewType) {
-                View itemView = inflater.inflate(com.idengyun.msgmodule.R.layout.fragment_notice_item_no_more, parent, false);
+                View itemView = inflater.inflate(R.layout.view_type_no_more, parent, false);
                 return new RecyclerView.ViewHolder(itemView) {
                 };
             }
