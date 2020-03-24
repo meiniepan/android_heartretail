@@ -19,17 +19,17 @@ import com.dengyun.baselibrary.utils.SizeUtils;
 import com.dengyun.baselibrary.utils.ToastUtils;
 import com.dengyun.baselibrary.utils.phoneapp.AppUtils;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
+import com.idengyun.commonmodule.beans.OrderStatusBean;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.activitys.CheckLogisticsActivity;
 import com.idengyun.heartretail.activitys.ChoosePayModeActivity;
 import com.idengyun.heartretail.activitys.EvaluateDetailActivity;
-import com.idengyun.heartretail.activitys.LogisticsDetailActivity;
+import com.idengyun.heartretail.activitys.EvaluateGoodsActivity;
 import com.idengyun.heartretail.activitys.OrderStatusFragment;
 import com.idengyun.heartretail.beans.ConfirmOrderRspBean;
-import com.idengyun.commonmodule.beans.OrderStatusBean;
 import com.idengyun.heartretail.interfaces.ITimer;
+import com.idengyun.heartretail.utils.DecimalFormatUtil;
 import com.idengyun.heartretail.widget.RecycleViewDivider;
-import com.idengyun.statusrecyclerviewlib.StatusRecyclerView;
 import com.idengyun.usermodule.HRUser;
 import com.idengyun.usermodule.utils.SecondsTimer;
 import com.lzy.okgo.model.Response;
@@ -64,9 +64,13 @@ public class OderStatusListAdapter extends BaseQuickAdapter<OrderStatusBean, Bas
         TextView tv_operate2 = helper.getView(R.id.tv_operate2);
         TextView tv_order_type = helper.getView(R.id.tv_order_type);
         TextView tv_total_pay = helper.getView(R.id.tv_total_pay);
-        tv_total_pay.setText("¥" + item.orderAmount + "(含运费 ¥" + item.shippingPrice + ")");
+        TextView tv_total_pay_tag = helper.getView(R.id.tv_total_pay_tag);
+        String sAmount = DecimalFormatUtil.getFormatDecimal("0.00",Double.parseDouble(item.orderAmount));
+        String sShipping = DecimalFormatUtil.getFormatDecimal("0.00",Double.parseDouble(item.shippingPrice));
+        tv_total_pay.setText("¥" + sAmount + "(含运费 ¥" + sShipping + ")");
         tv_order_type.setText(item.orderType == 1 ? "零售订单" : "批发订单");
-        if (item.orderStatus == 5||item.orderStatus == 7) {
+        if (item.orderStatus == 7) {
+            tv_total_pay_tag.setText("实付总额：");
             ll_surplus_pay_time.setVisibility(View.GONE);
             ll_advanced_operate.setVisibility(View.VISIBLE);
             tv_order_status_status.setText("已完成");
@@ -85,6 +89,7 @@ public class OderStatusListAdapter extends BaseQuickAdapter<OrderStatusBean, Bas
                 }
             });
         } else if (item.orderStatus == 0) {
+            tv_total_pay_tag.setText("应付总额：");
             ll_surplus_pay_time.setVisibility(View.VISIBLE);
             ll_advanced_operate.setVisibility(View.VISIBLE);
             tv_order_status_status.setText("待付款");
@@ -105,17 +110,19 @@ public class OderStatusListAdapter extends BaseQuickAdapter<OrderStatusBean, Bas
             TextView tv_order_status_time_h = helper.getView(R.id.tv_order_status_time_h);
             TextView tv_order_status_time_m = helper.getView(R.id.tv_order_status_time_m);
             TextView tv_order_status_time_s = helper.getView(R.id.tv_order_status_time_s);
-            //todo 时间测试
             startTimer(item.orderId, item.orderStatus, tv_order_status_time_h, tv_order_status_time_m, tv_order_status_time_s);
         } else if (item.orderStatus == 3) {
+            tv_total_pay_tag.setText("实付总额：");
             ll_surplus_pay_time.setVisibility(View.GONE);
             ll_advanced_operate.setVisibility(View.GONE);
             tv_order_status_status.setText("代销中");
         } else if (item.orderStatus == 1) {
+            tv_total_pay_tag.setText("实付总额：");
             ll_surplus_pay_time.setVisibility(View.GONE);
             ll_advanced_operate.setVisibility(View.GONE);
             tv_order_status_status.setText("待发货");
         } else if (item.orderStatus == 2) {
+            tv_total_pay_tag.setText("实付总额：");
             ll_surplus_pay_time.setVisibility(View.GONE);
             ll_advanced_operate.setVisibility(View.VISIBLE);
             tv_order_status_status.setText("待收货");
@@ -134,9 +141,34 @@ public class OderStatusListAdapter extends BaseQuickAdapter<OrderStatusBean, Bas
                 }
             });
         } else if (item.orderStatus == 4) {
+            tv_total_pay_tag.setText("实付总额：");
             ll_surplus_pay_time.setVisibility(View.GONE);
             ll_advanced_operate.setVisibility(View.GONE);
+            tv_order_status_status.setText("待提货");
+        }else if (item.orderStatus == 5) {
             tv_order_status_status.setText("待评价");
+            tv_total_pay_tag.setText("实付总额：");
+            ll_surplus_pay_time.setVisibility(View.GONE);
+            ll_advanced_operate.setVisibility(View.VISIBLE);
+            tv_operate1.setText("查看物流");
+            tv_operate2.setText("我要评价");
+            tv_operate1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CheckLogisticsActivity.start(mContext, item.orderId);
+                }
+            });
+            tv_operate2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    EvaluateGoodsActivity.start(mContext, item.orderId);
+                }
+            });
+        }else if (item.orderStatus == 6) {
+            ll_surplus_pay_time.setVisibility(View.GONE);
+            ll_advanced_operate.setVisibility(View.GONE);
+            tv_order_status_status.setText("已取消");
+            tv_total_pay_tag.setText("应付总额：");
         }
     }
 
