@@ -25,9 +25,9 @@ public class SaveMainConfigUtil {
                     urlConfigBean.urlHead+urlConfigBean.urlTail);
         }
         //保存协议
-        for (int i = 0; i < mainConfig.protocolConfigs.size(); i++) {
-            ProtocolConfigs protocolConfigs = mainConfig.protocolConfigs.get(i);
-            SharedPreferencesUtil.saveData(Utils.getApp(), SpProtocol.spFileName,protocolConfigs.configKey,protocolConfigs.protocolId);
-        }
+//        for (int i = 0; i < mainConfig.protocolConfigs.size(); i++) {
+//            ProtocolConfigs protocolConfigs = mainConfig.protocolConfigs.get(i);
+//            SharedPreferencesUtil.saveData(Utils.getApp(), SpProtocol.spFileName,protocolConfigs.configKey,protocolConfigs.protocolId);
+//        }
     }
 }

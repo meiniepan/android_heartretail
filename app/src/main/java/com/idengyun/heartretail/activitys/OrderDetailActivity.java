@@ -53,8 +53,9 @@ import butterknife.OnClick;
 public class OrderDetailActivity extends BaseActivity implements NestedScrollView.OnScrollChangeListener {
     @BindView(R.id.fl_second_title2)
     View flBackView2;
-    @BindView(R.id.iv_order_detail_back2)
+    @BindView(R.id.tv_order_detail_back2)
     View backView2;
+
     @BindView(R.id.toolbar_title_order_detail)
     BaseToolBar toolBar;
     @BindView(R.id.ll_shop_choose2)
@@ -84,7 +85,8 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
     @BindView(R.id.tv_buyer_msg)
     TextView tvBuyerMsg;
     @BindView(R.id.tv_should_pay_tag)
-    TextView tvShouldPayTag;@BindView(R.id.tv_should_pay)
+    TextView tvShouldPayTag;
+    @BindView(R.id.tv_should_pay)
     TextView tvShouldPay;
     @BindView(R.id.tv_bottom_operate1)
     TextView tvBottomOperate1;
@@ -95,7 +97,8 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
     @BindView(R.id.ll_pay_about2)
     LinearLayout llPayAbout;
     @BindView(R.id.tv_residue_time1_tag)
-    TextView tvResidueTimeTag;@BindView(R.id.tv_residue_time1)
+    TextView tvResidueTimeTag;
+    @BindView(R.id.tv_residue_time1)
     TextView tvResidueTime;
     @BindView(R.id.tv_status_name)
     TextView tvStatusName;
@@ -108,7 +111,7 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
     private int dimension;
     private int orderStatus = 0;
 
-    public static void start(Context context, String orderId,int status) {
+    public static void start(Context context, String orderId, int status) {
         Intent starter = new Intent(context, OrderDetailActivity.class);
         starter.putExtra(Constants.ORDER_ID, orderId);
         starter.putExtra(Constants.ORDER_STATUS, status);
@@ -135,7 +138,7 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
     @Override
     protected void initViews(Bundle savedInstanceState) {
         orderId = getIntent().getStringExtra(Constants.ORDER_ID);
-        orderStatus = getIntent().getIntExtra(Constants.ORDER_STATUS,0);
+        orderStatus = getIntent().getIntExtra(Constants.ORDER_STATUS, 0);
         initStatus();
         getData();
         startTimer();
@@ -267,10 +270,10 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
         }
     }
 
-    @OnClick({R.id.iv_order_detail_back2, R.id.ll_dl_detail, R.id.tv_customer_service, R.id.tv_order_id_copy, R.id.tv_bottom_operate1, R.id.tv_bottom_operate2})
+    @OnClick({R.id.tv_order_detail_back2, R.id.ll_dl_detail, R.id.tv_customer_service, R.id.tv_order_id_copy, R.id.tv_bottom_operate1, R.id.tv_bottom_operate2})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.iv_order_detail_back2:
+            case R.id.tv_order_detail_back2:
                 finish();
                 break;
             case R.id.ll_dl_detail:
