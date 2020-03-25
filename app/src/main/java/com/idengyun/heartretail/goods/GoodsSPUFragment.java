@@ -22,9 +22,13 @@ import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.net.ImageApi;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
+import com.idengyun.heartretail.goods.helper.WebViewHelper;
 import com.idengyun.heartretail.model.response.GoodsDetailBean;
 import com.idengyun.heartretail.model.response.GoodsEvaluateBean;
 import com.idengyun.heartretail.viewmodel.GoodsViewModel;
+import com.tencent.smtt.sdk.WebSettings;
+import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
 import com.zhoubo07.bannerlib.ConvenientBanner;
 import com.zhoubo07.bannerlib.banner.SimpleImageBannerBean;
 import com.zhoubo07.bannerlib.banner.SimpleImageHolder;
@@ -171,6 +175,7 @@ public final class GoodsSPUFragment extends BaseFragment implements View.OnClick
         List<GoodsDetailBean.Data.Rule> ruleList = data.ruleList;
         List<GoodsDetailBean.Data.GoodsSpec> goodsSpecList = data.goodsSpecList;
         List<GoodsDetailBean.Data.GoodsSku> goodsSkuList = data.goodsSkuList;
+        String goodsDetail = data.goodsDetail;
 //        List<String> goodsDetailList = data.goodsDetailList;
 
 //        if (imageList == null ||
@@ -251,7 +256,11 @@ public final class GoodsSPUFragment extends BaseFragment implements View.OnClick
         tv_goods_service.setText(sb.subSequence(0, sb.length() - 1));
 
         /* 商品详情 */
-//        layout_goods_detail.removeAllViews();
+        layout_goods_detail.removeAllViews();
+
+        WebView webView = WebViewHelper.getWebView(getContext(), goodsDetail);
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(-1, -2);
+        layout_goods_detail.addView(webView, params);
 //        int width = SizeUtils.dp2px(345f);
 //        int height = SizeUtils.dp2px(281f);
 //        int topMargin = SizeUtils.dp2px(8f);
