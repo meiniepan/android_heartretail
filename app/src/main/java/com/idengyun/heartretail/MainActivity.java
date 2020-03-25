@@ -121,9 +121,9 @@ public final class MainActivity extends BaseActivity {
                 .hide(redPacketFragment)
                 .commit();
 
-        homeFragment.setUserVisibleHint(false);
+        /*homeFragment.setUserVisibleHint(false);
         redPacketFragment.setUserVisibleHint(false);
-        myFragment.setUserVisibleHint(true);
+        myFragment.setUserVisibleHint(true);*/
     }
 
     private void showRedPacketFragment() {
@@ -134,9 +134,9 @@ public final class MainActivity extends BaseActivity {
                 .hide(myFragment)
                 .commit();
 
-        homeFragment.setUserVisibleHint(false);
+        /*homeFragment.setUserVisibleHint(false);
         redPacketFragment.setUserVisibleHint(true);
-        myFragment.setUserVisibleHint(false);
+        myFragment.setUserVisibleHint(false);*/
     }
 
     private void showHomeFragment() {
@@ -147,8 +147,8 @@ public final class MainActivity extends BaseActivity {
                 .hide(myFragment)
                 .commit();
 
-        homeFragment.setUserVisibleHint(true);
+        /*homeFragment.setUserVisibleHint(true);
         redPacketFragment.setUserVisibleHint(false);
-        myFragment.setUserVisibleHint(false);
+        myFragment.setUserVisibleHint(false);*/
     }
 }

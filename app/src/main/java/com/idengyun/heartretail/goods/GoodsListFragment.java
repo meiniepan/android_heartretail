@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,8 +22,12 @@ import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.model.response.GoodsListBean;
 import com.idengyun.heartretail.viewmodel.GoodsViewModel;
 import com.idengyun.msgmodule.RVLoadMore;
+import com.idengyun.usermodule.HRUser;
+import com.idengyun.usermodule.LoginActivity;
+import com.idengyun.usermodule.VerifyDeviceActivity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -211,6 +216,17 @@ public final class GoodsListFragment extends BaseFragment implements SwipeRefres
 
         @Override
         public void onClick(View v) {
+            if (!HRUser.isLogin()) {
+                LoginActivity.start(v.getContext());
+                return;
+            }
+
+            if (!HRUser.isAuthentication()) {
+                VerifyDeviceActivity.start(v.getContext());
+                return;
+
+            }
+
             Object tag = v.getTag();
             if (tag instanceof GoodsListBean.Data.Goods) {
                 int goodsId = ((GoodsListBean.Data.Goods) tag).goodsId;
@@ -218,7 +234,14 @@ public final class GoodsListFragment extends BaseFragment implements SwipeRefres
                 Bundle extras = new Bundle();
                 extras.putInt("home_goods_id", goodsId);
                 extras.putInt("home_goods_type", goodsType);
-                HRActivity.start(v.getContext(), extras, GoodsSPUFragment.class, GoodsEvaluateFragment.class, GoodsDetailFragment.class, GoodsSpecFragment.class, GoodsServiceFragment.class);
+                List<Class<? extends Fragment>> list = Arrays.asList(
+                        GoodsSPUFragment.class,
+                        GoodsEvaluateFragment.class,
+                        GoodsDetailFragment.class,
+                        GoodsSpecFragment.class,
+                        GoodsServiceFragment.class
+                );
+                HRActivity.start(v.getContext(), extras, list);
             }
         }
 

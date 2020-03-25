@@ -86,7 +86,10 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (hidden) return;
-        if (HRUser.isLogin()) onLoadMore();
+        if (getUserVisibleHint()) {
+            setUserVisibleHint(false);
+            if (HRUser.isLogin()) onLoadMore();
+        }
     }
 
     @Override
@@ -247,12 +250,12 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
         private TextView tv_red_packet_date;
         private TextView tv_red_packet_out_money;
 
-        public FriendHolder(@NonNull View itemView) {
+        private FriendHolder(@NonNull View itemView) {
             super(itemView);
             findViewById(itemView);
         }
 
-        public void updateUI(RedPacketBean.Data.Friend friend) {
+        private void updateUI(RedPacketBean.Data.Friend friend) {
             String friendName = friend.friendName;
             String friendHeadImg = friend.friendHeadImg;
             String inviteTime = friend.inviteTime;

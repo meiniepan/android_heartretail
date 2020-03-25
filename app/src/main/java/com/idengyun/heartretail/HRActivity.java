@@ -1,5 +1,6 @@
 package com.idengyun.heartretail;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +10,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 import com.dengyun.baselibrary.base.activity.BaseActivity;
+
+import java.util.Collections;
+import java.util.List;
 
 import io.reactivex.annotations.NonNull;
 import io.reactivex.annotations.Nullable;
@@ -21,19 +25,11 @@ import io.reactivex.annotations.Nullable;
  */
 public class HRActivity extends BaseActivity {
 
-    public static void start(@Nullable Context context, @NonNull Class<? extends Fragment> fragmentClass) {
-        start(context, null, fragmentClass);
-    }
-
-    public static void start(@Nullable Context context, @Nullable Bundle extras, @NonNull Class<? extends Fragment> fragmentClass) {
-        start(context, extras, new Class[]{fragmentClass});
-    }
-
-    public static void start(@Nullable Context context, @Nullable Bundle extras, @NonNull Class<? extends Fragment>... classes) {
-        if (context == null || classes.length == 0) return;
+    public static void start(Context context, Bundle extras, @NonNull List<Class<? extends Fragment>> fClassList) {
+        if (context == null || fClassList.isEmpty()) return;
 
         StringBuilder sb = new StringBuilder();
-        for (Class<? extends Fragment> clazz : classes)
+        for (Class<? extends Fragment> clazz : fClassList)
             sb.append(clazz.getName()).append(lineSeparator);
 
         Intent starter = new Intent(context, HRActivity.class);
@@ -41,6 +37,36 @@ public class HRActivity extends BaseActivity {
         starter.setAction(action);
         if (extras != null) starter.putExtras(extras);
         context.startActivity(starter);
+    }
+
+    public static void start(Context context, Bundle extras, @NonNull Class<? extends Fragment> fClass) {
+        start(context, extras, Collections.singletonList(fClass));
+    }
+
+    public static void start(Context context, Class<? extends Fragment> fClass) {
+        start(context, null, fClass);
+    }
+
+    public static void startForResult(Activity activity, Bundle extras, @NonNull List<Class<? extends Fragment>> fClassList, int requestCode) {
+        if (activity == null || fClassList.isEmpty()) return;
+
+        StringBuilder sb = new StringBuilder();
+        for (Class<? extends Fragment> clazz : fClassList)
+            sb.append(clazz.getName()).append(lineSeparator);
+
+        Intent starter = new Intent(activity, HRActivity.class);
+        String action = sb.toString();
+        starter.setAction(action);
+        if (extras != null) starter.putExtras(extras);
+        activity.startActivityForResult(starter, requestCode);
+    }
+
+    public static void startForResult(Activity activity, Bundle extras, @NonNull Class<? extends Fragment> fClass, int requestCode) {
+        startForResult(activity, extras, Collections.singletonList(fClass), requestCode);
+    }
+
+    public static void startForResult(Activity activity, Class<? extends Fragment> fClass, int requestCode) {
+        startForResult(activity, null, fClass, requestCode);
     }
 
     public static void finish(@Nullable FragmentActivity fActivity) {
