@@ -18,6 +18,7 @@ import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.net.ImageApi;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
+import com.idengyun.heartretail.activitys.WithdrawActivity;
 import com.idengyun.heartretail.model.response.RedPacketBean;
 import com.idengyun.heartretail.viewmodel.RedPacketViewModel;
 import com.idengyun.msgmodule.RVLoadMore;
@@ -37,6 +38,7 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
 
     private View layout_red_packet_rule;
 
+    private View tv_red_packet_to_cash;
     private TextView tv_red_packet_0;
     private TextView tv_red_packet_1;
     private TextView tv_red_packet_2;
@@ -88,7 +90,7 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
         if (hidden) return;
         if (getUserVisibleHint()) {
             setUserVisibleHint(false);
-            if (HRUser.isLogin()) onLoadMore();
+            if (HRUser.isLogin()) onRefresh();
         }
     }
 
@@ -106,6 +108,8 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
 
         if (layout_red_packet_rule == v) {
             HRActivity.start(getContext(), InviteRuleDetailFragment.class);
+        } else if (tv_red_packet_to_cash == v) {
+            WithdrawActivity.start(v.getContext());
         } else if (tv_red_packet_more == v) {
 
         }
@@ -188,6 +192,7 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
     private void findViewById(@NonNull View view) {
         layout_red_packet_rule = view.findViewById(R.id.layout_red_packet_rule);
 
+        tv_red_packet_to_cash = view.findViewById(R.id.tv_red_packet_to_cash);
         tv_red_packet_0 = view.findViewById(R.id.tv_red_packet_0);
         tv_red_packet_1 = view.findViewById(R.id.tv_red_packet_1);
         tv_red_packet_2 = view.findViewById(R.id.tv_red_packet_2);
@@ -201,6 +206,7 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
 
         v_red_packet_dash_line.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         layout_red_packet_rule.setOnClickListener(this);
+        tv_red_packet_to_cash.setOnClickListener(this);
     }
 
     private static class FriendAdapter extends RecyclerView.Adapter {

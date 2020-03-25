@@ -18,6 +18,7 @@ import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.net.ImageApi;
 import com.dengyun.baselibrary.utils.GsonConvertUtil;
 import com.idengyun.msgmodule.beans.NoticeListBean;
+import com.idengyun.msgmodule.beans.NoticeStatusBean;
 import com.idengyun.msgmodule.viewmodel.NoticeViewModel;
 
 import java.util.ArrayList;
@@ -113,10 +114,15 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
         noticeViewModel.requestNoticeList(this, currentPage + 1, pageSize, notifyGroup);
     }
 
+    private void requestNoticeUpdateStatus(int notifyId, int status) {
+        if (noticeViewModel == null) return;
+        noticeViewModel.requestNoticeUpdateStatus(this, notifyId, status);
+    }
+
     private void init() {
         notifyGroup = getNotifyGroup();
         findViewById();
-        initViewModel();
+        observe();
 
 
         recycler_view.addOnScrollListener(onScrollListener);
@@ -124,7 +130,7 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
         recycler_view.setAdapter(noticeAdapter);
     }
 
-    private void initViewModel() {
+    private void observe() {
         FragmentActivity activity = getActivity();
         if (activity == null) return;
         if (noticeViewModel == null) {
@@ -133,6 +139,12 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
                 @Override
                 public void onChanged(@Nullable NoticeListBean noticeListBean) {
                     updateUI(noticeListBean);
+                }
+            });
+            noticeViewModel.getNoticeStatus().observe(this, new Observer<NoticeStatusBean>() {
+                @Override
+                public void onChanged(@Nullable NoticeStatusBean noticeStatusBean) {
+
                 }
             });
         }
@@ -214,13 +226,30 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
         }
     }
 
+    private abstract class BaseHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        public BaseHolder(@NonNull View itemView) {
+            super(itemView);
+        }
+
+        @Override
+        public void onClick(View v) {
+            Object tag = v.getTag();
+            if (!(tag instanceof NoticeListBean.Data.Content)) return;
+            NoticeListBean.Data.Content content = ((NoticeListBean.Data.Content) tag);
+            int messageId = content.messageId;
+            int status = content.status;
+            requestNoticeUpdateStatus(messageId, status);
+        }
+    }
+
     private static class Holder0 extends RecyclerView.ViewHolder {
 
         private TextView tv_notice_0_push_time;
         private TextView tv_notice_0_title;
         private TextView tv_notice_0_detail;
 
-        public Holder0(@NonNull View itemView) {
+        private Holder0(@NonNull View itemView) {
             super(itemView);
             findViewById(itemView);
         }
@@ -251,7 +280,7 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
         private TextView tv_notice_1_title;
         private ImageView iv_notice_1_url;
 
-        public Holder1(@NonNull View itemView) {
+        private Holder1(@NonNull View itemView) {
             super(itemView);
             findViewById(itemView);
         }
@@ -287,7 +316,7 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
         private TextView tv_notice_2_goods_spec;
         private TextView tv_notice_2_goods_num;
 
-        public Holder2(@NonNull View itemView) {
+        private Holder2(@NonNull View itemView) {
             super(itemView);
             findViewById(itemView);
         }
@@ -342,7 +371,7 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
         private TextView tv_notice_4_invalid;
         private TextView tv_notice_4_detail;
 
-        public Holder4(@NonNull View itemView) {
+        private Holder4(@NonNull View itemView) {
             super(itemView);
             findViewById(itemView);
         }
@@ -379,7 +408,7 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
         private ImageView iv_notice_type_11_url;
         private TextView tv_notice_type_11_detail;
 
-        public Holder11(@NonNull View itemView) {
+        private Holder11(@NonNull View itemView) {
             super(itemView);
             findViewById(itemView);
         }

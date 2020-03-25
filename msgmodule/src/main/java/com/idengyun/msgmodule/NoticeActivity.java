@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.activity.BaseActivity;
 import com.idengyun.msgmodule.beans.NoticeCountBean;
-import com.idengyun.msgmodule.beans.NoticeStatusBean;
 import com.idengyun.msgmodule.viewmodel.NoticeViewModel;
 
 import java.util.List;
@@ -40,7 +39,6 @@ public final class NoticeActivity extends BaseActivity implements TabLayout.OnTa
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (NoticeConst.ACTION_NOTICE_API.equals(action)) requestNoticeCount();
-            // requestNoticeUpdateStatus();
         }
     };
 
@@ -108,12 +106,6 @@ public final class NoticeActivity extends BaseActivity implements TabLayout.OnTa
                     updateNoticeCount(noticeCountBean);
                 }
             });
-            noticeViewModel.getNoticeStatus().observe(this, new Observer<NoticeStatusBean>() {
-                @Override
-                public void onChanged(@Nullable NoticeStatusBean noticeStatusBean) {
-
-                }
-            });
         }
     }
 
@@ -125,10 +117,6 @@ public final class NoticeActivity extends BaseActivity implements TabLayout.OnTa
             TabHolder holder = noticeCountArray.get(data.notifyGroup);
             if (holder != null) holder.updateNoticeCount(data.counts);
         }
-    }
-
-    private void requestNoticeUpdateStatus() {
-        if (noticeViewModel != null) noticeViewModel.requestNoticeUpdateStatus(this, -1, 1);
     }
 
     private void requestNoticeCount() {

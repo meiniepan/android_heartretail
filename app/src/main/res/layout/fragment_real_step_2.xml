@@ -178,7 +178,7 @@
                         <ImageView
                             android:layout_width="241dp"
                             android:layout_height="164dp"
-                            android:background="@drawable/ic_id_card_true"
+                            android:background="@drawable/ic_bank_card_true"
                             android:padding="14dp" />
 
                         <com.dengyun.baselibrary.widgets.imageview.RoundImageView
@@ -186,7 +186,6 @@
                             android:layout_width="212dp"
                             android:layout_height="136dp"
                             android:layout_gravity="center"
-                            android:background="@drawable/ic_bank_card_true"
                             app:radius="12dp" />
                     </FrameLayout>
 
@@ -198,7 +197,7 @@
                         <ImageView
                             android:layout_width="241dp"
                             android:layout_height="164dp"
-                            android:background="@drawable/ic_id_card_true"
+                            android:background="@drawable/ic_bank_card_false"
                             android:padding="14dp" />
 
                         <com.dengyun.baselibrary.widgets.imageview.RoundImageView
@@ -206,7 +205,6 @@
                             android:layout_width="212dp"
                             android:layout_height="136dp"
                             android:layout_gravity="center"
-                            android:background="@drawable/ic_bank_card_false"
                             app:radius="12dp" />
                     </FrameLayout>
                 </LinearLayout>
