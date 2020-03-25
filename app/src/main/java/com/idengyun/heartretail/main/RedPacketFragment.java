@@ -19,6 +19,7 @@ import com.dengyun.baselibrary.net.ImageApi;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.activitys.WithdrawActivity;
+import com.idengyun.heartretail.model.response.RedPacketFriendBean;
 import com.idengyun.heartretail.model.response.RedPacketBean;
 import com.idengyun.heartretail.viewmodel.RedPacketViewModel;
 import com.idengyun.msgmodule.RVLoadMore;
@@ -88,21 +89,23 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (hidden) return;
+        if (!HRUser.isLogin()) return;
         if (getUserVisibleHint()) {
             setUserVisibleHint(false);
-            if (HRUser.isLogin()) onRefresh();
+            requestAPI();
+            onRefresh();
         }
     }
 
     @Override
     public void onClick(View v) {
         if (!HRUser.isLogin()) {
-            startLoginActivity();
+            LoginActivity.start(getContext());
             return;
         }
 
         if (!HRUser.isAuthentication()) {
-            startDeviceVerifyActivity();
+            VerifyDeviceActivity.start(getContext());
             return;
         }
 
@@ -125,17 +128,14 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
         onLoadMore();
     }
 
-    private void startDeviceVerifyActivity() {
-        VerifyDeviceActivity.start(getContext());
-    }
-
-    private void startLoginActivity() {
-        LoginActivity.start(getContext());
-    }
-
     private void onLoadMore() {
         if (redPacketViewModel == null) return;
-        redPacketViewModel.requestRedPacketDetail(this, currentPage + 1, pageSize);
+        redPacketViewModel.requestRedPacketFriendList(this, currentPage + 1, pageSize);
+    }
+
+    private void requestAPI() {
+        if (redPacketViewModel == null) return;
+        redPacketViewModel.requestRedPacketDetail(this);
     }
 
     private void observe() {
@@ -149,29 +149,40 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
                     updateUI(redPacketBean);
                 }
             });
+            redPacketViewModel.getRedPacketFriendList().observe(this, new Observer<RedPacketFriendBean>() {
+                @Override
+                public void onChanged(@Nullable RedPacketFriendBean redPacketFriendBean) {
+                    updateUI(redPacketFriendBean);
+                }
+            });
         }
     }
 
     @MainThread
     private void updateUI(@Nullable RedPacketBean redPacketBean) {
-        onScrollListener.setLoadingMore(false);
         if (redPacketBean == null) return;
         RedPacketBean.Data data = redPacketBean.data;
-        RedPacketBean.Data.Packet packet = data.packet;
-        List<RedPacketBean.Data.Friend> friends = data.friends;
 
-        String canExchange = packet.canExchange;
-        String total = packet.total;
-        String hasExchange = packet.hasExchange;
-        String willSend = packet.willSend;
-        int level = packet.level;
-        String percent = packet.percent;
+        String canExchange = data.withdrawableCash;
+        String total = data.total;
+        String hasExchange = data.withdrawnCash;
+        String willSend = data.caseTobeIssued;
+        int level = data.level;
+        String percent = data.percent;
         tv_red_packet_0.setText("¥" + canExchange);
         tv_red_packet_1.setText("¥" + total);
         tv_red_packet_2.setText("¥" + hasExchange);
         tv_red_packet_3.setText("¥" + willSend);
         tv_red_packet_level.setText(level + "级");
         tv_red_packet_percent.setText(percent + "%");
+    }
+
+    @MainThread
+    private void updateUI(@Nullable RedPacketFriendBean redPacketFriendBean) {
+        onScrollListener.setLoadingMore(false);
+        if (redPacketFriendBean == null) return;
+        RedPacketFriendBean.Data data = redPacketFriendBean.data;
+        List<RedPacketFriendBean.Data.Friend> friends = data.friends;
 
         totalSize = data.total;
         totalPage = data.pages;
@@ -181,7 +192,7 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
         if (currentPage == 1) friendAdapter.friendList.clear();
         friendAdapter.friendList.addAll(friends);
         if (!onScrollListener.isCanLoadMore()) {
-            RedPacketBean.Data.Friend friend = new RedPacketBean.Data.Friend();
+            RedPacketFriendBean.Data.Friend friend = new RedPacketFriendBean.Data.Friend();
             friend.friendId = -1;
             friendAdapter.friendList.add(friend);
         }
@@ -212,7 +223,7 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
     private static class FriendAdapter extends RecyclerView.Adapter {
 
         private LayoutInflater inflater;
-        final List<RedPacketBean.Data.Friend> friendList = new ArrayList<>();
+        final List<RedPacketFriendBean.Data.Friend> friendList = new ArrayList<>();
 
         @NonNull
         @Override
@@ -231,7 +242,7 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
             if (getItemViewType(position) != -1) {
-                RedPacketBean.Data.Friend friend = friendList.get(position);
+                RedPacketFriendBean.Data.Friend friend = friendList.get(position);
                 FriendHolder friendHolder = (FriendHolder) holder;
                 friendHolder.updateUI(friend);
             }
@@ -261,7 +272,7 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
             findViewById(itemView);
         }
 
-        private void updateUI(RedPacketBean.Data.Friend friend) {
+        private void updateUI(RedPacketFriendBean.Data.Friend friend) {
             String friendName = friend.friendName;
             String friendHeadImg = friend.friendHeadImg;
             String inviteTime = friend.inviteTime;

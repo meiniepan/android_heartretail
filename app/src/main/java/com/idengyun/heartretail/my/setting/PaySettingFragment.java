@@ -44,15 +44,17 @@ public final class PaySettingFragment extends BaseFragment implements View.OnCli
     }
 
     private void startAccountActivity() {
-        HRActivity.start(getContext(), AccountFragment.class);
+        HRActivity.start(getContext(), PayPwdModifyFragment.class);
     }
 
     private void startPersonalActivity() {
-        HRActivity.start(getContext(), PersonalFragment.class);
+        HRActivity.start(getContext(), PayPwdModifyFragment.class);
     }
 
     private void findViewById(View view) {
         layout_pay_setting_modify_pwd = view.findViewById(R.id.layout_pay_setting_modify_pwd);
         layout_pay_setting_forget_pwd = view.findViewById(R.id.layout_pay_setting_forget_pwd);
+        layout_pay_setting_modify_pwd.setOnClickListener(this);
+        layout_pay_setting_forget_pwd.setOnClickListener(this);
     }
 }

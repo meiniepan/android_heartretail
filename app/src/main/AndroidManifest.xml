@@ -39,7 +39,10 @@
         <activity android:name=".shop.ShopDetailActivity" />
         <activity android:name=".activitys.FirstActivity" />
         <activity android:name=".shop.ShopListActivity" />
-        <activity android:name=".HRActivity" />
+        <activity
+            android:name=".HRActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
         <activity android:name=".MainActivity" />
         <activity android:name=".activitys.ChoosePayModeActivity" />
         <activity android:name=".activitys.PaySuccessActivity" />

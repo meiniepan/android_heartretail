@@ -297,6 +297,11 @@ public class SpMainConfigConstants {
         return getMainConfigUrl("packetRecord");
     }
 
+    /* 查看红包好友列表 */
+    public static String queryPacketFriends() {
+        return getMainConfigUrl("queryPacketFriends");
+    }
+
     /* ================================= 余额 ================================= */
 
     /* 我的余额 */
