@@ -196,7 +196,7 @@ public final class MyFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void startMyAccountActivity() {
-        // TODO: 2020/3/12
+        MyBalanceActivity.start(getActivity());
     }
 
     private void startDeviceVerifyActivity() {
