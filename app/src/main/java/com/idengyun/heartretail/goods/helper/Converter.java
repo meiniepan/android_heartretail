@@ -17,21 +17,28 @@ import io.reactivex.annotations.Nullable;
 public final class Converter {
 
     private final GoodsDetailBean.Data mData;
+
     private final List<SKU> mSKUList;
     private final List<Section> mSectionList;
+    private final List<Section> mUnSelectedSectionList;
+    private final List<Section> mSelectedSectionList;
+    private final List<String> mSelectedSpecIDList;
+
     private SKU mDefaultSKU;
     private SKU mSelectedSKU;
-
-    @Nullable
-    private List<String> selectedSpecIDList;
 
     public Converter(@NonNull GoodsDetailBean.Data data) {
         mData = data;
 
+        mSKUList = new ArrayList<>();
+        mSectionList = new ArrayList<>();
+        mUnSelectedSectionList = new ArrayList<>();
+        mSelectedSectionList = new ArrayList<>();
+        mSelectedSpecIDList = new ArrayList<>();
+
         List<GoodsDetailBean.Data.GoodsSpec> goodsSpecList = data.goodsSpecList;
         List<GoodsDetailBean.Data.GoodsSku> goodsSkuList = data.goodsSkuList;
 
-        mSKUList = new ArrayList<>();
         for (final GoodsDetailBean.Data.GoodsSku goodsSku : goodsSkuList) {
             SKU sku = goodsSkuToSKU(goodsSku);
             // println(sku.specList);
@@ -44,7 +51,6 @@ public final class Converter {
         }
 
         /* DataModel to ViewModel */
-        mSectionList = new ArrayList<>();
         for (int i = 0; i < goodsSpecList.size(); i++) {
             GoodsDetailBean.Data.GoodsSpec goodsSpec = goodsSpecList.get(i);
 
@@ -72,14 +78,33 @@ public final class Converter {
         return mData;
     }
 
+    public int getGoodsType() {
+        return mData.goodsType;
+    }
+
     @NonNull
-    public List<SKU> getSKUList() {
+    public List<? extends SKU> getSKUList() {
         return mSKUList;
     }
 
     @NonNull
-    public List<Section> getSectionList() {
+    public List<? extends Section> getSectionList() {
         return mSectionList;
+    }
+
+    @NonNull
+    public List<? extends Section> getUnSelectedSectionList() {
+        return mUnSelectedSectionList;
+    }
+
+    @NonNull
+    public List<? extends Section> getSelectedSectionList() {
+        return mSelectedSectionList;
+    }
+
+    @NonNull
+    public List<? extends String> getSelectedSpecIDList() {
+        return mSelectedSpecIDList;
     }
 
     @Nullable
@@ -92,36 +117,32 @@ public final class Converter {
         return mSelectedSKU;
     }
 
-    @Nullable
-    public List<String> getSelectedSpecIDList() {
-        return selectedSpecIDList;
-    }
-
     public void executeSpecMutex() {
         /* 1.搜索未被选中的和已被选中的 */
-        List<Section> unSelectedSectionList = new ArrayList<>();
-        List<Section> selectedSectionList = new ArrayList<>();
+        mUnSelectedSectionList.clear();
+        mSelectedSectionList.clear();
         for (Section section : mSectionList) {
-            if (!section.checked) unSelectedSectionList.add(section);
-            else selectedSectionList.add(section);
+            if (!section.checked) mUnSelectedSectionList.add(section);
+            else mSelectedSectionList.add(section);
         }
 
-        selectedSpecIDList = null;
+        mSelectedSpecIDList.clear();
         mSelectedSKU = null;
-        if (selectedSectionList.size() == mSectionList.size()) {
+        if (mSelectedSectionList.size() == mSectionList.size()) {
             /* 被选中的specItemIdList */
-            selectedSpecIDList = new ArrayList<>();
-            for (Section section : mSectionList) {
-                if (!section.checked) continue;
+            for (Section section : mSelectedSectionList) {
                 for (Cell cell : section.cellList) {
-                    if (cell.checked) selectedSpecIDList.add(cell.specItemId);
+                    if (cell.checked) {
+                        mSelectedSpecIDList.add(cell.specItemId);
+                        break;
+                    }
                 }
             }
 
             /* 被选中的SKU */
-            if (!selectedSpecIDList.isEmpty()) {
+            if (!mSelectedSpecIDList.isEmpty()) {
                 for (SKU sku : mSKUList) {
-                    if (sku.specIDList.containsAll(selectedSpecIDList)) {
+                    if (sku.specIDList.containsAll(mSelectedSpecIDList)) {
                         mSelectedSKU = sku;
                         break;
                     }
@@ -130,16 +151,16 @@ public final class Converter {
         }
 
         /* 2.遍历未被选中选区，设置是否启用 */
-        for (Section section : unSelectedSectionList) {
+        for (Section section : mUnSelectedSectionList) {
             for (Cell cell : section.cellList) {
-                cell.enabled = isEnabled(selectedSectionList, cell);
+                cell.enabled = isEnabled(mSelectedSectionList, cell);
             }
         }
 
         /* 3.遍历被选中选区，假设被选中的中有一个是未选中的，模仿步骤2 */
-        for (int i = 0; i < selectedSectionList.size(); i++) {
-            Section unSelectedSection = selectedSectionList.get(i);
-            ArrayList<Section> selectedSections = new ArrayList<>(selectedSectionList);
+        for (int i = 0; i < mSelectedSectionList.size(); i++) {
+            Section unSelectedSection = mSelectedSectionList.get(i);
+            ArrayList<Section> selectedSections = new ArrayList<>(mSelectedSectionList);
             selectedSections.remove(unSelectedSection);
 
             for (Cell cell : unSelectedSection.cellList) {

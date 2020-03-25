@@ -46,6 +46,7 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
     private GoodsSpecAdapter mGoodsSpecAdapter;
     private final List<Section> mSectionList = new ArrayList<>();
 
+    private GoodsViewModel goodsViewModel;
     private Converter converter;
 
     @Override
@@ -61,6 +62,7 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        observe();
         mGoodsSpecAdapter = new GoodsSpecAdapter();
         recycler_view.setAdapter(mGoodsSpecAdapter);
 
@@ -72,16 +74,20 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
         } catch (JSONException e) {
             e.printStackTrace();
         }*/
+    }
 
+    private void observe() {
         FragmentActivity activity = getActivity();
-        assert activity != null;
-
-        GoodsViewModel.getInstance(activity).getGoodsDetail().observe(this, new Observer<GoodsDetailBean>() {
-            @Override
-            public void onChanged(@Nullable GoodsDetailBean goodsDetailBean) {
-                updateUI(goodsDetailBean);
-            }
-        });
+        if (activity == null) return;
+        if (goodsViewModel == null) {
+            goodsViewModel = GoodsViewModel.getInstance(activity);
+            goodsViewModel.getGoodsDetail().observe(this, new Observer<GoodsDetailBean>() {
+                @Override
+                public void onChanged(@Nullable GoodsDetailBean goodsDetailBean) {
+                    updateUI(goodsDetailBean);
+                }
+            });
+        }
     }
 
     @Override
@@ -89,7 +95,7 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
         if (getView() == v) {
             Fragment fragment = HRActivity.findFragmentByTag(getActivity(), GoodsSPUFragment.class.getName());
             if (fragment instanceof GoodsSPUFragment) {
-                if (converter.getData().goodsType == 1) {
+                if (converter.getGoodsType() == 1) {
                     SKU selectedSKU = converter.getSelectedSKU();
                     if (selectedSKU != null) {
                         ((GoodsSPUFragment) fragment).setWholesaleFlag(selectedSKU.wholesaleFlag);
@@ -107,23 +113,24 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
     private void updateUI(@Nullable GoodsDetailBean goodsDetailBean) {
         if (goodsDetailBean == null) return;
         GoodsDetailBean.Data data = goodsDetailBean.data;
-
         converter = new Converter(data);
-        List<Section> sectionList = converter.getSectionList();
-        SKU defaultSKU = converter.getDefaultSKU();
 
+        List<? extends Section> sectionList = converter.getSectionList();
         mSectionList.clear();
         mSectionList.addAll(sectionList);
+        mGoodsSpecAdapter.notifyDataSetChanged();
 
         /* 更新其他UI元素 */
-        if (defaultSKU != null) updateUIBySku(defaultSKU);
+        SKU defaultSKU = converter.getDefaultSKU();
+        updateUIBySku(defaultSKU);
     }
 
-    private void updateUIBySku(@NonNull SKU sku) {
-        String skuImgUrl = sku.skuImgUrl;
-        String goodsPrice = sku.goodsPrice;
-        int goodsCount = sku.goodsCount;
-        int canBuyCount = sku.canBuyCount;
+    private void updateUIBySku(@Nullable SKU selectedSKU) {
+        if (selectedSKU == null) return;
+        String skuImgUrl = selectedSKU.skuImgUrl;
+        String goodsPrice = selectedSKU.goodsPrice;
+        int goodsCount = selectedSKU.goodsCount;
+        int canBuyCount = selectedSKU.canBuyCount;
 
         ImageApi.displayImage(iv_goods_spec_logo.getContext(), iv_goods_spec_logo, skuImgUrl);
         tv_goods_spec_price.setText(goodsPrice);
@@ -137,8 +144,7 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
 
     /* 是否可以立即购买 */
     public boolean isCanBuy() {
-        List<String> selectedSpecIDList = converter.getSelectedSpecIDList();
-        return selectedSpecIDList != null && selectedSpecIDList.size() == mSectionList.size();
+        return converter.getSelectedSectionList().size() == converter.getSectionList().size();
     }
 
     /* 确认订单界面使用 */
@@ -155,21 +161,22 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
     }
 
     private String getGoodsSpecList() {
-        String specList = null;
-        int count = 0;
         StringBuilder sb = new StringBuilder();
-        for (Section section : mSectionList) {
-            for (Cell cell : section.cellList) {
-                if (cell.checked) {
-                    ++count;
-                    sb.append(cell.specItemName).append("/");
+
+        List<? extends Section> selectedSectionList = converter.getSelectedSectionList();
+        List<? extends Section> sectionList = converter.getSectionList();
+        if (selectedSectionList.size() == sectionList.size()) {
+            for (Section section : selectedSectionList) {
+                for (Cell cell : section.cellList) {
+                    if (cell.checked) {
+                        sb.append(cell.specItemName).append("/");
+                        break;
+                    }
                 }
             }
         }
-        if (count == mSectionList.size() && sb.length() > 0) {
-            specList = sb.substring(0, sb.length() - 1);
-        }
-        return specList;
+
+        return sb.length() > 0 ? sb.substring(0, sb.length() - 1) : null;
     }
 
     private void findViewById(@NonNull View view) {
@@ -204,7 +211,7 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
             return mSectionList.size();
         }
 
-        class GoodsSpecHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private class GoodsSpecHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
             private TextView tv_goods_spec_name;
             private FlexboxLayout flexbox_layout;
@@ -233,16 +240,8 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
                 notifyDataSetChanged();
 
                 /* 更新其他UI元素 */
-                List<String> selectedSpecIDList = converter.getSelectedSpecIDList();
-                if (selectedSpecIDList != null && selectedSpecIDList.size() == getItemCount()) {
-                    List<SKU> skuList = converter.getSKUList();
-                    for (SKU sku : skuList) {
-                        if (!selectedSpecIDList.retainAll(sku.specIDList)) {
-                            updateUIBySku(sku);
-                            break;
-                        }
-                    }
-                }
+                SKU selectedSKU = converter.getSelectedSKU();
+                updateUIBySku(selectedSKU);
             }
 
             @MainThread

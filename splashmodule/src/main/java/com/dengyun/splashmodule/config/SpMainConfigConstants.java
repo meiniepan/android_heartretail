@@ -67,15 +67,9 @@ public class SpMainConfigConstants {
         return getMainConfigUrl("evaluationList");
     }
 
-    /* 评价商品 */
-    public static String saveEvaluation() {
-        return getMainConfigUrl("saveEvaluation");
-    }
-
     /* 我的评价列表 */
-    public static String todo1() {
-        // TODO: 2020/3/9
-        return getMainConfigUrl("todo1");
+    public static String myEvaluationList() {
+        return getMainConfigUrl("myEvaluationList");
     }
 
     /* 我的评价详情 */
@@ -85,9 +79,13 @@ public class SpMainConfigConstants {
     }
 
     /* 评价订单商品 */
-    public static String todo3() {
-        // TODO: 2020/3/9
-        return getMainConfigUrl("todo3");
+    public static String saveEvaluation() {
+        return getMainConfigUrl("saveEvaluation");
+    }
+
+    /* 订单商品待评价列表 */
+    public static String queryTodoEvaluationList() {
+        return getMainConfigUrl("queryTodoEvaluationList");
     }
 
     /* ================================== 门店 ================================== */
