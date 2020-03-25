@@ -23,7 +23,8 @@ import java.io.IOException;
  */
 public class OCRUtils {
 
-        private static String appcode = "c88ac3ef5117409e860c7958e72f376c";
+//        private static String appcode = "c88ac3ef5117409e860c7958e72f376c";
+        private static String appcode = "6d690f2e76b34d3b8ed7f8433c5416ed";//个人
 //    private static String appcode = "524fb872670d4a508fb6b446d8ecf064";//妃子校
 
     /**
@@ -84,6 +85,24 @@ public class OCRUtils {
             }
         });
     }
+
+    /*public static void recoIdCard(boolean isLocal, String imagePath){
+        String url = "https://idcardocrc.shumaidata.com/getidcardocrc";
+        NetOption.Builder netBuilder = NetOption.newBuilder(url)
+                .headers("Authorization", "APPCODE " + appcode); //你自己的AppCode
+        if (isLocal) {
+            netBuilder.params("image", conventImageBase64(imagePath));// 图片二进制数据的base64编码
+        } else {
+            netBuilder.params("url", imagePath);//图片url
+        }
+        NetOption netOption = netBuilder.projectType(ProjectType.NONE).build();
+        NetApi.getString(RequestMethod.POST_FORM,netOption, new JsonCallback<String>(netOption) {
+            @Override
+            public void onSuccess(Response<String> response) {
+
+            }
+        });
+    }*/
 
     /**
      * 识别银行卡

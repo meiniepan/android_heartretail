@@ -125,7 +125,8 @@ public final class Step2Fragment extends BaseFragment implements View.OnClickLis
             return;
         }
 
-        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.uploads())
+        // TODO: 2020-03-24 先不做上传，ocr完全调通之后再放开
+        /*NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.uploads())
                 .fragment(this)
                 .clazz(UploadListBean.class)
                 .isShowDialog(false)
@@ -144,7 +145,7 @@ public final class Step2Fragment extends BaseFragment implements View.OnClickLis
                     startOCRRecognize();
                 }
             }
-        });
+        });*/
     }
 
     /* 开始OCR识别 */

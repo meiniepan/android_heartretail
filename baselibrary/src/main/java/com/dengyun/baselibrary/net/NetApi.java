@@ -53,6 +53,10 @@ public class NetApi {
         return getFormDataSync(netOption);
     }
 
+    public static void getString(@RequestMethod int requestMethod,NetOption netOption, JsonCallback<String> jsonCallback) {
+        getData(requestMethod,netOption, jsonCallback);
+    }
+
     public static <T> void getData(NetOption netOption, JsonCallback<T> jsonCallback) {
         getData(RequestMethod.POST_JSON, netOption, jsonCallback);
     }
