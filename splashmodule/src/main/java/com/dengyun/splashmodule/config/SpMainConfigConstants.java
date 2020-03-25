@@ -30,6 +30,11 @@ public class SpMainConfigConstants {
         return getMainConfigUrl(null);
     }
 
+    /* 升级版本查询 */
+    public static String queryVersion() {
+        return getMainConfigUrl("queryVersion");
+    }
+
     /* ================================== 协议 ================================== */
 
     /* 规则详情 */

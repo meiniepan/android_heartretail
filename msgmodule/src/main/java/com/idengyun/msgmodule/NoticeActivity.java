@@ -239,7 +239,8 @@ public final class NoticeActivity extends BaseActivity implements TabLayout.OnTa
         }
 
         private void updateNoticeCount(int noticeCount) {
-            tv_notice_count.setText(noticeCount + "+");
+            String text = noticeCount > 999 ? "999+" : "" + noticeCount;
+            tv_notice_count.setText(text);
             tv_notice_count.setVisibility(noticeCount > 0 ? View.VISIBLE : View.INVISIBLE);
         }
     }
