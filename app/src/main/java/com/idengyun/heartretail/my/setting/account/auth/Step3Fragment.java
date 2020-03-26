@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.utils.ToastUtils;
 import com.idengyun.heartretail.R;
+import com.idengyun.heartretail.model.request.KVRealVerify;
 import com.idengyun.heartretail.model.response.RealVerifyBean;
 import com.idengyun.heartretail.viewmodel.SettingViewModel;
 import com.idengyun.usermodule.HRConst;
@@ -45,6 +46,7 @@ public final class Step3Fragment extends BaseFragment implements View.OnClickLis
 
     private SecondsTimer timer;
     private SettingViewModel settingViewModel;
+    private KVRealVerify kvRealVerify = new KVRealVerify();
 
     @Override
     public int getLayoutId() {
@@ -103,7 +105,7 @@ public final class Step3Fragment extends BaseFragment implements View.OnClickLis
     /* 请求实名认证 */
     private void requestRealVerify() {
         if (settingViewModel == null) return;
-        //settingViewModel.requestRealVerify(this,);
+        settingViewModel.requestRealVerify(this, kvRealVerify);
     }
 
     /* 发送手机验证码API */

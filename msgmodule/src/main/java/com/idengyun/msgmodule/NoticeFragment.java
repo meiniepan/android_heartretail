@@ -191,10 +191,13 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
             } else if (11 == viewType) {
                 View itemView = inflater.inflate(R.layout.fragment_notice_item_11, parent, false);
                 return new Holder11(itemView);
-            } else {
+            } else if (-1 == viewType) {
                 View itemView = inflater.inflate(R.layout.view_type_no_more, parent, false);
                 return new RecyclerView.ViewHolder(itemView) {
                 };
+            } else {
+                View itemView = inflater.inflate(R.layout.fragment_notice_item_11, parent, false);
+                return new Holder11(itemView);
             }
         }
 
@@ -239,6 +242,24 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
             NoticeListBean.Data.Content content = ((NoticeListBean.Data.Content) tag);
             int messageId = content.messageId;
             int status = content.status;
+            int recordEvenType = content.recordEvenType;
+            /* 1、URL链接2、订单详情3、余额4、红包5、升级提醒6、富文本 */
+            switch (recordEvenType) {
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+                case 5:
+                    break;
+                case 6:
+                    break;
+                default:
+                    break;
+            }
             requestNoticeUpdateStatus(messageId, status);
         }
     }
