@@ -3,10 +3,12 @@ package com.dengyun.baselibrary.net.deal;
 import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.constants.ProjectType;
 import com.dengyun.baselibrary.utils.GsonConvertUtil;
+import com.dengyun.baselibrary.utils.ObjectUtils;
 import com.dengyun.baselibrary.utils.SharedPreferencesUtil;
 import com.dengyun.baselibrary.utils.Utils;
 import com.dengyun.baselibrary.utils.encode.EncryptUtils;
 import com.dengyun.baselibrary.utils.phoneapp.AppUtils;
+import com.orhanobut.logger.Logger;
 import com.sensorsdata.analytics.android.sdk.SensorsDataAPI;
 import com.sensorsdata.analytics.android.sdk.util.SensorsDataUtils;
 
@@ -177,7 +179,14 @@ public class DealParamsUtil {
             StringBuilder builder = new StringBuilder();
             for (Object key : array) {
                 Object value = paramsMap.get(key);
-                builder.append(key).append("=").append(value).append("&");
+
+                if (ObjectUtils.isPrimitive(value) || value instanceof String){
+                    //判断是否是基本数据类型或者String类型
+                    builder.append(key).append("=").append(value).append("&");
+                }else {
+                    //其他类型先转为Json字符串
+                    builder.append(key).append("=").append(GsonConvertUtil.toJson(value)).append("&");
+                }
             }
             /* MD5加密参数 */
             String parameters = builder.substring(0, builder.length() - 1);
