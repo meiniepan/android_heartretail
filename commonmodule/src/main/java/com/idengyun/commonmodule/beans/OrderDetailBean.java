@@ -13,6 +13,7 @@ public class OrderDetailBean {
     public class OrderDetailBeanBody {
         public String orderId;
         public String payOrderId;
+        public String payCode;
         public int userId;
         public int orderStatus;
         public int shopId;

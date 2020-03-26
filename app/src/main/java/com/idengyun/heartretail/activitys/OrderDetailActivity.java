@@ -107,6 +107,12 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
     TextView tvResidueTime;
     @BindView(R.id.tv_status_name)
     TextView tvStatusName;
+    @BindView(R.id.tv_pay_code)
+    TextView tvPayCode;
+    @BindView(R.id.tv_pay_type)
+    TextView tvPayType;
+    @BindView(R.id.tv_pay_time2)
+    TextView tvPayTime;
     @BindView(R.id.nsv_order_detail)
     NestedScrollView nestedScrollView;
     private SecondsTimer timer;
@@ -247,8 +253,12 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
     private void initUI(OrderDetailBean.OrderDetailBeanBody data) {
         if (orderStatus == 0) {
             startTimer();
-            tvOrderProtocol.setText(data.proxySalesName);
+            tvOrderProtocol.setText("《" + data.proxySalesName + "》");
             tvShouldPay.setText("¥" + data.orderAmount);
+        } else {
+            tvPayCode.setText(data.payOrderId);
+            tvPayType.setText(data.payCode);
+            tvPayTime.setText(data.payTime);
         }
         tvOrderId.setText("订单号" + orderId);
         tvOrderId2.setText(orderId);
@@ -280,7 +290,7 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
 
                 @Override
                 public void onFinish() {
-                    finish();
+
                 }
             });
 
