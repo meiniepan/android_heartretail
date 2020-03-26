@@ -167,13 +167,13 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
         String total = data.total;
         String hasExchange = data.withdrawnCash;
         String willSend = data.caseTobeIssued;
-        int level = data.level;
+        String levelName = data.levelName;
         String percent = data.percent;
         tv_red_packet_0.setText("¥" + canExchange);
         tv_red_packet_1.setText("¥" + total);
         tv_red_packet_2.setText("¥" + hasExchange);
         tv_red_packet_3.setText("¥" + willSend);
-        tv_red_packet_level.setText(level + "级");
+        tv_red_packet_level.setText(levelName + "级");
         tv_red_packet_percent.setText(percent + "%");
     }
 

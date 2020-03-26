@@ -9,8 +9,10 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.beans.LogisticalMessageBean;
+import com.idengyun.heartretail.beans.ShippingListBean;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @创建人：Burning
@@ -18,13 +20,13 @@ import java.util.ArrayList;
  * @备注：
  */
 
-public class LogisticalmsgAdapter extends BaseQuickAdapter<LogisticalMessageBean, BaseViewHolder> {
-    public LogisticalmsgAdapter(Context context, ArrayList<LogisticalMessageBean> datas, int layoutId) {
+public class LogisticalmsgAdapter extends BaseQuickAdapter<ShippingListBean.LogisticsTraces, BaseViewHolder> {
+    public LogisticalmsgAdapter(Context context, List<ShippingListBean.LogisticsTraces> datas, int layoutId) {
         super(layoutId, datas);
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, LogisticalMessageBean item) {
+    protected void convert(BaseViewHolder helper, ShippingListBean.LogisticsTraces item) {
         TextView tv_trace_info = helper.getView(R.id.tv_trace_info); //物流信息
         TextView tv_trace_time = helper.getView(R.id.tv_trace_time); //更新时间
         View v_bottom_line = helper.getView(R.id.v_bottom_line); //底部横线（最下面一条没有）
@@ -33,8 +35,8 @@ public class LogisticalmsgAdapter extends BaseQuickAdapter<LogisticalMessageBean
         ImageView iv_state = helper.getView(R.id.iv_state); //圆球图片
 
 
-        tv_trace_info.setText(item.processinfo);
-        tv_trace_time.setText(item.upload_time);
+        tv_trace_info.setText(item.AcceptStation);
+        tv_trace_time.setText(item.AcceptTime);
 
         if (mData.size() > 1 && helper.getAdapterPosition() == mData.size() - 1) {
             v_bottom_line.setVisibility(View.GONE);

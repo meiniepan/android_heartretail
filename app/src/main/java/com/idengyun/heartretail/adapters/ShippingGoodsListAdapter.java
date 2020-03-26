@@ -24,7 +24,7 @@ public class ShippingGoodsListAdapter extends BaseQuickAdapter<ShippingListBean.
     @Override
     protected void convert(BaseViewHolder helper, ShippingListBean.Goods item) {
         helper.setText(R.id.tv_goods_title1, item.goodsName)
-                .setText(R.id.tv_goods_spec1, item.specKeyName)
+                .setText(R.id.tv_goods_spec1, item.skuItemvalue)
                 .setText(R.id.tv_quantity1, "X" + item.goodsNum)
                 .setText(R.id.tv_price1, "¥" + item.goodsPrice);
         ImageView imageView = helper.getView(R.id.iv_goods_icon);

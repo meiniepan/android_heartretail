@@ -17,7 +17,7 @@ public final class RedPacketBean {
         public String total;
         public String withdrawnCash;
         public String caseTobeIssued;
-        public int level;
+        public String levelName;
         public String percent;
 
         /*public int current;

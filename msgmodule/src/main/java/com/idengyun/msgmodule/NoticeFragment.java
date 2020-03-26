@@ -191,10 +191,13 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
             } else if (11 == viewType) {
                 View itemView = inflater.inflate(R.layout.fragment_notice_item_11, parent, false);
                 return new Holder11(itemView);
-            } else {
+            } else if (-1 == viewType) {
                 View itemView = inflater.inflate(R.layout.view_type_no_more, parent, false);
                 return new RecyclerView.ViewHolder(itemView) {
                 };
+            } else {
+                View itemView = inflater.inflate(R.layout.fragment_notice_item_11, parent, false);
+                return new Holder11(itemView);
             }
         }
 
@@ -211,6 +214,10 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
             } else if (4 == viewType) {
                 ((Holder4) holder).updateUI(content);
             } else if (11 == viewType) {
+                ((Holder11) holder).updateUI(content);
+            } else if (-1 == viewType) {
+                // do nothing
+            } else {
                 ((Holder11) holder).updateUI(content);
             }
         }
@@ -239,6 +246,24 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
             NoticeListBean.Data.Content content = ((NoticeListBean.Data.Content) tag);
             int messageId = content.messageId;
             int status = content.status;
+            int recordEvenType = content.recordEvenType;
+            /* 1、URL链接2、订单详情3、余额4、红包5、升级提醒6、富文本 */
+            switch (recordEvenType) {
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+                case 5:
+                    break;
+                case 6:
+                    break;
+                default:
+                    break;
+            }
             requestNoticeUpdateStatus(messageId, status);
         }
     }
@@ -246,6 +271,7 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
     private static class Holder0 extends RecyclerView.ViewHolder {
 
         private TextView tv_notice_0_push_time;
+        private View v_notice_0_dot;
         private TextView tv_notice_0_title;
         private TextView tv_notice_0_detail;
 
@@ -258,17 +284,20 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
         private void updateUI(NoticeListBean.Data.Content content) {
             String pushTime = content.pushTime;
             String title = content.title;
+            int status = content.status;
             NoticeListBean.Data.Content.Type0 type0 = GsonConvertUtil.fromJson(content.content, NoticeListBean.Data.Content.Type0.class);
             String contentTitle = type0.contentTitle;
             String contentDetail = type0.contentDetail;
 
             tv_notice_0_push_time.setText(pushTime);
+            v_notice_0_dot.setVisibility(status == 0 ? View.VISIBLE : View.INVISIBLE);
             tv_notice_0_title.setText(contentTitle);
             tv_notice_0_detail.setText(contentDetail);
         }
 
         private void findViewById(@NonNull View itemView) {
             tv_notice_0_push_time = itemView.findViewById(R.id.tv_notice_0_push_time);
+            v_notice_0_dot = itemView.findViewById(R.id.v_notice_0_dot);
             tv_notice_0_title = itemView.findViewById(R.id.tv_notice_0_title);
             tv_notice_0_detail = itemView.findViewById(R.id.tv_notice_0_detail);
         }
@@ -277,6 +306,7 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
     private static class Holder1 extends RecyclerView.ViewHolder {
 
         private TextView tv_notice_1_push_time;
+        private View v_notice_1_dot;
         private TextView tv_notice_1_title;
         private ImageView iv_notice_1_url;
 
@@ -289,18 +319,21 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
         private void updateUI(NoticeListBean.Data.Content content) {
             String pushTime = content.pushTime;
             String title = content.title;
+            int status = content.status;
             String json = content.content;
             NoticeListBean.Data.Content.Type1 type1 = GsonConvertUtil.fromJson(json, NoticeListBean.Data.Content.Type1.class);
             String contentTitle = type1.contentTitle;
             String contentDetail = type1.contentDetail;
 
             tv_notice_1_push_time.setText(pushTime);
+            v_notice_1_dot.setVisibility(status == 0 ? View.VISIBLE : View.INVISIBLE);
             tv_notice_1_title.setText(contentTitle);
             ImageApi.displayImage(iv_notice_1_url.getContext(), iv_notice_1_url, contentDetail);
         }
 
         private void findViewById(@NonNull View itemView) {
             tv_notice_1_push_time = itemView.findViewById(R.id.tv_notice_1_push_time);
+            v_notice_1_dot = itemView.findViewById(R.id.v_notice_1_dot);
             tv_notice_1_title = itemView.findViewById(R.id.tv_notice_1_title);
             iv_notice_1_url = itemView.findViewById(R.id.iv_notice_1_url);
         }
@@ -309,7 +342,8 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
     private static class Holder2 extends RecyclerView.ViewHolder {
 
         private TextView tv_notice_2_push_time;
-        private TextView tv_tv_notice_2_title;
+        private View v_notice_2_dot;
+        private TextView tv_notice_2_title;
         private TextView tv_notice_2_click;
         private ImageView iv_notice_2_goods_url;
         private TextView tv_notice_2_goods_title;
@@ -325,13 +359,15 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
         private void updateUI(NoticeListBean.Data.Content content) {
             String pushTime = content.pushTime;
             String title = content.title;
+            int status = content.status;
             NoticeListBean.Data.Content.Type2 type2 = GsonConvertUtil.fromJson(content.content, NoticeListBean.Data.Content.Type2.class);
             String contentTitle = type2.contentTitle;
             String contentDetail = type2.contentDetail;
             List<NoticeListBean.Data.Content.Type2.Goods> goodsList = type2.goodsList;
 
             tv_notice_2_push_time.setText(pushTime);
-            tv_tv_notice_2_title.setText(contentTitle);
+            v_notice_2_dot.setVisibility(status == 0 ? View.VISIBLE : View.INVISIBLE);
+            tv_notice_2_title.setText(contentTitle);
             if (!goodsList.isEmpty()) {
                 NoticeListBean.Data.Content.Type2.Goods goods = goodsList.get(0);
                 String goodsName = goods.goodsName;
@@ -354,7 +390,8 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
 
         private void findViewById(@NonNull View itemView) {
             tv_notice_2_push_time = itemView.findViewById(R.id.tv_notice_2_push_time);
-            tv_tv_notice_2_title = itemView.findViewById(R.id.tv_tv_notice_2_title);
+            v_notice_2_dot = itemView.findViewById(R.id.v_notice_2_dot);
+            tv_notice_2_title = itemView.findViewById(R.id.tv_notice_2_title);
             tv_notice_2_click = itemView.findViewById(R.id.tv_notice_2_click);
             iv_notice_2_goods_url = itemView.findViewById(R.id.iv_notice_2_goods_url);
             tv_notice_2_goods_title = itemView.findViewById(R.id.tv_notice_2_goods_title);
@@ -366,6 +403,7 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
     private static class Holder4 extends RecyclerView.ViewHolder {
 
         private TextView tv_notice_4_push_time;
+        private View v_notice_4_dot;
         private TextView tv_notice_4_title;
         private ImageView iv_notice_4_url;
         private TextView tv_notice_4_invalid;
@@ -380,6 +418,7 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
         private void updateUI(NoticeListBean.Data.Content content) {
             String pushTime = content.pushTime;
             String title = content.title;
+            int status = content.status;
             String json = content.content;
             NoticeListBean.Data.Content.Type4 type4 = GsonConvertUtil.fromJson(json, NoticeListBean.Data.Content.Type4.class);
             String contentTitle = type4.contentTitle;
@@ -387,6 +426,7 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
             String imgUrl = type4.imgUrl;
 
             tv_notice_4_push_time.setText(pushTime);
+            v_notice_4_dot.setVisibility(status == 0 ? View.VISIBLE : View.INVISIBLE);
             tv_notice_4_title.setText(contentTitle);
             tv_notice_4_detail.setText(contentDetail);
             ImageApi.displayImage(iv_notice_4_url.getContext(), iv_notice_4_url, imgUrl);
@@ -395,6 +435,7 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
 
         private void findViewById(@NonNull View itemView) {
             tv_notice_4_push_time = itemView.findViewById(R.id.tv_notice_4_push_time);
+            v_notice_4_dot = itemView.findViewById(R.id.v_notice_4_dot);
             tv_notice_4_title = itemView.findViewById(R.id.tv_notice_4_title);
             iv_notice_4_url = itemView.findViewById(R.id.iv_notice_4_url);
             tv_notice_4_invalid = itemView.findViewById(R.id.tv_notice_4_invalid);
@@ -405,6 +446,7 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
     private static class Holder11 extends RecyclerView.ViewHolder {
 
         private TextView tv_notice_11_push_time;
+        private View v_notice_11_dot;
         private ImageView iv_notice_type_11_url;
         private TextView tv_notice_type_11_detail;
 
@@ -417,18 +459,21 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
         private void updateUI(NoticeListBean.Data.Content content) {
             String pushTime = content.pushTime;
             String title = content.title;
-            String json = content.content;
+            int status = content.status;
+            /*String json = content.content;
             NoticeListBean.Data.Content.Type11 type11 = GsonConvertUtil.fromJson(json, NoticeListBean.Data.Content.Type11.class);
             String contentDetail = type11.contentDetail;
-            String imgUrl = type11.imgUrl;
+            String imgUrl = type11.imgUrl;*/
 
             tv_notice_11_push_time.setText(pushTime);
-            ImageApi.displayImage(iv_notice_type_11_url.getContext(), iv_notice_type_11_url, imgUrl);
-            tv_notice_type_11_detail.setText(contentDetail);
+            v_notice_11_dot.setVisibility(status == 0 ? View.VISIBLE : View.INVISIBLE);
+            /*ImageApi.displayImage(iv_notice_type_11_url.getContext(), iv_notice_type_11_url, imgUrl);
+            tv_notice_type_11_detail.setText(contentDetail);*/
         }
 
         private void findViewById(@NonNull View itemView) {
             tv_notice_11_push_time = itemView.findViewById(R.id.tv_notice_11_push_time);
+            v_notice_11_dot = itemView.findViewById(R.id.v_notice_11_dot);
             iv_notice_type_11_url = itemView.findViewById(R.id.iv_notice_type_11_url);
             tv_notice_type_11_detail = itemView.findViewById(R.id.tv_notice_type_11_detail);
         }

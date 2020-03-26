@@ -13,6 +13,7 @@ import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
+import com.idengyun.heartretail.model.request.KVRealVerify;
 import com.idengyun.heartretail.model.response.MobileBindBean;
 import com.idengyun.heartretail.model.response.PersonalDataBean;
 import com.idengyun.heartretail.model.response.PwdModifyBean;
@@ -217,18 +218,12 @@ public final class SettingViewModel extends ViewModel {
     }
 
     /* 实名认证 */
-    public void requestRealVerify(Fragment fragment, String mobile, String nationality, String certificateType, String certificateCode, String bankCode, String verifyCode) {
+    public void requestRealVerify(Fragment fragment, KVRealVerify kvRealVerify) {
         NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.authIdentity())
                 .fragment(fragment)
                 .isShowDialog(true)
                 .clazz(RealVerifyBean.class)
-                .params("mobile", mobile)
-                .params("nationality", nationality)
-                .params("certificateType", certificateType)
-                .params("certificateCode", certificateCode)
-                .params("bankCode", bankCode)
-                .params("identifyCode", verifyCode)
-                .params("userId", HRUser.getId())
+                .params(kvRealVerify.toMap())
                 .build();
         NetApi.getData(netOption, new JsonCallback<RealVerifyBean>(netOption) {
             @Override
