@@ -7,7 +7,10 @@ import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.baselibrary.net.constants.ProjectType;
+import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.baselibrary.utils.phoneapp.AppUtils;
+import com.dengyun.splashmodule.beans.CustomUpdateBean;
+import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.google.gson.reflect.TypeToken;
 import com.idengyun.updatelib.bean.UpdateBean;
 import com.idengyun.updatelib.listener.UpdateDataLoader;
@@ -27,36 +30,47 @@ public class MyUpdateLoader implements UpdateDataLoader {
                                   String requestUrl,
                                   boolean isShowDialog,
                                   final UpdateDataLoaderCallback callback) {
-        // TODO: 2020-03-02 临时方案先不请求更新接口
-        UpdateBean updateBean = new UpdateBean();
-        updateBean.setIsUpdate(0);
-        updateBean.setIsForce(0);
-        callback.onSuccess(updateBean);
-
-        /*Type type = new TypeToken<ApiBean<UpdateBean>>() {}.getType();
-        NetOption netOption = NetOption.newBuilder(requestUrl)
-                .isShowDialog(isShowDialog)
-                .projectType(ProjectType.NONE)
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.queryVersion())
                 .activity(activity)
-                .type(type)
-                .params("appFlag", "fzx")
-                .params("client", "android")
-                .params("versionName", AppUtils.getAppVersionName())
-                .params("versionCode", String.valueOf(AppUtils.getAppVersionCode()))
+                .type(new TypeToken<ApiBean<CustomUpdateBean>>() {
+                }.getType())
+                .isShowDialog(false)
                 .build();
-        NetApi.<ApiBean<UpdateBean>>getData(netOption, new JsonCallback<ApiBean<UpdateBean>>(netOption) {
-            @Override
-            public void onSuccess(Response<ApiBean<UpdateBean>> response) {
-                if (null != response && null != response.body() && null != response.body().getData()) {
-                    callback.onSuccess(response.body().getData());
-                }
-            }
+        NetApi.<ApiBean<CustomUpdateBean>>getData(RequestMethod.GET, netOption,
+                new JsonCallback<ApiBean<CustomUpdateBean>>(netOption) {
+                    @Override
+                    public void onSuccess(Response<ApiBean<CustomUpdateBean>> response) {
+                        CustomUpdateBean customUpdateBean = response.body().data;
+                        UpdateBean updateBean = new UpdateBean();
+                        if (null == customUpdateBean || customUpdateBean.isNewAppversion == 1) {
+                            //升级的data没有信息 或者 没有新版本,  不升级
+                            updateBean.setIsUpdate(0);
+                            updateBean.setIsForce(0);
+                        } else {
+                            //设置升级字段--有新版本
+                            updateBean.setIsUpdate(1);
+                            ////设置升级字段--升级信息
+                            updateBean.setVersionName(customUpdateBean.verNewno);
+                            updateBean.setTitle(customUpdateBean.verDes);
+                            updateBean.setMessage(customUpdateBean.verContent);
+                            updateBean.setApkUrl(customUpdateBean.verUpdateurl);
+                            updateBean.setApkSize("");
+                            if (customUpdateBean.verStatus == 0) {
+                                //设置升级字段--非强更
+                                updateBean.setIsForce(0);
+                            } else {
+                                //设置升级字段--强更
+                                updateBean.setIsForce(1);
+                            }
+                        }
+                        callback.onSuccess(updateBean);
+                    }
 
-            @Override
-            public void handleError(Response<ApiBean<UpdateBean>> response) {
-                //处理请求错误，这里去掉默认处理，重写此方法空实现
-            }
-        });*/
+                    @Override
+                    public void handleError(Response<ApiBean<CustomUpdateBean>> response) {
+                        super.handleError(response);
+                    }
+                });
     }
 
     @Override

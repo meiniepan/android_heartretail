@@ -8,6 +8,7 @@ package com.idengyun.heartretail;
 public class Constants {
     public static final String ORDER_STATUS_BEAN = "order_status_bean";
     public static final String ORDER_ID = "order_id";
+    public static final String SHIPPING_BEAN = "shipping_bean";
     public static final String ORDER_STATUS = "order_status";
     public static final int REQUEST_CODE_PERSONAL = 1001;
     /*public static final int REQUEST_CODE_REAL_ID_CARD_TRUE = 2001;

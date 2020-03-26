@@ -6,19 +6,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.activity.BaseActivity;
+import com.dengyun.baselibrary.net.ImageApi;
 import com.dengyun.baselibrary.utils.ToastUtils;
 import com.idengyun.heartretail.Constants;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.adapters.LogisticalStatusAdapter;
 import com.idengyun.heartretail.adapters.LogisticalmsgAdapter;
 import com.idengyun.heartretail.beans.LogisticalBean;
-import com.idengyun.heartretail.beans.LogisticalMessageBean;
 import com.idengyun.heartretail.beans.LogisticalStatusBean;
+import com.idengyun.heartretail.beans.ShippingListBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,10 +44,7 @@ public class LogisticsDetailActivity extends BaseActivity {
     TextView tvLogisticsIdCopy;
     @BindView(R.id.tv_logistics_phone)
     TextView tvLogisticsPhone;
-    @BindView(R.id.tv_order_status_shop_name)
-    TextView tvOrderStatusShopName;
-    @BindView(R.id.tv_order_status_status)
-    TextView tvOrderStatusStatus;
+
     @BindView(R.id.rlv_logistical_status)
     RecyclerView rlvLogisticalStatus;
     @BindView(R.id.lv_logistical)
@@ -55,11 +54,12 @@ public class LogisticsDetailActivity extends BaseActivity {
     private List<LogisticalStatusBean> logisticalStatusBeanList;
     private LogisticalStatusAdapter logisticalStatusAdapter;
     private LogisticalmsgAdapter adapter;
-    private ArrayList<LogisticalMessageBean> list = new ArrayList<>();
+    private ArrayList<ShippingListBean.LogisticsTraces> list = new ArrayList<>();
+    ShippingListBean.ShippingBean data;
 
-    public static void start(Context context, String orderId) {
+    public static void start(Context context, ShippingListBean.ShippingBean bean) {
         Intent starter = new Intent(context, LogisticsDetailActivity.class);
-        starter.putExtra(Constants.ORDER_ID, orderId);
+        starter.putExtra(Constants.SHIPPING_BEAN, bean);
         context.startActivity(starter);
     }
     @Override
@@ -69,7 +69,16 @@ public class LogisticsDetailActivity extends BaseActivity {
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
-        orderId = getIntent().getStringExtra(Constants.ORDER_ID);
+        data = getIntent().getParcelableExtra(Constants.SHIPPING_BEAN);
+        initUI();
+        initAdapter();
+        initLogisticalStatus();
+    }
+
+    private void initUI() {
+        ImageApi.displayImage(this, ivGoods3, data.goods.get(0).originalImg);
+        tvLogisticsCompanyName.setText(data.shippingName);
+        tvLogisticsId.setText(data.shippingCode);
         initAdapter();
         initLogisticalStatus();
     }
@@ -90,25 +99,40 @@ public class LogisticsDetailActivity extends BaseActivity {
 
     private void initAdapter() {
         lvLogistical.setLayoutManager(new LinearLayoutManager(this));
-        LogisticalMessageBean bean = new LogisticalMessageBean();
-        bean.processinfo = "快件已在【亦庄开发区】签收，签收人：前台，如\n" +
-                "有疑问请电联：13112345678";
-        bean.upload_time="2019-12-07 14:31:44";
-        list.add(bean);
-        list.add(bean);
-        list.add(bean);
-        list.add(bean);
-        adapter = new LogisticalmsgAdapter(this, list, R.layout.item_lv_logisticalmessage_layout);
+        adapter = new LogisticalmsgAdapter(this, data.logisticsTraces, R.layout.item_lv_logisticalmessage_layout);
         lvLogistical.setAdapter(adapter);
     }
 
     private void initLogisticalStatus() {
+        int status_1 = 0;
+        int status_2 = 0;
+        int status_3 = 0;
+        int status_4 = 0;
+        int status_5 = 0;
+        String action = data.logisticsTraces.get(data.logisticsTraces.size() - 1).Action;
+        if (!TextUtils.isEmpty(action)) {
+            if (action.equals("1")) {
+                status_1 = 1;
+            } else if (action.equals("2")) {
+                status_2 = 1;
+            } else if (action.equals("201")) {
+                status_2 = 1;
+            } else if (action.equals("202")) {
+                status_3 = 1;
+            } else if (action.equals("301")) {
+                status_4 = 1;
+            } else if (action.equals("302")) {
+                status_4 = 1;
+            } else if (action.equals("304")) {
+                status_4 = 1;
+            }
+        }
         logisticalStatusBeanList = new ArrayList<>();
-        logisticalStatusBeanList.add(new LogisticalStatusBean("已发货", 0));
-        logisticalStatusBeanList.add(new LogisticalStatusBean("运输中", 1));
-        logisticalStatusBeanList.add(new LogisticalStatusBean("派件中", 0));
-        logisticalStatusBeanList.add(new LogisticalStatusBean("已签收", 0));
-        logisticalStatusBeanList.add(new LogisticalStatusBean("已提货", 0));
+        logisticalStatusBeanList.add(new LogisticalStatusBean("已发货", status_1));
+        logisticalStatusBeanList.add(new LogisticalStatusBean("运输中", status_2));
+        logisticalStatusBeanList.add(new LogisticalStatusBean("派件中", status_3));
+        logisticalStatusBeanList.add(new LogisticalStatusBean("已签收", status_4));
+        logisticalStatusBeanList.add(new LogisticalStatusBean("已提货", status_5));
         rlvLogisticalStatus.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         logisticalStatusAdapter = new LogisticalStatusAdapter(this, (ArrayList<LogisticalStatusBean>) logisticalStatusBeanList, R.layout.item_logistical_status);
         rlvLogisticalStatus.setAdapter(logisticalStatusAdapter);
@@ -116,7 +140,4 @@ public class LogisticsDetailActivity extends BaseActivity {
 
     }
 
-    private void initViewData(LogisticalBean data) {
-
-    }
 }

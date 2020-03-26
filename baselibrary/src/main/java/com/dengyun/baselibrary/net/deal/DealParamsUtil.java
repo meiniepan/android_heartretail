@@ -74,25 +74,24 @@ public class DealParamsUtil {
             Map queryMap = netOption.getParams();
             //添加公共参数
             setHRPublicParam(queryMap);
-            //if (queryMap.isEmpty()) return;
             if (netOption.getUrl().contains("?")) return;
-            if (queryMap.get("sign") != null) queryMap.remove("sign");
 
-            //整理参数拼接
-            StringBuilder builder = new StringBuilder().append("?");
             /* 真实请求参数 */
             Object[] array = queryMap.keySet().toArray();
             Arrays.sort(array);
+            //整理参数拼接
+            StringBuilder builder = new StringBuilder().append("?");
             for (Object key : array) {
                 Object value = queryMap.get(key);
                 builder.append(key).append("=").append(value).append("&");
             }
             /* MD5加密参数 */
+            //去掉sbd开头的"?"和结尾的"&"
             String parameters = builder.substring(1, builder.length() - 1);
             String sign = EncryptUtils.stringToMD5(parameters + "xls");
-            builder.append("sign").append("=").append(sign);
+            netOption.addHeaders("sign", sign);
 
-            String newUrl = netOption.getUrl() + builder.toString();
+            String newUrl = netOption.getUrl() + builder.substring(0, builder.length() - 1);
             netOption.setUrl(newUrl);
         } else {
             //其他项目的暂时没有配置get方式的拼接处理
