@@ -26,6 +26,7 @@ import com.dengyun.baselibrary.utils.ToastUtils;
 import com.dengyun.baselibrary.utils.phoneapp.AppUtils;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.google.gson.reflect.TypeToken;
+import com.idengyun.commonmodule.beans.BaseGoodsBean;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.adapters.OderStatusGoodsListAdapter;
 import com.idengyun.heartretail.beans.ConfirmOrderReqBean;
@@ -162,14 +163,51 @@ public class ConfirmOrderActivity extends BaseActivity {
     }
 
     private void initData() {
-
         order_confirm_goods_img_url=getIntent().getStringExtra("order_confirm_goods_img_url");
         order_confirm_goods_title=getIntent().getStringExtra("order_confirm_goods_title");
         order_confirm_goods_spec_list=getIntent().getStringExtra("order_confirm_goods_spec_list");
         order_confirm_goods_price=getIntent().getStringExtra("order_confirm_goods_price");
         order_confirm_goods_count=getIntent().getIntExtra("order_confirm_goods_count",1);
         orderType=getIntent().getIntExtra("order_confirm_goods_type",1);
+        getShippingPrice();
 //        orderType = "2";
+    }
+
+    private void getShippingPrice() {
+        HashMap map = new HashMap();
+        map.put("version", AppUtils.getAppVersionName());
+        map.put("userId", TextUtils.isEmpty(HRUser.getId()) ? "1" : HRUser.getId());
+        map.put("isUsePacket", "0");
+        map.put("goodsType", orderType);
+        map.put("orderType", 0);
+        BaseGoodsBean goodsBean = new BaseGoodsBean();
+        goodsBean.goodsId = 0;
+        goodsBean.goodsSkuId = 0;
+        goodsBean.goodsNum = order_confirm_goods_count;
+        goodsBean.goodsType = orderType+"";
+        List<BaseGoodsBean> list = new ArrayList<>();
+        list.add(goodsBean);
+        map.put("goodsSkuEntityList", list);
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.calculatePrice())
+                .activity(this)
+                .params(map)
+                .isShowDialog(true)
+                .clazz(ApiBean.class)
+                .build();
+
+        NetApi.getData(netOption, new JsonCallback<ApiBean>(netOption) {
+            @Override
+            public void onSuccess(Response<ApiBean> response) {
+                ApiBean<ConfirmOrderRspBean> body = response.body();
+                ToastUtils.showShort("运费");
+
+            }
+
+            @Override
+            public void onError(Response<ApiBean> response) {
+                super.onError(response);
+            }
+        });
     }
 
     private void initRecycler() {

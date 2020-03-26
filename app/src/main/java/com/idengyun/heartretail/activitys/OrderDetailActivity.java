@@ -25,6 +25,7 @@ import com.dengyun.baselibrary.utils.phoneapp.AppUtils;
 import com.dengyun.baselibrary.widgets.toolbar.BaseToolBar;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.google.gson.reflect.TypeToken;
+import com.idengyun.commonmodule.beans.OrderDetailBean;
 import com.idengyun.commonmodule.beans.OrderStatusBean;
 import com.idengyun.heartretail.Constants;
 import com.idengyun.heartretail.R;
@@ -74,6 +75,8 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
     TextView tvOrderFreight;
     @BindView(R.id.tv_order_red_packet_deduction)
     TextView tvOrderRedPacketDeduction;
+    @BindView(R.id.tv_order_should_total_pay_tag)
+    TextView tvOrderShouldTotalPayTag;
     @BindView(R.id.tv_order_should_total_pay)
     TextView tvOrderShouldTotalPay;
     @BindView(R.id.tv_order_id2)
@@ -92,6 +95,8 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
     TextView tvBottomOperate1;
     @BindView(R.id.tv_bottom_operate2)
     TextView tvBottomOperate2;
+    @BindView(R.id.ll_protocol_)
+    LinearLayout llProtocol;
     @BindView(R.id.ll_bottom)
     LinearLayout llBottom;
     @BindView(R.id.ll_pay_about2)
@@ -102,15 +107,21 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
     TextView tvResidueTime;
     @BindView(R.id.tv_status_name)
     TextView tvStatusName;
+    @BindView(R.id.tv_pay_code)
+    TextView tvPayCode;
+    @BindView(R.id.tv_pay_type)
+    TextView tvPayType;
+    @BindView(R.id.tv_pay_time2)
+    TextView tvPayTime;
     @BindView(R.id.nsv_order_detail)
     NestedScrollView nestedScrollView;
     private SecondsTimer timer;
     OrderStatusBean dataSource;
-    OrderStatusBean data;
+    OrderDetailBean.OrderDetailBeanBody data;
     private String orderId;
     private int dimension;
     private int orderStatus = 0;
-    List<OrderStatusBean.GoodsBean> goodsData = new ArrayList<>();
+    List<OrderDetailBean.GoodsBean> goodsData = new ArrayList<>();
     OderDetailGoodsListAdapter adapter;
 
     public static void start(Context context, String orderId, int status) {
@@ -144,7 +155,6 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
         initStatus();
         initRecyclerView();
         getData();
-        startTimer();
     }
 
     private void initRecyclerView() {
@@ -174,7 +184,9 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
             tvResidueTime.setVisibility(View.VISIBLE);
             llShopChoose.setVisibility(View.GONE);
             llPayAbout.setVisibility(View.GONE);
+            llProtocol.setVisibility(View.VISIBLE);
             tvStatusName.setText("待付款");
+            tvOrderShouldTotalPayTag.setText("应付总额");
             tvBottomOperate1.setText("取消订单");
             tvBottomOperate2.setText("立即付款");
             tvBottomOperate1.setOnClickListener(new View.OnClickListener() {
@@ -216,7 +228,7 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
     }
 
     private void getData() {
-        Type type = new TypeToken<ApiBean<OrderStatusBean>>() {
+        Type type = new TypeToken<ApiBean<OrderDetailBean>>() {
         }.getType();
         NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.queryOrderDetail())
                 .activity(this)
@@ -227,11 +239,10 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
                 .type(type)
                 .build();
 
-        NetApi.getData(RequestMethod.GET, netOption, new JsonCallback<ApiBean<OrderStatusBean>>(netOption) {
+        NetApi.getData(RequestMethod.GET, netOption, new JsonCallback<ApiBean<OrderDetailBean>>(netOption) {
             @Override
-            public void onSuccess(Response<ApiBean<OrderStatusBean>> response) {
-                ApiBean<OrderStatusBean> body = response.body();
-                data = body.data;
+            public void onSuccess(Response<ApiBean<OrderDetailBean>> response) {
+                data = response.body().data.order;
                 if (data != null) {
                     initUI(data);
                 }
@@ -239,21 +250,36 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
         });
     }
 
-    private void initUI(OrderStatusBean data) {
+    private void initUI(OrderDetailBean.OrderDetailBeanBody data) {
+        if (orderStatus == 0) {
+            startTimer();
+            tvOrderProtocol.setText("《" + data.proxySalesName + "》");
+            tvShouldPay.setText("¥" + data.orderAmount);
+        } else {
+            tvPayCode.setText(data.payOrderId);
+            tvPayType.setText(data.payCode);
+            tvPayTime.setText(data.payTime);
+        }
         tvOrderId.setText("订单号" + orderId);
         tvOrderId2.setText(orderId);
+        tvOrderTotal.setText("¥" + data.totalAmount);
+        tvOrderFreight.setText("¥" + data.shippingPrice);
+        tvOrderRedPacketDeduction.setText("¥" + data.couponPrice);
+        tvOrderShouldTotalPay.setText("¥" + data.orderAmount);
+        tvOrderTime.setText(data.createTime);
 
+        tvBuyerMsg.setText(data.userRemark);
         setRecyclerView(data);
     }
 
-    private void setRecyclerView(OrderStatusBean data) {
+    private void setRecyclerView(OrderDetailBean.OrderDetailBeanBody data) {
         goodsData.addAll(data.orderGoods);
         srGoods.notifyDataSetChange();
     }
 
     private void startTimer() {
         if (timer == null) {
-            timer = new SecondsTimer(24 * 60 * 60, new SecondsTimer.Callback() {
+            timer = new SecondsTimer(data.leftTime, new SecondsTimer.Callback() {
                 @Override
                 public void onTick(long secondsUntilFinished) {
                     int h = (int) (secondsUntilFinished / 3600);
@@ -264,7 +290,7 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
 
                 @Override
                 public void onFinish() {
-                    finish();
+
                 }
             });
 
@@ -338,7 +364,9 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        timer.cancel();
+        if (timer != null) {
+            timer.cancel();
+        }
     }
 
     @Override
