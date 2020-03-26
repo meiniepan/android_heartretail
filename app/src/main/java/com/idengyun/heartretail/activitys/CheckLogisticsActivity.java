@@ -4,8 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.widget.TextView;
+import android.view.View;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.dengyun.baselibrary.base.ApiBean;
 import com.dengyun.baselibrary.base.activity.BaseActivity;
 import com.dengyun.baselibrary.net.NetApi;
@@ -18,6 +19,7 @@ import com.google.gson.reflect.TypeToken;
 import com.idengyun.heartretail.Constants;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.adapters.ShippingGoodsListAdapter;
+import com.idengyun.heartretail.adapters.ShippingListAdapter;
 import com.idengyun.heartretail.beans.ShippingListBean;
 import com.idengyun.heartretail.widget.RecycleViewDivider;
 import com.idengyun.statusrecyclerviewlib.StatusRecyclerView;
@@ -35,15 +37,11 @@ import butterknife.BindView;
  * @date :2020/3/6 0006 9:06
  */
 public class CheckLogisticsActivity extends BaseActivity {
-    @BindView(R.id.tv_shipping_order)
-    TextView tvShippingOrder;
-    @BindView(R.id.tv_shipping_name)
-    TextView tvShippingName;
-    @BindView(R.id.sr_shipping_goods)
+    @BindView(R.id.sr_shipping_list)
     StatusRecyclerView recyclerView;
-    List<ShippingListBean.Goods> goodsData = new ArrayList<>();
+    List<ShippingListBean.ShippingBean> beanList = new ArrayList<>();
     private String orderId = "";
-    private ShippingGoodsListAdapter adapter;
+    private ShippingListAdapter adapter;
 
     public static void start(Context context, String orderId) {
         Intent starter = new Intent(context, CheckLogisticsActivity.class);
@@ -65,10 +63,14 @@ public class CheckLogisticsActivity extends BaseActivity {
 
     private void initUI() {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        RecycleViewDivider divider = new RecycleViewDivider(SizeUtils.dp2px(1),getResources().getColor(R.color.lineColor));
-        recyclerView.addItemDecoration(divider);
-        adapter = new ShippingGoodsListAdapter(R.layout.item_order_status_goods, goodsData);
+        adapter = new ShippingListAdapter(R.layout.item_check_logistics, beanList);
         recyclerView.setAdapter(adapter);
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                LogisticsDetailActivity.start(getContext(),beanList.get(position));
+            }
+        });
     }
 
     private void getData() {
@@ -84,10 +86,9 @@ public class CheckLogisticsActivity extends BaseActivity {
         NetApi.getData(RequestMethod.GET, netOption, new JsonCallback<ApiBean<ShippingListBean>>(netOption) {
             @Override
             public void onSuccess(Response<ApiBean<ShippingListBean>> response) {
-                ShippingListBean.ShippingBean data = response.body().data.shippings.get(0);
-                goodsData.addAll(data.goods);
+                List<ShippingListBean.ShippingBean> data = response.body().data.shippings;
+                beanList.addAll(data);
                 recyclerView.notifyDataSetChange();
-                tvShippingName.setText(data.shippingName + " " + data.shippingCode);
             }
         });
     }

@@ -110,6 +110,8 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
     private String orderId;
     private int dimension;
     private int orderStatus = 0;
+    List<OrderStatusBean.GoodsBean> goodsData = new ArrayList<>();
+    OderDetailGoodsListAdapter adapter;
 
     public static void start(Context context, String orderId, int status) {
         Intent starter = new Intent(context, OrderDetailActivity.class);
@@ -140,8 +142,17 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
         orderId = getIntent().getStringExtra(Constants.ORDER_ID);
         orderStatus = getIntent().getIntExtra(Constants.ORDER_STATUS, 0);
         initStatus();
+        initRecyclerView();
         getData();
         startTimer();
+    }
+
+    private void initRecyclerView() {
+         adapter = new OderDetailGoodsListAdapter(R.layout.item_order_detail_goods, goodsData);
+        srGoods.setLayoutManager(new LinearLayoutManager(this));
+        RecycleViewDivider divider = new RecycleViewDivider(SizeUtils.dp2px(1), getResources().getColor(R.color.lineColor));
+        srGoods.addItemDecoration(divider);
+        srGoods.setAdapter(adapter);
     }
 
     private void initStatus() {
@@ -222,31 +233,22 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
                 ApiBean<OrderStatusBean> body = response.body();
                 data = body.data;
                 if (data != null) {
-                    initUI();
+                    initUI(data);
                 }
             }
         });
     }
 
-    private void initUI() {
+    private void initUI(OrderStatusBean data) {
         tvOrderId.setText("订单号" + orderId);
         tvOrderId2.setText(orderId);
-        initRecyclerView();
+
+        setRecyclerView(data);
     }
 
-    private void initRecyclerView() {
-        List<OrderStatusBean.GoodsBean> list = new ArrayList<>();
-        OrderStatusBean.GoodsBean goodsBean = new OrderStatusBean.GoodsBean();
-        goodsBean.goodsName = "这里是一段商品标题信息，最多展示2行，超出后显";
-        goodsBean.skuItemvalue = "白色";
-        goodsBean.goodsNum = 1;
-        goodsBean.goodsPrice = "370.35";
-        list.add(goodsBean);
-        OderDetailGoodsListAdapter adapter = new OderDetailGoodsListAdapter(R.layout.item_order_detail_goods, list);
-        srGoods.setLayoutManager(new LinearLayoutManager(this));
-        RecycleViewDivider divider = new RecycleViewDivider(SizeUtils.dp2px(1), getResources().getColor(R.color.lineColor));
-        srGoods.addItemDecoration(divider);
-        srGoods.setAdapter(adapter);
+    private void setRecyclerView(OrderStatusBean data) {
+        goodsData.addAll(data.orderGoods);
+        srGoods.notifyDataSetChange();
     }
 
     private void startTimer() {
