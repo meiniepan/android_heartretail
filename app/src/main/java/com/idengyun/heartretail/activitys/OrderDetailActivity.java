@@ -25,6 +25,7 @@ import com.dengyun.baselibrary.utils.phoneapp.AppUtils;
 import com.dengyun.baselibrary.widgets.toolbar.BaseToolBar;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.google.gson.reflect.TypeToken;
+import com.idengyun.commonmodule.beans.OrderDetailBean;
 import com.idengyun.commonmodule.beans.OrderStatusBean;
 import com.idengyun.heartretail.Constants;
 import com.idengyun.heartretail.R;
@@ -106,11 +107,11 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
     NestedScrollView nestedScrollView;
     private SecondsTimer timer;
     OrderStatusBean dataSource;
-    OrderStatusBean data;
+    OrderDetailBean data;
     private String orderId;
     private int dimension;
     private int orderStatus = 0;
-    List<OrderStatusBean.GoodsBean> goodsData = new ArrayList<>();
+    List<OrderDetailBean.GoodsBean> goodsData = new ArrayList<>();
     OderDetailGoodsListAdapter adapter;
 
     public static void start(Context context, String orderId, int status) {
@@ -216,7 +217,7 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
     }
 
     private void getData() {
-        Type type = new TypeToken<ApiBean<OrderStatusBean>>() {
+        Type type = new TypeToken<ApiBean<OrderDetailBean>>() {
         }.getType();
         NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.queryOrderDetail())
                 .activity(this)
@@ -227,10 +228,10 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
                 .type(type)
                 .build();
 
-        NetApi.getData(RequestMethod.GET, netOption, new JsonCallback<ApiBean<OrderStatusBean>>(netOption) {
+        NetApi.getData(RequestMethod.GET, netOption, new JsonCallback<ApiBean<OrderDetailBean>>(netOption) {
             @Override
-            public void onSuccess(Response<ApiBean<OrderStatusBean>> response) {
-                ApiBean<OrderStatusBean> body = response.body();
+            public void onSuccess(Response<ApiBean<OrderDetailBean>> response) {
+                ApiBean<OrderDetailBean> body = response.body();
                 data = body.data;
                 if (data != null) {
                     initUI(data);
@@ -239,14 +240,14 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
         });
     }
 
-    private void initUI(OrderStatusBean data) {
+    private void initUI(OrderDetailBean data) {
         tvOrderId.setText("订单号" + orderId);
         tvOrderId2.setText(orderId);
 
         setRecyclerView(data);
     }
 
-    private void setRecyclerView(OrderStatusBean data) {
+    private void setRecyclerView(OrderDetailBean data) {
         goodsData.addAll(data.orderGoods);
         srGoods.notifyDataSetChange();
     }
