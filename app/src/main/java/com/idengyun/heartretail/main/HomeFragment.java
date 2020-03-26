@@ -33,7 +33,6 @@ import com.idengyun.maplibrary.utils.PoiSearchUtil;
 import com.idengyun.msgmodule.NoticeActivity;
 import com.idengyun.msgmodule.NoticeConst;
 import com.idengyun.msgmodule.beans.NoticeCountBean;
-import com.idengyun.msgmodule.beans.NoticeStatusBean;
 import com.idengyun.msgmodule.viewmodel.NoticeViewModel;
 import com.idengyun.usermodule.HRUser;
 import com.idengyun.usermodule.LoginActivity;
@@ -141,7 +140,6 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
                 }
             }
         });
-
         requestNoticeCount();
     }
 
@@ -251,6 +249,7 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
     }
 
     private void requestNoticeCount() {
+        if (!HRUser.isLogin()) return;
         FragmentActivity activity = getActivity();
         if (activity == null) return;
         if (noticeViewModel != null) noticeViewModel.requestNoticeCount(activity);
