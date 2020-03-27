@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.dengyun.baselibrary.base.ApiBean;
 import com.dengyun.baselibrary.base.activity.BaseActivity;
 import com.dengyun.baselibrary.net.NetApi;
@@ -32,6 +33,7 @@ import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.HRUIHelper;
 import com.idengyun.heartretail.adapters.OderDetailGoodsListAdapter;
 import com.idengyun.heartretail.beans.ConfirmOrderRspBean;
+import com.idengyun.routermodule.RouterPathConfig;
 import com.idengyun.statusrecyclerviewlib.RecycleViewDivider;
 import com.idengyun.statusrecyclerviewlib.StatusRecyclerView;
 import com.idengyun.usermodule.HRUser;
@@ -51,6 +53,7 @@ import butterknife.OnClick;
  * @description:
  * @date :2020/3/5 0005 10:35
  */
+@Route(path = (RouterPathConfig.app_OrderDetail))
 public class OrderDetailActivity extends BaseActivity implements NestedScrollView.OnScrollChangeListener {
     @BindView(R.id.fl_second_title2)
     View flBackView2;

@@ -23,4 +23,13 @@ public class IntentRouterUtils {
     public static void skipToFirstActivity(){
         ARouter.getInstance().build(RouterPathConfig.app_FirstActivity).navigation();
     }
+
+    /**
+     * 跳到订单详情页
+     */
+    public static void skipToOrderDetailActivity(String OrderId) {
+        ARouter.getInstance().build(RouterPathConfig.app_OrderDetail)
+                .withString("order_id",OrderId)
+                .navigation();
+    }
 }

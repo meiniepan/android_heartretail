@@ -3,13 +3,24 @@ package com.idengyun.heartretail.activitys;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.dengyun.baselibrary.base.ApiBean;
 import com.dengyun.baselibrary.base.activity.BaseActivity;
+import com.dengyun.baselibrary.net.NetApi;
+import com.dengyun.baselibrary.net.NetOption;
+import com.dengyun.baselibrary.net.callback.JsonCallback;
+import com.dengyun.baselibrary.utils.ToastUtils;
+import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.heartretail.R;
+import com.idengyun.usermodule.HRUser;
 import com.idengyun.usermodule.utils.SecondsTimer;
+import com.lzy.okgo.model.Response;
+
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -84,8 +95,7 @@ public class ChoosePayModeActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_confirm1:
-                PaySuccessActivity.start(this);
-                finish();
+                doCommit();
                 break;
             case R.id.cb_pay:
                 cbPay.setChecked(true);
@@ -104,7 +114,33 @@ public class ChoosePayModeActivity extends BaseActivity {
                 break;
         }
     }
+    private void doCommit() {
+        HashMap map = new HashMap();
+        map.put("userId", TextUtils.isEmpty(HRUser.getId()) ? "1" : HRUser.getId());
+        map.put("orderId", "1");
+        map.put("orderNo", "1");
 
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.pay())
+                .activity(this)
+                .params(map)
+                .isShowDialog(true)
+                .clazz(ApiBean.class)
+                .build();
+
+        NetApi.getData(netOption, new JsonCallback<ApiBean>(netOption) {
+            @Override
+            public void onSuccess(Response<ApiBean> response) {
+                ToastUtils.showShort("支付成功");
+                PaySuccessActivity.start(getContext());
+                finish();
+            }
+
+            @Override
+            public void onError(Response<ApiBean> response) {
+                super.onError(response);
+            }
+        });
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();

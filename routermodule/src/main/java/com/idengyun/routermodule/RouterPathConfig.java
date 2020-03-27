@@ -10,6 +10,7 @@ public class RouterPathConfig {
 
     public static final String app_FirstActivity = "/app/FirstActivity";
     public static final String app_SomewebActivity = "/app/SomewebActivity";
+    public static final String app_OrderDetail = "/app/OrderDetail";
 //    public static final String app_MainActivity = "/app/MainActivity";
 
 }
