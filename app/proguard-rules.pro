@@ -20,4 +20,4 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
-#-keep class com..**{*;}  #过滤掉自己编写的实体类
+-keep class com.idengyun.heartretail.beans.**{*;}  #过滤掉自己编写的实体类

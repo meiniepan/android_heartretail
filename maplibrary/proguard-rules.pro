@@ -19,6 +19,8 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+-keep class com.idengyun.maplibrary.beans.**{*;}  #过滤掉自己编写的实体类
+
 #3D 地图 V5.0.0之前：
 -keep   class com.amap.api.maps.**{*;}
 -keep   class com.autonavi.amap.mapcore.*{*;}
