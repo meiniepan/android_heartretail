@@ -6,8 +6,11 @@ import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
+import com.dengyun.baselibrary.net.ImageApi;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.beans.PersonalDataBean;
 import com.idengyun.heartretail.viewmodel.SettingViewModel;
@@ -18,6 +21,12 @@ import com.idengyun.heartretail.viewmodel.SettingViewModel;
  * @author aLang
  */
 public final class BankCardInfoFragment extends BaseFragment {
+
+    private ImageView iv_bank_card_icon;
+    private TextView tv_bank_card_name;
+    private TextView tv_bank_card_type;
+    private TextView tv_bank_card_no;
+    private TextView tv_bank_card_reserve_mobile;
 
     private SettingViewModel settingViewModel;
 
@@ -42,23 +51,18 @@ public final class BankCardInfoFragment extends BaseFragment {
     private void updateUI(@Nullable PersonalDataBean personalDataBean) {
         if (personalDataBean == null) return;
         PersonalDataBean.Data data = personalDataBean.data;
-        String name = data.name;
-        String sex = data.sex;
-        String nation = data.nation;
-        String userBirthday = data.userBirthday;
-        String address = data.address;
-        String number = data.number;
-        String authority = data.authority;
-        String timeLimit = data.timeLimit;
+        String userBankName = data.userBankName;
+        String bankCardType = data.bankCardType;
+        String cardType = data.cardType;
+        String bankCardNo = data.bankCardNo;
+        String bankMobile = data.bankMobile;
 
-        /*tv_id_card_value_1.setText(name);
-        tv_id_card_value_2.setText(sex);
-        tv_id_card_value_3.setText(nation);
-        tv_id_card_value_4.setText(userBirthday);
-        tv_id_card_value_5.setText(address);
-        tv_id_card_value_6.setText(number);
-        tv_id_card_value_7.setText(authority);
-        tv_id_card_value_8.setText(timeLimit);*/
+        // TODO: 2020/3/27
+        ImageApi.displayImage(iv_bank_card_icon.getContext(), iv_bank_card_icon, "");
+        tv_bank_card_name.setText(userBankName);
+        tv_bank_card_type.setText(cardType);
+        tv_bank_card_no.setText(bankCardNo);
+        tv_bank_card_reserve_mobile.setText(bankMobile);
     }
 
     private void observe() {
@@ -79,5 +83,10 @@ public final class BankCardInfoFragment extends BaseFragment {
     }
 
     private void findViewById(View view) {
+        iv_bank_card_icon = view.findViewById(R.id.iv_bank_card_icon);
+        tv_bank_card_name = view.findViewById(R.id.tv_bank_card_name);
+        tv_bank_card_type = view.findViewById(R.id.tv_bank_card_type);
+        tv_bank_card_no = view.findViewById(R.id.tv_bank_card_no);
+        tv_bank_card_reserve_mobile = view.findViewById(R.id.tv_bank_card_reserve_mobile);
     }
 }
