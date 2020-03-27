@@ -19,3 +19,5 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-keep class com.idengyun.usermodule.beans.**{*;}  #过滤掉自己编写的实体类
