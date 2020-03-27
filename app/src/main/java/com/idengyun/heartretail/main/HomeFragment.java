@@ -172,21 +172,17 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
     @Override
     public void onClick(View v) {
         if (tv_home_share == v) {
-
-
             if (!HRUser.isLogin()) {
                 LoginActivity.start(getContext());
                 return;
             }
 
-            new InformationUtil(getContext()).startSobot();
-
-            /*if (!HRUser.isAuthentication()) {
+            if (!HRUser.isAuthentication()) {
                 VerifyDeviceActivity.start(getContext());
                 return;
             }
 
-            ShareQRCodeActivity.start(getContext());*/
+            ShareQRCodeActivity.start(getContext());
         } else if (tv_home_notice == v) {
             if (!HRUser.isLogin()) {
                 LoginActivity.start(getContext());
