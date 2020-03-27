@@ -50,7 +50,7 @@ public final class MainActivity extends BaseActivity {
     }
 
     private void init() {
-        SystemUIHelper.applySystemUI(this);
+        HRUIHelper.applySystemUI(this);
 
         setContentView(R.layout.activity_main);
 

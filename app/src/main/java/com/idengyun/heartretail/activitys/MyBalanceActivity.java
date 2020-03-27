@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.activity.BaseActivity;
 import com.idengyun.heartretail.R;
-import com.idengyun.heartretail.SystemUIHelper;
+import com.idengyun.heartretail.HRUIHelper;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -47,7 +47,7 @@ public class MyBalanceActivity extends BaseActivity {
     @Override
     public void setStatusBar() {
         super.setStatusBar();
-        SystemUIHelper.applySystemUI(this);
+        HRUIHelper.applySystemUI(this);
     }
 
     @Override

@@ -111,7 +111,7 @@ public class HRActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SystemUIHelper.applySystemUI(this);
+        HRUIHelper.applySystemUI(this);
         // setContentView(R.layout.activity_hr);
         instantiateFragment();
     }

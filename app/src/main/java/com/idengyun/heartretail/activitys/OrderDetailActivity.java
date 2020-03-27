@@ -29,7 +29,7 @@ import com.idengyun.commonmodule.beans.OrderDetailBean;
 import com.idengyun.commonmodule.beans.OrderStatusBean;
 import com.idengyun.heartretail.Constants;
 import com.idengyun.heartretail.R;
-import com.idengyun.heartretail.SystemUIHelper;
+import com.idengyun.heartretail.HRUIHelper;
 import com.idengyun.heartretail.adapters.OderDetailGoodsListAdapter;
 import com.idengyun.heartretail.beans.ConfirmOrderRspBean;
 import com.idengyun.statusrecyclerviewlib.RecycleViewDivider;
@@ -144,7 +144,7 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
 
     private void initBase() {
         dimension = SizeUtils.dp2px(64f);
-        SystemUIHelper.applySystemUI(this);
+        HRUIHelper.applySystemUI(this);
         nestedScrollView.setOnScrollChangeListener(this);
     }
 

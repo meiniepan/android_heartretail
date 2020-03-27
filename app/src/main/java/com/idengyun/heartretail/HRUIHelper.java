@@ -15,7 +15,7 @@ import android.view.WindowManager;
 /**
  * @author aLang
  */
-public final class SystemUIHelper {
+public final class HRUIHelper {
 
     public static void applySystemUI(@NonNull Activity activity) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
@@ -23,7 +23,7 @@ public final class SystemUIHelper {
         }
     }
 
-    private SystemUIHelper() {
+    private HRUIHelper() {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT_WATCH)
