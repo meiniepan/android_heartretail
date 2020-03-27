@@ -23,7 +23,7 @@ import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.net.ImageApi;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
-import com.idengyun.heartretail.model.response.GoodsListBean;
+import com.idengyun.heartretail.beans.GoodsListBean;
 import com.idengyun.heartretail.viewmodel.GoodsViewModel;
 import com.idengyun.msgmodule.RVLoadMore;
 import com.idengyun.usermodule.HRUser;

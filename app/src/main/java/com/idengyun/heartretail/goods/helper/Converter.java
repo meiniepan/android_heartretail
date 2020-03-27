@@ -1,6 +1,6 @@
 package com.idengyun.heartretail.goods.helper;
 
-import com.idengyun.heartretail.model.response.GoodsDetailBean;
+import com.idengyun.heartretail.beans.GoodsDetailBean;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -13,7 +13,7 @@ import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
-import com.idengyun.heartretail.model.response.BalanceBean;
+import com.idengyun.heartretail.beans.BalanceBean;
 import com.idengyun.usermodule.HRUser;
 import com.lzy.okgo.model.Response;
 

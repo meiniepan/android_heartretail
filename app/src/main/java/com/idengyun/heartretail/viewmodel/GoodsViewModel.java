@@ -12,9 +12,9 @@ import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
-import com.idengyun.heartretail.model.response.GoodsDetailBean;
-import com.idengyun.heartretail.model.response.GoodsEvaluateBean;
-import com.idengyun.heartretail.model.response.GoodsListBean;
+import com.idengyun.heartretail.beans.GoodsDetailBean;
+import com.idengyun.heartretail.beans.GoodsEvaluateBean;
+import com.idengyun.heartretail.beans.GoodsListBean;
 import com.idengyun.usermodule.HRUser;
 import com.lzy.okgo.model.Response;
 

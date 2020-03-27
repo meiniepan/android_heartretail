@@ -1,7 +1,6 @@
 package com.idengyun.heartretail.main;
 
 import android.arch.lifecycle.Observer;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
@@ -13,8 +12,7 @@ import android.widget.TextView;
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.widgets.toolbar.BaseToolBar;
 import com.idengyun.heartretail.R;
-import com.idengyun.heartretail.model.response.ProtocolBean;
-import com.idengyun.heartretail.model.response.RuleBean;
+import com.idengyun.heartretail.beans.RuleBean;
 import com.idengyun.heartretail.viewmodel.RuleViewModel;
 
 /**

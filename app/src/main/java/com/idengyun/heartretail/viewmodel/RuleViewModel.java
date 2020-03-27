@@ -14,7 +14,7 @@ import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.dengyun.splashmodule.config.SpRule;
-import com.idengyun.heartretail.model.response.RuleBean;
+import com.idengyun.heartretail.beans.RuleBean;
 import com.lzy.okgo.model.Response;
 
 import java.util.List;

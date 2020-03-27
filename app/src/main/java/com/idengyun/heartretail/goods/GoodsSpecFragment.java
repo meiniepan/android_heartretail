@@ -24,7 +24,7 @@ import com.idengyun.heartretail.goods.helper.Cell;
 import com.idengyun.heartretail.goods.helper.Converter;
 import com.idengyun.heartretail.goods.helper.SKU;
 import com.idengyun.heartretail.goods.helper.Section;
-import com.idengyun.heartretail.model.response.GoodsDetailBean;
+import com.idengyun.heartretail.beans.GoodsDetailBean;
 import com.idengyun.heartretail.viewmodel.GoodsViewModel;
 
 import java.util.ArrayList;

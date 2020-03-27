@@ -19,7 +19,7 @@ import android.widget.TextView;
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.net.ImageApi;
 import com.idengyun.heartretail.R;
-import com.idengyun.heartretail.model.response.GoodsEvaluateBean;
+import com.idengyun.heartretail.beans.GoodsEvaluateBean;
 import com.idengyun.heartretail.viewmodel.GoodsViewModel;
 import com.idengyun.msgmodule.RVLoadMore;
 

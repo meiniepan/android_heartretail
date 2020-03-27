@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.idengyun.heartretail.R;
-import com.idengyun.heartretail.model.response.GoodsDetailBean;
+import com.idengyun.heartretail.beans.GoodsDetailBean;
 import com.idengyun.heartretail.viewmodel.GoodsViewModel;
 
 import java.util.ArrayList;
