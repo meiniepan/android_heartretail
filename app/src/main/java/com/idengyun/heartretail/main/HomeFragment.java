@@ -37,6 +37,7 @@ import com.idengyun.msgmodule.viewmodel.NoticeViewModel;
 import com.idengyun.usermodule.HRUser;
 import com.idengyun.usermodule.LoginActivity;
 import com.idengyun.usermodule.VerifyDeviceActivity;
+import com.sobot.chat.utils.InformationUtil;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -171,17 +172,21 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
     @Override
     public void onClick(View v) {
         if (tv_home_share == v) {
+
+
             if (!HRUser.isLogin()) {
                 LoginActivity.start(getContext());
                 return;
             }
 
-            if (!HRUser.isAuthentication()) {
+            new InformationUtil(getContext()).startSobot();
+
+            /*if (!HRUser.isAuthentication()) {
                 VerifyDeviceActivity.start(getContext());
                 return;
             }
 
-            ShareQRCodeActivity.start(getContext());
+            ShareQRCodeActivity.start(getContext());*/
         } else if (tv_home_notice == v) {
             if (!HRUser.isLogin()) {
                 LoginActivity.start(getContext());
