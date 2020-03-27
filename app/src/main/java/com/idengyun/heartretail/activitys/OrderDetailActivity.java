@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.dengyun.baselibrary.base.ApiBean;
 import com.dengyun.baselibrary.base.activity.BaseActivity;
 import com.dengyun.baselibrary.net.NetApi;
@@ -32,6 +33,7 @@ import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.HRUIHelper;
 import com.idengyun.heartretail.adapters.OderDetailGoodsListAdapter;
 import com.idengyun.heartretail.beans.ConfirmOrderRspBean;
+import com.idengyun.routermodule.RouterPathConfig;
 import com.idengyun.statusrecyclerviewlib.RecycleViewDivider;
 import com.idengyun.statusrecyclerviewlib.StatusRecyclerView;
 import com.idengyun.usermodule.HRUser;
@@ -51,6 +53,7 @@ import butterknife.OnClick;
  * @description:
  * @date :2020/3/5 0005 10:35
  */
+@Route(path = (RouterPathConfig.app_OrderDetail))
 public class OrderDetailActivity extends BaseActivity implements NestedScrollView.OnScrollChangeListener {
     @BindView(R.id.fl_second_title2)
     View flBackView2;
@@ -124,10 +127,9 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
     List<OrderDetailBean.GoodsBean> goodsData = new ArrayList<>();
     OderDetailGoodsListAdapter adapter;
 
-    public static void start(Context context, String orderId, int status) {
+    public static void start(Context context, String orderId) {
         Intent starter = new Intent(context, OrderDetailActivity.class);
         starter.putExtra(Constants.ORDER_ID, orderId);
-        starter.putExtra(Constants.ORDER_STATUS, status);
         context.startActivity(starter);
     }
 
@@ -151,8 +153,6 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
     @Override
     protected void initViews(Bundle savedInstanceState) {
         orderId = getIntent().getStringExtra(Constants.ORDER_ID);
-        orderStatus = getIntent().getIntExtra(Constants.ORDER_STATUS, 0);
-        initStatus();
         initRecyclerView();
         getData();
     }
@@ -251,6 +251,8 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
     }
 
     private void initUI(OrderDetailBean.OrderDetailBeanBody data) {
+        orderStatus = data.orderStatus;
+        initStatus();
         if (orderStatus == 0) {
             startTimer();
             tvOrderProtocol.setText("《" + data.proxySalesName + "》");

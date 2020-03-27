@@ -113,9 +113,9 @@ public class SpMainConfigConstants {
     }
 
     /* 支付方式查询-删除 */
-    public static String todo9() {
+    public static String pay() {
         // TODO: 2020/3/9
-        return getMainConfigUrl("todo9");
+        return getMainConfigUrl("pay");
     }
 
     /* 查询用户代销资格 */
