@@ -2,18 +2,14 @@ package com.sobot.chat.utils;
 
 import android.content.Context;
 import android.text.TextUtils;
-
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.dengyun.baselibrary.base.ApiBean;
-import com.dengyun.baselibrary.config.RouterPathConfig;
 import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
-import com.dengyun.baselibrary.net.constants.ProjectType;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.baselibrary.utils.ListUtils;
 import com.google.gson.reflect.TypeToken;
-import com.idengyun.usermodule.HRUser;
+import com.idengyun.routermodule.IntentRouterUtils;
 import com.lzy.okgo.model.Response;
 import com.sobot.chat.SobotApi;
 import com.sobot.chat.SpSobotUtils;
@@ -117,11 +113,7 @@ public class InformationUtil {
                                         + "&tel=" + SpSobotUtils.getUserPhone()
                                         + "&uname=" + SpSobotUtils.getUserNickName()
                                         + "&face=" + SpSobotUtils.getUserHeadPic();
-                                ARouter.getInstance().build(RouterPathConfig.app_SomewebActivity)
-                                        .withString("weburl", kefu)
-                                        .withString("title", "联系客服")
-                                        .withInt("type", 3)
-                                        .navigation();
+                                IntentRouterUtils.skipToSomeWeb(kefu);
                             }
                         }
                     });

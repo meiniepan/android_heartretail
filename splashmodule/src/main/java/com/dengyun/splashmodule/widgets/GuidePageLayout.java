@@ -23,8 +23,6 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
-import com.alibaba.android.arouter.launcher.ARouter;
-import com.dengyun.baselibrary.config.RouterPathConfig;
 import com.dengyun.baselibrary.widgets.VPSimpleAdapter;
 import com.dengyun.splashmodule.R;
 import com.dengyun.splashmodule.config.GuidePicData;

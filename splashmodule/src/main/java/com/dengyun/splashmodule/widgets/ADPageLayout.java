@@ -17,8 +17,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
-import com.alibaba.android.arouter.launcher.ARouter;
-import com.dengyun.baselibrary.config.RouterPathConfig;
 import com.dengyun.baselibrary.net.ImageApi;
 import com.dengyun.baselibrary.spconstants.SpUserConstants;
 import com.dengyun.baselibrary.widgets.imageview.RatioImageView;
@@ -26,6 +24,7 @@ import com.dengyun.sadatalib.SAGetData;
 import com.dengyun.splashmodule.R;
 import com.dengyun.splashmodule.utils.ArouterToFirstUtil;
 import com.dengyun.splashmodule.utils.LocalAdInfoUtils;
+import com.idengyun.routermodule.IntentRouterUtils;
 
 /**
  * @titile
@@ -156,7 +155,7 @@ public class ADPageLayout extends FrameLayout {
         int interest = SpUserConstants.getInterest();
         int whatFragment = interest <= 0 ? 0 : (interest - 1);
         ArouterToFirstUtil.skipToFirst();
-        ARouter.getInstance().build(RouterPathConfig.app_SomewebActivity).withString("url",url).navigation();
+        IntentRouterUtils.skipToSomeWeb(url);
 
         /*Intent intent1 = new Intent(activity, FirstActivity2.class);
         Intent intent2 = new Intent(activity, MySomewebActivity.class);
