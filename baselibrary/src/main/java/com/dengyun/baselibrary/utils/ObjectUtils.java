@@ -9,6 +9,7 @@ import android.util.SparseIntArray;
 import android.util.SparseLongArray;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.Map;
 
@@ -144,4 +145,27 @@ public final class ObjectUtils {
     public static String getClassPath(Object o){
         return o.getClass().getName();
     }
+
+    /**
+     * 是否是8种基本数据类型
+     * @param value
+     * @return
+     */
+    public static boolean isPrimitive(Object value){
+        try {
+            Field field = value.getClass().getField("TYPE");
+            Class claz = (Class) field.get(null);
+
+            if (claz.isPrimitive()){
+                return true;
+            }
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
 }
