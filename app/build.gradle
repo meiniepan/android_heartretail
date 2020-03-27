@@ -110,8 +110,6 @@ dependencies {
     annotationProcessor rootProject.ext.dependencies.arouter_compiler
     //butterknife插件
     annotationProcessor rootProject.ext.dependencies.butterknife_compiler
-    //适配
-    implementation 'me.jessyan:autosize:1.1.2'
     //walle打包渠道信息
     implementation(rootProject.ext.dependencies.walle) { exclude group: 'com.android.support' }
     //分享组件
