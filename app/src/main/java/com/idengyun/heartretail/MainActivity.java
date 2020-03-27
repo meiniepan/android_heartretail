@@ -11,10 +11,10 @@ import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.dengyun.baselibrary.base.activity.BaseActivity;
-import com.dengyun.baselibrary.config.RouterPathConfig;
 import com.idengyun.heartretail.main.HomeFragment;
 import com.idengyun.heartretail.main.MyFragment;
 import com.idengyun.heartretail.main.RedPacketFragment;
+import com.idengyun.routermodule.RouterPathConfig;
 
 /**
  * APP主界面

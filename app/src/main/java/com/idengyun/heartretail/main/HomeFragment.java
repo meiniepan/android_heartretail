@@ -37,6 +37,7 @@ import com.idengyun.msgmodule.viewmodel.NoticeViewModel;
 import com.idengyun.usermodule.HRUser;
 import com.idengyun.usermodule.LoginActivity;
 import com.idengyun.usermodule.VerifyDeviceActivity;
+import com.sobot.chat.utils.InformationUtil;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;

@@ -238,7 +238,7 @@ public class DealParamsUtil {
      */
     private static String getSobotEncryptJson(Map map) {
         String paramJson0 = GsonConvertUtil.toJson(map);
-        // TODO: 2020-03-18 测试客服功能写死mtmy
+        //  2020-03-18 测试客服功能先写死mtmy
 //        String secret = SharedPreferencesUtil.getData(Utils.getApp(), "mainconfig", "secret", "");
         String secret = "mtmy";
         //加密字段拼接在请求json前后，得md5值

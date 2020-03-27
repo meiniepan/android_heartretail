@@ -7,11 +7,11 @@ import android.support.annotation.Nullable;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.dengyun.baselibrary.base.activity.BaseSomewebActivity;
-import com.dengyun.baselibrary.config.RouterPathConfig;
 import com.dengyun.baselibrary.utils.webview.WebJsBean;
 import com.dengyun.sharelibrary.utils.ShareUtil;
 import com.idengyun.heartretail.beans.MyWebJsBean;
 import com.idengyun.heartretail.widget.webset.SomeWebJsControlImpl;
+import com.idengyun.routermodule.RouterPathConfig;
 import com.tencent.smtt.sdk.WebView;
 
 @Route(path = (RouterPathConfig.app_SomewebActivity))

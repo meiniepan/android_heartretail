@@ -6,20 +6,18 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.dengyun.baselibrary.base.ApiSimpleBean;
 import com.dengyun.baselibrary.base.activity.BaseActivity;
-import com.dengyun.baselibrary.config.RouterPathConfig;
 import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.baselibrary.utils.ToastUtils;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
+import com.idengyun.routermodule.IntentRouterUtils;
 import com.idengyun.usermodule.beans.VerifyCodeBean;
 import com.idengyun.usermodule.utils.SecondsTimer;
 import com.idengyun.usermodule.utils.TransformPhoneNumUtil;
@@ -142,7 +140,7 @@ public class VerifyDeviceActivity extends BaseActivity {
     }
 
     private void startMainActivity() {
-        ARouter.getInstance().build(RouterPathConfig.app_FirstActivity).navigation();
+        IntentRouterUtils.skipToFirstActivity();
         finish();
     }
 

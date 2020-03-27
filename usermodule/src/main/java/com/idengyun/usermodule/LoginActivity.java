@@ -15,10 +15,7 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.alibaba.android.arouter.facade.annotation.Route;
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.dengyun.baselibrary.base.activity.BaseActivity;
-import com.dengyun.baselibrary.config.RouterPathConfig;
 import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
@@ -26,6 +23,7 @@ import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.baselibrary.utils.RegexUtils;
 import com.dengyun.baselibrary.utils.ToastUtils;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
+import com.idengyun.routermodule.IntentRouterUtils;
 import com.idengyun.usermodule.beans.LoginBean;
 import com.idengyun.usermodule.beans.RegisterBean;
 import com.idengyun.usermodule.beans.VerifyCodeBean;
@@ -38,7 +36,6 @@ import com.lzy.okgo.model.Response;
  *
  * @author aLang
  */
-@Route(path = (RouterPathConfig.user_LoginActivity))
 public final class LoginActivity extends BaseActivity
         implements RadioGroup.OnCheckedChangeListener, View.OnClickListener, CompoundButton.OnCheckedChangeListener, View.OnFocusChangeListener {
 
@@ -275,7 +272,7 @@ public final class LoginActivity extends BaseActivity
 
     /* 开启主界面 */
     private void startMainActivity() {
-        ARouter.getInstance().build(RouterPathConfig.app_FirstActivity).navigation();
+        IntentRouterUtils.skipToFirstActivity();
         finish();
     }
 

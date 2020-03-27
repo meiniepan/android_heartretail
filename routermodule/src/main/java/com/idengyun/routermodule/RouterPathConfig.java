@@ -1,4 +1,4 @@
-package com.dengyun.baselibrary.config;
+package com.idengyun.routermodule;
 
 /**
  * @titile
@@ -12,7 +12,4 @@ public class RouterPathConfig {
     public static final String app_SomewebActivity = "/app/SomewebActivity";
 //    public static final String app_MainActivity = "/app/MainActivity";
 
-    /*------------------------user模块---------------------------------*/
-
-    public static final String user_LoginActivity = "/user/LoginActivity";
 }

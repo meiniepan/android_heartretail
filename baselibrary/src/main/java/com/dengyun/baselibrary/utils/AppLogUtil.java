@@ -27,7 +27,7 @@ public class AppLogUtil {
     public static synchronized void setNetResultLog(String url, Map params, String resultJson) {
         if (!AppConfig.isDebug) return;
         Logger.t("wwwwww-u").d(url);
-        Logger.t("wwwwww-p").d(params);
+        Logger.t("wwwwww-p").d(GsonConvertUtil.toJson(params));
         Logger.t("wwwwww-r").json(resultJson);
     }
 

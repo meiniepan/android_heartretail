@@ -7,9 +7,7 @@ import android.text.TextPaint;
 import android.text.style.URLSpan;
 import android.view.View;
 
-import com.alibaba.android.arouter.launcher.ARouter;
-import com.dengyun.baselibrary.config.RouterPathConfig;
-import com.sobot.chat.activity.WebViewActivity;
+import com.idengyun.routermodule.IntentRouterUtils;
 import com.sobot.chat.api.apiUtils.ZhiChiConstants;
 import com.sobot.chat.utils.CommonUtils;
 import com.sobot.chat.utils.LogUtils;
@@ -71,7 +69,7 @@ public class MyURLSpan extends URLSpan {
                     return;
                 }
                 url = fixUrl(url);
-                ARouter.getInstance().build(RouterPathConfig.app_SomewebActivity).withString("url",url).navigation();
+                IntentRouterUtils.skipToSomeWeb(url);
 //                Intent intent = new Intent(context, WebViewActivity.class);
 //                intent.putExtra("url", url);
 //                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

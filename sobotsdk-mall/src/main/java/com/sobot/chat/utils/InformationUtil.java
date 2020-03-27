@@ -2,21 +2,27 @@ package com.sobot.chat.utils;
 
 import android.content.Context;
 import android.text.TextUtils;
-
-import com.alibaba.android.arouter.launcher.ARouter;
-import com.dengyun.baselibrary.config.RouterPathConfig;
+import com.dengyun.baselibrary.base.ApiBean;
 import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
-import com.dengyun.baselibrary.net.constants.ProjectType;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
+import com.dengyun.baselibrary.net.constants.RequestMethod;
+import com.dengyun.baselibrary.utils.ListUtils;
+import com.google.gson.reflect.TypeToken;
+import com.idengyun.routermodule.IntentRouterUtils;
 import com.lzy.okgo.model.Response;
 import com.sobot.chat.SobotApi;
 import com.sobot.chat.SpSobotUtils;
 import com.sobot.chat.api.model.ConsultingContent;
 import com.sobot.chat.api.model.Information;
-import com.sobot.chat.beans.KefuFlagBean;
+import com.sobot.chat.beans.XlsKefuBean;
 import com.sobot.chat.dengy.bean.SobotUserBean;
 import com.sobot.chat.dengy.utils.SpliceUtil;
+
+import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -41,12 +47,16 @@ public class InformationUtil {
     /**
      * @param context 测试商品发送客服
      */
-    public static void testGoods(Context context){
-        String productSplice = SpliceUtil.getProductSplice( "4169",
+    private static void testGoods(Context context) {
+        String productSplice = SpliceUtil.getProductSplice("4169",
                 "艾丽婷双头纸轴棉棒",
                 "http://resource.idengyun.com/resource/images/2017/11/e2dc0dbe-e96a-41fd-abe1-b62d0cdc1872.jpg",
                 4.8);
         new InformationUtil(context).startSobot("商品", productSplice);
+    }
+
+    public void startSobot() {
+        startSobot(null, null);
     }
 
     /**
@@ -62,51 +72,51 @@ public class InformationUtil {
                 setConsulting(type, msg);//商品/订单卡信息
             }
 
+            Type netType = new TypeToken<ApiBean<List<XlsKefuBean>>>() {
+            }.getType();
             NetOption netOption = NetOption.newBuilder(SpSobotUtils.queryZCService())
                     .params("userId", SpSobotUtils.getUserId())
                     .isShowDialog(false)
                     .isEncrypt(true)
-                    .clazz(KefuFlagBean.class)
-                    .projectType(ProjectType.IDENGYUN_SOBOT)
+                    .type(netType)
                     .build();
-            NetApi.getData(netOption, new JsonCallback<KefuFlagBean>(netOption) {
-                @Override
-                public void onSuccess(Response<KefuFlagBean> response) {
-                    KefuFlagBean bean = response.body();
-                    if ("0".equals(bean.data.kefuFlag)) {
-                        //appKey
-                        info.setAppkey(bean.data.appKeyAndroid);//我们平台聊天的key
-                        info.setUid(SpSobotUtils.getUserId()); //注意：uid为用户唯一标识，不能传入一样的值
-                        info.setFace(SpSobotUtils.getUserHeadPic());//自定义头像，选填
-                        if (bean.data.user == null) {
-                            ToastUtil.showToast(mContext, "无法获取用户信息，请尝试重新登陆");
+            NetApi.<ApiBean<List<XlsKefuBean>>>getData(RequestMethod.GET, netOption,
+                    new JsonCallback<ApiBean<List<XlsKefuBean>>>(netOption) {
+                        @Override
+                        public void onSuccess(Response<ApiBean<List<XlsKefuBean>>> response) {
+                            List<XlsKefuBean> kefuBeans = response.body().data;
+                            if (ListUtils.isEmpty(kefuBeans)) return;
+                            Map<String, String> kefuBeanMap = new HashMap<>();
+                            for (int i = 0; i < kefuBeans.size(); i++) {
+                                kefuBeanMap.put(kefuBeans.get(i).getConfigKey(), kefuBeans.get(i).getConfigValue());
+                            }
+
+                            if ("0".equals(kefuBeanMap.get("kefuFlag"))) {
+                                //appKey
+                                info.setAppkey(kefuBeanMap.get("zcAppKeyAndroid"));//我们平台聊天的key
+                                info.setUid(SpSobotUtils.getUserId()); //注意：uid为用户唯一标识，不能传入一样的值
+                                info.setFace(SpSobotUtils.getUserHeadPic());//自定义头像，选填
+                                info.setUname("0".equals(kefuBeanMap.get("nickIsShow")) ? SpSobotUtils.getUserNickName() : ""); //用户昵称，选填
+                                info.setRealname("0".equals(kefuBeanMap.get("realnameIsShow")) ? SpSobotUtils.getUserRealName() : "");//真实姓名
+                                info.setTel("0".equals(kefuBeanMap.get("phoneIsShow")) ? SpSobotUtils.getUserPhone() : "");//电话
+                                info.setQq("0".equals(kefuBeanMap.get("qqIsShow")) ? SpSobotUtils.getUserQQ() : "");//QQ
+                                info.setRemark("0".equals(kefuBeanMap.get("zcRemarkIsShow")) ? SpSobotUtils.getUserRemark() : "");//备注
+                                info.setSkillSetId(kefuBeanMap.get("teamId"));//技能组id
+                                info.setColor("#333333");//标题栏颜色
+
+                                SobotApi.startSobotChat(mContext, info, getUser());
+
+                            } else if ("1".equals(kefuBeanMap.get("kefuFlag")) && !TextUtils.isEmpty(SpSobotUtils.getUserQQ())) {
+                                String kefu = SpSobotUtils.getUserQQ()
+                                        + "&groupId=" + kefuBeanMap.get("teamId")
+                                        + "&partnerId=" + SpSobotUtils.getUserId()
+                                        + "&tel=" + SpSobotUtils.getUserPhone()
+                                        + "&uname=" + SpSobotUtils.getUserNickName()
+                                        + "&face=" + SpSobotUtils.getUserHeadPic();
+                                IntentRouterUtils.skipToSomeWeb(kefu);
+                            }
                         }
-                        info.setUname("0".equals(bean.data.nickIsShow) ? bean.data.user.nickName : ""); //用户昵称，选填
-                        info.setRealname("0".equals(bean.data.realnameIsShow) ? bean.data.user.realName : "");//真实姓名
-                        info.setTel("0".equals(bean.data.phoneIsShow) ? bean.data.user.mobile : "");//电话
-                        info.setQq("0".equals(bean.data.qqIsShow) ? bean.data.user.qq : "");//QQ
-                        info.setRemark("0".equals(bean.data.remarkIsShow) ? bean.data.user.remark : "");//备注
-                        info.setSkillSetId(bean.data.teamId);//技能组id
-                        info.setColor("#333333");//标题栏颜色
-
-                        SobotApi.startSobotChat(mContext, info, getUser());
-
-                    } else if ("1".equals(bean.data.kefuFlag)) {
-                        // TODO: 2017/11/10 去QQ客服
-                        String kefu = bean.data.QQ
-                                + "&groupId=" + bean.data.teamId
-                                + "&partnerId=" + SpSobotUtils.getUserId()
-                                + "&tel=" + bean.data.user.mobile
-                                + "&uname=" + bean.data.user.realName
-                                + "&face=" + SpSobotUtils.getUserHeadPic();
-                        ARouter.getInstance().build(RouterPathConfig.app_SomewebActivity)
-                                .withString("weburl", kefu)
-                                .withString("title", "联系客服")
-                                .withInt("type", 3)
-                                .navigation();
-                    }
-                }
-            });
+                    });
 
         }
 
