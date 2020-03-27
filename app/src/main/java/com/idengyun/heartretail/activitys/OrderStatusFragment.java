@@ -94,7 +94,7 @@ public class OrderStatusFragment extends BaseFragment implements ITimer {
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                OrderDetailActivity.start(getActivity(), mData.get(position).orderId,mData.get(position).orderStatus);
+                OrderDetailActivity.start(getActivity(), mData.get(position).orderId);
             }
         });
     }

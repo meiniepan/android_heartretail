@@ -127,10 +127,9 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
     List<OrderDetailBean.GoodsBean> goodsData = new ArrayList<>();
     OderDetailGoodsListAdapter adapter;
 
-    public static void start(Context context, String orderId, int status) {
+    public static void start(Context context, String orderId) {
         Intent starter = new Intent(context, OrderDetailActivity.class);
         starter.putExtra(Constants.ORDER_ID, orderId);
-        starter.putExtra(Constants.ORDER_STATUS, status);
         context.startActivity(starter);
     }
 
@@ -154,8 +153,6 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
     @Override
     protected void initViews(Bundle savedInstanceState) {
         orderId = getIntent().getStringExtra(Constants.ORDER_ID);
-        orderStatus = getIntent().getIntExtra(Constants.ORDER_STATUS, 0);
-        initStatus();
         initRecyclerView();
         getData();
     }
@@ -254,6 +251,8 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
     }
 
     private void initUI(OrderDetailBean.OrderDetailBeanBody data) {
+        orderStatus = data.orderStatus;
+        initStatus();
         if (orderStatus == 0) {
             startTimer();
             tvOrderProtocol.setText("《" + data.proxySalesName + "》");
