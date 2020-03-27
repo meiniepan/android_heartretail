@@ -145,6 +145,12 @@
     *;
 }
 
+#-----------------x5webview----------------------------
+
+-keep class com.tencent.smtt.** {
+    *;
+}
+
 #-----------------gson----------------------------
 -keep class com.google.**{*;}
 -keepattributes Signature
