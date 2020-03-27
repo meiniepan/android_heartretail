@@ -14,19 +14,16 @@ import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.baselibrary.utils.ToastUtils;
-import com.dengyun.baselibrary.utils.phoneapp.AppUtils;
 import com.dengyun.baselibrary.widgets.imageview.RoundImageView;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.heartretail.Constants;
 import com.idengyun.heartretail.R;
-import com.idengyun.heartretail.beans.ConfirmOrderRspBean;
 import com.idengyun.usermodule.HRUser;
 import com.lzy.okgo.model.Response;
 
 import java.util.HashMap;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -49,6 +46,7 @@ public class EvaluateGoodsActivity extends BaseActivity {
     EditText etContent2;
     @BindView(R.id.tv_evaluate_confirm)
     TextView tvEvaluateConfirm;
+    String orderId;
 
     public static void start(Context context, String orderId) {
         Intent starter = new Intent(context, EvaluateGoodsActivity.class);
@@ -63,20 +61,20 @@ public class EvaluateGoodsActivity extends BaseActivity {
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
-
+        orderId = getIntent().getStringExtra(Constants.ORDER_ID);
     }
 
     private void doCommit() {
         HashMap map = new HashMap();
         map.put("userId", TextUtils.isEmpty(HRUser.getId()) ? "1" : HRUser.getId());
-        map.put("userIp", "0");
-        map.put("goodsId", 0);
-        map.put("skuId", "");
-        map.put("evaluationContent", etContent2.getText());
+        map.put("userIp", "1");
+        map.put("goodsId", 1);
+        map.put("skuId", "1");
+        map.put("evaluationContent", etContent2.getText().toString());
         map.put("evaluationStar", rbEvaluation2.getNumStars());
-        map.put("goodsType", 0);
-        map.put("orderId", "");
-        map.put("ogId", 0);
+        map.put("goodsType", 1);
+        map.put("orderId", "1");
+        map.put("ogId", 1);
 
         NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.saveEvaluation())
                 .activity(this)
