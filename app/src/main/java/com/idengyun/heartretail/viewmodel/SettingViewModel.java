@@ -13,6 +13,7 @@ import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
 import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
+import com.idengyun.heartretail.beans.Bean;
 import com.idengyun.heartretail.beans.KVRealVerify;
 import com.idengyun.heartretail.beans.MobileBindBean;
 import com.idengyun.heartretail.beans.PersonalDataBean;
@@ -35,7 +36,11 @@ public final class SettingViewModel extends ViewModel {
         return ViewModelProviders.of(activity).get(SettingViewModel.class);
     }
 
-    private final MutableLiveData<VerifyCodeBean> verifyCodeLiveData;
+    public static SettingViewModel getInstance(@NonNull Fragment fragment) {
+        return ViewModelProviders.of(fragment).get(SettingViewModel.class);
+    }
+
+    /* 查询用户信息 */
     private final MutableLiveData<PersonalDataBean> userInfoLiveData;
 
     /* 个人资料 */
@@ -47,21 +52,31 @@ public final class SettingViewModel extends ViewModel {
     private final MutableLiveData<MobileBindBean> idVerifyLiveData;
     private final MutableLiveData<MobileBindBean> mobileBindLiveData;
     private final MutableLiveData<RealVerifyBean> realVerifyLiveData;
+    private final MutableLiveData<Bean> bankCardChangeLiveData;
+
+    /* 支付设置 */
+    private final MutableLiveData<Bean> payPwdCheckLiveData;
+    private final MutableLiveData<Bean> payPwdChangeLiveData;
+
+    /* 获取验证码 */
+    private final MutableLiveData<VerifyCodeBean> verifyCodeLiveData;
 
     public SettingViewModel() {
         super();
-        verifyCodeLiveData = new MutableLiveData<>();
         userInfoLiveData = new MutableLiveData<>();
+        verifyCodeLiveData = new MutableLiveData<>();
+
         avatarModifyLiveData = new MutableLiveData<>();
         nicknameModifyLiveData = new MutableLiveData<>();
+
         pwdModifyLiveData = new MutableLiveData<>();
         idVerifyLiveData = new MutableLiveData<>();
         mobileBindLiveData = new MutableLiveData<>();
         realVerifyLiveData = new MutableLiveData<>();
-    }
+        bankCardChangeLiveData = new MutableLiveData<>();
 
-    public LiveData<VerifyCodeBean> getVerifyCode() {
-        return verifyCodeLiveData;
+        payPwdCheckLiveData = new MutableLiveData<>();
+        payPwdChangeLiveData = new MutableLiveData<>();
     }
 
     public LiveData<PersonalDataBean> getUserInfo() {
@@ -92,22 +107,20 @@ public final class SettingViewModel extends ViewModel {
         return realVerifyLiveData;
     }
 
-    /* 发送验证码 */
-    public void requestVerifyCode(Fragment fragment, String identifyType) {
-        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.getIdentifyCode())
-                .fragment(fragment)
-                .isShowDialog(true)
-                .clazz(VerifyCodeBean.class)
-                .params("mobile", HRUser.getMobile())
-                .params("identifyType", identifyType)
-                .build();
+    public LiveData<Bean> getBankCardChange() {
+        return bankCardChangeLiveData;
+    }
 
-        NetApi.getData(RequestMethod.GET, netOption, new JsonCallback<VerifyCodeBean>(netOption) {
-            @Override
-            public void onSuccess(Response<VerifyCodeBean> response) {
-                verifyCodeLiveData.setValue(response.body());
-            }
-        });
+    public LiveData<Bean> getPayPwdCheck() {
+        return payPwdCheckLiveData;
+    }
+
+    public LiveData<Bean> getPayPwdChange() {
+        return payPwdChangeLiveData;
+    }
+
+    public LiveData<VerifyCodeBean> getVerifyCode() {
+        return verifyCodeLiveData;
     }
 
     /* 查询用户信息 */
@@ -229,6 +242,90 @@ public final class SettingViewModel extends ViewModel {
             @Override
             public void onSuccess(Response<RealVerifyBean> response) {
                 realVerifyLiveData.setValue(response.body());
+            }
+        });
+    }
+
+    /* 已绑定银行卡修改 */
+    public void requestChangeBankCard(Fragment fragment, KVRealVerify.BankCard bankCard) {
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.changeBankCard())
+                .fragment(fragment)
+                .isShowDialog(true)
+                .clazz(Bean.class)
+                .params("userId", HRUser.getId())
+                .params("bankCardNo", bankCard.bankCardNo)
+                .params("bankMobile", bankCard.bankMobile)
+                .params("userBankName", bankCard.userBankName)
+                .params("userBankFullName", bankCard.userBankFullName)
+                .params("userBankCity", bankCard.userBankCity)
+                .params("userBankProvince", bankCard.userBankProvince)
+                .params("bankCardType", bankCard.bankCardType)
+                .params("cardType", bankCard.cardType)
+                .params("name", bankCard.name)
+                .params("bankUrl", bankCard.bankUrl)
+                .params("identifyCode", bankCard.identifyCode)
+                .build();
+        NetApi.getData(netOption, new JsonCallback<Bean>(netOption) {
+            @Override
+            public void onSuccess(Response<Bean> response) {
+                payPwdChangeLiveData.setValue(response.body());
+            }
+        });
+    }
+
+    /* 支付密码校验 */
+    public void requestCheckPayPwd(Fragment fragment, String pwd, int type) {
+        /* type:0提现1购买2修改支付密码 */
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.checkPayPwd())
+                .fragment(fragment)
+                .isShowDialog(true)
+                .clazz(Bean.class)
+                .params("userId", HRUser.getId())
+                .params("pwd", pwd)
+                .params("type", type)
+                .build();
+        NetApi.getData(netOption, new JsonCallback<Bean>(netOption) {
+            @Override
+            public void onSuccess(Response<Bean> response) {
+                payPwdCheckLiveData.setValue(response.body());
+            }
+        });
+    }
+
+    /* 支付密码设置 */
+    public void requestChangePayPwd(Fragment fragment, String pwd, int type) {
+        /* type:0新增支付密码1修改支付密码2忘记支付密码 */
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.changePayPwd())
+                .fragment(fragment)
+                .isShowDialog(true)
+                .clazz(Bean.class)
+                .params("userId", HRUser.getId())
+                .params("pwd", pwd)
+                .params("type", type)
+                .build();
+        NetApi.getData(netOption, new JsonCallback<Bean>(netOption) {
+            @Override
+            public void onSuccess(Response<Bean> response) {
+                payPwdChangeLiveData.setValue(response.body());
+            }
+        });
+    }
+
+    /* 发送验证码 */
+    public void requestVerifyCode(Fragment fragment, String identifyType) {
+        /* 验证码类型0注册1换新设备2修改密码3忘记密码4绑定新手机号5旧手机号身份验证6（提现审核）实名认证 7支付密码设置8忘记支付密码 */
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.getIdentifyCode())
+                .fragment(fragment)
+                .isShowDialog(true)
+                .clazz(VerifyCodeBean.class)
+                .params("mobile", HRUser.getMobile())
+                .params("identifyType", identifyType)
+                .build();
+
+        NetApi.getData(RequestMethod.GET, netOption, new JsonCallback<VerifyCodeBean>(netOption) {
+            @Override
+            public void onSuccess(Response<VerifyCodeBean> response) {
+                verifyCodeLiveData.setValue(response.body());
             }
         });
     }

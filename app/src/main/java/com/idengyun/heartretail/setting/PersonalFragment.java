@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,7 +21,6 @@ import com.dengyun.baselibrary.utils.TakePhotoUtil;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
-import com.idengyun.heartretail.beans.PersonalDataBean;
 import com.idengyun.heartretail.beans.UserAvatarBean;
 import com.idengyun.heartretail.setting.personal.InviteCodeFragment;
 import com.idengyun.heartretail.setting.personal.NicknameFragment;
@@ -68,18 +66,7 @@ public final class PersonalFragment extends BaseFragment implements View.OnClick
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        FragmentActivity activity = getActivity();
-        if (activity == null) return;
-        if (settingViewModel == null) {
-            settingViewModel = SettingViewModel.getInstance(activity);
-            settingViewModel.getModifyAvatar().observe(this, new Observer<UserAvatarBean>() {
-                @Override
-                public void onChanged(@Nullable UserAvatarBean userAvatarBean) {
-                    HRUser.saveAvatar(avatarUrl);
-                    ImageApi.displayImage(iv_personal_avatar.getContext(), iv_personal_avatar, avatarUrl);
-                }
-            });
-        }
+        observe();
     }
 
     @Override
@@ -94,9 +81,9 @@ public final class PersonalFragment extends BaseFragment implements View.OnClick
         if (layout_personal_avatar == v) {
             TakePhotoUtil.takePhotoWithItem(this, true, REQUEST_CODE_PERSONAL);
         } else if (layout_personal_nickname == v) {
-            startNicknameActivity();
+            HRActivity.start(getContext(), NicknameFragment.class);
         } else if (layout_personal_invite_code == v) {
-            startInviteCodeActivity();
+            HRActivity.start(getContext(), InviteCodeFragment.class);
         }
     }
 
@@ -139,15 +126,19 @@ public final class PersonalFragment extends BaseFragment implements View.OnClick
         ImageApi.displayImage(iv_personal_avatar.getContext(), iv_personal_avatar, HRUser.getAvatar());
         tv_personal_nickname.setText(HRUser.getNickname());
         tv_personal_invite_code.setText(HRUser.getInviteCode());
-        // tv_personal_invite_code.setCompoundDrawables(null, null, null, null);
     }
 
-    private void startInviteCodeActivity() {
-        HRActivity.start(getContext(), InviteCodeFragment.class);
-    }
-
-    private void startNicknameActivity() {
-        HRActivity.start(getContext(), NicknameFragment.class);
+    private void observe() {
+        if (settingViewModel == null) {
+            settingViewModel = SettingViewModel.getInstance(this);
+            settingViewModel.getModifyAvatar().observe(this, new Observer<UserAvatarBean>() {
+                @Override
+                public void onChanged(@Nullable UserAvatarBean userAvatarBean) {
+                    HRUser.saveAvatar(avatarUrl);
+                    ImageApi.displayImage(iv_personal_avatar.getContext(), iv_personal_avatar, avatarUrl);
+                }
+            });
+        }
     }
 
     private void findViewById(View view) {
@@ -164,14 +155,4 @@ public final class PersonalFragment extends BaseFragment implements View.OnClick
         layout_personal_invite_code.setOnClickListener(this);
     }
 
-    @MainThread
-    private void updateUI(PersonalDataBean.Data data) {
-        String headPic = data.headPic;
-        String nickName = data.nickName;
-        String invitationCode = data.invitationCode;
-
-        ImageApi.displayImage(iv_personal_avatar.getContext(), iv_personal_avatar, headPic);
-        tv_personal_nickname.setText(nickName);
-        tv_personal_invite_code.setText(invitationCode);
-    }
 }

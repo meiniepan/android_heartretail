@@ -222,6 +222,21 @@ public class SpMainConfigConstants {
         return getMainConfigUrl("changeMobile");
     }
 
+    /* 绑定银行卡修改 */
+    public static String changeBankCard() {
+        return getMainConfigUrl("changeBankCard");
+    }
+
+    /* 支付密码设置 */
+    public static String changePayPwd() {
+        return getMainConfigUrl("changePayPwd");
+    }
+
+    /* 支付密码校验 */
+    public static String checkPayPwd() {
+        return getMainConfigUrl("checkPayPwd");
+    }
+
     /* ================================= 登录注册 ================================= */
 
     /* 注册 */

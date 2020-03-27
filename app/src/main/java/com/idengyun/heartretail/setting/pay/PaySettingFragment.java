@@ -1,4 +1,4 @@
-package com.idengyun.heartretail.setting;
+package com.idengyun.heartretail.setting.pay;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -36,19 +36,18 @@ public final class PaySettingFragment extends BaseFragment implements View.OnCli
 
     @Override
     public void onClick(View v) {
-        if (layout_pay_setting_modify_pwd == v) {
-            startPersonalActivity();
-        } else if (layout_pay_setting_forget_pwd == v) {
-            startAccountActivity();
+        if (true) {
+            /* 验证码类型0注册1换新设备2修改密码3忘记密码4绑定新手机号5旧手机号身份验证6（提现审核）实名认证 7支付密码设置8忘记支付密码 */
+            /* 0新增支付密码1修改支付密码2忘记支付密码 */
+            PayPwdVerifyFragment.start(v.getContext(), 7, 0);
+            return;
         }
-    }
 
-    private void startAccountActivity() {
-        HRActivity.start(getContext(), PayPwdModifyFragment.class);
-    }
-
-    private void startPersonalActivity() {
-        HRActivity.start(getContext(), PayPwdModifyFragment.class);
+        if (layout_pay_setting_modify_pwd == v) {
+            HRActivity.start(getContext(), OldPayPwdCheckFragment.class);
+        } else if (layout_pay_setting_forget_pwd == v) {
+            PayPwdVerifyFragment.start(v.getContext(), 8, 2);
+        }
     }
 
     private void findViewById(View view) {

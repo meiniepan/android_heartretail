@@ -35,7 +35,8 @@
             android:layout_marginBottom="52dp"
             android:text="请输入原6位支付密码"
             android:textColor="#ff333333"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:visibility="visible" />
 
         <TextView
             android:id="@+id/tv_pay_pwd_new"

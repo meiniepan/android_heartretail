@@ -141,9 +141,9 @@ public class HRActivity extends BaseActivity {
             for (String fname : fnameArray) {
                 Fragment fragment = Fragment.instantiate(this, fname, extras);
                 fTransaction.add(android.R.id.content, fragment, fname);
-                boolean isVisibleToUser = fragment.getUserVisibleHint();
+                /*boolean isVisibleToUser = fragment.getUserVisibleHint();
                 if (isVisibleToUser) fTransaction.show(fragment);
-                else fTransaction.hide(fragment);
+                else fTransaction.hide(fragment);*/
             }
             fTransaction.commit();
         } catch (Throwable e) {

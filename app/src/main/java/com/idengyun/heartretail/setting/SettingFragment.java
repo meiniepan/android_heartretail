@@ -12,6 +12,8 @@ import com.dengyun.baselibrary.utils.phoneapp.AppUtils;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.MainActivity;
 import com.idengyun.heartretail.R;
+import com.idengyun.heartretail.setting.pay.PaySettingFragment;
+import com.idengyun.updatelib.update.UpdateUtils;
 import com.idengyun.usermodule.HRUser;
 import com.idengyun.usermodule.LoginActivity;
 
@@ -44,6 +46,7 @@ public final class SettingFragment extends BaseFragment implements View.OnClickL
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        iv_setting_new.setVisibility(UpdateUtils.isRequestAndHasNew() ? View.VISIBLE : View.INVISIBLE);
         tv_setting_version.setText(AppUtils.getAppVersionName());
         tv_setting_version.setCompoundDrawables(null, null, null, null);
     }
@@ -58,7 +61,8 @@ public final class SettingFragment extends BaseFragment implements View.OnClickL
         } else if (layout_setting_pay == v) {
             startPaySettingActivity();
         } else if (layout_setting_version == v) {
-            startVersionActivity();
+//            if (UpdateUtils.isRequestAndHasNew())
+                UpdateUtils.checkUpdate(getActivity(), true);
         } else if (layout_setting_agreement == v) {
             startAgreementActivity();
         } else if (layout_setting_logout == v) {
@@ -75,10 +79,6 @@ public final class SettingFragment extends BaseFragment implements View.OnClickL
 
     private void startAgreementActivity() {
         HRActivity.start(getActivity(), AgreeListFragment.class);
-    }
-
-    private void startVersionActivity() {
-        HRActivity.start(getActivity(), VersionFragment.class);
     }
 
     private void startPaySettingActivity() {

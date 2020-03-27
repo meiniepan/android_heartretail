@@ -1,6 +1,7 @@
-package com.idengyun.heartretail.setting.account;
+package com.idengyun.heartretail.setting.pay;
 
 import android.arch.lifecycle.Observer;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,8 +13,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
-import com.dengyun.baselibrary.utils.RegexUtils;
 import com.dengyun.baselibrary.utils.ToastUtils;
+import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.beans.MobileBindBean;
 import com.idengyun.heartretail.viewmodel.SettingViewModel;
@@ -23,23 +24,35 @@ import com.idengyun.usermodule.beans.VerifyCodeBean;
 import com.idengyun.usermodule.utils.SecondsTimer;
 
 /**
- * 绑定新手机界面
+ * 第一次设置支付密码 or 忘记支付密码
  *
  * @author aLang
  */
-public final class MobileBindFragment extends BaseFragment implements View.OnClickListener {
+public final class PayPwdVerifyFragment extends BaseFragment implements View.OnClickListener {
 
-    private EditText et_phone_mobile;
-    private EditText et_phone_verify_code;
-    private TextView tv_phone_verify_code;
-    private View tv_phone_bind;
+    public static void start(Context context, int identifyType, int type) {
+        Bundle extras = new Bundle();
+        extras.putInt("verify_code_type", identifyType);
+        extras.putInt("pay_pwd_change_type", type);
+        HRActivity.start(context, extras, PayPwdVerifyFragment.class);
+    }
+
+    private TextView tv_identity_mobile;
+    private EditText et_identity_verify_code;
+    private TextView tv_identity_verify_code;
+    private View tv_identity_contact_service;
+    private View tv_identity_next;
 
     private SecondsTimer timer;
     private SettingViewModel settingViewModel;
+    /* 验证码类型0注册1换新设备2修改密码3忘记密码4绑定新手机号5旧手机号身份验证6（提现审核）实名认证 7支付密码设置8忘记支付密码 */
+    private int identifyType;
+    /* 0新增支付密码1修改支付密码2忘记支付密码 */
+    private int type;
 
     @Override
     public int getLayoutId() {
-        return R.layout.fragment_mobile_bind;
+        return R.layout.fragment_first_pay_pwd_check;
     }
 
     @Override
@@ -50,7 +63,17 @@ public final class MobileBindFragment extends BaseFragment implements View.OnCli
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        FragmentActivity activity = getActivity();
+        if (activity == null) return;
+        identifyType = activity.getIntent().getIntExtra("verify_code_type", -1);
+        type = activity.getIntent().getIntExtra("pay_pwd_change_type", -1);
         observe();
+
+        String mobile = HRUser.getMobile();
+        if (mobile.length() == 11) {
+            mobile = mobile.substring(0, 3) + "****" + mobile.substring(7, 11);
+            tv_identity_mobile.setText(mobile);
+        }
     }
 
     @Override
@@ -61,10 +84,12 @@ public final class MobileBindFragment extends BaseFragment implements View.OnCli
 
     @Override
     public void onClick(View v) {
-        if (tv_phone_verify_code == v) {
+        if (tv_identity_verify_code == v) {
             sendVerifyCode();
-        } else if (tv_phone_bind == v) {
-            bindNewMobile();
+        } else if (tv_identity_contact_service == v) {
+            // TODO: 2020/3/9
+        } else if (tv_identity_next == v) {
+            nextStep();
         }
     }
 
@@ -79,38 +104,33 @@ public final class MobileBindFragment extends BaseFragment implements View.OnCli
                     ToastUtils.showLong("验证码已发出");
                 }
             });
-            settingViewModel.getBindMobile().observe(this, new Observer<MobileBindBean>() {
+            settingViewModel.getIdentityVerify().observe(this, new Observer<MobileBindBean>() {
                 @Override
                 public void onChanged(@Nullable MobileBindBean mobileBindBean) {
-                    HRUser.saveMobile(et_phone_mobile.getText().toString());
-                    ToastUtils.showShort("手机号绑定成功");
-                    if (getActivity() != null) getActivity().finish();
+                    /* 0新增支付密码1修改支付密码2忘记支付密码 */
+                    PayPwdChangeFragment.start(getContext(), type);
+                    HRActivity.finish(getActivity());
                 }
             });
         }
     }
 
-    private void bindNewMobile() {
-        if (!RegexUtils.isMobileSimple(et_phone_mobile.getText())) {
-            ToastUtils.showShort("请输入有效手机号码");
-            return;
-        }
+    /* 发送手机验证码API */
+    private void sendVerifyCode() {
+        startTimer(tv_identity_verify_code);
 
-        if (et_phone_verify_code.length() < 1) {
+        if (settingViewModel == null) return;
+        settingViewModel.requestVerifyCode(this, "" + identifyType);
+    }
+
+    private void nextStep() {
+        if (et_identity_verify_code.length() < 1) {
             ToastUtils.showShort("请输入有效验证码");
             return;
         }
-
-        if (settingViewModel == null) return;
-        settingViewModel.requestBindMobile(this, et_phone_mobile.getText().toString(), et_phone_verify_code.getText().toString());
-    }
-
-    /* 发送手机验证码API */
-    private void sendVerifyCode() {
-        startTimer(tv_phone_verify_code);
-
-        if (settingViewModel == null) return;
-        settingViewModel.requestVerifyCode(this, HRConst.IDENTIFY_TYPE_4);
+        if (settingViewModel != null) {
+            settingViewModel.requestIdentityVerify(this, et_identity_verify_code.getText().toString());
+        }
     }
 
     private void startTimer(TextView textView) {
@@ -139,13 +159,17 @@ public final class MobileBindFragment extends BaseFragment implements View.OnCli
     }
 
     private void findViewById(View view) {
-        et_phone_mobile = view.findViewById(R.id.et_phone_mobile);
-        et_phone_verify_code = view.findViewById(R.id.et_phone_verify_code);
-        tv_phone_verify_code = view.findViewById(R.id.tv_phone_verify_code);
-        tv_phone_bind = view.findViewById(R.id.tv_phone_bind);
-        tv_phone_verify_code.setOnClickListener(this);
-        tv_phone_bind.setOnClickListener(this);
-        et_phone_mobile.addTextChangedListener(new TextWatcher() {
+        tv_identity_mobile = view.findViewById(R.id.tv_identity_mobile);
+        et_identity_verify_code = view.findViewById(R.id.et_identity_verify_code);
+        tv_identity_verify_code = view.findViewById(R.id.tv_identity_verify_code);
+        tv_identity_contact_service = view.findViewById(R.id.tv_identity_contact_service);
+        tv_identity_next = view.findViewById(R.id.tv_identity_next);
+
+        tv_identity_mobile.setOnClickListener(this);
+        tv_identity_verify_code.setOnClickListener(this);
+        tv_identity_contact_service.setOnClickListener(this);
+        tv_identity_next.setOnClickListener(this);
+        et_identity_verify_code.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -158,25 +182,8 @@ public final class MobileBindFragment extends BaseFragment implements View.OnCli
 
             @Override
             public void afterTextChanged(Editable s) {
-                tv_phone_bind.setEnabled(RegexUtils.isMobileSimple(et_phone_mobile.getText()) && et_phone_verify_code.length() > 5);
+                tv_identity_next.setEnabled(s.length() > 5);
             }
         });
-        et_phone_verify_code.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                tv_phone_bind.setEnabled(RegexUtils.isMobileSimple(et_phone_mobile.getText()) && et_phone_verify_code.length() > 5);
-            }
-        });
-
     }
 }

@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.Html;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
@@ -23,6 +24,7 @@ public final class AgreeDetailFragment extends BaseFragment {
 
     private BaseToolBar base_tool_bar;
     private TextView tv_agree_detail;
+    private WebView web_view;
 
     @Override
     public int getLayoutId() {
@@ -53,11 +55,13 @@ public final class AgreeDetailFragment extends BaseFragment {
 
         base_tool_bar.setTitle(protocolName);
         tv_agree_detail.setText(Html.fromHtml(protocolContent));
+        // web_view.loadDataWithBaseURL(null, protocolContent, "text/html", "UTF-8", null);
     }
 
     private void findViewById(View view) {
         base_tool_bar = view.findViewById(R.id.base_tool_bar);
         tv_agree_detail = view.findViewById(R.id.tv_agree_detail);
+        web_view = view.findViewById(R.id.web_view);
     }
 
 }

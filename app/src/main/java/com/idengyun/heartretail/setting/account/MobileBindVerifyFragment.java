@@ -27,7 +27,7 @@ import com.idengyun.usermodule.utils.SecondsTimer;
  *
  * @author aLang
  */
-public final class IdentityFragment extends BaseFragment implements View.OnClickListener {
+public final class MobileBindVerifyFragment extends BaseFragment implements View.OnClickListener {
 
     private TextView tv_identity_mobile;
     private EditText et_identity_verify_code;
@@ -40,7 +40,7 @@ public final class IdentityFragment extends BaseFragment implements View.OnClick
 
     @Override
     public int getLayoutId() {
-        return R.layout.fragment_id_verify;
+        return R.layout.fragment_mobile_bind_verify;
     }
 
     @Override

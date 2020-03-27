@@ -113,7 +113,7 @@ public final class Step3Fragment extends BaseFragment implements View.OnClickLis
         startTimer(tv_real_verify_code);
 
         if (settingViewModel == null) return;
-        settingViewModel.requestVerifyCode(this, HRConst.IDENTIFY_TYPE_0);
+        settingViewModel.requestVerifyCode(this, "6");
     }
 
     private void startTimer(final TextView textView) {
