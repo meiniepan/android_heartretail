@@ -2,11 +2,10 @@ package com.idengyun.msgmodule.services;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.dengyun.baselibrary.utils.GsonConvertUtil;
-import com.idengyun.msgmodule.NoticeConst;
+import com.idengyun.msgmodule.NoticeActivity;
 import com.idengyun.msgmodule.PushNotificationUtils;
 import com.idengyun.msgmodule.beans.GeTuiBean;
 import com.igexin.sdk.GTIntentService;
@@ -22,9 +21,9 @@ import org.greenrobot.eventbus.EventBus;
  * @Author: zhoubo
  * @CreateDate: 2020-03-05 15:38
  */
-public class CustomMsgReciveService extends GTIntentService {
+public class CustomMsgReceiverService extends GTIntentService {
 
-    public CustomMsgReciveService() {
+    public CustomMsgReceiverService() {
     }
 
     @Override
@@ -83,7 +82,7 @@ public class CustomMsgReciveService extends GTIntentService {
 
         // 4：发送全局广播
         EventBus.getDefault().post(geTuiBean);
-        sendBroadcast(new Intent(NoticeConst.ACTION_NOTICE_API));
+        sendBroadcast(new Intent(NoticeActivity.ACTION_ON_NOTICE_ARRIVED));
 
         // 5：发送通知栏
         new PushNotificationUtils().sendNotification(geTuiBean);

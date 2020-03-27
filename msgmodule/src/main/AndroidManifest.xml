@@ -8,7 +8,7 @@
             android:label="PushService"
             android:process=":pushservice" />
         <service
-            android:name=".services.CustomMsgReciveService"
+            android:name=".services.CustomMsgReceiverService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <activity

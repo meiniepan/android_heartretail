@@ -28,6 +28,8 @@ import java.util.List;
  */
 public final class NoticeActivity extends BaseActivity implements TabLayout.OnTabSelectedListener {
 
+    public static final String ACTION_ON_NOTICE_ARRIVED = NoticeActivity.class.getName();
+
     public static void start(Context context) {
         Intent starter = new Intent(context, NoticeActivity.class);
         // starter.putExtra();
@@ -38,7 +40,7 @@ public final class NoticeActivity extends BaseActivity implements TabLayout.OnTa
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (NoticeConst.ACTION_NOTICE_API.equals(action)) requestNoticeCount();
+            if (NoticeActivity.ACTION_ON_NOTICE_ARRIVED.equals(action)) requestNoticeCount();
         }
     };
 
@@ -53,7 +55,7 @@ public final class NoticeActivity extends BaseActivity implements TabLayout.OnTa
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        IntentFilter filter = new IntentFilter(NoticeConst.ACTION_NOTICE_API);
+        IntentFilter filter = new IntentFilter(NoticeActivity.ACTION_ON_NOTICE_ARRIVED);
         registerReceiver(receiver, filter);
         setContentView(R.layout.activity_notice);
         init();

@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.NestedScrollView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -31,7 +32,6 @@ import com.idengyun.maplibrary.beans.EventChoosePoiItem;
 import com.idengyun.maplibrary.utils.AmapLocationWapper;
 import com.idengyun.maplibrary.utils.PoiSearchUtil;
 import com.idengyun.msgmodule.NoticeActivity;
-import com.idengyun.msgmodule.NoticeConst;
 import com.idengyun.msgmodule.beans.NoticeCountBean;
 import com.idengyun.msgmodule.viewmodel.NoticeViewModel;
 import com.idengyun.usermodule.HRUser;
@@ -54,7 +54,9 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (NoticeConst.ACTION_NOTICE_API.equals(action)) requestNoticeCount();
+            if (NoticeActivity.ACTION_ON_NOTICE_ARRIVED.equals(action) || LoginActivity.ACTION_ON_LOGIN_SUCCEED.equals(action)) {
+                requestNoticeCount();
+            }
         }
     };
     private NoticeViewModel noticeViewModel;
@@ -89,7 +91,8 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
         super.onCreate(savedInstanceState);
         Context context = getContext();
         if (context != null) {
-            IntentFilter filter = new IntentFilter(NoticeConst.ACTION_NOTICE_API);
+            IntentFilter filter = new IntentFilter(NoticeActivity.ACTION_ON_NOTICE_ARRIVED);
+            filter.addAction(LoginActivity.ACTION_ON_LOGIN_SUCCEED);
             context.registerReceiver(receiver, filter);
         }
     }
@@ -153,9 +156,7 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
     @Override
     public void onDestroy() {
         Context context = getContext();
-        if (context != null) {
-            context.unregisterReceiver(receiver);
-        }
+        if (context != null) context.unregisterReceiver(receiver);
         super.onDestroy();
     }
 

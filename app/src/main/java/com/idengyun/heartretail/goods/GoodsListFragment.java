@@ -1,6 +1,10 @@
 package com.idengyun.heartretail.goods;
 
 import android.arch.lifecycle.Observer;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
@@ -37,6 +41,14 @@ import java.util.List;
  */
 public final class GoodsListFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
+    private final BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (LoginActivity.ACTION_ON_LOGIN_SUCCEED.equals(action)) onRefresh();
+        }
+    };
+
     private RecyclerView recycler_view;
     private View tv_home_load_more;
     private GoodsViewModel goodsViewModel;
@@ -56,6 +68,15 @@ public final class GoodsListFragment extends BaseFragment implements SwipeRefres
         }
     };
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Context context = getContext();
+        if (context != null) {
+            IntentFilter filter = new IntentFilter(LoginActivity.ACTION_ON_LOGIN_SUCCEED);
+            context.registerReceiver(receiver, filter);
+        }
+    }
 
     @Override
     public int getLayoutId() {
@@ -91,7 +112,13 @@ public final class GoodsListFragment extends BaseFragment implements SwipeRefres
         onRefresh();
     }
 
-    /*@Override
+    @Override
+    public void onDestroy() {
+        Context context = getContext();
+        if (context != null) context.unregisterReceiver(receiver);
+        super.onDestroy();
+    }
+/*@Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (hidden) return;

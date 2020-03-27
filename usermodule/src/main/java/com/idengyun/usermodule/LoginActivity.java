@@ -42,6 +42,8 @@ import com.lzy.okgo.model.Response;
 public final class LoginActivity extends BaseActivity
         implements RadioGroup.OnCheckedChangeListener, View.OnClickListener, CompoundButton.OnCheckedChangeListener, View.OnFocusChangeListener {
 
+    public static final String ACTION_ON_LOGIN_SUCCEED = LoginActivity.class.getName();
+
     public static void start(Context context) {
         Intent starter = new Intent(context, LoginActivity.class);
         context.startActivity(starter);
@@ -249,9 +251,11 @@ public final class LoginActivity extends BaseActivity
                 /* 保存用户信息 */
                 LoginBean body = response.body();
                 HRUser.saveLoginBean(body);
+                sendBroadcast(new Intent(ACTION_ON_LOGIN_SUCCEED));
                 if (body.data.isnewPhoneImei == 1) {
                     startVerifyActivity();
                 } else {
+                    finish();
                     // startMainActivity();
                 }
             }

@@ -1,6 +1,10 @@
 package com.idengyun.heartretail.main;
 
 import android.arch.lifecycle.Observer;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
@@ -19,8 +23,8 @@ import com.dengyun.baselibrary.net.ImageApi;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.activitys.WithdrawActivity;
-import com.idengyun.heartretail.model.response.RedPacketFriendBean;
 import com.idengyun.heartretail.model.response.RedPacketBean;
+import com.idengyun.heartretail.model.response.RedPacketFriendBean;
 import com.idengyun.heartretail.viewmodel.RedPacketViewModel;
 import com.idengyun.msgmodule.RVLoadMore;
 import com.idengyun.usermodule.HRUser;
@@ -36,6 +40,16 @@ import java.util.List;
  * @author aLang
  */
 public final class RedPacketFragment extends BaseFragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+
+    private final BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (LoginActivity.ACTION_ON_LOGIN_SUCCEED.equals(action)) {
+                onRefresh();
+            }
+        }
+    };
 
     private View layout_red_packet_rule;
 
@@ -67,6 +81,16 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
     private FriendAdapter friendAdapter;
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Context context = getContext();
+        if (context != null) {
+            IntentFilter filter = new IntentFilter(LoginActivity.ACTION_ON_LOGIN_SUCCEED);
+            context.registerReceiver(receiver, filter);
+        }
+    }
+
+    @Override
     public int getLayoutId() {
         return R.layout.fragment_red_packet;
     }
@@ -86,13 +110,25 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (HRUser.isLogin()) requestAPI();
+    }
+
+    @Override
+    public void onDestroy() {
+        Context context = getContext();
+        if (context != null) context.unregisterReceiver(receiver);
+        super.onDestroy();
+    }
+
+    @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (hidden) return;
         if (!HRUser.isLogin()) return;
         if (getUserVisibleHint()) {
             setUserVisibleHint(false);
-            requestAPI();
             onRefresh();
         }
     }

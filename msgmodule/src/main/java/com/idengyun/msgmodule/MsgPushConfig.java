@@ -1,7 +1,7 @@
 package com.idengyun.msgmodule;
 
 import com.dengyun.baselibrary.utils.Utils;
-import com.idengyun.msgmodule.services.CustomMsgReciveService;
+import com.idengyun.msgmodule.services.CustomMsgReceiverService;
 import com.idengyun.msgmodule.services.CustomPushService;
 
 /**
@@ -20,6 +20,6 @@ public class MsgPushConfig {
         com.igexin.sdk.PushManager.getInstance().initialize(Utils.getApp(), CustomPushService.class);
 
         //在个推SDK初始化后，注册消息接收类：
-        com.igexin.sdk.PushManager.getInstance().registerPushIntentService(Utils.getApp(), CustomMsgReciveService.class);
+        com.igexin.sdk.PushManager.getInstance().registerPushIntentService(Utils.getApp(), CustomMsgReceiverService.class);
     }
 }
