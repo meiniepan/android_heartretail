@@ -73,4 +73,6 @@ dependencies {
     //    api rootProject.ext.dependencies["FlycoTabLayout_Lib"]
 
     api rootProject.ext.dependencies.litepal
+    //适配
+    api 'me.jessyan:autosize:1.1.2'
 }
