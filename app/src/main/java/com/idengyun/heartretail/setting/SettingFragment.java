@@ -61,8 +61,7 @@ public final class SettingFragment extends BaseFragment implements View.OnClickL
         } else if (layout_setting_pay == v) {
             startPaySettingActivity();
         } else if (layout_setting_version == v) {
-//            if (UpdateUtils.isRequestAndHasNew())
-                UpdateUtils.checkUpdate(getActivity(), true);
+            if (UpdateUtils.isRequestAndHasNew()) UpdateUtils.checkUpdate(getActivity(), true);
         } else if (layout_setting_agreement == v) {
             startAgreementActivity();
         } else if (layout_setting_logout == v) {
