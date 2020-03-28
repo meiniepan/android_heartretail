@@ -30,8 +30,10 @@ import com.idengyun.commonmodule.beans.BaseGoodsBean;
 import com.idengyun.commonmodule.beans.OrderStatusBean;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.adapters.OderStatusGoodsListAdapter;
+import com.idengyun.heartretail.beans.CommentDetailBean;
 import com.idengyun.heartretail.beans.ConfirmOrderReqBean;
 import com.idengyun.heartretail.beans.ConfirmOrderRspBean;
+import com.idengyun.heartretail.beans.OrderPriceBean;
 import com.idengyun.heartretail.shop.ShopListActivity;
 import com.idengyun.heartretail.utils.DecimalFormatUtil;
 import com.idengyun.heartretail.widget.RecycleViewDivider;
@@ -145,11 +147,7 @@ public class ConfirmOrderActivity extends BaseActivity {
         rlShop.setVisibility(View.GONE);
         llNoShop.setVisibility(View.VISIBLE);
         initRecycler();
-        float totalPay = Float.parseFloat(goodsBean.goodsPrice)*goodsBean.goodsNum;
-        String sPay = "¥"+DecimalFormatUtil.getFormatDecimal("0.00",totalPay);
-        tvTotalPay1.setText(sPay);
-        tvShouldPay1.setText(sPay);
-        tvShouldPayBottom.setText(sPay);
+
     }
 
     private void initWholeSale() {
@@ -175,6 +173,8 @@ public class ConfirmOrderActivity extends BaseActivity {
     }
 
     private void getShippingPrice() {
+        Type type = new TypeToken<ApiBean<OrderPriceBean>>() {
+        }.getType();
         HashMap map = new HashMap();
         map.put("version", AppUtils.getAppVersionName());
         map.put("userId", TextUtils.isEmpty(HRUser.getId()) ? "1" : HRUser.getId());
@@ -193,19 +193,27 @@ public class ConfirmOrderActivity extends BaseActivity {
                 .activity(this)
                 .params(map)
                 .isShowDialog(true)
-                .clazz(ApiBean.class)
+                .type(type)
                 .build();
 
-        NetApi.getData(netOption, new JsonCallback<ApiBean>(netOption) {
+        NetApi.getData(netOption, new JsonCallback<ApiBean<OrderPriceBean>>(netOption) {
             @Override
-            public void onSuccess(Response<ApiBean> response) {
-                ApiBean<ConfirmOrderRspBean> body = response.body();
-                ToastUtils.showShort("运费");
-
+            public void onSuccess(Response<ApiBean<OrderPriceBean>> response) {
+                OrderPriceBean data = response.body().data;
+                float totalPay = Float.parseFloat(data.goodsTotalPrice);
+                float f2 = Float.parseFloat(data.shipping);
+                float f3 = Float.parseFloat(data.payAmount);
+                String stotalPay = "¥"+DecimalFormatUtil.getFormatDecimal("0.00",totalPay);
+                String s2 = "¥"+DecimalFormatUtil.getFormatDecimal("0.00",f2);
+                String s3 = "¥"+DecimalFormatUtil.getFormatDecimal("0.00",f3);
+                tvTotalPay1.setText(stotalPay);
+                tvShouldPay1.setText(s3);
+                tvShouldPayBottom.setText(s3);
+                tvOrderFreight1.setText(s2);
             }
 
             @Override
-            public void onError(Response<ApiBean> response) {
+            public void onError(Response<ApiBean<OrderPriceBean>> response) {
                 super.onError(response);
             }
         });
@@ -336,7 +344,7 @@ public class ConfirmOrderActivity extends BaseActivity {
         map.put("isUsePacket", "0");
         map.put("orderType", 0);
         map.put("signProtocolId", 1);
-//        map.put("saleProxyProtocolId", 1);
+        map.put("saleProxyProtocolId", 1);
         map.put("goodsType", 0);
         ConfirmOrderReqBean bean = new ConfirmOrderReqBean();
         //todo 取值

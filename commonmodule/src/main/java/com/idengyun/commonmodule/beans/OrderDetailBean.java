@@ -12,6 +12,7 @@ public class OrderDetailBean {
     public OrderDetailBeanBody order;
     public class OrderDetailBeanBody {
         public String orderId;
+        public String orderNO;
         public String payOrderId;
         public String payCode;
         public int userId;

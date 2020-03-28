@@ -78,9 +78,9 @@ public class SpMainConfigConstants {
     }
 
     /* 我的评价详情 */
-    public static String todo2() {
+    public static String queryMyEvaluationDetail() {
         // TODO: 2020/3/9
-        return getMainConfigUrl("todo2");
+        return getMainConfigUrl("queryMyEvaluationDetail");
     }
 
     /* 评价订单商品 */

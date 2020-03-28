@@ -75,7 +75,7 @@ public class AwardDetailActivity extends BaseActivity {
         adapterIncome.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                EvaluateDetailActivity.start(getContext(), "");
+//                EvaluateDetailActivity.start(getContext(), "");
             }
         });
     }

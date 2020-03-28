@@ -71,9 +71,9 @@ public class EvaluateGoodsActivity extends BaseActivity {
         map.put("goodsId", 1);
         map.put("skuId", "1");
         map.put("evaluationContent", etContent2.getText().toString());
-        map.put("evaluationStar", rbEvaluation2.getNumStars());
+        map.put("evaluationStar", rbEvaluation2.getRating());
         map.put("goodsType", 1);
-        map.put("orderId", "1");
+        map.put("orderId", orderId);
         map.put("ogId", 1);
 
         NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.saveEvaluation())

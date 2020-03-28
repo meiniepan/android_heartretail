@@ -59,6 +59,7 @@ public class ChoosePayModeActivity extends BaseActivity {
     TextView tvS;
     private SecondsTimer timer;
     private String orderId;
+    private String orderNo;
 
 
     public static void start(Context context, String orderId) {
@@ -75,6 +76,7 @@ public class ChoosePayModeActivity extends BaseActivity {
     @Override
     protected void initViews(Bundle savedInstanceState) {
         orderId = getIntent().getStringExtra(Constants.ORDER_ID);
+        getData();
         startTimer();
     }
 
@@ -127,7 +129,7 @@ public class ChoosePayModeActivity extends BaseActivity {
         HashMap map = new HashMap();
         map.put("userId", TextUtils.isEmpty(HRUser.getId()) ? "1" : HRUser.getId());
         map.put("orderId", orderId);
-        map.put("orderNo", "1");
+        map.put("orderNo", orderNo);
 
         NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.pay())
                 .activity(this)
@@ -165,7 +167,7 @@ public class ChoosePayModeActivity extends BaseActivity {
         NetApi.getData(RequestMethod.GET, netOption, new JsonCallback<ApiBean<OrderDetailBean>>(netOption) {
             @Override
             public void onSuccess(Response<ApiBean<OrderDetailBean>> response) {
-//                orderNo = response.body().data.order.or
+                orderNo = response.body().data.order.orderNO;
             }
         });
     }

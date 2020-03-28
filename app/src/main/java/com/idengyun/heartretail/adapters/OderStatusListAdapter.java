@@ -85,7 +85,7 @@ public class OderStatusListAdapter extends BaseQuickAdapter<OrderStatusBean, Bas
             tv_operate2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    EvaluateDetailActivity.start(mContext, item.orderId);
+                    ToastUtils.showShort("暂未开通");
                 }
             });
         } else if (item.orderStatus == 0) {
