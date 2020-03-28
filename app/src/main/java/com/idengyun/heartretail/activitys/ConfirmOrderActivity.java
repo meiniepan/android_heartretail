@@ -27,11 +27,11 @@ import com.dengyun.baselibrary.utils.phoneapp.AppUtils;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.google.gson.reflect.TypeToken;
 import com.idengyun.commonmodule.beans.BaseGoodsBean;
+import com.idengyun.commonmodule.beans.OrderStatusBean;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.adapters.OderStatusGoodsListAdapter;
 import com.idengyun.heartretail.beans.ConfirmOrderReqBean;
 import com.idengyun.heartretail.beans.ConfirmOrderRspBean;
-import com.idengyun.commonmodule.beans.OrderStatusBean;
 import com.idengyun.heartretail.shop.ShopListActivity;
 import com.idengyun.heartretail.utils.DecimalFormatUtil;
 import com.idengyun.heartretail.widget.RecycleViewDivider;
@@ -116,6 +116,7 @@ public class ConfirmOrderActivity extends BaseActivity {
     String order_confirm_goods_type;
     private OrderStatusBean.GoodsBean goodsBean;
     private String orderId;
+    private boolean isProxy;
 
     public static void start(Context context,@NonNull Bundle extras) {
         Intent starter = new Intent(context, ConfirmOrderActivity.class);
@@ -188,7 +189,7 @@ public class ConfirmOrderActivity extends BaseActivity {
         List<BaseGoodsBean> list = new ArrayList<>();
         list.add(goodsBean);
         map.put("goodsSkuEntityList", list);
-        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.calculatePrice())
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.queryOrderPrice())
                 .activity(this)
                 .params(map)
                 .isShowDialog(true)
@@ -245,6 +246,7 @@ public class ConfirmOrderActivity extends BaseActivity {
                 tvProxySale.setBackground(new BitmapDrawable());
                 llProtocol.setVisibility(View.VISIBLE);
                 initSelfGet();
+                isProxy = false;
                 break;
             //代销tab
             case R.id.tv_proxy_sale:
@@ -258,6 +260,7 @@ public class ConfirmOrderActivity extends BaseActivity {
         HashMap map = new HashMap();
         map.put("version", AppUtils.getAppVersionName());
         map.put("userId", TextUtils.isEmpty(HRUser.getId()) ? "1" : HRUser.getId());
+        map.put("skuIds", "1");
         NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.checkProxyState())
                 .activity(this)
                 .params(map)
@@ -270,6 +273,7 @@ public class ConfirmOrderActivity extends BaseActivity {
             public void onSuccess(Response<ApiBean> response) {
                 ApiBean<ConfirmOrderRspBean> body = response.body();
                 ToastUtils.showShort("有代销资格");
+                isProxy = true;
                 tvProxySale.setBackgroundResource(R.drawable.shape_white_tab_corner_rec);
                 tvSelfGet.setBackground(new BitmapDrawable());
                 llProtocol.setVisibility(View.GONE);
@@ -305,10 +309,18 @@ public class ConfirmOrderActivity extends BaseActivity {
     }
 
     private void doCommit() {
-        if (!cbProtocol.isChecked()) {
-            ToastUtils.showShort("请先同意协议");
-            return;
+        if (isProxy) {
+            if (!cbProtocolProxySale.isChecked()) {
+                ToastUtils.showShort("请先同意协议");
+                return;
+            }
+        } else {
+            if (!cbProtocol.isChecked()) {
+                ToastUtils.showShort("请先同意协议");
+                return;
+            }
         }
+
         Type type = new TypeToken<ApiBean<ConfirmOrderRspBean>>() {
         }.getType();
         HashMap map = new HashMap();
@@ -318,11 +330,21 @@ public class ConfirmOrderActivity extends BaseActivity {
         map.put("mobile", HRUser.getMobile());
         map.put("consignee", "");
         map.put("shopId", 0);
+        map.put("shopMobile", "1");
+        map.put("shopAddress",  "1");
         map.put("userRemark", "");
-        map.put("isUsePacket", "");
+        map.put("isUsePacket", "0");
         map.put("orderType", 0);
+        map.put("signProtocolId", 1);
+//        map.put("saleProxyProtocolId", 1);
         map.put("goodsType", 0);
-        map.put("goodsSkuEntityList", new ConfirmOrderReqBean());
+        ConfirmOrderReqBean bean = new ConfirmOrderReqBean();
+        //todo 取值
+        bean.goodsId = 1;
+        bean.goodsNum = 1;
+        bean.goodsSkuId = 1;
+        bean.goodsType = "1";
+        map.put("goodsSkuEntityList",bean);
         NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.commitOrder())
                 .activity(this)
                 .params(map)
@@ -335,7 +357,7 @@ public class ConfirmOrderActivity extends BaseActivity {
             public void onSuccess(Response<ApiBean<ConfirmOrderRspBean>> response) {
                 ApiBean<ConfirmOrderRspBean> body = response.body();
                 ToastUtils.showShort("提交成功");
-                ChoosePayModeActivity.start(getContext(), orderId);
+                ChoosePayModeActivity.start(getContext(), body.data.orderId);
             }
 
             @Override

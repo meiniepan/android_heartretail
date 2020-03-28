@@ -299,8 +299,8 @@ public class SpMainConfigConstants {
     }
 
     /* 运费接口 */
-    public static String calculatePrice() {
-        return getMainConfigUrl("calculatePrice");
+    public static String queryOrderPrice() {
+        return getMainConfigUrl("queryOrderPrice");
     }
 
     /* ================================= 红包 ================================= */

@@ -13,13 +13,19 @@ import com.dengyun.baselibrary.base.activity.BaseActivity;
 import com.dengyun.baselibrary.net.NetApi;
 import com.dengyun.baselibrary.net.NetOption;
 import com.dengyun.baselibrary.net.callback.JsonCallback;
+import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.dengyun.baselibrary.utils.ToastUtils;
+import com.dengyun.baselibrary.utils.phoneapp.AppUtils;
 import com.dengyun.splashmodule.config.SpMainConfigConstants;
+import com.google.gson.reflect.TypeToken;
+import com.idengyun.commonmodule.beans.OrderDetailBean;
+import com.idengyun.heartretail.Constants;
 import com.idengyun.heartretail.R;
 import com.idengyun.usermodule.HRUser;
 import com.idengyun.usermodule.utils.SecondsTimer;
 import com.lzy.okgo.model.Response;
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
 
 import butterknife.BindView;
@@ -52,10 +58,12 @@ public class ChoosePayModeActivity extends BaseActivity {
     @BindView(R.id.tv_s)
     TextView tvS;
     private SecondsTimer timer;
+    private String orderId;
 
 
     public static void start(Context context, String orderId) {
         Intent starter = new Intent(context, ChoosePayModeActivity.class);
+        starter.putExtra(Constants.ORDER_ID,orderId);
         context.startActivity(starter);
     }
 
@@ -66,6 +74,7 @@ public class ChoosePayModeActivity extends BaseActivity {
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
+        orderId = getIntent().getStringExtra(Constants.ORDER_ID);
         startTimer();
     }
 
@@ -117,7 +126,7 @@ public class ChoosePayModeActivity extends BaseActivity {
     private void doCommit() {
         HashMap map = new HashMap();
         map.put("userId", TextUtils.isEmpty(HRUser.getId()) ? "1" : HRUser.getId());
-        map.put("orderId", "1");
+        map.put("orderId", orderId);
         map.put("orderNo", "1");
 
         NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.pay())
@@ -138,6 +147,25 @@ public class ChoosePayModeActivity extends BaseActivity {
             @Override
             public void onError(Response<ApiBean> response) {
                 super.onError(response);
+            }
+        });
+    }
+    private void getData() {
+        Type type = new TypeToken<ApiBean<OrderDetailBean>>() {
+        }.getType();
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.queryOrderDetail())
+                .activity(this)
+                .params("version", AppUtils.getAppVersionName())
+                .params("userId", HRUser.getId())
+                .params("orderId", TextUtils.isEmpty(orderId) ? "" : orderId)
+                .isShowDialog(true)
+                .type(type)
+                .build();
+
+        NetApi.getData(RequestMethod.GET, netOption, new JsonCallback<ApiBean<OrderDetailBean>>(netOption) {
+            @Override
+            public void onSuccess(Response<ApiBean<OrderDetailBean>> response) {
+//                orderNo = response.body().data.order.or
             }
         });
     }
