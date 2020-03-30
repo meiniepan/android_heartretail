@@ -48,7 +48,7 @@ public final class AuthenticationFragment extends BaseFragment implements View.O
         } else if (tv_to_auth_steps == v) {
             HRActivity.start(getContext(), Step1Fragment.class);
         }
-       // HRActivity.start(getContext(), Step1Fragment.class);
+        // HRActivity.start(getContext(), Step1Fragment.class);
     }
 
     private void findViewById(View view) {

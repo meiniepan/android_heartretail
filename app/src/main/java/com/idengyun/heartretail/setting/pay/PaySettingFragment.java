@@ -8,6 +8,7 @@ import android.view.View;
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
+import com.idengyun.usermodule.HRUser;
 
 /**
  * 设置界面
@@ -36,7 +37,7 @@ public final class PaySettingFragment extends BaseFragment implements View.OnCli
 
     @Override
     public void onClick(View v) {
-        if (true) {
+        if (!HRUser.isHavePayPwd()) {
             /* 验证码类型0注册1换新设备2修改密码3忘记密码4绑定新手机号5旧手机号身份验证6（提现审核）实名认证 7支付密码设置8忘记支付密码 */
             /* 0新增支付密码1修改支付密码2忘记支付密码 */
             PayPwdVerifyFragment.start(v.getContext(), 7, 0);

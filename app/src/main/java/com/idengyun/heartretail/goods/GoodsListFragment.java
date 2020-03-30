@@ -248,7 +248,7 @@ public final class GoodsListFragment extends BaseFragment implements SwipeRefres
                 return;
             }
 
-            if (!HRUser.isAuthentication()) {
+            if (HRUser.isNewDevice()) {
                 VerifyDeviceActivity.start(v.getContext());
                 return;
 

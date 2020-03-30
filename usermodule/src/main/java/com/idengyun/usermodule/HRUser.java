@@ -14,6 +14,11 @@ import com.idengyun.usermodule.beans.LoginBean;
  */
 public final class HRUser {
 
+    /* 用户是否有支付密码 */
+    public static boolean isHavePayPwd() {
+        return "1".equals(getString("userPayPwdSetFlag"));
+    }
+
     /* 用户是否实名认证 */
     public static boolean isAuthentication() {
         return getInt("authIdentity") == 1;
@@ -103,6 +108,7 @@ public final class HRUser {
         putValue("headUrl", user.headUrl);
         putValue("nickName", user.nickName);
         putValue("authIdentity", user.authIdentity);
+        putValue("userPayPwdSetFlag", user.userPayPwdSetFlag);
     }
 
     private static Application context = Utils.getApp();

@@ -122,7 +122,7 @@ public final class MyFragment extends BaseFragment implements View.OnClickListen
             return;
         }
 
-        if (!HRUser.isAuthentication()) {
+        if (HRUser.isNewDevice()) {
             startDeviceVerifyActivity();
             return;
         }

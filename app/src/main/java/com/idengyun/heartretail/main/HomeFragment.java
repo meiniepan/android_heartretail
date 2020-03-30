@@ -177,7 +177,7 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
                 return;
             }
 
-            if (!HRUser.isAuthentication()) {
+            if (HRUser.isNewDevice()) {
                 VerifyDeviceActivity.start(getContext());
                 return;
             }
@@ -189,7 +189,7 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
                 return;
             }
 
-            if (!HRUser.isAuthentication()) {
+            if (HRUser.isNewDevice()) {
                 VerifyDeviceActivity.start(getContext());
                 return;
             }
@@ -248,10 +248,15 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
         String text = count > 999 ? "999+" : "" + count;
         tv_home_notice_count.setText(text);
         tv_home_notice_count.setVisibility(count > 0 ? View.VISIBLE : View.INVISIBLE);
+        if (!HRUser.isLogin()) tv_home_notice_count.setVisibility(View.INVISIBLE);
     }
 
     private void requestNoticeCount() {
-        if (!HRUser.isLogin()) return;
+        if (!HRUser.isLogin()) {
+            tv_home_notice_count.setVisibility(View.INVISIBLE);
+            return;
+        }
+
         FragmentActivity activity = getActivity();
         if (activity == null) return;
         if (noticeViewModel != null) noticeViewModel.requestNoticeCount(activity);

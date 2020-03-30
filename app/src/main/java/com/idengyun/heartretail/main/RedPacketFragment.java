@@ -140,7 +140,7 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
             return;
         }
 
-        if (!HRUser.isAuthentication()) {
+        if (HRUser.isNewDevice()) {
             VerifyDeviceActivity.start(getContext());
             return;
         }

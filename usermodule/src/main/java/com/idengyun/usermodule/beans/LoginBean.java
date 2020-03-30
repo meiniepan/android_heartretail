@@ -23,6 +23,7 @@ public final class LoginBean {
             public String headUrl;
             public String nickName;
             public int authIdentity;
+            public String userPayPwdSetFlag;
         }
     }
 }
