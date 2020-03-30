@@ -20,11 +20,11 @@ import com.dengyun.baselibrary.net.ImageApi;
 import com.google.android.flexbox.FlexboxLayout;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
+import com.idengyun.heartretail.beans.GoodsDetailBean;
 import com.idengyun.heartretail.goods.helper.Cell;
 import com.idengyun.heartretail.goods.helper.Converter;
 import com.idengyun.heartretail.goods.helper.SKU;
 import com.idengyun.heartretail.goods.helper.Section;
-import com.idengyun.heartretail.beans.GoodsDetailBean;
 import com.idengyun.heartretail.viewmodel.GoodsViewModel;
 
 import java.util.ArrayList;
@@ -150,13 +150,45 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
     /* 确认订单界面使用 */
     public Bundle createExtras() {
         Bundle extras = new Bundle();
+
         GoodsDetailBean.Data data = converter.getData();
-        extras.putString("order_confirm_goods_img_url", (String) getView().getTag());
+        List<? extends String> c = converter.getSelectedSpecIDList();
+        SKU selectedSKU = converter.getSelectedSKU();
+
+        int goodsId = data.goodsId;
+        int goodsType = data.goodsType;
+
+        ArrayList<String> selectedSpecIDList = new ArrayList<>(c);
+
+        ArrayList<String> specIDList = new ArrayList<>(selectedSKU.specIDList);
+        int isDefault = selectedSKU.isDefault;
+        int goodsCount = selectedSKU.goodsCount;
+        int goodsSkuId = selectedSKU.goodsSkuId;
+        String goodsPrice = selectedSKU.goodsPrice;
+        int canBuyCount = selectedSKU.canBuyCount;
+        String skuImgUrl = selectedSKU.skuImgUrl;
+        int wholesaleFlag = selectedSKU.wholesaleFlag;
+
+        extras.putInt("goodsId", goodsId);
+        extras.putInt("goodsType", goodsType);
+
+        extras.putStringArrayList("selectedSpecIDList", selectedSpecIDList);
+
+        extras.putStringArrayList("specIDList", specIDList);
+        extras.putInt("isDefault", isDefault);
+        extras.putInt("goodsCount", goodsCount);
+        extras.putInt("goodsSkuId", goodsSkuId);
+        extras.putString("goodsPrice", goodsPrice);
+        extras.putInt("canBuyCount", canBuyCount);
+        extras.putString("skuImgUrl", skuImgUrl);
+        extras.putInt("wholesaleFlag", wholesaleFlag);
+
+        /*extras.putString("order_confirm_goods_img_url", (String) getView().getTag());
         extras.putString("order_confirm_goods_title", data.goodsTitle);
         extras.putString("order_confirm_goods_spec_list", getGoodsSpecList());
         extras.putString("order_confirm_goods_price", (String) tv_goods_spec_price.getTag());
         extras.putInt("order_confirm_goods_count", (int) tv_purchase_quantity.getTag());
-        extras.putInt("order_confirm_goods_type", data.goodsType);
+        extras.putInt("order_confirm_goods_type", data.goodsType);*/
         return extras;
     }
 
