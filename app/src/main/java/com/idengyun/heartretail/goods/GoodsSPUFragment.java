@@ -251,7 +251,7 @@ public final class GoodsSPUFragment extends BaseFragment implements View.OnClick
         for (GoodsDetailBean.Data.Rule rule : ruleList) {
             sb.append(rule.title).append("&");
         }
-        tv_goods_service.setText(sb.subSequence(0, sb.length() - 1));
+        tv_goods_service.setText(sb.length() > 0 ? sb.subSequence(0, sb.length() - 1) : sb);
 
         /* 商品详情 */
         layout_goods_detail.removeAllViews();

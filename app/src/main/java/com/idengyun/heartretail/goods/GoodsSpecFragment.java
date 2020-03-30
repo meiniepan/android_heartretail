@@ -157,6 +157,8 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
 
         int goodsId = data.goodsId;
         int goodsType = data.goodsType;
+        String goodsName = data.goodsName;
+        String goodsTitle = data.goodsTitle;
 
         ArrayList<String> selectedSpecIDList = new ArrayList<>(c);
 
@@ -171,6 +173,8 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
 
         extras.putInt("goodsId", goodsId);
         extras.putInt("goodsType", goodsType);
+        extras.putString("goodsName", goodsName);
+        extras.putString("goodsTitle", goodsTitle);
 
         extras.putStringArrayList("selectedSpecIDList", selectedSpecIDList);
 
@@ -182,6 +186,22 @@ public final class GoodsSpecFragment extends BaseFragment implements View.OnClic
         extras.putInt("canBuyCount", canBuyCount);
         extras.putString("skuImgUrl", skuImgUrl);
         extras.putInt("wholesaleFlag", wholesaleFlag);
+
+        /*goodsId = extras.getInt("goodsId", goodsId);
+        goodsType = extras.getInt("goodsType", goodsType);
+        goodsName = extras.getString("goodsName");
+        goodsTitle = extras.getString("goodsTitle");
+
+        selectedSpecIDList = extras.getStringArrayList("selectedSpecIDList");
+
+        specIDList = extras.getStringArrayList("specIDList");
+        isDefault = extras.getInt("isDefault", -1);
+        goodsCount = extras.getInt("goodsCount", -1);
+        goodsSkuId = extras.getInt("goodsSkuId", -1);
+        goodsPrice = extras.getString("goodsPrice");
+        canBuyCount = extras.getInt("canBuyCount", -1);
+        skuImgUrl = extras.getString("skuImgUrl");
+        wholesaleFlag = extras.getInt("wholesaleFlag", -1);*/
 
         /*extras.putString("order_confirm_goods_img_url", (String) getView().getTag());
         extras.putString("order_confirm_goods_title", data.goodsTitle);
