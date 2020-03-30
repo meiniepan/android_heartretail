@@ -172,6 +172,51 @@ public class ConfirmOrderActivity extends BaseActivity {
 //        orderType = "2";
     }
 
+    private void initRecycler() {
+        List<OrderStatusBean.GoodsBean> goodsBeanList = new ArrayList<>();
+         goodsBean = new OrderStatusBean.GoodsBean();
+        goodsBean.goodsName = order_confirm_goods_title;
+        goodsBean.skuItemvalue = order_confirm_goods_spec_list;
+        goodsBean.originalImg = order_confirm_goods_img_url;
+        goodsBean.goodsPrice = order_confirm_goods_price;
+        goodsBean.goodsNum = order_confirm_goods_count;
+        goodsBeanList.add(goodsBean);
+        OderStatusGoodsListAdapter adapter = new OderStatusGoodsListAdapter(R.layout.item_order_status_goods, goodsBeanList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        RecycleViewDivider divider = new RecycleViewDivider(SizeUtils.dp2px(1), getResources().getColor(R.color.lineColor));
+        recyclerView.addItemDecoration(divider);
+        recyclerView.setAdapter(adapter);
+    }
+
+    @OnClick({R.id.ll_shop_choose, R.id.tv_commit, R.id.tv_self_get, R.id.tv_proxy_sale})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            //选择商家
+            case R.id.ll_shop_choose:
+//                ShopListActivity.start(this);
+                Intent intent = new Intent(this, ShopListActivity.class);
+                startActivityForResult(intent, 1);
+
+                break;
+            case R.id.tv_commit:
+                doCommit();
+                break;
+            //自提tab
+            case R.id.tv_self_get:
+                tvSelfGet.setBackgroundResource(R.drawable.shape_white_tab_corner_rec);
+                tvProxySale.setBackground(new BitmapDrawable());
+                llProtocol.setVisibility(View.VISIBLE);
+                initSelfGet();
+                isProxy = false;
+                break;
+            //代销tab
+            case R.id.tv_proxy_sale:
+                queryProxyQualification();
+
+                break;
+        }
+    }
+
     private void getShippingPrice() {
         Type type = new TypeToken<ApiBean<OrderPriceBean>>() {
         }.getType();
@@ -217,51 +262,6 @@ public class ConfirmOrderActivity extends BaseActivity {
                 super.onError(response);
             }
         });
-    }
-
-    private void initRecycler() {
-        List<OrderStatusBean.GoodsBean> goodsBeanList = new ArrayList<>();
-         goodsBean = new OrderStatusBean.GoodsBean();
-        goodsBean.goodsName = order_confirm_goods_title;
-        goodsBean.skuItemvalue = order_confirm_goods_spec_list;
-        goodsBean.originalImg = order_confirm_goods_img_url;
-        goodsBean.goodsPrice = order_confirm_goods_price;
-        goodsBean.goodsNum = order_confirm_goods_count;
-        goodsBeanList.add(goodsBean);
-        OderStatusGoodsListAdapter adapter = new OderStatusGoodsListAdapter(R.layout.item_order_status_goods, goodsBeanList);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        RecycleViewDivider divider = new RecycleViewDivider(SizeUtils.dp2px(1), getResources().getColor(R.color.lineColor));
-        recyclerView.addItemDecoration(divider);
-        recyclerView.setAdapter(adapter);
-    }
-
-    @OnClick({R.id.ll_shop_choose, R.id.tv_commit, R.id.tv_self_get, R.id.tv_proxy_sale})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            //选择商家
-            case R.id.ll_shop_choose:
-//                ShopListActivity.start(this);
-                Intent intent = new Intent(this, ShopListActivity.class);
-                startActivityForResult(intent, 1);
-
-                break;
-            case R.id.tv_commit:
-                doCommit();
-                break;
-            //自提tab
-            case R.id.tv_self_get:
-                tvSelfGet.setBackgroundResource(R.drawable.shape_white_tab_corner_rec);
-                tvProxySale.setBackground(new BitmapDrawable());
-                llProtocol.setVisibility(View.VISIBLE);
-                initSelfGet();
-                isProxy = false;
-                break;
-            //代销tab
-            case R.id.tv_proxy_sale:
-                queryProxyQualification();
-
-                break;
-        }
     }
 
     private void queryProxyQualification() {

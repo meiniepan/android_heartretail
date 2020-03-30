@@ -20,9 +20,8 @@ import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.google.gson.reflect.TypeToken;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.adapters.EvaluateListAdapter;
-import com.idengyun.heartretail.beans.CommentBean;
+import com.idengyun.heartretail.beans.CommentListBean;
 import com.idengyun.statusrecyclerviewlib.RefreshStatusRecyclerView;
-import com.idengyun.usermodule.HRUser;
 import com.lzy.okgo.model.Response;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
@@ -41,7 +40,7 @@ import butterknife.BindView;
 public class MyEvaluateActivity extends BaseActivity {
     @BindView(R.id.sr_evaluate)
     RefreshStatusRecyclerView recyclerView;
-    List<CommentBean> mData = new ArrayList<>();
+    List<CommentListBean.CommentBean> mData = new ArrayList<>();
     private EvaluateListAdapter adapter;
     private int page = 1;
 
@@ -64,13 +63,13 @@ public class MyEvaluateActivity extends BaseActivity {
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                EvaluateDetailActivity.start(getContext(),mData.get(position).commentId);
+                EvaluateDetailActivity.start(getContext(),mData.get(position).evaluationId);
             }
         });
     }
 
     private void getData() {
-        Type type = new TypeToken<ApiBean<List<CommentBean>>>() {
+        Type type = new TypeToken<ApiBean<CommentListBean>>() {
         }.getType();
         NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.myEvaluationList())
                 .activity(activity)
@@ -83,12 +82,12 @@ public class MyEvaluateActivity extends BaseActivity {
                 .type(type)
                 .build();
 
-        NetApi.getData(RequestMethod.GET, netOption, new JsonCallback<ApiBean<List<CommentBean>>>(netOption) {
+        NetApi.getData(RequestMethod.GET, netOption, new JsonCallback<ApiBean<CommentListBean>>(netOption) {
             @Override
-            public void onSuccess(Response<ApiBean<List<CommentBean>>> response) {
+            public void onSuccess(Response<ApiBean<CommentListBean>> response) {
                 recyclerView.finishRefreshLoadMore();
-                List<CommentBean> data = response.body().data;
-                if (data != null && data.size() > 0) {
+                List<CommentListBean.CommentBean> data = response.body().data.evaluationList;
+                if (response.body().data!=null&data != null && data.size() > 0) {
                     mData.addAll(data);
                 } else {
                     if (page != 1) {
@@ -99,7 +98,7 @@ public class MyEvaluateActivity extends BaseActivity {
             }
 
             @Override
-            public void onError(Response<ApiBean<List<CommentBean>>> response) {
+            public void onError(Response<ApiBean<CommentListBean>> response) {
                 super.onError(response);
                 recyclerView.finishRefreshLoadMore();
             }
