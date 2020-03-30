@@ -43,19 +43,20 @@
                 android:textSize="28sp"
                 android:textStyle="bold" />
 
-            <Space
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
             <EditText
                 android:id="@+id/et_input_num"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
-                android:layout_marginStart="@dimen/dp_15"
+                android:layout_marginStart="12dp"
                 android:background="@null"
-                android:gravity="end"
+                android:hint="请输入金额" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_15"
                 android:hint="100元起提" />
         </LinearLayout>
 
@@ -213,6 +214,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@null"
+            android:checked="true"
             android:button="@null"
             android:drawableStart="@drawable/selector_read_protocol"
             android:padding="@dimen/dp_3" />
