@@ -133,7 +133,7 @@ public class VerifyDeviceActivity extends BaseActivity {
             public void onSuccess(Response<ApiSimpleBean> response) {
                 ToastUtils.showShort("验证新设备成功");
                 // startMainActivity();
-                HRUser.saveAuthentication(1);
+                HRUser.saveNewDevice(1);
                 finish();
             }
         });

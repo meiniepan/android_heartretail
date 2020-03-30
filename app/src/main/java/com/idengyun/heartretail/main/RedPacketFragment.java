@@ -22,6 +22,7 @@ import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.net.ImageApi;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
+import com.idengyun.heartretail.activitys.ShareQRCodeActivity;
 import com.idengyun.heartretail.activitys.WithdrawActivity;
 import com.idengyun.heartretail.beans.RedPacketBean;
 import com.idengyun.heartretail.beans.RedPacketFriendBean;
@@ -64,6 +65,7 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
 
     private RecyclerView recycler_view;
     private TextView tv_red_packet_more;
+    private View iv_red_packet_share;
     private RedPacketViewModel redPacketViewModel;
 
     /* 分页加载 */
@@ -75,7 +77,7 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
     private final RVLoadMore onScrollListener = new RVLoadMore() {
         @Override
         public void onLoadingMore(RVLoadMore listener) {
-            onLoadMore();
+            // onLoadMore();
         }
     };
     private FriendAdapter friendAdapter;
@@ -112,7 +114,9 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
     @Override
     public void onResume() {
         super.onResume();
-        if (HRUser.isLogin()) requestAPI();
+        if (!HRUser.isLogin()) return;
+        requestAPI();
+        onRefresh();
     }
 
     @Override
@@ -123,34 +127,27 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
     }
 
     @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        if (hidden) return;
-        if (!HRUser.isLogin()) return;
-        if (getUserVisibleHint()) {
-            setUserVisibleHint(false);
-            onRefresh();
-        }
-    }
-
-    @Override
     public void onClick(View v) {
+        Context context = v.getContext();
+
         if (!HRUser.isLogin()) {
-            LoginActivity.start(getContext());
+            LoginActivity.start(context);
             return;
         }
 
         if (HRUser.isNewDevice()) {
-            VerifyDeviceActivity.start(getContext());
+            VerifyDeviceActivity.start(context);
             return;
         }
 
         if (layout_red_packet_rule == v) {
-            HRActivity.start(getContext(), InviteRuleDetailFragment.class);
+            HRActivity.start(context, InviteRuleDetailFragment.class);
         } else if (tv_red_packet_to_cash == v) {
-            WithdrawActivity.start(v.getContext());
+            WithdrawActivity.start(context);
         } else if (tv_red_packet_more == v) {
-
+            onLoadMore();
+        } else if (iv_red_packet_share == v) {
+            ShareQRCodeActivity.start(context);
         }
     }
 
@@ -228,12 +225,12 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
         if (currentPage == 1) friendAdapter.friendList.clear();
         friendAdapter.friendList.addAll(friends);
         if (!onScrollListener.isCanLoadMore()) {
-            RedPacketFriendBean.Data.Friend friend = new RedPacketFriendBean.Data.Friend();
+            /*RedPacketFriendBean.Data.Friend friend = new RedPacketFriendBean.Data.Friend();
             friend.friendId = -1;
-            friendAdapter.friendList.add(friend);
+            friendAdapter.friendList.add(friend);*/
         }
         friendAdapter.notifyDataSetChanged();
-        // tv_red_packet_more.setVisibility(friendAdapter.getItemCount() == friendsCount ? View.GONE : View.VISIBLE);
+        tv_red_packet_more.setVisibility(onScrollListener.isCanLoadMore() ? View.VISIBLE : View.GONE);
     }
 
     private void findViewById(@NonNull View view) {
@@ -250,10 +247,13 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
 
         recycler_view = view.findViewById(R.id.recycler_view);
         tv_red_packet_more = view.findViewById(R.id.tv_red_packet_more);
+        iv_red_packet_share = view.findViewById(R.id.iv_red_packet_share);
 
         v_red_packet_dash_line.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         layout_red_packet_rule.setOnClickListener(this);
         tv_red_packet_to_cash.setOnClickListener(this);
+        iv_red_packet_share.setOnClickListener(this);
+        tv_red_packet_more.setOnClickListener(this);
     }
 
     private static class FriendAdapter extends RecyclerView.Adapter {
@@ -280,7 +280,7 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
             if (getItemViewType(position) != -1) {
                 RedPacketFriendBean.Data.Friend friend = friendList.get(position);
                 FriendHolder friendHolder = (FriendHolder) holder;
-                friendHolder.updateUI(friend);
+                friendHolder.updateUI(friendList, position);
             }
         }
 
@@ -302,24 +302,28 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
         private TextView tv_red_packet_user_name;
         private TextView tv_red_packet_date;
         private TextView tv_red_packet_out_money;
+        private View v_red_packet_divider;
 
         private FriendHolder(@NonNull View itemView) {
             super(itemView);
             findViewById(itemView);
         }
 
-        private void updateUI(RedPacketFriendBean.Data.Friend friend) {
+        public void updateUI(List<RedPacketFriendBean.Data.Friend> friendList, int position) {
+            RedPacketFriendBean.Data.Friend friend = friendList.get(position);
             String friendName = friend.friendName;
             String friendHeadImg = friend.friendHeadImg;
             String inviteTime = friend.inviteTime;
             String consumeMoney = friend.consumeMoney;
-            String[] split = inviteTime.split(" ");
-            String date = split.length > 0 ? split[0] : "";
+            /*String[] split = inviteTime.split(" ");
+            String date = split.length > 0 ? split[0] : "";*/
+            String date = inviteTime.length() >= 3 ? inviteTime.substring(0, inviteTime.length() - 3) : inviteTime;
 
             ImageApi.displayImage(iv_red_packet_user_avatar.getContext(), iv_red_packet_user_avatar, friendHeadImg);
             tv_red_packet_user_name.setText(friendName);
             tv_red_packet_date.setText(date);
             tv_red_packet_out_money.setText(consumeMoney + "元");
+            v_red_packet_divider.setVisibility(friendList.size() == position + 1 ? View.GONE : View.VISIBLE);
         }
 
         private void findViewById(@NonNull View itemView) {
@@ -327,6 +331,7 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
             tv_red_packet_user_name = itemView.findViewById(R.id.tv_red_packet_user_name);
             tv_red_packet_date = itemView.findViewById(R.id.tv_red_packet_date);
             tv_red_packet_out_money = itemView.findViewById(R.id.tv_red_packet_out_money);
+            v_red_packet_divider = itemView.findViewById(R.id.v_red_packet_divider);
         }
     }
 }

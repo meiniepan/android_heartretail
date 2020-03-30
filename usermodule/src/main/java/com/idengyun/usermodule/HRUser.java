@@ -1,6 +1,9 @@
 package com.idengyun.usermodule;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.dengyun.baselibrary.utils.SharedPreferencesUtil;
@@ -62,6 +65,11 @@ public final class HRUser {
     /* 获取用户昵称 */
     public static String getNickname() {
         return getString("nickName");
+    }
+
+    /* 保存新设备验证 */
+    public static void saveNewDevice(int isnewPhoneImei) {
+        putValue("isnewPhoneImei", isnewPhoneImei);
     }
 
     /* 保存实名认证 */

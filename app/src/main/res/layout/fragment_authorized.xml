@@ -47,6 +47,8 @@
                     android:id="@+id/iv_real_avatar"
                     android:layout_width="64dp"
                     android:layout_height="64dp"
+                    app:civ_border_color="#80ffffff"
+                    app:civ_border_width="2dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:background="#fff" />
@@ -65,22 +67,23 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:text="施永哲"
                     android:textColor="#ffffffff"
                     android:textSize="20sp"
                     app:layout_constraintLeft_toRightOf="@+id/iv_real_avatar"
-                    app:layout_constraintTop_toTopOf="@+id/iv_real_avatar" />
+                    app:layout_constraintTop_toTopOf="@+id/iv_real_avatar"
+                    tools:text="施永哲" />
 
                 <TextView
+                    android:id="@+id/tv_real_mobile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="12dp"
-                    android:text="18012345678"
                     android:textColor="#ffffffff"
                     android:textSize="16sp"
                     app:layout_constraintLeft_toRightOf="@+id/iv_real_avatar"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_real_name" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_real_name"
+                    tools:text="18012345678" />
 
                 <TextView
                     android:layout_width="wrap_content"

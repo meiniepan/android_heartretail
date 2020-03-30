@@ -13,6 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#F8F8F8"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:gravity="center_horizontal"
         android:orientation="vertical"
         android:paddingBottom="49dp">

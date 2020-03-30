@@ -12,7 +12,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.NestedScrollView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -37,7 +36,6 @@ import com.idengyun.msgmodule.viewmodel.NoticeViewModel;
 import com.idengyun.usermodule.HRUser;
 import com.idengyun.usermodule.LoginActivity;
 import com.idengyun.usermodule.VerifyDeviceActivity;
-import com.sobot.chat.utils.InformationUtil;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -171,38 +169,40 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
 
     @Override
     public void onClick(View v) {
+        Context context = v.getContext();
+
         if (tv_home_share == v) {
             if (!HRUser.isLogin()) {
-                LoginActivity.start(getContext());
+                LoginActivity.start(context);
                 return;
             }
 
             if (HRUser.isNewDevice()) {
-                VerifyDeviceActivity.start(getContext());
+                VerifyDeviceActivity.start(context);
                 return;
             }
 
-            ShareQRCodeActivity.start(getContext());
+            ShareQRCodeActivity.start(context);
         } else if (tv_home_notice == v) {
             if (!HRUser.isLogin()) {
-                LoginActivity.start(getContext());
+                LoginActivity.start(context);
                 return;
             }
 
             if (HRUser.isNewDevice()) {
-                VerifyDeviceActivity.start(getContext());
+                VerifyDeviceActivity.start(context);
                 return;
             }
 
-            NoticeActivity.start(getContext());
+            NoticeActivity.start(context);
         } else if (tv_home_location == v) {
             if (TextUtils.isEmpty(cityName)) {
                 ToastUtils.showShort("还没有定位成功");
             } else {
-                MyMapActivity.start(getContext(), cityName, poiName, poiId);
+                MyMapActivity.start(context, cityName, poiName, poiId);
             }
         } else if (tv_home_rule == v) {
-            HRActivity.start(getContext(), PlayRuleDetailFragment.class);
+            HRActivity.start(context, PlayRuleDetailFragment.class);
         }
     }
 

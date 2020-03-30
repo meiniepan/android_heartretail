@@ -249,7 +249,7 @@ public final class LoginActivity extends BaseActivity
                 LoginBean body = response.body();
                 HRUser.saveLoginBean(body);
                 sendBroadcast(new Intent(ACTION_ON_LOGIN_SUCCEED));
-                if (body.data.isnewPhoneImei == 1) {
+                if (HRUser.isNewDevice()) {
                     startVerifyActivity();
                 } else {
                     finish();

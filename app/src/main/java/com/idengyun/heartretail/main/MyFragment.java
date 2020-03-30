@@ -1,6 +1,7 @@
 package com.idengyun.heartretail.main;
 
 import android.arch.lifecycle.Observer;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
@@ -18,12 +19,14 @@ import com.idengyun.heartretail.activitys.AwardDetailActivity;
 import com.idengyun.heartretail.activitys.MyBalanceActivity;
 import com.idengyun.heartretail.activitys.MyEvaluateActivity;
 import com.idengyun.heartretail.activitys.OrderListActivity;
+import com.idengyun.heartretail.activitys.ShareQRCodeActivity;
 import com.idengyun.heartretail.beans.BalanceBean;
 import com.idengyun.heartretail.setting.SettingFragment;
 import com.idengyun.heartretail.viewmodel.PayViewModel;
 import com.idengyun.usermodule.HRUser;
 import com.idengyun.usermodule.LoginActivity;
 import com.idengyun.usermodule.VerifyDeviceActivity;
+import com.sobot.chat.utils.InformationUtil;
 
 /**
  * 我的页面
@@ -96,7 +99,6 @@ public final class MyFragment extends BaseFragment implements View.OnClickListen
                 }
             });
         }
-        init();
     }
 
     @Override
@@ -106,131 +108,49 @@ public final class MyFragment extends BaseFragment implements View.OnClickListen
         if (HRUser.isLogin()) requestAPI();
     }
 
-    /*@Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        if (!hidden) {
-            updateUI(HRUser.isLogin(), HRUser.isAuthenticated());
-            requestAPI();
-        }
-    }*/
-
     @Override
     public void onClick(View v) {
+        Context context = v.getContext();
+
         if (!HRUser.isLogin()) {
-            startLoginActivity();
+            LoginActivity.start(context);
             return;
         }
 
         if (HRUser.isNewDevice()) {
-            startDeviceVerifyActivity();
+            VerifyDeviceActivity.start(context);
             return;
         }
 
         if (iv_my_setting == v) {
-            startMySettingActivity();
-        } else if (iv_my_user_avatar == v) {
-            startMyAvatarActivity();
+            HRActivity.start(context, SettingFragment.class);
         } else if (tv_my_go_login == v) {
-            startLoginActivity();
+            LoginActivity.start(context);
         } else if (tv_my_account == v) {
-            startMyAccountActivity();
+            MyBalanceActivity.start(context);
+        } else if (iv_my_user_logo == v) {
+            ShareQRCodeActivity.start(context);
         } else if (tv_my_all_orders == v) {
-            startMyAllOrdersActivity();
+            OrderListActivity.start(context, 0);
         } else if (tv_my_order_1 == v) {
-            startMyOrder1Activity();
+            OrderListActivity.start(context, 1);
         } else if (tv_my_order_2 == v) {
-            startMyOrder2Activity();
+            OrderListActivity.start(context, 2);
         } else if (tv_my_order_3 == v) {
-            startMyOrder3Activity();
+            OrderListActivity.start(context, 3);
         } else if (tv_my_order_4 == v) {
-            startMyOrder4Activity();
+            OrderListActivity.start(context, 4);
         } else if (tv_my_order_5 == v) {
-            startMyOrder5Activity();
+            OrderListActivity.start(context, 5);
         } else if (layout_my_evaluation == v) {
-            startMyEvaluationActivity();
+            MyEvaluateActivity.start(context);
         } else if (layout_my_help == v) {
-            startMyHelpActivity();
+            // HelpCenterActivity.start(context);
+            // OrderDetailActivity.start(context, "");
+            AwardDetailActivity.start(context);
         } else if (layout_my_customer_service == v) {
-            startMyCustomerServiceActivity();
+            new InformationUtil(context).startSobot();
         }
-    }
-
-    private void startMyCustomerServiceActivity() {
-        // TODO: 2020/3/12
-    }
-
-    private void startMyHelpActivity() {
-//        HelpCenterActivity.start(getActivity());
-//        OrderDetailActivity.start(getActivity(),"");
-        AwardDetailActivity.start(getActivity());
-    }
-
-    private void startMyEvaluationActivity() {
-        MyEvaluateActivity.start(getActivity());
-    }
-
-    private void startMyOrder5Activity() {
-        OrderListActivity.start(getActivity(), 5);
-    }
-
-    private void startMyOrder4Activity() {
-        OrderListActivity.start(getActivity(), 4);
-    }
-
-    private void startMyOrder3Activity() {
-        OrderListActivity.start(getActivity(), 3);
-    }
-
-    private void startMyOrder2Activity() {
-        OrderListActivity.start(getActivity(), 2);
-    }
-
-    private void startMyOrder1Activity() {
-        OrderListActivity.start(getActivity(), 1);
-    }
-
-    private void startMyAllOrdersActivity() {
-        OrderListActivity.start(getActivity(), 0);
-    }
-
-    private void startMyAccountActivity() {
-        MyBalanceActivity.start(getActivity());
-    }
-
-    private void startDeviceVerifyActivity() {
-        VerifyDeviceActivity.start(getContext());
-    }
-
-    private void startLoginActivity() {
-        LoginActivity.start(getContext());
-    }
-
-    private void startMyAvatarActivity() {
-        // TODO: 2020/3/12
-    }
-
-    private void startMySettingActivity() {
-        HRActivity.start(getContext(), SettingFragment.class);
-    }
-
-    private void init() {
-        iv_my_setting.setOnClickListener(this);
-        iv_my_user_avatar.setOnClickListener(this);
-        tv_my_go_login.setOnClickListener(this);
-        tv_my_account.setOnClickListener(this);
-
-        tv_my_all_orders.setOnClickListener(this);
-        tv_my_order_1.setOnClickListener(this);
-        tv_my_order_2.setOnClickListener(this);
-        tv_my_order_3.setOnClickListener(this);
-        tv_my_order_3.setOnClickListener(this);
-        tv_my_order_4.setOnClickListener(this);
-        tv_my_order_5.setOnClickListener(this);
-
-        layout_my_evaluation.setOnClickListener(this);
-        layout_my_help.setOnClickListener(this);
-        layout_my_customer_service.setOnClickListener(this);
     }
 
     private void requestAPI() {
@@ -324,5 +244,22 @@ public final class MyFragment extends BaseFragment implements View.OnClickListen
         layout_my_evaluation = view.findViewById(R.id.layout_my_evaluation);
         layout_my_help = view.findViewById(R.id.layout_my_help);
         layout_my_customer_service = view.findViewById(R.id.layout_my_customer_service);
+
+        iv_my_setting.setOnClickListener(this);
+        tv_my_go_login.setOnClickListener(this);
+        tv_my_account.setOnClickListener(this);
+        iv_my_user_logo.setOnClickListener(this);
+
+        tv_my_all_orders.setOnClickListener(this);
+        tv_my_order_1.setOnClickListener(this);
+        tv_my_order_2.setOnClickListener(this);
+        tv_my_order_3.setOnClickListener(this);
+        tv_my_order_3.setOnClickListener(this);
+        tv_my_order_4.setOnClickListener(this);
+        tv_my_order_5.setOnClickListener(this);
+
+        layout_my_evaluation.setOnClickListener(this);
+        layout_my_help.setOnClickListener(this);
+        layout_my_customer_service.setOnClickListener(this);
     }
 }

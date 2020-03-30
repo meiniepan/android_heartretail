@@ -71,10 +71,14 @@ public final class GoodsDetailFragment extends BaseFragment implements RadioGrou
         if (iv_goods_detail_back == v || tv_goods_detail_back == v) {
             if (getActivity() != null) getActivity().onBackPressed();
         } else if (layout_goods_detail_customer_service == v) {
-            // TODO: 2020/3/17
-            if (HRUser.isLogin()) new InformationUtil(getContext()).startSobot();
+            if (HRUser.isLogin()) new InformationUtil(v.getContext()).startSobot();
         } else if (layout_goods_detail_buy_now == v) {
             GoodsSpecFragment goodsSpecFragment = (GoodsSpecFragment) HRActivity.findFragmentByTag(getActivity(), GoodsSpecFragment.class.getName());
+            if (goodsSpecFragment != null && goodsSpecFragment.isHidden()) {
+                HRActivity.showFragment(getActivity(), GoodsSpecFragment.class.getName());
+                return;
+            }
+
             GoodsSPUFragment goodsSPUFragment = (GoodsSPUFragment) HRActivity.findFragmentByTag(getActivity(), GoodsSPUFragment.class.getName());
             if (goodsSpecFragment == null || !goodsSpecFragment.isCanBuy()) {
                 ToastUtils.showShort("去选择规格");
