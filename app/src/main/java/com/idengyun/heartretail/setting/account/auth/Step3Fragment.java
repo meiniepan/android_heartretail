@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -77,6 +79,33 @@ public final class Step3Fragment extends BaseFragment implements View.OnClickLis
         if (tv_real_verify_code == v) {
             sendVerifyCode();
         } else if (tv_real_go_auth == v) {
+            kvRealVerify.name = null;
+            kvRealVerify.sex = null;
+            kvRealVerify.nation = null;
+            kvRealVerify.userBirthday = null;
+            kvRealVerify.address = null;
+            kvRealVerify.number = null;
+            kvRealVerify.authority = null;
+            kvRealVerify.timeLimit = null;
+
+            kvRealVerify.bankCardNo = null;
+            kvRealVerify.bankMobile = null;
+            kvRealVerify.userBankName = null;
+            kvRealVerify.userBankFullName = null;
+            kvRealVerify.userBankCity = null;
+            kvRealVerify.userBankProvince = null;
+            kvRealVerify.bankCardType = null;
+            kvRealVerify.cardType = null;
+
+            kvRealVerify.userId = null;
+            kvRealVerify.frontUrl = null;
+            kvRealVerify.backUrl = null;
+            kvRealVerify.bankUrl = null;
+            kvRealVerify.userCertificateType = null;
+            kvRealVerify.frontOrderNo = null;
+            kvRealVerify.backOrderNo = null;
+            kvRealVerify.identifyCode = null;
+
             requestRealVerify();
         }
     }
@@ -152,5 +181,49 @@ public final class Step3Fragment extends BaseFragment implements View.OnClickLis
         tv_real_verify_code = view.findViewById(R.id.tv_real_verify_code);
         tv_real_go_auth = view.findViewById(R.id.tv_real_go_auth);
         tv_real_go_auth.setOnClickListener(this);
+    }
+
+    private class OnTextChangedListener implements TextWatcher {
+        private EditText editText;
+
+        private CharSequence loginMobile;
+        private CharSequence loginPwd;
+        private CharSequence registerMobile;
+        private CharSequence registerVerifyCode;
+        private CharSequence registerPwd;
+        private CharSequence registerInviteCode;
+
+        public OnTextChangedListener(EditText editText) {
+            this.editText = editText;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            int id = editText.getId();
+            if (id == R.id.et_login_mobile) {
+                loginMobile = s;
+            } else if (id == R.id.et_login_pwd) {
+                loginPwd = s;
+            } else if (id == R.id.et_register_mobile) {
+                registerMobile = s;
+            } else if (id == R.id.et_register_verify_code) {
+                registerVerifyCode = s;
+            } else if (id == R.id.et_register_pwd) {
+                registerPwd = s;
+            } else if (id == R.id.et_register_invite_code) {
+                registerInviteCode = s;
+            }
+        }
+
     }
 }

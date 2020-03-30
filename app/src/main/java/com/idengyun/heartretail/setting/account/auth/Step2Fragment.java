@@ -12,6 +12,10 @@ import android.widget.ImageView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.net.ImageApi;
+import com.dengyun.baselibrary.net.NetApi;
+import com.dengyun.baselibrary.net.NetOption;
+import com.dengyun.baselibrary.net.callback.JsonCallback;
+import com.dengyun.baselibrary.net.upload.UploadListBean;
 import com.dengyun.baselibrary.utils.ListUtils;
 import com.dengyun.baselibrary.utils.TakePhotoUtil;
 import com.dengyun.baselibrary.utils.ToastUtils;
@@ -19,10 +23,12 @@ import com.dengyun.baselibrary.utils.ocr.BankCardBean;
 import com.dengyun.baselibrary.utils.ocr.IdCardBackBean;
 import com.dengyun.baselibrary.utils.ocr.IdCardFaceBean;
 import com.dengyun.baselibrary.utils.ocr.OCRUtils;
+import com.dengyun.splashmodule.config.SpMainConfigConstants;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.entity.LocalMedia;
+import com.lzy.okgo.model.Response;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -120,7 +126,7 @@ public final class Step2Fragment extends BaseFragment implements View.OnClickLis
         }
 
         // TODO: 2020-03-24 先不做上传，ocr完全调通之后再放开
-        /*NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.uploads())
+        NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.uploads())
                 .fragment(this)
                 .clazz(UploadListBean.class)
                 .isShowDialog(false)
@@ -139,7 +145,7 @@ public final class Step2Fragment extends BaseFragment implements View.OnClickLis
                     startOCRRecognize();
                 }
             }
-        });*/
+        });
     }
 
     /* 开始OCR识别 */
