@@ -23,9 +23,8 @@ import java.io.IOException;
  */
 public class OCRUtils {
 
-//        private static String appcode = "c88ac3ef5117409e860c7958e72f376c";
-        private static String appcode = "6d690f2e76b34d3b8ed7f8433c5416ed";//个人
-//    private static String appcode = "524fb872670d4a508fb6b446d8ecf064";//妃子校
+    private static String appcode_bank = "c88ac3ef5117409e860c7958e72f376c";//心零售
+    private static String appcode_id = "524fb872670d4a508fb6b446d8ecf064";//妃子校
 
     /**
      * 识别身份证(正面)
@@ -38,7 +37,7 @@ public class OCRUtils {
 //        String url = "http://dm-51.data.aliyun.com/rest/160601/ocr/ocr_idcard.json";
         String url = "https://dm-51.data.aliyun.com/rest/160601/ocr/ocr_idcard.json";
         NetOption netOption = NetOption.newBuilder(url)
-                .headers("Authorization", "APPCODE " + appcode) //你自己的AppCode
+                .headers("Authorization", "APPCODE " + appcode_id) //你自己的AppCode
                 .params("configure", "{\"side\":\"face\"}") // 身份证正反面类型:face/back
                 .params("image", isLocal ? conventImageBase64(imagePath) : imagePath) // 图片二进制数据的base64编码/图片url
                 .clazz(IdCardFaceBean.class)
@@ -67,7 +66,7 @@ public class OCRUtils {
 //        String url = "http://dm-51.data.aliyun.com/rest/160601/ocr/ocr_idcard.json";
         String url = "https://dm-51.data.aliyun.com/rest/160601/ocr/ocr_idcard.json";
         NetOption netOption = NetOption.newBuilder(url)
-                .headers("Authorization", "APPCODE " + appcode) //你自己的AppCode
+                .headers("Authorization", "APPCODE " + appcode_id) //你自己的AppCode
                 .params("configure", "{\"side\":\"back\"}") // 身份证正反面类型:face/back
                 .params("image", isLocal ? conventImageBase64(imagePath) : imagePath) // 图片二进制数据的base64编码/图片url
                 .clazz(IdCardBackBean.class)
@@ -113,7 +112,7 @@ public class OCRUtils {
     public static void recoBankCard(boolean isLocal, String imagePath, OnBankCardResult onBankCardResult) {
         String url = "http://bankocrb.shumaidata.com/getbankocrb";
         NetOption.Builder netBuilder = NetOption.newBuilder(url)
-                .headers("Authorization", "APPCODE " + appcode); //你自己的AppCode
+                .headers("Authorization", "APPCODE " + appcode_bank); //你自己的AppCode
         if (isLocal) {
             netBuilder.params("image", conventImageBase64(imagePath));// 图片二进制数据的base64编码
         } else {
@@ -122,7 +121,7 @@ public class OCRUtils {
         NetOption netOption = netBuilder.clazz(BankCardBean.class)
                 .projectType(ProjectType.NONE)
                 .build();
-        NetApi.<BankCardBean>getData(RequestMethod.POST_FORM,netOption, new JsonCallback<BankCardBean>(netOption) {
+        NetApi.<BankCardBean>getData(RequestMethod.POST_FORM, netOption, new JsonCallback<BankCardBean>(netOption) {
             @Override
             public void onSuccess(Response<BankCardBean> response) {
                 /*200	成功	成功

@@ -50,7 +50,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/dp_8"
                             android:layout_weight="1"
-                            android:text="等待付款"
+                            android:text="待付款"
                             android:textColor="@color/white"
                             android:textSize="@dimen/sp_16" />
 
