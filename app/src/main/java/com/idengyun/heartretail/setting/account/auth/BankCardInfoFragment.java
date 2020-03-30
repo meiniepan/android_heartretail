@@ -89,4 +89,26 @@ public final class BankCardInfoFragment extends BaseFragment {
         tv_bank_card_no = view.findViewById(R.id.tv_bank_card_no);
         tv_bank_card_reserve_mobile = view.findViewById(R.id.tv_bank_card_reserve_mobile);
     }
+
+    private int[] bankIcons = new int[]{
+            R.drawable.ic_zgjsyh,
+            R.drawable.ic_zgyh,
+            R.drawable.ic_zggsyh,
+            R.drawable.ic_zgnyyh,
+            R.drawable.ic_jtyh,
+            R.drawable.ic_zgyzcxyh,
+            R.drawable.ic_zxyh,
+            R.drawable.ic_zggdyh,
+            R.drawable.ic_hxyh,
+            R.drawable.ic_gfyh,
+            R.drawable.ic_payh,
+            R.drawable.ic_zsyh,
+            R.drawable.ic_pfyh,
+            R.drawable.ic_xyyh,
+            R.drawable.ic_zgmsyh,
+            R.drawable.id_hfyh,
+            R.drawable.ic_zs_yh,
+            R.drawable.ic_bhyh,
+            R.drawable.ic_unknow_yh
+    };
 }

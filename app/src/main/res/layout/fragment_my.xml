@@ -141,7 +141,7 @@
                                     android:layout_height="wrap_content"
                                     android:textColor="#ffffffff"
                                     android:textSize="16sp"
-                                    tools:text="12345.67" />
+                                    tools:text="123456.78" />
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -165,7 +165,7 @@
                                     android:layout_height="wrap_content"
                                     android:textColor="#ffffffff"
                                     android:textSize="16sp"
-                                    tools:text="123.45" />
+                                    tools:text="123456.78" />
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -189,7 +189,7 @@
                                     android:layout_height="wrap_content"
                                     android:textColor="#ffffffff"
                                     android:textSize="16sp"
-                                    tools:text="12.34" />
+                                    tools:text="123456.78" />
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -203,17 +203,15 @@
 
                         <TextView
                             android:id="@+id/tv_my_account"
-                            android:layout_width="118dp"
-                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:layout_height="32dp"
                             android:background="@drawable/shape_my_login_btn_bg"
                             android:drawableEnd="@drawable/ic_my_unauthorized_account"
-                            android:drawablePadding="12dp"
-                            android:gravity="center_vertical"
+                            android:drawablePadding="4dp"
+                            android:gravity="center"
                             android:lines="1"
-                            android:paddingStart="20dp"
-                            android:paddingTop="9dp"
-                            android:paddingEnd="15dp"
-                            android:paddingBottom="9dp"
+                            android:paddingStart="8dp"
+                            android:paddingEnd="8dp"
                             android:text="我的账户"
                             android:textColor="#ffff6633"
                             android:textSize="14sp" />

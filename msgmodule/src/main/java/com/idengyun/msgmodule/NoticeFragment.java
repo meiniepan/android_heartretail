@@ -1,13 +1,17 @@
 package com.idengyun.msgmodule;
 
 import android.arch.lifecycle.Observer;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +21,7 @@ import android.widget.TextView;
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.net.ImageApi;
 import com.dengyun.baselibrary.utils.GsonConvertUtil;
+import com.dengyun.baselibrary.utils.ToastUtils;
 import com.idengyun.msgmodule.beans.NoticeListBean;
 import com.idengyun.msgmodule.beans.NoticeStatusBean;
 import com.idengyun.msgmodule.viewmodel.NoticeViewModel;
@@ -33,10 +38,17 @@ import java.util.List;
  */
 public final class NoticeFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
+    private static final String ACTION_NOTICE_UPDATE = NoticeFragment.class.getName();
+
     private int notifyGroup;
     private RecyclerView recycler_view;
     private NoticeViewModel noticeViewModel;
     private NoticeAdapter noticeAdapter;
+
+    private int notifyId;
+    private int status;
+    private int position;
+    private int recordEvenType;
 
     /* 分页加载 */
     private int totalSize = 0;
@@ -50,6 +62,28 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
             onLoadMore();
         }
     };
+
+    private final BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (ACTION_NOTICE_UPDATE.equals(action)) {
+                notifyId = intent.getIntExtra("messageId", -1);
+                status = intent.getIntExtra("status", -1);
+                position = intent.getIntExtra("position", -1);
+                recordEvenType = intent.getIntExtra("recordEvenType", -1);
+                requestNoticeUpdateStatus(notifyId, status);
+            }
+        }
+    };
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Context context = getContext();
+        if (context == null) return;
+        context.registerReceiver(receiver, new IntentFilter(ACTION_NOTICE_UPDATE));
+    }
 
     @Override
     public int getLayoutId() {
@@ -65,6 +99,14 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         init();
+    }
+
+    @Override
+    public void onDestroy() {
+        Context context = getContext();
+        if (context == null) return;
+        context.unregisterReceiver(receiver);
+        super.onDestroy();
     }
 
     @Override
@@ -131,8 +173,6 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
     }
 
     private void observe() {
-        FragmentActivity activity = getActivity();
-        if (activity == null) return;
         if (noticeViewModel == null) {
             noticeViewModel = NoticeViewModel.getInstance(this);
             noticeViewModel.getNoticeList().observe(this, new Observer<NoticeListBean>() {
@@ -144,9 +184,40 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
             noticeViewModel.getNoticeStatus().observe(this, new Observer<NoticeStatusBean>() {
                 @Override
                 public void onChanged(@Nullable NoticeStatusBean noticeStatusBean) {
-
+                    updateItem(position, recordEvenType);
                 }
             });
+        }
+    }
+
+    private void updateItem(int position, int recordEvenType) {
+        List<NoticeListBean.Data.Content> noticeList = noticeAdapter.noticeList;
+        NoticeListBean.Data.Content content = noticeList.get(position);
+        content.status = 1;
+        noticeAdapter.notifyItemChanged(position);
+        /* 1、URL链接2、订单详情3、余额4、红包5、升级提醒6、富文本 */
+        // TODO: 2020/3/30
+        switch (recordEvenType) {
+            case 1:
+                ToastUtils.showShort("URL链接");
+                break;
+            case 2:
+                ToastUtils.showShort("订单详情");
+                break;
+            case 3:
+                ToastUtils.showShort("余额");
+                break;
+            case 4:
+                ToastUtils.showShort("红包");
+                break;
+            case 5:
+                ToastUtils.showShort("升级提醒");
+                break;
+            case 6:
+                ToastUtils.showShort("富文本");
+                break;
+            default:
+                break;
         }
     }
 
@@ -203,22 +274,22 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-            NoticeListBean.Data.Content content = noticeList.get(position);
+            holder.itemView.setTag(new Pair<>(position, noticeList));
             int viewType = getItemViewType(position);
             if (0 == viewType) {
-                ((Holder0) holder).updateUI(content);
+                ((Holder0) holder).updateUI(noticeList, position);
             } else if (1 == viewType) {
-                ((Holder1) holder).updateUI(content);
+                ((Holder1) holder).updateUI(noticeList, position);
             } else if (2 == viewType) {
-                ((Holder2) holder).updateUI(content);
+                ((Holder2) holder).updateUI(noticeList, position);
             } else if (4 == viewType) {
-                ((Holder4) holder).updateUI(content);
+                ((Holder4) holder).updateUI(noticeList, position);
             } else if (11 == viewType) {
-                ((Holder11) holder).updateUI(content);
+                ((Holder11) holder).updateUI(noticeList, position);
             } else if (-1 == viewType) {
                 // do nothing
             } else {
-                ((Holder11) holder).updateUI(content);
+                ((Holder11) holder).updateUI(noticeList, position);
             }
         }
 
@@ -233,42 +304,33 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
         }
     }
 
-    private abstract class BaseHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private static abstract class BaseHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public BaseHolder(@NonNull View itemView) {
+        private BaseHolder(@NonNull View itemView) {
             super(itemView);
         }
 
         @Override
         public void onClick(View v) {
-            Object tag = v.getTag();
-            if (!(tag instanceof NoticeListBean.Data.Content)) return;
-            NoticeListBean.Data.Content content = ((NoticeListBean.Data.Content) tag);
-            int messageId = content.messageId;
-            int status = content.status;
-            int recordEvenType = content.recordEvenType;
-            /* 1、URL链接2、订单详情3、余额4、红包5、升级提醒6、富文本 */
-            switch (recordEvenType) {
-                case 1:
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    break;
-                case 4:
-                    break;
-                case 5:
-                    break;
-                case 6:
-                    break;
-                default:
-                    break;
+            Pair<Integer, List<NoticeListBean.Data.Content>> pair = (Pair<Integer, List<NoticeListBean.Data.Content>>) v.getTag();
+            if (pair != null) {
+                Integer position = pair.first;
+                List<NoticeListBean.Data.Content> noticeList = pair.second;
+                NoticeListBean.Data.Content content = noticeList.get(position);
+                int messageId = content.messageId;
+                int status = content.status;
+                int recordEvenType = content.recordEvenType;
+                Intent intent = new Intent(NoticeFragment.ACTION_NOTICE_UPDATE);
+                intent.putExtra("messageId", messageId);
+                intent.putExtra("status", status);
+                intent.putExtra("position", position);
+                intent.putExtra("recordEvenType", recordEvenType);
+                v.getContext().sendBroadcast(intent);
             }
-            requestNoticeUpdateStatus(messageId, status);
         }
     }
 
-    private static class Holder0 extends RecyclerView.ViewHolder {
+    private static class Holder0 extends BaseHolder {
 
         private TextView tv_notice_0_push_time;
         private View v_notice_0_dot;
@@ -281,7 +343,8 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
         }
 
         @MainThread
-        private void updateUI(NoticeListBean.Data.Content content) {
+        private void updateUI(List<NoticeListBean.Data.Content> noticeList, int position) {
+            NoticeListBean.Data.Content content = noticeList.get(position);
             String pushTime = content.pushTime;
             String title = content.title;
             int status = content.status;
@@ -303,7 +366,7 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
         }
     }
 
-    private static class Holder1 extends RecyclerView.ViewHolder {
+    private static class Holder1 extends BaseHolder {
 
         private TextView tv_notice_1_push_time;
         private View v_notice_1_dot;
@@ -316,7 +379,8 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
         }
 
         @MainThread
-        private void updateUI(NoticeListBean.Data.Content content) {
+        private void updateUI(List<NoticeListBean.Data.Content> noticeList, int position) {
+            NoticeListBean.Data.Content content = noticeList.get(position);
             String pushTime = content.pushTime;
             String title = content.title;
             int status = content.status;
@@ -339,7 +403,7 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
         }
     }
 
-    private static class Holder2 extends RecyclerView.ViewHolder {
+    private static class Holder2 extends BaseHolder {
 
         private TextView tv_notice_2_push_time;
         private View v_notice_2_dot;
@@ -356,7 +420,8 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
         }
 
         @MainThread
-        private void updateUI(NoticeListBean.Data.Content content) {
+        private void updateUI(List<NoticeListBean.Data.Content> noticeList, int position) {
+            NoticeListBean.Data.Content content = noticeList.get(position);
             String pushTime = content.pushTime;
             String title = content.title;
             int status = content.status;
@@ -400,7 +465,7 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
         }
     }
 
-    private static class Holder4 extends RecyclerView.ViewHolder {
+    private static class Holder4 extends BaseHolder {
 
         private TextView tv_notice_4_push_time;
         private View v_notice_4_dot;
@@ -415,7 +480,8 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
         }
 
         @MainThread
-        private void updateUI(NoticeListBean.Data.Content content) {
+        private void updateUI(List<NoticeListBean.Data.Content> noticeList, int position) {
+            NoticeListBean.Data.Content content = noticeList.get(position);
             String pushTime = content.pushTime;
             String title = content.title;
             int status = content.status;
@@ -443,7 +509,7 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
         }
     }
 
-    private static class Holder11 extends RecyclerView.ViewHolder {
+    private static class Holder11 extends BaseHolder {
 
         private TextView tv_notice_11_push_time;
         private View v_notice_11_dot;
@@ -456,7 +522,8 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
         }
 
         @MainThread
-        private void updateUI(NoticeListBean.Data.Content content) {
+        private void updateUI(List<NoticeListBean.Data.Content> noticeList, int position) {
+            NoticeListBean.Data.Content content = noticeList.get(position);
             String pushTime = content.pushTime;
             String title = content.title;
             int status = content.status;
