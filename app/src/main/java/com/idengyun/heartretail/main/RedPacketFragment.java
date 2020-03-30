@@ -263,13 +263,14 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
 
         layout_red_packet_title = view.findViewById(R.id.layout_red_packet_title);
         nested_scroll_view = view.findViewById(R.id.nested_scroll_view);
-        layout_red_packet_title.setAlpha(0f);
+        layout_red_packet_title.setVisibility(View.GONE);
         nested_scroll_view.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 int height = SizeUtils.dp2px(68f);
                 float alpha = 1f * scrollY / height;
                 layout_red_packet_title.setAlpha(alpha);
+                layout_red_packet_title.setVisibility(scrollY > 0 ? View.VISIBLE : View.GONE);
             }
         });
     }

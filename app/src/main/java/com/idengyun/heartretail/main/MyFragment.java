@@ -270,13 +270,14 @@ public final class MyFragment extends BaseFragment implements View.OnClickListen
         layout_my_help.setOnClickListener(this);
         layout_my_customer_service.setOnClickListener(this);
 
-        layout_my_title.setAlpha(0f);
+        layout_my_title.setVisibility(View.GONE);
         nested_scroll_view.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 int height = SizeUtils.dp2px(68f);
                 float alpha = 1f * scrollY / height;
                 layout_my_title.setAlpha(alpha);
+                layout_my_title.setVisibility(scrollY > 0 ? View.VISIBLE : View.GONE);
             }
         });
     }
