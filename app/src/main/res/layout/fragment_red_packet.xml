@@ -8,6 +8,7 @@
     android:orientation="vertical">
 
     <android.support.v4.widget.NestedScrollView
+        android:id="@+id/nested_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fillViewport="true"
@@ -428,4 +429,18 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:src="@drawable/ic_red_packet_floating" />
+
+    <FrameLayout
+        android:id="@+id/layout_red_packet_title"
+        android:layout_width="match_parent"
+        android:layout_height="68dp"
+        android:background="@android:color/white"
+        android:paddingTop="24dp">
+
+        <com.dengyun.baselibrary.widgets.toolbar.BaseToolBar
+            android:id="@+id/base_tool_bar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/basetool_height"
+            app:toolbar_title="红包" />
+    </FrameLayout>
 </FrameLayout>

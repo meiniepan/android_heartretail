@@ -121,27 +121,6 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
                 .hide(retailFragment)
                 .hide(wholesaleFragment)
                 .commit();
-        nested_scroll_view.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                nsv_home_bg.setTranslationY(-scrollY);
-
-                int height = SizeUtils.dp2px(68f);
-                if (scrollY < height) {
-                    layout_home_title.setBackgroundColor(Color.TRANSPARENT);
-                    tv_home_location.setSelected(false);
-                    tv_home_share.setSelected(false);
-                    tv_home_notice.setSelected(false);
-                    tv_home_notice_count.setSelected(false);
-                } else {
-                    layout_home_title.setBackgroundColor(Color.WHITE);
-                    tv_home_location.setSelected(true);
-                    tv_home_share.setSelected(true);
-                    tv_home_notice.setSelected(true);
-                    tv_home_notice_count.setSelected(true);
-                }
-            }
-        });
         requestNoticeCount();
     }
 
@@ -323,5 +302,27 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
         tv_home_rule.setOnClickListener(this);
         rg_home_tab_bar.setOnCheckedChangeListener(this);
         rg_home_tab_bar.clearCheck();
+
+        nested_scroll_view.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                nsv_home_bg.setTranslationY(-scrollY);
+
+                int height = SizeUtils.dp2px(68f);
+                if (scrollY < height) {
+                    layout_home_title.setBackgroundColor(Color.TRANSPARENT);
+                    tv_home_location.setSelected(false);
+                    tv_home_share.setSelected(false);
+                    tv_home_notice.setSelected(false);
+                    tv_home_notice_count.setSelected(false);
+                } else {
+                    layout_home_title.setBackgroundColor(Color.WHITE);
+                    tv_home_location.setSelected(true);
+                    tv_home_share.setSelected(true);
+                    tv_home_notice.setSelected(true);
+                    tv_home_notice_count.setSelected(true);
+                }
+            }
+        });
     }
 }

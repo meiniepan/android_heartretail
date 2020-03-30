@@ -10,6 +10,7 @@ import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.net.ImageApi;
+import com.dengyun.baselibrary.utils.SizeUtils;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.activitys.ShareQRCodeActivity;
@@ -66,6 +68,10 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
     private RecyclerView recycler_view;
     private TextView tv_red_packet_more;
     private View iv_red_packet_share;
+
+    private View layout_red_packet_title;
+    private NestedScrollView nested_scroll_view;
+
     private RedPacketViewModel redPacketViewModel;
 
     /* 分页加载 */
@@ -254,6 +260,18 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
         tv_red_packet_to_cash.setOnClickListener(this);
         iv_red_packet_share.setOnClickListener(this);
         tv_red_packet_more.setOnClickListener(this);
+
+        layout_red_packet_title = view.findViewById(R.id.layout_red_packet_title);
+        nested_scroll_view = view.findViewById(R.id.nested_scroll_view);
+        layout_red_packet_title.setAlpha(0f);
+        nested_scroll_view.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                int height = SizeUtils.dp2px(68f);
+                float alpha = 1f * scrollY / height;
+                layout_red_packet_title.setAlpha(alpha);
+            }
+        });
     }
 
     private static class FriendAdapter extends RecyclerView.Adapter {

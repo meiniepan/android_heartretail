@@ -7,12 +7,14 @@ import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.widget.NestedScrollView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.net.ImageApi;
+import com.dengyun.baselibrary.utils.SizeUtils;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.activitys.AwardDetailActivity;
@@ -73,6 +75,10 @@ public final class MyFragment extends BaseFragment implements View.OnClickListen
     private View layout_my_evaluation;
     private View layout_my_help;
     private View layout_my_customer_service;
+
+    private NestedScrollView nested_scroll_view;
+    private View layout_my_title;
+
     private PayViewModel payViewModel;
 
     @Override
@@ -244,6 +250,8 @@ public final class MyFragment extends BaseFragment implements View.OnClickListen
         layout_my_evaluation = view.findViewById(R.id.layout_my_evaluation);
         layout_my_help = view.findViewById(R.id.layout_my_help);
         layout_my_customer_service = view.findViewById(R.id.layout_my_customer_service);
+        nested_scroll_view = view.findViewById(R.id.nested_scroll_view);
+        layout_my_title = view.findViewById(R.id.layout_my_title);
 
         iv_my_setting.setOnClickListener(this);
         tv_my_go_login.setOnClickListener(this);
@@ -261,5 +269,15 @@ public final class MyFragment extends BaseFragment implements View.OnClickListen
         layout_my_evaluation.setOnClickListener(this);
         layout_my_help.setOnClickListener(this);
         layout_my_customer_service.setOnClickListener(this);
+
+        layout_my_title.setAlpha(0f);
+        nested_scroll_view.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                int height = SizeUtils.dp2px(68f);
+                float alpha = 1f * scrollY / height;
+                layout_my_title.setAlpha(alpha);
+            }
+        });
     }
 }

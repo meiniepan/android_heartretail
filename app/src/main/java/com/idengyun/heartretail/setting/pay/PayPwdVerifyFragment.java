@@ -109,6 +109,7 @@ public final class PayPwdVerifyFragment extends BaseFragment implements View.OnC
                 public void onChanged(@Nullable MobileBindBean mobileBindBean) {
                     /* 0新增支付密码1修改支付密码2忘记支付密码 */
                     PayPwdChangeFragment.start(getContext(), type);
+                    HRUser.savePayPwdFlag("1");
                     HRActivity.finish(getActivity());
                 }
             });

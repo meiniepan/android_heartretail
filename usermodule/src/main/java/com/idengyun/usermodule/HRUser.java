@@ -67,6 +67,11 @@ public final class HRUser {
         return getString("nickName");
     }
 
+    /* 保存非首次设置支付密码 */
+    public static void savePayPwdFlag(String userPayPwdSetFlag) {
+        putValue("userPayPwdSetFlag", userPayPwdSetFlag);
+    }
+
     /* 保存新设备验证 */
     public static void saveNewDevice(int isnewPhoneImei) {
         putValue("isnewPhoneImei", isnewPhoneImei);
