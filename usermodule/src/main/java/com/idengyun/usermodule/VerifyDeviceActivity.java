@@ -63,7 +63,7 @@ public class VerifyDeviceActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() > 0) {
+                if (s.length() > 5) {
                     confirmVerifyDevice.setEnabled(true);
                 } else {
                     confirmVerifyDevice.setEnabled(false);
@@ -113,7 +113,7 @@ public class VerifyDeviceActivity extends BaseActivity {
     /* 新设备验证 */
     private void verifyDevice() {
 
-        if (etVCode.length() < 1) {
+        if (etVCode.length() < 6) {
             ToastUtils.showShort("请输入有效验证码");
             return;
         }
@@ -133,7 +133,8 @@ public class VerifyDeviceActivity extends BaseActivity {
             public void onSuccess(Response<ApiSimpleBean> response) {
                 ToastUtils.showShort("验证新设备成功");
                 // startMainActivity();
-                HRUser.saveNewDevice(1);
+                //是否是新设备0否1是
+                HRUser.saveNewDevice(0);
                 finish();
             }
         });

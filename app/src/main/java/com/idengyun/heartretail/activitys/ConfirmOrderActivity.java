@@ -168,6 +168,21 @@ public class ConfirmOrderActivity extends BaseActivity {
         order_confirm_goods_price=getIntent().getStringExtra("order_confirm_goods_price");
         order_confirm_goods_count=getIntent().getIntExtra("order_confirm_goods_count",1);
         orderType=getIntent().getIntExtra("order_confirm_goods_type",1);
+        /*goodsId = extras.getInt("goodsId", goodsId);
+        goodsType = extras.getInt("goodsType", goodsType);
+        goodsName = extras.getString("goodsName");
+        goodsTitle = extras.getString("goodsTitle");
+
+        selectedSpecIDList = extras.getStringArrayList("selectedSpecIDList");
+
+        specIDList = extras.getStringArrayList("specIDList");
+        isDefault = extras.getInt("isDefault", -1);
+        goodsCount = extras.getInt("goodsCount", -1);
+        goodsSkuId = extras.getInt("goodsSkuId", -1);
+        goodsPrice = extras.getString("goodsPrice");
+        canBuyCount = extras.getInt("canBuyCount", -1);
+        skuImgUrl = extras.getString("skuImgUrl");
+        wholesaleFlag = extras.getInt("wholesaleFlag", -1);*/
         getShippingPrice();
 //        orderType = "2";
     }

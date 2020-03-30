@@ -91,10 +91,12 @@
         <android.support.v7.widget.AppCompatRatingBar
             android:id="@+id/rb_evaluation2"
             style="?android:attr/ratingBarStyleSmall"
-            android:layout_width="80dp"
-            android:layout_height="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxHeight="13dp"
+            android:minHeight="13dp"
             android:numStars="5"
-            android:progressTint="@color/heart_orange"
+            android:progressDrawable="@drawable/layer_list_rating_bar"
             android:isIndicator="false"
             android:rating="1" />
     </LinearLayout>
