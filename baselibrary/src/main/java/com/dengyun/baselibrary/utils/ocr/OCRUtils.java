@@ -53,6 +53,11 @@ public class OCRUtils {
                     ToastUtils.showShort("识别失败");
                 }
             }
+
+            @Override
+            public void handleError(Response<IdCardFaceBean> response) {
+                ToastUtils.showShort("识别失败");
+            }
         });
     }
 
@@ -81,6 +86,10 @@ public class OCRUtils {
                 } else {
                     ToastUtils.showShort("识别失败");
                 }
+            }
+            @Override
+            public void handleError(Response<IdCardBackBean> response) {
+                ToastUtils.showShort("识别失败");
             }
         });
     }
@@ -140,6 +149,11 @@ public class OCRUtils {
                 } else {
                     ToastUtils.showShort("识别失败");
                 }
+            }
+
+            @Override
+            public void handleError(Response<BankCardBean> response) {
+                ToastUtils.showShort("识别失败");
             }
         });
     }
