@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentActivity;
 import com.dengyun.baselibrary.base.dialog.BaseDialogFragment;
 import com.dengyun.baselibrary.base.dialog.loading.LoadingDialog1;
 import com.dengyun.baselibrary.net.constants.ProjectType;
+import com.dengyun.baselibrary.net.constants.RequestMethod;
 import com.lzy.okgo.model.HttpHeaders;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
@@ -19,19 +20,17 @@ import java.util.Map;
  */
 
 /**
- *
  * NetOption netOption = NetOption.newBuilder(HttpUrlConstants.login)
- .params("account",userName)     //必传参数，参数的key-value，可以传多个，内部转成了json
- .params("password", password)
- .activity(mView.getMyActivity())   //和.fragment参数二选一，标识当前调用的是fragment或者activity
- //.fragment()                     //和.activity参数二选一，标识当前调用的是fragment或者activity
- .type(type)        //和.clazz参数二选一，标识返回bean的类型，推荐使用.type
- //.clazz()        //和.type参数二选一，标识返回bean的类型，推荐使用.type
- .isEncrypt(true)    //非必传，是否参数加密，默认true
- .isShowDialog(true) //非必传，是否展示加载缓冲圈，默认false
- .build();
- *
- * */
+ * .params("account",userName)     //必传参数，参数的key-value，可以传多个，内部转成了json
+ * .params("password", password)
+ * .activity(mView.getMyActivity())   //和.fragment参数二选一，标识当前调用的是fragment或者activity
+ * //.fragment()                     //和.activity参数二选一，标识当前调用的是fragment或者activity
+ * .type(type)        //和.clazz参数二选一，标识返回bean的类型，推荐使用.type
+ * //.clazz()        //和.type参数二选一，标识返回bean的类型，推荐使用.type
+ * .isEncrypt(true)    //非必传，是否参数加密，默认true
+ * .isShowDialog(true) //非必传，是否展示加载缓冲圈，默认false
+ * .build();
+ */
 
 public class NetOption {
 
@@ -49,6 +48,8 @@ public class NetOption {
     private final Type type;
     private final Class clazz;
     private boolean isInterceptErrorCode = true;//是否拦截错误code
+    private @RequestMethod
+    int requestMethod;//网络请求方式：get/post_json/post_form
     private @ProjectType
     int projectType;//项目类型（由于不同的项目的网络参数配置可能不一致)，默认每天美耶
 
@@ -66,6 +67,7 @@ public class NetOption {
         type = builder.type;
         clazz = builder.clazz;
         isInterceptErrorCode = builder.isInterceptErrorCode;
+        requestMethod = builder.requestMethod;
         projectType = builder.projectType;
     }
 
@@ -150,6 +152,17 @@ public class NetOption {
         return projectType;
     }
 
+    public @RequestMethod
+    int getRequestMethod() {
+        return requestMethod;
+    }
+
+    //临时放开这个设置，因为NetApi中有传RequestMethod的方法，
+    // 之后的新项目删除这个设置，只在NetOption中配置RequestMethod，不在NetApi出传
+    public void setRequestMethod(@RequestMethod int requestMethod){
+        this.requestMethod = requestMethod;
+    }
+
     public static final class Builder {
         private String tag;
         private HttpHeaders headers;
@@ -164,6 +177,8 @@ public class NetOption {
         private Type type;
         private Class clazz;
         private boolean isInterceptErrorCode = true;//是否拦截错误code (继续拦截全局的错误code，例如token过期，只是设置是否不拦截其他非全局的错误code)
+        private @RequestMethod
+        int requestMethod = RequestMethod.POST_JSON;//网络请求方式：get/post_json/post_form
         private @ProjectType
         int projectType = ProjectType.IDENGYUN_HR;//项目类型（由于不同的项目的网络参数配置可能不一致)，默认每天美耶
 
@@ -248,6 +263,11 @@ public class NetOption {
 
         public Builder isInterceptErrorCode(boolean isInterceptErrorCode) {
             this.isInterceptErrorCode = isInterceptErrorCode;
+            return this;
+        }
+
+        public Builder requestMethod(@RequestMethod int requestMethod) {
+            this.requestMethod = requestMethod;
             return this;
         }
 

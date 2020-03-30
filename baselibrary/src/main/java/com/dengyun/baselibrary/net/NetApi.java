@@ -45,35 +45,12 @@ public class NetApi {
         return getDataSync(netOption);
     }
 
-    public static void getFormString(NetOption netOption, JsonCallback<String> jsonCallback) {
-        getFormData(netOption, jsonCallback);
-    }
-
-    public static Response getFormStringSync(NetOption netOption) {
-        return getFormDataSync(netOption);
-    }
-
-    public static void getString(@RequestMethod int requestMethod,NetOption netOption, JsonCallback<String> jsonCallback) {
-        getData(requestMethod,netOption, jsonCallback);
-    }
-
     public static <T> void getData(NetOption netOption, JsonCallback<T> jsonCallback) {
-        getData(RequestMethod.POST_JSON, netOption, jsonCallback);
+        getData(netOption.getRequestMethod(), netOption, jsonCallback);
     }
 
     public static Response getDataSync(NetOption netOption) {
-        return getDataSync(RequestMethod.POST_JSON, netOption);
-    }
-
-    /**
-     * 网络请求封装，传泛型类，回调返回泛型类普通okgo形式请求
-     */
-    public static <T> void getFormData(NetOption netOption, JsonCallback<T> jsonCallback) {
-        getData(RequestMethod.POST_FORM, netOption, jsonCallback);
-    }
-
-    public static <T> Response getFormDataSync(NetOption netOption) {
-        return getDataSync(RequestMethod.POST_FORM, netOption);
+        return getDataSync(netOption.getRequestMethod(), netOption);
     }
 
     /**
@@ -85,6 +62,9 @@ public class NetApi {
      * @param <T>
      */
     public static <T> void getData(@RequestMethod int requestMethod, NetOption netOption, JsonCallback<T> jsonCallback) {
+        // 临时这个设置 之后的新项目删除这个设置，只在NetOption中配置RequestMethod，不在NetApi出传
+        netOption.setRequestMethod(requestMethod);
+
         if (!NetworkUtils.isConnected()) {
             jsonCallback.onNoNet();
             return;
@@ -128,6 +108,9 @@ public class NetApi {
      * @param <T>
      */
     public static <T> Response getDataSync(@RequestMethod int requestMethod, NetOption netOption) {
+        // 临时这个设置 之后的新项目删除这个设置，只在NetOption中配置RequestMethod，不在NetApi出传
+        netOption.setRequestMethod(requestMethod);
+
         if (requestMethod == RequestMethod.GET) {
             DealParamsUtil.dealUrlForGet(netOption);
             pringLog(netOption.getUrl());
@@ -196,16 +179,8 @@ public class NetApi {
         return getDataRX(netOption);
     }
 
-    public static Observable<String> getFormStringRX(NetOption netOption) {
-        return getFormDataRX(netOption);
-    }
-
     public static <T> Observable<T> getDataRX(NetOption netOption) {
-        return getDataRX(RequestMethod.POST_JSON, netOption);
-    }
-
-    public static <T> Observable<T> getFormDataRX(NetOption netOption) {
-        return getDataRX(RequestMethod.POST_FORM, netOption);
+        return getDataRX(netOption.getRequestMethod(), netOption);
     }
 
     /**
@@ -217,6 +192,9 @@ public class NetApi {
      * @return
      */
     public static <T> Observable<T> getDataRX(@RequestMethod int requestMethod, NetOption netOption) {
+        // 临时这个设置 之后的新项目删除这个设置，只在NetOption中配置RequestMethod，不在NetApi出传
+        netOption.setRequestMethod(requestMethod);
+
         if (!NetworkUtils.isConnected()) {
             return Observable.error(new NoNetException());
         }
