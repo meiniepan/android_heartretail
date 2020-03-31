@@ -303,25 +303,33 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
         rg_home_tab_bar.setOnCheckedChangeListener(this);
         rg_home_tab_bar.clearCheck();
 
+        // layout_home_title.setVisibility(View.GONE);
         nested_scroll_view.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 nsv_home_bg.setTranslationY(-scrollY);
 
                 int height = SizeUtils.dp2px(68f);
+                float alpha = 1f * scrollY / height;
+                // layout_home_title.setAlpha(alpha);
+                // layout_home_title.setVisibility(scrollY > 0 ? View.VISIBLE : View.GONE);
                 if (scrollY < height) {
+                    layout_home_title.setAlpha(1f - alpha);
                     layout_home_title.setBackgroundColor(Color.TRANSPARENT);
                     tv_home_location.setSelected(false);
                     tv_home_share.setSelected(false);
                     tv_home_notice.setSelected(false);
                     tv_home_notice_count.setSelected(false);
                 } else {
+                    layout_home_title.setAlpha(alpha);
                     layout_home_title.setBackgroundColor(Color.WHITE);
                     tv_home_location.setSelected(true);
                     tv_home_share.setSelected(true);
                     tv_home_notice.setSelected(true);
                     tv_home_notice_count.setSelected(true);
                 }
+
+                if (scrollY == 0) layout_home_title.setAlpha(1f);
             }
         });
     }

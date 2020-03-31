@@ -16,6 +16,7 @@ import com.dengyun.baselibrary.utils.ToastUtils;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.beans.MobileBindBean;
+import com.idengyun.heartretail.utils.CustomerServiceHelper;
 import com.idengyun.heartretail.viewmodel.SettingViewModel;
 import com.idengyun.usermodule.HRConst;
 import com.idengyun.usermodule.HRUser;
@@ -71,7 +72,7 @@ public final class MobileBindVerifyFragment extends BaseFragment implements View
         if (tv_identity_verify_code == v) {
             sendVerifyCode();
         } else if (tv_identity_contact_service == v) {
-            // TODO: 2020/3/9
+            CustomerServiceHelper.start(v.getContext());
         } else if (tv_identity_next == v) {
             nextStep();
         }

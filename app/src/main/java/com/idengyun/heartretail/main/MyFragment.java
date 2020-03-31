@@ -24,11 +24,11 @@ import com.idengyun.heartretail.activitys.OrderListActivity;
 import com.idengyun.heartretail.activitys.ShareQRCodeActivity;
 import com.idengyun.heartretail.beans.BalanceBean;
 import com.idengyun.heartretail.setting.SettingFragment;
+import com.idengyun.heartretail.utils.CustomerServiceHelper;
 import com.idengyun.heartretail.viewmodel.PayViewModel;
 import com.idengyun.usermodule.HRUser;
 import com.idengyun.usermodule.LoginActivity;
 import com.idengyun.usermodule.VerifyDeviceActivity;
-import com.sobot.chat.utils.InformationUtil;
 
 /**
  * 我的页面
@@ -156,7 +156,7 @@ public final class MyFragment extends BaseFragment implements View.OnClickListen
             // OrderDetailActivity.start(context, "");
             AwardDetailActivity.start(context);
         } else if (layout_my_customer_service == v) {
-            new InformationUtil(context).startSobot();
+            CustomerServiceHelper.start(context);
         }
     }
 

@@ -13,8 +13,7 @@ import com.dengyun.baselibrary.utils.ToastUtils;
 import com.idengyun.heartretail.HRActivity;
 import com.idengyun.heartretail.R;
 import com.idengyun.heartretail.activitys.ConfirmOrderActivity;
-import com.idengyun.usermodule.HRUser;
-import com.sobot.chat.utils.InformationUtil;
+import com.idengyun.heartretail.utils.CustomerServiceHelper;
 
 /**
  * 商品详情-控制器
@@ -71,7 +70,7 @@ public final class GoodsDetailFragment extends BaseFragment implements RadioGrou
         if (iv_goods_detail_back == v || tv_goods_detail_back == v) {
             if (getActivity() != null) getActivity().onBackPressed();
         } else if (layout_goods_detail_customer_service == v) {
-            if (HRUser.isLogin()) new InformationUtil(v.getContext()).startSobot();
+            CustomerServiceHelper.start(v.getContext());
         } else if (layout_goods_detail_buy_now == v) {
             GoodsSpecFragment goodsSpecFragment = (GoodsSpecFragment) HRActivity.findFragmentByTag(getActivity(), GoodsSpecFragment.class.getName());
             if (goodsSpecFragment != null && goodsSpecFragment.isHidden()) {

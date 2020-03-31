@@ -80,8 +80,6 @@ public final class PasswordFragment extends BaseFragment implements CompoundButt
     public void onClick(View v) {
         if (tv_pwd_verify_code == v) {
             sendVerifyCode();
-        } else if (tv_pwd_contact_service == v) {
-            // TODO: 2020/3/9
         } else if (tv_pwd_confirm == v) {
             modifyPwd();
         }
