@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Pair;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +39,7 @@ import java.util.List;
  */
 public final class NoticeFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
-    private static final String ACTION_NOTICE_UPDATE = NoticeFragment.class.getName();
+    private static final String ACTION_ON_NOTICE_CLICKED = NoticeFragment.class.getName();
 
     private int notifyGroup;
     private RecyclerView recycler_view;
@@ -64,16 +65,23 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
     };
 
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
+
         @Override
         public void onReceive(Context context, Intent intent) {
+            if (isHidden()) return;
+
             String action = intent.getAction();
-            if (ACTION_NOTICE_UPDATE.equals(action)) {
-                notifyId = intent.getIntExtra("messageId", -1);
-                status = intent.getIntExtra("status", -1);
-                position = intent.getIntExtra("position", -1);
-                recordEvenType = intent.getIntExtra("recordEvenType", -1);
-                requestNoticeUpdateStatus(notifyId, status);
-            }
+            if (!ACTION_ON_NOTICE_CLICKED.equals(action)) return;
+
+            notifyId = intent.getIntExtra("messageId", -1);
+            status = intent.getIntExtra("status", -1);
+            position = intent.getIntExtra("position", -1);
+            recordEvenType = intent.getIntExtra("recordEvenType", -1);
+
+            /* status = 0|1|2 (未读|已读|删除) */
+            if (status == 0) requestNoticeUpdateStatus(notifyId, status);
+            else if (status == 1) start(position, recordEvenType);
+            else if (status == 2) return;
         }
     };
 
@@ -82,7 +90,7 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
         super.onCreate(savedInstanceState);
         Context context = getContext();
         if (context == null) return;
-        context.registerReceiver(receiver, new IntentFilter(ACTION_NOTICE_UPDATE));
+        context.registerReceiver(receiver, new IntentFilter(ACTION_ON_NOTICE_CLICKED));
     }
 
     @Override
@@ -134,6 +142,7 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
         onScrollListener.setLoadingMore(false);
         if (noticeListBean == null) return;
         NoticeListBean.Data data = noticeListBean.data;
+        int notifyGroup = data.notifyGroup;
         List<NoticeListBean.Data.Content> contentList = data.contentList;
 
         totalSize = data.total;
@@ -149,6 +158,54 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
             noticeAdapter.noticeList.add(content);
         }
         noticeAdapter.notifyDataSetChanged();
+    }
+
+    @MainThread
+    private void updateItemUI(int position, int recordEvenType) {
+        if (position == -1 || recordEvenType == -1) return;
+        List<NoticeListBean.Data.Content> noticeList = noticeAdapter.noticeList;
+        NoticeListBean.Data.Content content = noticeList.get(position);
+        content.status = 1;
+        noticeAdapter.notifyItemChanged(position);
+        start(position, recordEvenType);
+    }
+
+    /* 根据事件类型跳转相关界面 */
+    private void start(int position, int recordEvenType) {
+        // TODO: 2020/3/30
+        /* recordEvenType: 1、URL链接2、订单详情3、余额4、红包5、升级提醒6、富文本 */
+        /* contentType: 内容类型(0:文本(标题+内容) 1:图文(标题+图片) 2:物流通知 3:商品 4:普通通知(文本+图片+副标题) 5:文章 6:视频 7:评论 8：(标题+图片地址+链接地址)9:（标题+内容+链接地址）10：取货通知（标题+副标题+图片地址+内容）11:（图片+内容）) */
+        if (position == -1 || recordEvenType == -1) return;
+        NoticeListBean.Data.Content content = noticeAdapter.noticeList.get(position);
+        Bundle extras = new Bundle();
+        extras.putInt("contentType", content.contentType);
+        extras.putString("content", content.content);
+        NoticeDetailActivity.start(getContext(), content.contentType, content.content);
+        switch (recordEvenType) {
+            case 1:
+                ToastUtils.showShort("URL链接");
+
+                break;
+            case 2:
+                ToastUtils.showShort("订单详情");
+                break;
+            case 3:
+                ToastUtils.showShort("余额");
+                break;
+            case 4:
+                ToastUtils.showShort("红包");
+                break;
+            case 5:
+                ToastUtils.showShort("升级提醒");
+                break;
+            case 6:
+                ToastUtils.showShort("富文本");
+
+                break;
+            default:
+                ToastUtils.showShort("recordEvenType= " + recordEvenType);
+                break;
+        }
     }
 
     private void onLoadMore() {
@@ -184,44 +241,14 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
             noticeViewModel.getNoticeStatus().observe(this, new Observer<NoticeStatusBean>() {
                 @Override
                 public void onChanged(@Nullable NoticeStatusBean noticeStatusBean) {
-                    updateItem(position, recordEvenType);
+                    updateItemUI(position, recordEvenType);
                 }
             });
         }
     }
 
-    private void updateItem(int position, int recordEvenType) {
-        List<NoticeListBean.Data.Content> noticeList = noticeAdapter.noticeList;
-        NoticeListBean.Data.Content content = noticeList.get(position);
-        content.status = 1;
-        noticeAdapter.notifyItemChanged(position);
-        /* 1、URL链接2、订单详情3、余额4、红包5、升级提醒6、富文本 */
-        // TODO: 2020/3/30
-        switch (recordEvenType) {
-            case 1:
-                ToastUtils.showShort("URL链接");
-                break;
-            case 2:
-                ToastUtils.showShort("订单详情");
-                break;
-            case 3:
-                ToastUtils.showShort("余额");
-                break;
-            case 4:
-                ToastUtils.showShort("红包");
-                break;
-            case 5:
-                ToastUtils.showShort("升级提醒");
-                break;
-            case 6:
-                ToastUtils.showShort("富文本");
-                break;
-            default:
-                break;
-        }
-    }
-
     private int getNotifyGroup() {
+        /* 消息分组0促销优惠1账户通知2服务通知 */
         int notifyGroup = -1;
         String tag = getTag();
         if ("促销优惠".equals(tag)) {
@@ -308,6 +335,7 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
 
         private BaseHolder(@NonNull View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
         }
 
         @Override
@@ -320,7 +348,7 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
                 int messageId = content.messageId;
                 int status = content.status;
                 int recordEvenType = content.recordEvenType;
-                Intent intent = new Intent(NoticeFragment.ACTION_NOTICE_UPDATE);
+                Intent intent = new Intent(NoticeFragment.ACTION_ON_NOTICE_CLICKED);
                 intent.putExtra("messageId", messageId);
                 intent.putExtra("status", status);
                 intent.putExtra("position", position);

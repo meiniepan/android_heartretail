@@ -7,12 +7,17 @@
             android:exported="true"
             android:label="PushService"
             android:process=":pushservice" />
+
         <service
             android:name=".services.CustomMsgReceiverService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <activity
             android:name=".NoticeActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".NoticeDetailActivity"
             android:screenOrientation="portrait" />
     </application>
 
