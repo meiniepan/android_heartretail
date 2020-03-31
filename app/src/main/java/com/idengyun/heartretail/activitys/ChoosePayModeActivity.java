@@ -85,7 +85,7 @@ public class ChoosePayModeActivity extends BaseActivity {
             timer = new SecondsTimer(24 * 60 * 60, new SecondsTimer.Callback() {
                 @Override
                 public void onTick(long secondsUntilFinished) {
-                    //todo 倒计时加0
+                    //todo 倒计时加 0
                     int h = (int) (secondsUntilFinished / 3600);
                     int m = (int) (secondsUntilFinished % 3600 / 60);
                     int s = (int) (secondsUntilFinished % 60);
