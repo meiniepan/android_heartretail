@@ -50,7 +50,7 @@ import butterknife.OnClick;
 
 /**
  * @author Burning
- * @description:
+ * @description: 订单详情
  * @date :2020/3/5 0005 10:35
  */
 @Route(path = (RouterPathConfig.app_OrderDetail))
@@ -284,6 +284,7 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
             timer = new SecondsTimer(data.leftTime, new SecondsTimer.Callback() {
                 @Override
                 public void onTick(long secondsUntilFinished) {
+                    //todo 倒计时加0
                     int h = (int) (secondsUntilFinished / 3600);
                     int m = (int) (secondsUntilFinished % 3600 / 60);
                     int s = (int) (secondsUntilFinished % 60);
@@ -335,6 +336,7 @@ public class OrderDetailActivity extends BaseActivity implements NestedScrollVie
     }
 
     private void cancelOrder() {
+        //todo 请求参数
         HashMap map = new HashMap();
         map.put("version", AppUtils.getAppVersionName());
         map.put("orderId", orderId);

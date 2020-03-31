@@ -139,7 +139,7 @@ public class ConfirmOrderActivity extends BaseActivity {
     }
 
     private void initUI() {
-        if (orderType==1) {
+        if (orderType==1) {//1为零售
             initRetail();
         } else {
             initWholeSale();
@@ -162,6 +162,7 @@ public class ConfirmOrderActivity extends BaseActivity {
     }
 
     private void initData() {
+        //todo 处理上个页面传递过来的数据
         order_confirm_goods_img_url=getIntent().getStringExtra("order_confirm_goods_img_url");
         order_confirm_goods_title=getIntent().getStringExtra("order_confirm_goods_title");
         order_confirm_goods_spec_list=getIntent().getStringExtra("order_confirm_goods_spec_list");
@@ -184,6 +185,7 @@ public class ConfirmOrderActivity extends BaseActivity {
         skuImgUrl = extras.getString("skuImgUrl");
         wholesaleFlag = extras.getInt("wholesaleFlag", -1);*/
         getShippingPrice();
+        //todo 获取推荐店铺数据
 //        orderType = "2";
     }
 
@@ -236,6 +238,7 @@ public class ConfirmOrderActivity extends BaseActivity {
         Type type = new TypeToken<ApiBean<OrderPriceBean>>() {
         }.getType();
         HashMap map = new HashMap();
+        //todo 请求参数
         map.put("version", AppUtils.getAppVersionName());
         map.put("userId", TextUtils.isEmpty(HRUser.getId()) ? "1" : HRUser.getId());
         map.put("isUsePacket", "0");
@@ -281,6 +284,7 @@ public class ConfirmOrderActivity extends BaseActivity {
 
     private void queryProxyQualification() {
         HashMap map = new HashMap();
+        //todo 请求参数
         map.put("version", AppUtils.getAppVersionName());
         map.put("userId", TextUtils.isEmpty(HRUser.getId()) ? "1" : HRUser.getId());
         map.put("skuIds", "1");
@@ -347,6 +351,7 @@ public class ConfirmOrderActivity extends BaseActivity {
         Type type = new TypeToken<ApiBean<ConfirmOrderRspBean>>() {
         }.getType();
         HashMap map = new HashMap();
+        //todo 请求参数
         map.put("version", AppUtils.getAppVersionName());
         map.put("userId", HRUser.getId());
         map.put("userName", HRUser.getNickname());

@@ -33,7 +33,7 @@ import butterknife.BindView;
 
 /**
  * @author Burning
- * @description:
+ * @description:查看物流页面
  * @date :2020/3/6 0006 9:06
  */
 public class CheckLogisticsActivity extends BaseActivity {

@@ -34,7 +34,7 @@ import butterknife.ButterKnife;
 
 /**
  * @author Burning
- * @description:
+ * @description: 评价详情
  * @date :2020/3/6 0006 9:06
  */
 public class EvaluateDetailActivity extends BaseActivity {

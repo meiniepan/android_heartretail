@@ -25,8 +25,8 @@ import butterknife.OnClick;
 
 /**
  * @author Burning
- * @description:
- * @date :2020/3/16 0016 10:50
+ * @description:提现页面
+ * * @date :2020/3/16 0016 10:50
  */
 public class WithdrawActivity extends BaseActivity {
     @BindView(R.id.et_input_num)

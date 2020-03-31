@@ -28,7 +28,7 @@ import butterknife.OnClick;
 
 /**
  * @author Burning
- * @description:
+ * @description: 评价商品
  * @date :2020/3/24 0024 16:49
  */
 public class EvaluateGoodsActivity extends BaseActivity {
@@ -66,6 +66,7 @@ public class EvaluateGoodsActivity extends BaseActivity {
 
     private void doCommit() {
         HashMap map = new HashMap();
+        //todo 请求参数
         map.put("userId", TextUtils.isEmpty(HRUser.getId()) ? "1" : HRUser.getId());
         map.put("userIp", "1");
         map.put("goodsId", 1);

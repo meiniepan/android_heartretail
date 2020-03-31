@@ -17,7 +17,7 @@ import butterknife.OnClick;
 
 /**
  * @author Burning
- * @description:
+ * @description: 我的余额
  * @date :2020/3/20 0020 11:28
  */
 public class MyBalanceActivity extends BaseActivity {

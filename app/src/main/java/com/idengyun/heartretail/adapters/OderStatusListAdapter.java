@@ -197,6 +197,7 @@ public class OderStatusListAdapter extends BaseQuickAdapter<OrderStatusBean, Bas
             timer.setCallback(new SecondsTimer.Callback() {
                 @Override
                 public void onTick(long secondsUntilFinished) {
+                    //todo 倒计时加0
                     int h = (int) (secondsUntilFinished / 3600);
                     int m = (int) (secondsUntilFinished % 3600 / 60);
                     int s = (int) (secondsUntilFinished % 60);

@@ -34,7 +34,7 @@ import butterknife.BindView;
 
 /**
  * @author Burning
- * @description:
+ * @description: 我的评价列表
  * @date :2020/3/6 0006 9:06
  */
 public class MyEvaluateActivity extends BaseActivity {
@@ -71,6 +71,7 @@ public class MyEvaluateActivity extends BaseActivity {
     private void getData() {
         Type type = new TypeToken<ApiBean<CommentListBean>>() {
         }.getType();
+        //todo 请求参数
         NetOption netOption = NetOption.newBuilder(SpMainConfigConstants.myEvaluationList())
                 .activity(activity)
                 .params("version", AppUtils.getAppVersionName())

@@ -40,7 +40,7 @@ import butterknife.BindView;
 
 /**
  * @author Burning
- * @description:订单状态详情
+ * @description:订单状态列表
  * @date :2020/3/4 0004 13:25
  */
 public class OrderStatusFragment extends BaseFragment implements ITimer {
@@ -50,6 +50,7 @@ public class OrderStatusFragment extends BaseFragment implements ITimer {
     int status;
     private int page = 1;
     private OderStatusListAdapter adapter;
+    //根据orderId存定时器，代付款状态用到
     private HashMap<String, SecondsTimer> timerMap = new HashMap();
 
     @Override

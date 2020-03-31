@@ -30,7 +30,7 @@ import butterknife.OnClick;
 
 /**
  * @author Burning
- * @description:
+ * @description: 物流详情
  * @date :2020/3/6 0006 9:06
  */
 public class LogisticsDetailActivity extends BaseActivity {

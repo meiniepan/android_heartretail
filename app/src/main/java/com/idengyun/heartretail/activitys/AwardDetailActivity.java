@@ -30,8 +30,8 @@ import butterknife.OnClick;
 
 /**
  * @author Burning
- * @description:
- * @date :2020/3/16 0016 16:53
+ * @description:奖励明细页面
+ * * @date :2020/3/16 0016 16:53
  */
 public class AwardDetailActivity extends BaseActivity {
     @BindView(R.id.toolbar_title_award)
