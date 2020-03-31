@@ -108,10 +108,11 @@ public final class MyFragment extends BaseFragment implements View.OnClickListen
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (hidden) return;
         updateUI(HRUser.isLogin(), HRUser.isAuthentication());
-        if (HRUser.isLogin()) requestAPI();
+        if (HRUser.isLogin() && HRUser.isAuthentication()) requestAPI();
     }
 
     @Override
@@ -183,7 +184,12 @@ public final class MyFragment extends BaseFragment implements View.OnClickListen
         if (isLogin) {
             ImageApi.displayImage(iv_my_user_avatar.getContext(), iv_my_user_avatar, HRUser.getAvatar());
             tv_my_user_name.setText(HRUser.getNickname());
-            tv_my_user_mobile.setText(HRUser.getMobile());
+            // tv_my_user_mobile.setText(HRUser.getMobile());
+            String mobile = HRUser.getMobile();
+            if (mobile.length() == 11) {
+                mobile = mobile.substring(0, 3) + "****" + mobile.substring(7, 11);
+                tv_my_user_mobile.setText(mobile);
+            }
 
             iv_my_not_login_bg.setVisibility(View.GONE);
             iv_my_login_bg.setVisibility(View.VISIBLE);

@@ -44,8 +44,11 @@ public final class GoodsListFragment extends BaseFragment implements SwipeRefres
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            if (isHidden()) return;
             String action = intent.getAction();
-            if (LoginActivity.ACTION_ON_LOGIN_SUCCEED.equals(action)) onRefresh();
+            if (LoginActivity.ACTION_ON_LOGIN_SUCCEED.equals(action)) {
+                onRefresh();
+            }
         }
     };
 
@@ -118,7 +121,8 @@ public final class GoodsListFragment extends BaseFragment implements SwipeRefres
         if (context != null) context.unregisterReceiver(receiver);
         super.onDestroy();
     }
-/*@Override
+
+    @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (hidden) return;
@@ -126,7 +130,7 @@ public final class GoodsListFragment extends BaseFragment implements SwipeRefres
             setUserVisibleHint(false);
             onRefresh();
         }
-    }*/
+    }
 
     @Override
     public void onRefresh() {

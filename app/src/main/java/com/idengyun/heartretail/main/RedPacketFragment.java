@@ -47,6 +47,7 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            if (isHidden()) return;
             String action = intent.getAction();
             if (LoginActivity.ACTION_ON_LOGIN_SUCCEED.equals(action)) {
                 onRefresh();
@@ -118,8 +119,9 @@ public final class RedPacketFragment extends BaseFragment implements View.OnClic
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (hidden) return;
         if (!HRUser.isLogin()) return;
         requestAPI();
         onRefresh();

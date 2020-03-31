@@ -133,7 +133,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:gravity="center_horizontal"
-                                android:orientation="vertical">
+                                android:orientation="vertical"
+                                android:visibility="gone">
 
                                 <TextView
                                     android:id="@+id/tv_my_money_1"
@@ -156,7 +157,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:gravity="center_horizontal"
+                                android:gravity="start"
                                 android:orientation="vertical">
 
                                 <TextView
@@ -171,16 +172,21 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="4dp"
-                                    android:text="待发放"
+                                    android:text="待发放余额"
                                     android:textColor="#ffffffff"
                                     android:textSize="12sp" />
                             </LinearLayout>
+
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="match_parent"
+                                android:background="#33ffffff" />
 
                             <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:gravity="center_horizontal"
+                                android:gravity="end"
                                 android:orientation="vertical">
 
                                 <TextView
@@ -195,7 +201,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="4dp"
-                                    android:text="可提现"
+                                    android:text="可提现余额"
                                     android:textColor="#ffffffff"
                                     android:textSize="12sp" />
                             </LinearLayout>
@@ -205,6 +211,7 @@
                             android:id="@+id/tv_my_account"
                             android:layout_width="wrap_content"
                             android:layout_height="32dp"
+                            android:layout_marginStart="20dp"
                             android:background="@drawable/shape_my_login_btn_bg"
                             android:drawableEnd="@drawable/ic_my_unauthorized_account"
                             android:drawablePadding="4dp"

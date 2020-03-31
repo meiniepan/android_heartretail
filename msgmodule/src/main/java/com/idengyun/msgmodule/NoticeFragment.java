@@ -347,7 +347,7 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
                 NoticeListBean.Data.Content content = noticeList.get(position);
                 int messageId = content.messageId;
                 int status = content.status;
-                int recordEvenType = content.recordEvenType;
+                int recordEvenType = content.recordEventType;
                 Intent intent = new Intent(NoticeFragment.ACTION_ON_NOTICE_CLICKED);
                 intent.putExtra("messageId", messageId);
                 intent.putExtra("status", status);

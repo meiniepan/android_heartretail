@@ -28,7 +28,7 @@ public final class NoticeListBean {
             public String pushTime;
             public int contentType;
             public String title;
-            public int recordEvenType;
+            public int recordEventType;
 
             public static class Type0 {
                 public String contentTitle;

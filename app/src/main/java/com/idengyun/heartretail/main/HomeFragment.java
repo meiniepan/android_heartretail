@@ -52,8 +52,11 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            if (isHidden()) return;
             String action = intent.getAction();
             if (NoticeActivity.ACTION_ON_NOTICE_ARRIVED.equals(action) || LoginActivity.ACTION_ON_LOGIN_SUCCEED.equals(action)) {
+                if (!HRUser.isLogin()) tv_home_notice_count.setVisibility(View.INVISIBLE);
+                if (!HRUser.isLogin()) return;
                 requestNoticeCount();
             }
         }
@@ -121,7 +124,6 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
                 .hide(retailFragment)
                 .hide(wholesaleFragment)
                 .commit();
-        requestNoticeCount();
     }
 
     @Override
@@ -142,6 +144,9 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (hidden) return;
+        if (!HRUser.isLogin()) tv_home_notice_count.setVisibility(View.INVISIBLE);
+        if (!HRUser.isLogin()) return;
+        requestNoticeCount();
         if (rg_home_tab_bar.getCheckedRadioButtonId() == View.NO_ID)
             rg_home_tab_bar.check(R.id.rb_home_retail);
     }
@@ -226,19 +231,14 @@ public final class HomeFragment extends BaseFragment implements View.OnClickList
         for (NoticeCountBean.Data data : dataList) count += data.counts;
         String text = count > 999 ? "999+" : "" + count;
         tv_home_notice_count.setText(text);
-        tv_home_notice_count.setVisibility(count > 0 ? View.VISIBLE : View.INVISIBLE);
-        if (!HRUser.isLogin()) tv_home_notice_count.setVisibility(View.INVISIBLE);
+        tv_home_notice_count.setVisibility(HRUser.isLogin() && count > 0 ? View.VISIBLE : View.INVISIBLE);
     }
 
     private void requestNoticeCount() {
-        if (!HRUser.isLogin()) {
-            tv_home_notice_count.setVisibility(View.INVISIBLE);
-            return;
-        }
-
         FragmentActivity activity = getActivity();
         if (activity == null) return;
-        if (noticeViewModel != null) noticeViewModel.requestNoticeCount(activity);
+        if (noticeViewModel == null) return;
+        noticeViewModel.requestNoticeCount(activity);
     }
 
     /*选择完地址*/
