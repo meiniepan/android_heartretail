@@ -91,7 +91,9 @@ public class DealParamsUtil {
             //去掉sbd开头的"?"和结尾的"&"
             String parameters = builder.substring(1, builder.length() - 1);
             String sign = EncryptUtils.stringToMD5(parameters + "xls");
+            String token = SharedPreferencesUtil.getData(Utils.getApp(), "hr_user_info", "token", "");
             netOption.addHeaders("sign", sign);
+            netOption.addHeaders("token", token);
 
             String newUrl = netOption.getUrl() + builder.substring(0, builder.length() - 1);
             netOption.setUrl(newUrl);
@@ -191,7 +193,9 @@ public class DealParamsUtil {
             /* MD5加密参数 */
             String parameters = builder.substring(0, builder.length() - 1);
             String sign = EncryptUtils.stringToMD5(parameters + "xls");
+            String token = SharedPreferencesUtil.getData(Utils.getApp(), "hr_user_info", "token", "");
             netOption.addHeaders("sign", sign);
+            netOption.addHeaders("token", token);
         }
         return paramJson0;
 
