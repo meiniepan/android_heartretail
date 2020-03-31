@@ -12,7 +12,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Pair;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +21,6 @@ import android.widget.TextView;
 import com.dengyun.baselibrary.base.fragment.BaseFragment;
 import com.dengyun.baselibrary.net.ImageApi;
 import com.dengyun.baselibrary.utils.GsonConvertUtil;
-import com.dengyun.baselibrary.utils.ToastUtils;
 import com.idengyun.msgmodule.beans.NoticeListBean;
 import com.idengyun.msgmodule.beans.NoticeStatusBean;
 import com.idengyun.msgmodule.viewmodel.NoticeViewModel;
@@ -172,38 +170,38 @@ public final class NoticeFragment extends BaseFragment implements SwipeRefreshLa
 
     /* 根据事件类型跳转相关界面 */
     private void start(int position, int recordEvenType) {
-        // TODO: 2020/3/30
         /* recordEvenType: 1、URL链接2、订单详情3、余额4、红包5、升级提醒6、富文本 */
         /* contentType: 内容类型(0:文本(标题+内容) 1:图文(标题+图片) 2:物流通知 3:商品 4:普通通知(文本+图片+副标题) 5:文章 6:视频 7:评论 8：(标题+图片地址+链接地址)9:（标题+内容+链接地址）10：取货通知（标题+副标题+图片地址+内容）11:（图片+内容）) */
         if (position == -1 || recordEvenType == -1) return;
         NoticeListBean.Data.Content content = noticeAdapter.noticeList.get(position);
-        Bundle extras = new Bundle();
-        extras.putInt("contentType", content.contentType);
-        extras.putString("content", content.content);
-        NoticeDetailActivity.start(getContext(), content.contentType, content.content);
         switch (recordEvenType) {
             case 1:
-                ToastUtils.showShort("URL链接");
-
+                // ToastUtils.showShort("URL链接");
+                NoticeStarter.start1(getContext(), content.contentType, content.content);
                 break;
             case 2:
-                ToastUtils.showShort("订单详情");
+                // ToastUtils.showShort("订单详情");
+                NoticeStarter.start2(getContext(), content.contentType, content.content);
                 break;
             case 3:
-                ToastUtils.showShort("余额");
+                // ToastUtils.showShort("余额");
+                NoticeStarter.start3(getContext(), content.contentType, content.content);
                 break;
             case 4:
-                ToastUtils.showShort("红包");
+                // ToastUtils.showShort("红包");
+                NoticeStarter.start4(getContext(), content.contentType, content.content);
                 break;
             case 5:
-                ToastUtils.showShort("升级提醒");
+                // ToastUtils.showShort("升级提醒");
+                NoticeStarter.start5(getContext(), content.contentType, content.content);
                 break;
             case 6:
-                ToastUtils.showShort("富文本");
-
+                // ToastUtils.showShort("富文本");
+                NoticeStarter.start6(getContext(), content.contentType, content.content);
                 break;
             default:
-                ToastUtils.showShort("recordEvenType= " + recordEvenType);
+                // ToastUtils.showShort("recordEvenType= " + recordEvenType);
+                NoticeStarter.start5(getContext(), content.contentType, content.content);
                 break;
         }
     }
